@@ -6,6 +6,8 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.functions";
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
 import cadetsImage from "@/assets/alpha-cadets.png.asset.json";
+import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
+
 
 const FOUNDED_YEAR = 2007;
 const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
