@@ -625,12 +625,12 @@ function PeekInside() {
         </div>
 
         <div className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
-          <StripePanel tone="blue" label="IMG · CIRCLE TIME" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
-          <StripePanel tone="gold" label="IMG · ART CORNER" className="h-44" />
-          <StripePanel tone="blue-dark" label="IMG · STORY TIME" className="h-44" />
-          <StripePanel tone="blue-light" label="IMG · OUTDOOR PLAY" className="md:col-span-2 h-44" />
-          <StripePanel tone="blue" label="IMG · CODING CLUB" className="h-40" />
-          <StripePanel tone="gold" label="IMG · MUSIC & SONG" className="h-40" />
+          <GalleryTile src={photoBallPit.url} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
+          <GalleryTile src={photoTeacher.url} caption="One-on-one learning" className="h-44" />
+          <GalleryTile src={photoTelescope.url} caption="Curious minds" className="h-44" />
+          <GalleryTile src={photoTeam.url} caption="Sports & teamwork" className="md:col-span-2 h-44" />
+          <GalleryTile src={photoMusicalChairs.url} caption="Active play" className="h-40" />
+          <GalleryTile src={photoDance.url} caption="Culture & dance" className="h-40" />
         </div>
 
         {/* Come and meet us ribbon */}
