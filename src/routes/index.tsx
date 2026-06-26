@@ -413,15 +413,14 @@ function eventMonth(iso: string) {
 }
 
 function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEventItem[] }) {
-  if (news.length === 0 && events.length === 0) return null;
-
   return (
     <>
-      {news.length > 0 && <UpdatesSlideshow news={news} />}
-      {events.length > 0 && <EventsRail events={events} />}
+      <UpdatesSlideshow news={news} />
+      <EventsRail events={events} />
     </>
   );
 }
+
 
 function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
   const [idx, setIdx] = useState(0);
@@ -450,6 +449,17 @@ function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
             View all →
           </Link>
         </Reveal>
+
+        {count === 0 ? (
+          <div className="mt-8 grid place-items-center rounded-3xl border border-dashed border-[var(--color-deep-blue)]/15 bg-white px-6 py-16 text-center">
+            <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--color-brand-blue)]/10 text-2xl">📰</div>
+            <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-deep-blue)]">No updates yet</h3>
+            <p className="mt-2 max-w-md text-sm text-[var(--color-ink)]/65">
+              Fresh news from across Alpha will appear here as soon as it's published. Check back soon.
+            </p>
+          </div>
+        ) : (
+
 
         <div
           className="relative mt-8 overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-[var(--color-deep-blue)]/10"
@@ -521,7 +531,9 @@ function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
             </>
           )}
         </div>
+        )}
       </div>
+
     </section>
   );
 }
@@ -548,6 +560,15 @@ function EventsRail({ events }: { events: HomeEventItem[] }) {
           </Link>
         </Reveal>
 
+        {events.length === 0 ? (
+          <div className="mt-10 grid place-items-center rounded-2xl border border-dashed border-white/20 bg-white/[0.05] px-6 py-16 text-center">
+            <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--color-gold)]/20 text-2xl">📅</div>
+            <h3 className="mt-4 font-display text-xl font-semibold text-white">No upcoming events scheduled</h3>
+            <p className="mt-2 max-w-md text-sm text-white/65">
+              We're between events right now. The next one will appear here as soon as it's announced.
+            </p>
+          </div>
+        ) : (
         <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {events.map((e, i) => (
             <Reveal key={e.id} direction="up" delay={i * 90}>
@@ -591,6 +612,8 @@ function EventsRail({ events }: { events: HomeEventItem[] }) {
             </Reveal>
           ))}
         </div>
+        )}
+
       </div>
     </section>
   );
