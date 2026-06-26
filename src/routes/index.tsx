@@ -22,6 +22,12 @@ const whatsNewQuery = queryOptions({
   staleTime: 5 * 60 * 1000,
 });
 
+const upcomingEventsQuery = queryOptions({
+  queryKey: ["home", "upcoming-events"],
+  queryFn: () => getHomeUpcomingEvents(),
+  staleTime: 5 * 60 * 1000,
+});
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
