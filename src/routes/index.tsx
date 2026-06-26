@@ -340,32 +340,33 @@ function Home() {
       {/* WHERE DO YOU START */}
       <section className="bg-[var(--color-off-white)]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <div className="text-center">
+          <Reveal direction="up" className="text-center">
             <h2 className="font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
               Where do you start?
             </h2>
             <p className="mt-3 text-sm text-[var(--color-ink)]/70">
               Tell us about your child and we'll point you to the right school.
             </p>
-          </div>
+          </Reveal>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {START_PATHS.map((p) => (
-              <Link
-                key={p.title}
-                to={p.to}
-                className="group rounded-xl bg-white p-5 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md"
-                style={{ borderTop: `3px solid ${p.accent}` }}
-              >
-                <p className="text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
-                  {p.age}
-                </p>
-                <h3 className="mt-2 font-display text-lg font-600 text-[var(--color-deep-blue)]">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-sm text-[var(--color-ink)]/75 transition-transform group-hover:translate-x-0.5">
-                  {p.sub} →
-                </p>
-              </Link>
+            {START_PATHS.map((p, i) => (
+              <Reveal key={p.title} direction="up" delay={i * 100}>
+                <Link
+                  to={p.to}
+                  className="group block h-full rounded-xl bg-white p-5 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md"
+                  style={{ borderTop: `3px solid ${p.accent}` }}
+                >
+                  <p className="text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
+                    {p.age}
+                  </p>
+                  <h3 className="mt-2 font-display text-lg font-600 text-[var(--color-deep-blue)]">
+                    {p.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-[var(--color-ink)]/75 transition-transform group-hover:translate-x-0.5">
+                    {p.sub} →
+                  </p>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
