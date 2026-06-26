@@ -227,18 +227,57 @@ function Home() {
       </section>
 
       {/* STAT BAR */}
-      <section className="bg-[var(--color-deep-blue)] text-white">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
-          {STATS.map((s) => (
-            <div key={s.value} className="px-2">
+      <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
+          <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)] blur-3xl animate-pulse" />
+          <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)] blur-3xl animate-pulse [animation-delay:1s]" />
+        </div>
+        <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
+          {STATS.map((s, i) => (
+            <div key={i} className="px-2 animate-fade-in" style={{ animationDelay: `${i * 120}ms`, animationFillMode: "both" }}>
               <div className="font-display text-5xl font-600 text-[var(--color-gold)] sm:text-6xl">
-                {s.value}
+                <CountUp to={s.value} />{s.suffix ?? ""}
               </div>
               <div className="mt-2 text-sm leading-snug text-white/90">
                 {s.label[0]}<br />{s.label[1]}
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* OUR STORY */}
+      <section className="bg-white">
+        <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
+            <h2 className="mt-3 font-display text-4xl font-600 tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+              Since 19 March 2007.
+            </h2>
+            <p className="mt-5 text-base leading-relaxed text-[var(--color-ink)]/80">
+              Alpha High School was founded on a solid vision: enabling students to achieve academic excellence through intellectual and physical challenges, and to function as responsible citizens of a dynamic society.
+            </p>
+            <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
+              With that vision embraced by every staff member and carried swiftly to our students, Alpha has become the nurturing ground of professionals and leaders — locally and globally.
+            </p>
+          </div>
+          <div className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Our mission</p>
+            <ul className="mt-4 space-y-4">
+              {[
+                "Provide education that is the source of intellectual, spiritual and cultural growth.",
+                "Enable students to acquire knowledge that supports and meets individual needs.",
+                "Develop students' critical and divergent thinking.",
+                "Encourage students to be all-rounded.",
+                "Inculcate the attitude to be social, mobile, interactive, ambitious and self-directed.",
+              ].map((m) => (
+                <li key={m} className="flex gap-3 text-sm leading-relaxed text-[var(--color-ink)]/85">
+                  <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
+                  <span>{m}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </section>
 
