@@ -9,6 +9,16 @@ import campusHigh from "@/assets/campus-high.jpg.asset.json";
 import campusGirls from "@/assets/campus-girls.jpg.asset.json";
 import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
 import aviation from "@/assets/aviation-uniform.jpg.asset.json";
+import clubAviation from "@/assets/club-aviation.jpg.asset.json";
+import clubDrama from "@/assets/club-drama.jpg.asset.json";
+import clubMusic from "@/assets/club-music-dance.jpg.asset.json";
+import clubDebate from "@/assets/club-debate.jpg.asset.json";
+import clubArt from "@/assets/club-art.jpg.asset.json";
+import clubCookery from "@/assets/club-cookery.jpg.asset.json";
+import clubScout from "@/assets/club-scout.jpg.asset.json";
+import clubSpeaking from "@/assets/club-public-speaking.jpg.asset.json";
+import clubUn from "@/assets/club-un.jpg.asset.json";
+import clubEnvironment from "@/assets/club-environment.jpg.asset.json";
 
 const slug = "alpha-high" as const;
 const ACCENT = "#0C447C";
@@ -408,11 +418,83 @@ function SignpostCard({
 // ---------- Beyond the classroom ----------
 
 const CLUBS = [
-  "News Bulletin", "Aviation", "Art & Drawing", "UN", "Drama",
-  "Music & Dance", "Music & Singing", "Debate", "Modeling",
-  "Cookery", "Environment", "Scout", "Public Speaking",
+  { name: "Aviation", photo: clubAviation.url },
+  { name: "Drama", photo: clubDrama.url },
+  { name: "Music & Dance", photo: clubMusic.url },
+  { name: "Debate", photo: clubDebate.url },
+  { name: "Art & Drawing", photo: clubArt.url },
+  { name: "Cookery", photo: clubCookery.url },
+  { name: "Scout", photo: clubScout.url },
+  { name: "Public Speaking", photo: clubSpeaking.url },
+  { name: "Model UN", photo: clubUn.url },
+  { name: "Environment", photo: clubEnvironment.url },
 ];
 const SPORTS = ["Football", "Basketball", "Volleyball", "Netball", "Athletics"];
+
+function ClubsRibbon() {
+  // Duplicate the list so the marquee loops seamlessly.
+  const loop = [...CLUBS, ...CLUBS];
+  return (
+    <Reveal direction="up" className="mt-10">
+      <div className="flex items-end justify-between gap-4">
+        <h3 className="font-display text-2xl font-black" style={{ color: ACCENT }}>
+          Clubs & societies
+        </h3>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: GOLD }}>
+          {CLUBS.length}+ student-led clubs
+        </span>
+      </div>
+
+      <div
+        className="group relative mt-5 overflow-hidden rounded-2xl border border-black/5 bg-[var(--color-off-white)] py-6"
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+        }}
+      >
+        <div className="flex w-max gap-5 px-5 animate-[clubsMarquee_38s_linear_infinite] group-hover:[animation-play-state:paused]">
+          {loop.map((c, i) => (
+            <figure
+              key={`${c.name}-${i}`}
+              className="relative h-56 w-72 shrink-0 overflow-hidden rounded-xl shadow-md ring-1 ring-black/10 transition-transform duration-500 hover:scale-[1.03] hover:shadow-xl"
+            >
+              <img
+                src={c.photo}
+                alt={`${c.name} club at Alpha High`}
+                className="h-full w-full object-cover transition-transform duration-700 hover:scale-110"
+                loading="lazy"
+                decoding="async"
+                width={800}
+                height={1024}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(12,68,124,0.85) 0%, rgba(12,68,124,0.15) 45%, transparent 65%)",
+                }}
+              />
+              <figcaption className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 pb-3 text-white">
+                <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
+                <span className="font-display text-sm font-bold tracking-wide">{c.name}</span>
+              </figcaption>
+            </figure>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes clubsMarquee {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
+    </Reveal>
+  );
+}
 
 function BeyondClassroom() {
   return (
@@ -427,23 +509,10 @@ function BeyondClassroom() {
           </h2>
         </Reveal>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          <Reveal direction="up">
-            <div className="h-full rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-6">
-              <h3 className="font-display text-lg font-bold" style={{ color: ACCENT }}>Clubs</h3>
-              <div className="mt-4 flex flex-wrap gap-2">
-                {CLUBS.map((c) => (
-                  <span
-                    key={c}
-                    className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold ring-1 ring-black/10 transition hover:scale-105"
-                    style={{ color: ACCENT }}
-                  >
-                    {c}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </Reveal>
+        <ClubsRibbon />
+
+        <div className="mt-10 grid gap-6 lg:grid-cols-2">
+
 
           <Reveal direction="up" delay={80}>
             <div className="h-full rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-6">
