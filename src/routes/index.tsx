@@ -526,7 +526,7 @@ function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
   );
 }
 
-function EventsRail({ events }: { events: HomeWhatsNew["events"] }) {
+function EventsRail({ events }: { events: HomeEventItem[] }) {
   return (
     <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
