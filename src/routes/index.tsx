@@ -305,7 +305,7 @@ function Home() {
       {/* OUR STORY */}
       <section className="bg-white">
         <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
-          <div>
+          <Reveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
             <h2 className="mt-3 font-display text-4xl font-600 tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
               Since 19 March 2007.
@@ -316,8 +316,8 @@ function Home() {
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
               With that vision embraced by every staff member and carried swiftly to our students, Alpha has become the nurturing ground of professionals and leaders — locally and globally.
             </p>
-          </div>
-          <div className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
+          </Reveal>
+          <Reveal direction="right" className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Our mission</p>
             <ul className="mt-4 space-y-4">
               {[
@@ -333,7 +333,7 @@ function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
         </div>
       </section>
 
