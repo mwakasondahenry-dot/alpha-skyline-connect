@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import React, { useEffect, useRef, useState, type CSSProperties, type ReactNode, type ElementType } from "react";
 
 export type RevealDirection = "up" | "left" | "right" | "none";
 
