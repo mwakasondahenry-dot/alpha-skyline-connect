@@ -45,7 +45,7 @@ export function SchoolPage({ config, bundle }: { config: SchoolConfig; bundle: S
               to="/admission"
               className="inline-flex items-center rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
             >
-              Apply Now
+              Enroll Now
             </Link>
             <Link
               to="/contact"
