@@ -104,8 +104,8 @@ function Hero() {
         style={{ background: GOLD }}
       />
 
-      <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pt-14 pb-12 sm:pt-20 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10 lg:pt-24 lg:pb-20">
-        <Reveal direction="up" className="max-w-2xl text-white">
+      <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-6 pt-14 pb-0 sm:pt-20 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10 lg:pt-24 lg:pb-0">
+        <Reveal direction="up" className="max-w-2xl pb-12 text-white lg:pb-20">
           <span
             className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
           >
@@ -136,22 +136,24 @@ function Hero() {
           </div>
         </Reveal>
 
-        <Reveal direction="right" className="relative mx-auto w-full max-w-md lg:max-w-none">
+        <Reveal direction="right" className="relative mx-auto flex w-full max-w-md items-end justify-center self-end lg:max-w-none">
           <div
             aria-hidden
-            className="absolute inset-0 m-auto h-[22rem] w-[22rem] rounded-full"
+            className="absolute bottom-0 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full blur-3xl"
             style={{
-              background: "radial-gradient(circle at center, rgba(232,160,32,0.35), transparent 70%)",
+              background: "radial-gradient(circle at center, rgba(232,160,32,0.65), rgba(232,160,32,0.15) 55%, transparent 75%)",
             }}
           />
           <img
             src={graduate.url}
             alt="Alpha High School Form Four graduate in cap and gown"
-            className="relative z-10 mx-auto h-auto w-full max-w-[28rem] drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)]"
+            className="relative z-10 mx-auto block h-auto w-full max-w-[28rem] drop-shadow-[0_25px_45px_rgba(232,160,32,0.55)]"
+            style={{ filter: "drop-shadow(0 0 60px rgba(232,160,32,0.55)) drop-shadow(0 30px 40px rgba(0,0,0,0.45))" }}
             loading="eager"
             decoding="async"
           />
         </Reveal>
+
       </div>
     </section>
   );
