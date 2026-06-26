@@ -378,20 +378,22 @@ function Home() {
       {/* CTA BAND */}
       <section className="bg-[var(--color-gold)]">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
-          <div>
+          <Reveal direction="left">
             <h2 className="font-display text-3xl font-600 text-[var(--color-deep-blue)] sm:text-4xl">
               Come and see Alpha for yourself.
             </h2>
             <p className="mt-2 text-sm text-[var(--color-deep-blue)]/85">
               Book a campus visit — we'll match you to the right school.
             </p>
-          </div>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
-          >
-            Book a Visit →
-          </Link>
+          </Reveal>
+          <Reveal direction="right">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+            >
+              Book a Visit →
+            </Link>
+          </Reveal>
         </div>
       </section>
 
