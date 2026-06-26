@@ -9,6 +9,16 @@ import campusHigh from "@/assets/campus-high.jpg.asset.json";
 import campusGirls from "@/assets/campus-girls.jpg.asset.json";
 import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
 import aviation from "@/assets/aviation-uniform.jpg.asset.json";
+import clubAviation from "@/assets/club-aviation.jpg.asset.json";
+import clubDrama from "@/assets/club-drama.jpg.asset.json";
+import clubMusic from "@/assets/club-music-dance.jpg.asset.json";
+import clubDebate from "@/assets/club-debate.jpg.asset.json";
+import clubArt from "@/assets/club-art.jpg.asset.json";
+import clubCookery from "@/assets/club-cookery.jpg.asset.json";
+import clubScout from "@/assets/club-scout.jpg.asset.json";
+import clubSpeaking from "@/assets/club-public-speaking.jpg.asset.json";
+import clubUn from "@/assets/club-un.jpg.asset.json";
+import clubEnvironment from "@/assets/club-environment.jpg.asset.json";
 
 const slug = "alpha-high" as const;
 const ACCENT = "#0C447C";
