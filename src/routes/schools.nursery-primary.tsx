@@ -10,6 +10,11 @@ import photoTeacher from "@/assets/np-teacher-pupils.jpg.asset.json";
 import photoTeam from "@/assets/np-team-thumbs.jpg.asset.json";
 import photoGirlPortrait from "@/assets/np-girl-portrait.jpg.asset.json";
 import photoHippoRide from "@/assets/np-hippo-ride.jpg.asset.json";
+import photoSpeakersGroup from "@/assets/np-junior-speakers-group.jpg.asset.json";
+import photoSpeakersTeam from "@/assets/np-junior-speakers-team.jpg.asset.json";
+import photoPlayground from "@/assets/np-playground.jpg.asset.json";
+import photoShapesClass from "@/assets/np-shapes-class.jpg.asset.json";
+import photoToyCar from "@/assets/np-toy-car.jpg.asset.json";
 
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
