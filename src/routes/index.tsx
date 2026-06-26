@@ -212,7 +212,7 @@ function Home() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
             Three schools · One Alpha
           </p>
-          <h2 className="mt-3 max-w-2xl font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
+          <h2 className="mt-3 max-w-2xl font-display text-4xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-5xl">
             Find the right campus<br />for your child.
           </h2>
         </Reveal>
@@ -243,7 +243,7 @@ function Home() {
                   <p className="text-[10px] font-bold tracking-[0.18em] text-[var(--color-gold)]">
                     {s.campus}
                   </p>
-                  <h3 className="mt-2 font-display text-3xl font-600 leading-tight">
+                  <h3 className="mt-2 font-display text-3xl font-semibold leading-tight">
                     {s.name}
                   </h3>
                   <p className="mt-3 text-sm leading-relaxed text-white/85">
@@ -274,7 +274,7 @@ function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/20" />
             <div className="relative flex h-full flex-col justify-end p-8 text-white">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/85">The Alpha Difference</p>
-              <h3 className="mt-2 font-display text-3xl font-600 leading-tight drop-shadow-md sm:text-4xl">
+              <h3 className="mt-2 font-display text-3xl font-semibold leading-tight drop-shadow-md sm:text-4xl">
                 Aviation, taught here.
               </h3>
               <p className="mt-3 max-w-md text-sm text-white/90 drop-shadow">
@@ -291,7 +291,7 @@ function Home() {
 
           <Reveal direction="right" className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Right behind it</p>
-            <h3 className="mt-2 font-display text-3xl font-600 text-[var(--color-deep-blue)]">
+            <h3 className="mt-2 font-display text-3xl font-semibold text-[var(--color-deep-blue)]">
               Coding &amp; digital skills
             </h3>
             <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink)]/80">
@@ -313,7 +313,7 @@ function Home() {
         <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
           {STATS.map((s, i) => (
             <Reveal key={i} direction="up" delay={i * 100} className="px-2">
-              <div className="font-display text-5xl font-600 text-[var(--color-gold)] sm:text-6xl">
+              <div className="font-display text-5xl font-semibold text-[var(--color-gold)] sm:text-6xl">
                 <CountUp to={s.value} />{s.suffix ?? ""}
               </div>
               <div className="mt-2 text-sm leading-snug text-white/90">
@@ -329,7 +329,7 @@ function Home() {
         <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
           <Reveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
-            <h2 className="mt-3 font-display text-4xl font-600 tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
               Since 19 March 2007.
             </h2>
             <p className="mt-5 text-base leading-relaxed text-[var(--color-ink)]/80">
@@ -363,7 +363,7 @@ function Home() {
       <section className="bg-[var(--color-off-white)]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
           <Reveal direction="up" className="text-center">
-            <h2 className="font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
+            <h2 className="font-display text-4xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-5xl">
               Where do you start?
             </h2>
             <p className="mt-3 text-sm text-[var(--color-ink)]/70">
@@ -381,7 +381,7 @@ function Home() {
                   <p className="text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
                     {p.age}
                   </p>
-                  <h3 className="mt-2 font-display text-lg font-600 text-[var(--color-deep-blue)]">
+                  <h3 className="mt-2 font-display text-lg font-semibold text-[var(--color-deep-blue)]">
                     {p.title}
                   </h3>
                   <p className="mt-2 text-sm text-[var(--color-ink)]/75 transition-transform group-hover:translate-x-0.5">
@@ -401,7 +401,7 @@ function Home() {
       <section className="bg-[var(--color-gold)]">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
           <Reveal direction="left">
-            <h2 className="font-display text-3xl font-600 text-[var(--color-deep-blue)] sm:text-4xl">
+            <h2 className="font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
               Come and see Alpha for yourself.
             </h2>
             <p className="mt-2 text-sm text-[var(--color-deep-blue)]/85">
@@ -453,7 +453,7 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
               What's new
             </p>
-            <h2 className="mt-2 font-display text-4xl font-600 tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
               Announcements &amp; upcoming events
             </h2>
             <p className="mt-3 text-sm text-[var(--color-ink)]/70">
@@ -484,7 +484,7 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
                         </span>
                         {n.published_at && <span>Posted {relativeDate(n.published_at)}</span>}
                       </div>
-                      <h3 className="mt-3 font-display text-base font-600 leading-snug text-[var(--color-deep-blue)]">
+                      <h3 className="mt-3 font-display text-base font-semibold leading-snug text-[var(--color-deep-blue)]">
                         {n.title}
                       </h3>
                       {n.body && (
@@ -506,7 +506,7 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
                 {events.map((e) => (
                   <li key={e.id} className="flex gap-4 py-4">
                     <div className="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-[var(--color-off-white)] ring-1 ring-[var(--color-deep-blue)]/10">
-                      <span className="font-display text-xl font-600 leading-none text-[var(--color-deep-blue)]">
+                      <span className="font-display text-xl font-semibold leading-none text-[var(--color-deep-blue)]">
                         {eventDay(e.event_date)}
                       </span>
                       <span className="text-[9px] font-bold tracking-wider text-[var(--color-brand-blue)]">
@@ -514,7 +514,7 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
                       </span>
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="font-display text-sm font-600 text-[var(--color-deep-blue)]">{e.title}</div>
+                      <div className="font-display text-sm font-semibold text-[var(--color-deep-blue)]">{e.title}</div>
                       <div className="mt-1 flex items-center gap-2 text-[11px]">
                         <span className={`rounded px-2 py-0.5 font-bold uppercase tracking-wider ${SCHOOL_BADGE[e.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
                           {SCHOOL_LABELS[e.school_slug] ?? e.school_slug}
