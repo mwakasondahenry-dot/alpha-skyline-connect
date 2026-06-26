@@ -79,11 +79,11 @@ const START_PATHS = [
   { age: "FORM 1 – 6", title: "Secondary, girls", sub: "Alpha Girls, Kunduchi", to: "/schools/alpha-girls", accent: "var(--color-blue-violet)" },
 ] as const;
 
-const STATS = [
-  { value: "3", label: ["schools across", "Dar es Salaam"] },
-  { value: "2 – 18", label: ["nursery through", "to A-Level"] },
-  { value: "1st", label: ["in Tanzania to", "teach aviation"] },
-  { value: "2", label: ["campuses —", "Kunduchi & Mikocheni"] },
+const STATS: ReadonlyArray<{ value: number; suffix?: string; prefix?: string; display?: string; label: [string, string] }> = [
+  { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"] },
+  { value: 3, label: ["schools across", "Dar es Salaam"] },
+  { value: 1, suffix: "st", label: ["in Tanzania to", "teach aviation"] },
+  { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"] },
 ] as const;
 
 const SCHOOL_LABELS: Record<string, string> = {
