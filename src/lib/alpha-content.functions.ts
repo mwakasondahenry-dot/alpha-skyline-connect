@@ -34,7 +34,7 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
           .select("id,title,body,cover_url,published_at,school_slug")
           .eq("published", true)
           .order("published_at", { ascending: false, nullsFirst: false })
-          .limit(3),
+          .limit(8),
         sb
           .from("events")
           .select("id,title,description,event_date,location,school_slug")
