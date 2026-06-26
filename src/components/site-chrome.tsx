@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 
 const NAV = [
   { to: "/schools/alpha-high" as const, label: "Schools" },
@@ -13,8 +14,8 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 bg-[var(--color-deep-blue)] text-white shadow-sm">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3 lg:px-10">
         <Link to="/" className="flex items-center gap-3 hover:opacity-90">
-          <span className="grid h-11 w-11 place-items-center rounded-full bg-white text-[var(--color-deep-blue)] font-display font-bold text-lg">
-            A
+          <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-white">
+            <img src={alphaLogo.url} alt="Alpha Schools" className="h-10 w-10 object-contain" />
           </span>
           <span className="leading-tight">
             <span className="block font-display text-sm font-bold tracking-wider">
@@ -54,8 +55,8 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[var(--color-deep-blue)] font-display font-bold">
-              A
+            <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-white">
+              <img src={alphaLogo.url} alt="Alpha Schools" className="h-9 w-9 object-contain" />
             </span>
             <span className="font-display text-sm font-bold tracking-wider">
               ALPHA <span className="font-normal text-white/80">SCHOOLS</span>
