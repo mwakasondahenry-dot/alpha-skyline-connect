@@ -2,6 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 import girlCutout from "@/assets/alpha-girl-uniform.png.asset.json";
+import photoDance from "@/assets/np-traditional-dance.jpg.asset.json";
+import photoMusicalChairs from "@/assets/np-musical-chairs.jpg.asset.json";
+import photoBallPit from "@/assets/np-ball-pit.jpg.asset.json";
+import photoTelescope from "@/assets/np-telescope.jpg.asset.json";
+import photoTeacher from "@/assets/np-teacher-pupils.jpg.asset.json";
+import photoTeam from "@/assets/np-team-thumbs.jpg.asset.json";
 
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
