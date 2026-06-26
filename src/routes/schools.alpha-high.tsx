@@ -261,7 +261,19 @@ const O_LEVEL = [
   { name: "Optional", items: "Additional Maths, Literature in English, French, ICS" },
 ];
 
-const A_COMBOS = ["PCM", "PCB", "PGM", "PMC", "CBG", "HGL", "HKL", "KLF", "EGM", "ECA", "HGE"];
+const A_COMBOS: { code: string; subjects: string }[] = [
+  { code: "PCM", subjects: "Physics · Chemistry · Mathematics" },
+  { code: "PCB", subjects: "Physics · Chemistry · Biology" },
+  { code: "PGM", subjects: "Physics · Geography · Mathematics" },
+  { code: "PMC", subjects: "Physics · Mathematics · Computer Science" },
+  { code: "CBG", subjects: "Chemistry · Biology · Geography" },
+  { code: "HGL", subjects: "History · Geography · Language" },
+  { code: "HKL", subjects: "History · Kiswahili · Language" },
+  { code: "KLF", subjects: "Kiswahili · Language · French" },
+  { code: "EGM", subjects: "Economics · Geography · Mathematics" },
+  { code: "ECA", subjects: "Economics · Commerce · Accountancy" },
+  { code: "HGE", subjects: "History · Geography · Economics" },
+];
 
 function Academics() {
   return (
