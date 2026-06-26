@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.functions";
+import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
 
 const FOUNDED_YEAR = 2007;
 const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
@@ -137,17 +138,28 @@ function Home() {
       <SiteHeader />
 
       {/* HERO */}
-      <section className="bg-[var(--color-off-white)]">
-        <div className="mx-auto grid max-w-7xl items-center gap-10 px-6 py-16 lg:grid-cols-[1.05fr_1fr] lg:px-10 lg:py-24">
-          <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-deep-blue)]/15 bg-white px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--color-deep-blue)]">
+      <section className="relative isolate overflow-hidden">
+        <img
+          src={heroImage.url}
+          alt="Floatplane against an open blue sky"
+          className="absolute inset-0 h-full w-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+        {/* Fade to black: heavy at bottom + left for legibility, lighter at top */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+
+        <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40">
+          <div className="max-w-2xl">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
               First high school in Tanzania to teach aviation
             </span>
-            <h1 className="mt-6 font-display text-6xl font-600 leading-[1.02] tracking-tight text-[var(--color-deep-blue)] sm:text-7xl">
+            <h1 className="mt-6 font-display text-6xl font-600 leading-[1.02] tracking-tight text-white sm:text-7xl drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]">
               Learning that<br />takes <span className="italic text-[var(--color-gold)]">off.</span>
             </h1>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-[var(--color-ink)]/80">
+            <p className="mt-6 max-w-md text-base leading-relaxed text-white/85">
               From nursery to A-Level across two Dar es Salaam campuses — one school where ambition has a runway.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -159,23 +171,11 @@ function Home() {
               </Link>
               <Link
                 to="/aviation"
-                className="inline-flex items-center gap-2 rounded-md border border-[var(--color-deep-blue)]/25 bg-white px-5 py-3 text-sm font-semibold text-[var(--color-deep-blue)] transition-colors hover:bg-[var(--color-deep-blue)]/5"
+                className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
               >
                 Inside the aviation programme →
               </Link>
             </div>
-          </div>
-
-          {/* Photo collage */}
-          <div className="relative hidden h-[440px] lg:block">
-            <div className="absolute right-6 top-0 h-56 w-48 rotate-[4deg] rounded-2xl bg-gradient-to-br from-[var(--color-bright-blue)] to-[var(--color-deep-blue)] ring-4 ring-[var(--color-deep-blue)] shadow-xl" />
-            <div className="absolute left-2 top-20 h-60 w-52 -rotate-[5deg] rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[#b9791a] ring-4 ring-[var(--color-gold)] shadow-xl" />
-            <div className="absolute right-2 bottom-0 h-48 w-60 rotate-[2deg] rounded-2xl bg-gradient-to-br from-[var(--color-bright-blue)] to-[var(--color-brand-blue)] ring-4 ring-[var(--color-bright-blue)] shadow-xl" />
-            <svg className="absolute right-0 top-2 h-8 w-8 text-[var(--color-gold)]" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path strokeLinecap="round" d="M4 10c4-6 12-4 14 2M16 8l2 4-4 1" /></svg>
-            <svg className="absolute -right-2 top-16 h-6 w-6 text-[var(--color-gold)]" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-5-7-11a5 5 0 019-3 5 5 0 019 3c0 6-7 11-7 11z"/></svg>
-            <span className="absolute right-2 top-32 h-3 w-3 rounded-full bg-[var(--color-deep-blue)]" />
-            <svg className="absolute left-8 bottom-2 h-7 w-7 text-[var(--color-deep-blue)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2l2.4 7.4H22l-6.2 4.5L18 21l-6-4.4L6 21l2.2-7.1L2 9.4h7.6z"/></svg>
-            <svg className="absolute right-12 bottom-1 h-8 w-12 text-[var(--color-gold)]" viewBox="0 0 48 16" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><path d="M2 8c4-6 8 6 12 0s8 6 12 0 8 6 12 0 8 6 8 0"/></svg>
           </div>
         </div>
       </section>
