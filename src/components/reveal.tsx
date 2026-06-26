@@ -48,7 +48,7 @@ interface RevealProps {
   children: ReactNode;
   direction?: RevealDirection;
   delay?: number;
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType;
   className?: string;
   style?: CSSProperties;
 }
