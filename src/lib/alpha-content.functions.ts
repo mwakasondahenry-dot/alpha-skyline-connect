@@ -7,15 +7,19 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database, NewsRow, EventRow } from "@/integrations/alpha-supabase/types";
 
 function serverClient() {
-  const url = process.env.ALPHA_SUPABASE_URL_SERVER;
+  const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER;
   const key = process.env.ALPHA_SUPABASE_ANON_KEY_SERVER;
-  if (!url || !key) {
+  if (!rawUrl || !key) {
     throw new Error("ALPHA_SUPABASE_URL_SERVER / ALPHA_SUPABASE_ANON_KEY_SERVER not configured");
   }
+  // Defensive: secret may have been stored with a trailing /rest/v1/ — supabase-js
+  // appends that itself, so strip it to avoid a double path (PGRST125).
+  const url = rawUrl.replace(/\/+$/, "").replace(/\/rest\/v1$/, "");
   return createClient<Database>(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });
 }
+
 
 export type HomeNewsItem = Pick<NewsRow, "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug">;
 export type HomeEventItem = Pick<EventRow, "id" | "title" | "description" | "event_date" | "location" | "school_slug">;
