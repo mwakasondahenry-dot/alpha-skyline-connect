@@ -531,7 +531,9 @@ function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
             </>
           )}
         </div>
+        )}
       </div>
+
     </section>
   );
 }
