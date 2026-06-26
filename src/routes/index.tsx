@@ -1,8 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.functions";
+
+const FOUNDED_YEAR = 2007;
+const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
 
 const whatsNewQuery = queryOptions({
   queryKey: ["home", "whats-new"],
