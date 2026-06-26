@@ -1,26 +1,29 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, GraduationCap, School, Sparkles } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
+import schoolNurseryPhoto from "@/assets/school-nursery-primary.jpg.asset.json";
+import schoolHighPhoto from "@/assets/school-alpha-high.jpg.asset.json";
+import schoolGirlsPhoto from "@/assets/school-alpha-girls.jpg.asset.json";
 
 const SCHOOLS = [
   {
     to: "/schools/nursery-primary" as const,
     label: "Nursery & Primary",
     blurb: "Ages 2–12 · Foundations for life",
-    Icon: School,
+    photo: schoolNurseryPhoto.url,
   },
   {
     to: "/schools/alpha-high" as const,
     label: "Alpha High",
     blurb: "Form 1–6 · Mixed secondary, Mikocheni",
-    Icon: GraduationCap,
+    photo: schoolHighPhoto.url,
   },
   {
     to: "/schools/alpha-girls" as const,
     label: "Alpha Girls",
     blurb: "Form 1–6 · Girls' secondary, Kunduchi",
-    Icon: Sparkles,
+    photo: schoolGirlsPhoto.url,
   },
 ];
 
