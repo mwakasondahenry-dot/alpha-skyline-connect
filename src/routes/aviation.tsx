@@ -247,19 +247,22 @@ function AviationPage() {
         </div>
       </section>
 
-      {/* 4. 11 MODULES */}
-      <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
+      {/* 4. 11 MODULES — tarmac */}
+      <section className="alpha-tarmac relative py-20 text-white sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          {/* Runway centre-line marking */}
+          <div className="alpha-runway-divider mx-auto mb-14 w-40" aria-hidden />
+
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
             <div className="max-w-2xl">
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
                 What students learn
               </p>
-              <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+              <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
                 Eleven modules. One real licence.
               </h2>
             </div>
-            <p className="max-w-md text-[var(--color-ink)]/75">
+            <p className="max-w-md text-white/70">
               Ground school content runs alongside flying hours so students arrive at every
               lesson prepared for the cockpit.
             </p>
@@ -269,21 +272,27 @@ function AviationPage() {
             {MODULES.map((m, i) => (
               <div
                 key={m}
-                className="group flex items-center gap-4 rounded-2xl border border-[var(--color-deep-blue)]/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--color-gold)] hover:shadow-md"
+                className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-[var(--color-gold)]/60 hover:bg-white/[0.08]"
               >
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-deep-blue)] font-display text-sm font-black text-[var(--color-gold)]">
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-gold)] font-display text-sm font-black text-[#1a1a18]">
                   {String(i + 1).padStart(2, "0")}
                 </div>
-                <div className="font-display font-semibold text-[var(--color-deep-blue)]">{m}</div>
+                <div className="font-display font-semibold text-white">{m}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* 5. TRAINING & TECHNOLOGY */}
-      <section className="bg-[#08365f] py-20 text-white sm:py-28">
+      {/* 5. TRAINING & TECHNOLOGY — tarmac continued */}
+      <section className="alpha-tarmac relative py-20 text-white sm:py-28">
+        {/* runway divider between the two tarmac sections */}
+        <div
+          className="alpha-runway-divider absolute left-1/2 top-0 w-64 -translate-x-1/2 -translate-y-1/2"
+          aria-hidden
+        />
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
               Training & technology
