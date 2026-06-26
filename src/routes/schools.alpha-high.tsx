@@ -61,7 +61,7 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
       <Distinctive />
       <BeyondClassroom />
       <LifeAtMikocheni />
-      <Staff staff={bundle.staff} />
+      
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
