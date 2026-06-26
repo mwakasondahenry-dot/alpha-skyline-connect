@@ -186,7 +186,7 @@ function Hero() {
           >
             <div className="overflow-hidden rounded-xl">
               <img
-                src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=900&q=80"
+                src={photoDance.url}
                 alt="Children in chef hats"
                 className="h-56 w-full object-cover"
                 loading="eager"
