@@ -426,7 +426,7 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
   return (
     <section className="bg-[var(--color-off-white)]">
       <div className="mx-auto max-w-7xl px-6 pb-20 pt-4 lg:px-10">
-        <div className="flex items-end justify-between gap-6">
+        <Reveal direction="up" className="flex items-end justify-between gap-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
               What's new
@@ -441,36 +441,38 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
           <Link to="/news" className="hidden text-sm font-semibold text-[var(--color-brand-blue)] hover:underline sm:inline">
             View all →
           </Link>
-        </div>
+        </Reveal>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]/60">Recent news</p>
             <div className="mt-4 grid gap-5 sm:grid-cols-2">
-              {news.map((n) => (
-                <article key={n.id} className="flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md">
-                  {n.cover_url ? (
-                    <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover" />
-                  ) : (
-                    <div aria-hidden className="aspect-[16/10] w-full bg-[var(--color-bright-blue)]/30" />
-                  )}
-                  <div className="flex flex-1 flex-col p-4">
-                    <div className="flex items-center gap-2 text-[11px] text-[var(--color-ink)]/60">
-                      <span className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
-                        {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
-                      </span>
-                      {n.published_at && <span>Posted {relativeDate(n.published_at)}</span>}
-                    </div>
-                    <h3 className="mt-3 font-display text-base font-600 leading-snug text-[var(--color-deep-blue)]">
-                      {n.title}
-                    </h3>
-                    {n.body && (
-                      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink)]/75">
-                        {n.body}
-                      </p>
+              {news.map((n, i) => (
+                <Reveal key={n.id} direction="up" delay={i * 100}>
+                  <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md">
+                    {n.cover_url ? (
+                      <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover" />
+                    ) : (
+                      <div aria-hidden className="aspect-[16/10] w-full bg-[var(--color-bright-blue)]/30" />
                     )}
-                  </div>
-                </article>
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="flex items-center gap-2 text-[11px] text-[var(--color-ink)]/60">
+                        <span className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
+                          {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
+                        </span>
+                        {n.published_at && <span>Posted {relativeDate(n.published_at)}</span>}
+                      </div>
+                      <h3 className="mt-3 font-display text-base font-600 leading-snug text-[var(--color-deep-blue)]">
+                        {n.title}
+                      </h3>
+                      {n.body && (
+                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink)]/75">
+                          {n.body}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                </Reveal>
               ))}
             </div>
           </div>
