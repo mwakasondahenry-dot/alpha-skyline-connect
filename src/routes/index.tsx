@@ -151,20 +151,20 @@ function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-20 lg:px-10 lg:pt-28">
-          <div className="grid items-end gap-10 lg:grid-cols-12">
-            <div className="pb-20 lg:col-span-7 lg:pb-28">
-              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
-                First high school in Tanzania to teach aviation
+        <div className="relative mx-auto max-w-7xl px-6 pt-16 sm:pt-20 lg:px-10 lg:pt-28">
+          <div className="grid items-end gap-6 lg:grid-cols-12 lg:gap-10">
+            <div className="pb-8 lg:col-span-7 lg:pb-28">
+              <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur sm:text-[11px]">
+                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
+                <span className="truncate">First high school in Tanzania to teach aviation</span>
               </span>
-              <h1 className="mt-6 font-display text-6xl font-600 leading-[1.02] tracking-tight text-white sm:text-7xl drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]">
+              <h1 className="mt-5 font-display text-5xl font-600 leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:mt-6 sm:text-6xl lg:text-7xl">
                 Learning that<br />takes <span className="italic text-[var(--color-gold)]">off.</span>
               </h1>
-              <p className="mt-6 max-w-md text-base leading-relaxed text-white/85">
+              <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/85 sm:mt-6 sm:text-base">
                 From nursery to A-Level across two Dar es Salaam campuses — one school where ambition has a runway.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
                 <Link
                   to="/schools/alpha-high"
                   className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
@@ -179,18 +179,19 @@ function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative hidden lg:col-span-5 lg:block">
+            <div className="relative lg:col-span-5">
               <div className="pointer-events-none absolute -inset-6 rounded-full bg-[var(--color-gold)]/8 blur-2xl" />
               <img
                 src={cadetsImage.url}
                 alt="Two Alpha Schools aviation cadets in uniform"
-                className="relative z-10 mx-auto h-auto w-full max-w-[520px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.4)]"
+                className="relative z-10 mx-auto block h-auto w-full max-w-[280px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.4)] sm:max-w-[360px] lg:max-w-[520px]"
                 loading="eager"
                 decoding="async"
               />
             </div>
           </div>
         </div>
+
       </section>
 
       {/* FIND THE RIGHT CAMPUS */}
