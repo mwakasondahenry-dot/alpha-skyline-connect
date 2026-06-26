@@ -93,8 +93,8 @@ function SchoolsDropdown() {
             : "pointer-events-none -translate-y-1 opacity-0"
         }`}
       >
-        <div className="w-[22rem] overflow-hidden rounded-xl border border-[var(--color-gold)]/40 bg-gradient-to-b from-[#fff8e6] to-[var(--color-off-white)] text-[var(--color-ink)] shadow-2xl shadow-black/30 ring-1 ring-black/5">
-          <div className="h-1 w-full bg-gradient-to-r from-[var(--color-gold)] via-[#f5c14b] to-[var(--color-gold)]" />
+        <div className="w-[22rem] overflow-hidden rounded-xl border border-black/10 bg-white text-[var(--color-ink)] shadow-2xl shadow-black/30 ring-1 ring-black/5">
+          <div className="h-1 w-full bg-gradient-to-r from-[var(--color-deep-blue)] via-[var(--color-bright-blue)] to-[var(--color-deep-blue)]" />
           <div className="p-2">
             {SCHOOLS.map((s, i) => (
               <Link
@@ -107,18 +107,18 @@ function SchoolsDropdown() {
                     ? `schoolItemIn 320ms ${i * 60 + 60}ms cubic-bezier(.2,.8,.2,1) both`
                     : undefined,
                 }}
-                className="group/item flex items-start gap-3 rounded-lg px-3 py-3 transition-all duration-200 hover:bg-[var(--color-gold)]/15 hover:translate-x-1"
+                className="group/item flex items-start gap-3 rounded-lg px-3 py-3 transition-all duration-200 hover:bg-[var(--color-bright-blue)] hover:translate-x-1"
               >
-                <span className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-lg ring-2 ring-[var(--color-gold)]/40 transition-all duration-300 group-hover/item:ring-[var(--color-gold)] group-hover/item:scale-105">
+                <span className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-lg ring-2 ring-black/10 transition-all duration-300 group-hover/item:ring-white group-hover/item:scale-105">
                   <img src={s.photo} alt={s.label} className="h-full w-full object-cover transition-transform duration-500 group-hover/item:scale-110" loading="lazy" />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block font-display text-[15px] font-bold text-[var(--color-deep-blue)]">
+                  <span className="block font-display text-[15px] font-bold text-[var(--color-deep-blue)] transition-colors group-hover/item:text-white">
                     {s.label}
                   </span>
-                  <span className="block text-xs text-[var(--color-ink)]/70">{s.blurb}</span>
+                  <span className="block text-xs text-[var(--color-ink)]/70 transition-colors group-hover/item:text-white/85">{s.blurb}</span>
                 </span>
-                <span className="self-center text-[var(--color-gold)] opacity-0 transition-opacity duration-200 group-hover/item:opacity-100">
+                <span className="self-center text-white opacity-0 transition-opacity duration-200 group-hover/item:opacity-100">
                   →
                 </span>
               </Link>
