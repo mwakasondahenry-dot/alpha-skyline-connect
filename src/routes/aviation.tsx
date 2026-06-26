@@ -1,10 +1,483 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { makeStubRoute } from "@/components/stub-route";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import heroFloatplane from "@/assets/hero-floatplane.jpg.asset.json";
+import aviationUniform from "@/assets/aviation-uniform.jpg.asset.json";
 
 export const Route = createFileRoute("/aviation")({
-  head: () => ({ meta: [{ title: "Aviation · Alpha Schools" }] }),
-  component: makeStubRoute(
-    "Aviation programme",
-    "The first school in Tanzania to teach aviation. Full flagship page coming next.",
-  ),
+  head: () => ({
+    meta: [
+      { title: "Aviation Programme · Alpha Schools" },
+      {
+        name: "description",
+        content:
+          "Alpha is the first school in Tanzania to teach flying. In partnership with the Kenya School of Flying, students train toward a real Private Pilot Licence.",
+      },
+      { property: "og:title", content: "Aviation Programme · Alpha Schools" },
+      {
+        property: "og:description",
+        content:
+          "Ground school, simulator hours and time in the air — the Alpha aviation pathway from Form One to the cockpit.",
+      },
+      { property: "og:image", content: heroFloatplane.url },
+    ],
+  }),
+  component: AviationPage,
 });
+
+const MODULES = [
+  "Aviation Technology",
+  "Basic Aeronautics",
+  "Flight Operations & Regulations",
+  "Safety in Aviation",
+  "Meteorology & Weather",
+  "Aircraft Engineering & Maintenance",
+  "Air Traffic Control",
+  "Electrical Systems in Aircraft",
+  "Flight Dispatch Procedures",
+  "Cabin Crew",
+  "Aerodynamics",
+];
+
+const PATHWAY = [
+  {
+    step: "01",
+    title: "Partner",
+    body:
+      "Kenya School of Flying (KSOF) in Nairobi conducts the pilot courses and ground school — a fully certified training partner.",
+  },
+  {
+    step: "02",
+    title: "Qualification",
+    body:
+      "A real Private Pilot Licence (PPL) — offered to Form Four and Form Six leavers who complete the programme.",
+  },
+  {
+    step: "03",
+    title: "Requirement",
+    body:
+      "A minimum of 40 flying hours, built up steadily through holiday flying programs at KSOF.",
+  },
+  {
+    step: "04",
+    title: "Two entry paths",
+    body:
+      "O-Level students start at Form One and complete their hours before CSEE. A-Level students joining at Form Five follow an accelerated programme with more flying and ground school.",
+  },
+];
+
+// NOTE: real Class of 2022 student names and faces only go live once
+// media-release consent is confirmed for each student. Until then we show
+// non-identifying flight imagery in this section.
+const STUDENT_PLACEHOLDERS = [
+  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
+  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
+  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
+  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
+];
+
+function AviationPage() {
+  return (
+    <div className="min-h-screen bg-[var(--color-off-white)]">
+      <SiteHeader />
+
+      {/* 1. HERO */}
+      <section className="relative overflow-hidden bg-[#0C447C] text-white">
+        <div
+          className="absolute inset-0 bg-cover bg-center opacity-60"
+          style={{ backgroundImage: `url(${heroFloatplane.url})` }}
+          aria-hidden
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(115deg, rgba(12,68,124,0.92) 0%, rgba(12,68,124,0.7) 45%, rgba(12,68,124,0.25) 100%)",
+          }}
+          aria-hidden
+        />
+        <div
+          className="absolute -bottom-20 -right-10 h-72 w-72 rounded-full"
+          style={{ background: "radial-gradient(circle, rgba(232,160,32,0.35) 0%, transparent 70%)" }}
+          aria-hidden
+        />
+
+        <div className="relative mx-auto max-w-7xl px-4 pb-28 pt-24 sm:px-6 sm:pt-32 lg:pb-40 lg:pt-40">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            The Alpha difference
+          </p>
+          <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+            Learning that <span className="text-[var(--color-gold)]">takes off.</span>
+          </h1>
+          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
+            Alpha is the first school in Tanzania to teach flying. In partnership with the
+            Kenya School of Flying, our students train toward a real Private Pilot Licence —
+            ground school, simulator hours, and time in the air.
+          </p>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              to="/admission"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[#1a1a18] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl"
+            >
+              How to join →
+            </Link>
+            <a
+              href="#pathway"
+              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
+            >
+              See the pathway
+            </a>
+          </div>
+
+          {/* mini stat strip */}
+          <div className="mt-14 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
+            <div>
+              <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">1st</div>
+              <div className="mt-1 text-xs uppercase tracking-wider text-white/70">School in Tanzania to fly</div>
+            </div>
+            <div>
+              <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">40h+</div>
+              <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Minimum flying hours</div>
+            </div>
+            <div>
+              <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">11</div>
+              <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Aviation modules</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. WHY IT MATTERS */}
+      <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
+        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            Why it matters
+          </p>
+          <p className="mx-auto mt-6 max-w-4xl font-display text-3xl font-bold leading-snug text-[var(--color-deep-blue)] sm:text-4xl lg:text-[2.75rem]">
+            Alpha schools are the <span className="text-[var(--color-gold)]">first in Tanzania</span> to introduce aviation
+            and flying through extra-curricular activities — giving students the chance to explore
+            aviation technology, build confidence, and open a genuine career pathway.
+          </p>
+        </div>
+      </section>
+
+      {/* 3. PATHWAY */}
+      <section id="pathway" className="relative overflow-hidden bg-[#0C447C] py-20 text-white sm:py-28">
+        <div
+          className="pointer-events-none absolute -left-32 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full opacity-30"
+          style={{ background: "radial-gradient(circle, rgba(232,160,32,0.4), transparent 70%)" }}
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              The pathway
+            </p>
+            <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
+              From Form One to the cockpit.
+            </h2>
+            <p className="mt-4 text-white/75">
+              A clear, structured route from secondary school into a real pilot licence —
+              built around the academic calendar and KSOF's training schedule.
+            </p>
+          </div>
+
+          <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {PATHWAY.map((p) => (
+              <li
+                key={p.step}
+                className="group relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur transition hover:scale-[1.02] hover:border-[var(--color-gold)]/40 hover:bg-white/[0.07]"
+              >
+                <div className="font-display text-5xl font-black text-[var(--color-gold)]/80">
+                  {p.step}
+                </div>
+                <h3 className="mt-3 font-display text-xl font-bold">{p.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/75">{p.body}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* 4. 11 MODULES */}
+      <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+                What students learn
+              </p>
+              <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+                Eleven modules. One real licence.
+              </h2>
+            </div>
+            <p className="max-w-md text-[var(--color-ink)]/75">
+              Ground school content runs alongside flying hours so students arrive at every
+              lesson prepared for the cockpit.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {MODULES.map((m, i) => (
+              <div
+                key={m}
+                className="group flex items-center gap-4 rounded-2xl border border-[var(--color-deep-blue)]/10 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:border-[var(--color-gold)] hover:shadow-md"
+              >
+                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-deep-blue)] font-display text-sm font-black text-[var(--color-gold)]">
+                  {String(i + 1).padStart(2, "0")}
+                </div>
+                <div className="font-display font-semibold text-[var(--color-deep-blue)]">{m}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. TRAINING & TECHNOLOGY */}
+      <section className="bg-[#08365f] py-20 text-white sm:py-28">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              Training & technology
+            </p>
+            <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
+              Real cockpits. Professional simulators.
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-white/80">
+              Students train on full-flight simulators including the{" "}
+              <span className="font-semibold text-[var(--color-gold)]">CAE 7000XR Series Level D</span>
+              {" "}— professional-grade simulation that improves training efficiency and real
+              understanding — alongside actual flying lessons at KSOF in Nairobi.
+            </p>
+
+            <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-white/15 pt-8">
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-white/60">Simulator</dt>
+                <dd className="mt-1 font-display text-xl font-bold">CAE 7000XR · Level D</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-white/60">Live flying</dt>
+                <dd className="mt-1 font-display text-xl font-bold">KSOF · Nairobi</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-white/60">Ground school</dt>
+                <dd className="mt-1 font-display text-xl font-bold">11 modules</dd>
+              </div>
+              <div>
+                <dt className="text-xs uppercase tracking-wider text-white/60">Outcome</dt>
+                <dd className="mt-1 font-display text-xl font-bold">PPL qualification</dd>
+              </div>
+            </dl>
+          </div>
+
+          <div className="relative">
+            <div
+              className="absolute -inset-6 rounded-[2rem] opacity-60 blur-2xl"
+              style={{ background: "radial-gradient(circle, rgba(232,160,32,0.45), transparent 70%)" }}
+              aria-hidden
+            />
+            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
+              <img
+                src={heroFloatplane.url}
+                alt="Aircraft on approach — training environment"
+                loading="lazy"
+                decoding="async"
+                className="aspect-[4/3] w-full object-cover"
+              />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5">
+                <div className="text-xs uppercase tracking-wider text-[var(--color-gold)]">
+                  Simulator + live flight
+                </div>
+                <div className="font-display text-lg font-bold">
+                  Hours that count toward the licence.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 6. OUR FLYING STUDENTS */}
+      {/* NOTE: real Class of 2022 student names and faces only go live once
+          media-release consent is confirmed for each student. Until then,
+          this section uses non-identifying flight imagery and placeholder names. */}
+      <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              Our flying students
+            </p>
+            <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+              Class of 2022.
+            </h2>
+            <p className="mt-4 text-[var(--color-ink)]/75">
+              Real Alpha students in flight gear, pre-flight checks, and post-solo grins.
+              Names and photos publish here once each family has signed a media-release form.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {STUDENT_PLACEHOLDERS.map((s, i) => (
+              <figure
+                key={i}
+                className="group overflow-hidden rounded-2xl border border-[var(--color-deep-blue)]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+              >
+                <div className="relative aspect-[3/4] overflow-hidden bg-[var(--color-deep-blue)]/5">
+                  <img
+                    src={aviationUniform.url}
+                    alt="Alpha aviation student in uniform"
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute right-3 top-3 rounded-full bg-[var(--color-gold)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1a1a18]">
+                    Pending consent
+                  </div>
+                </div>
+                <figcaption className="p-4">
+                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
+                    {s.name}
+                  </div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-[var(--color-ink)]/60">
+                    {s.role}
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 7. HOW TO JOIN */}
+      <section className="bg-white py-20 sm:py-28">
+        <div className="mx-auto max-w-6xl px-4 sm:px-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              How to join
+            </p>
+            <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+              Joining the aviation programme.
+            </h2>
+          </div>
+
+          <div className="mt-12 grid gap-8 lg:grid-cols-[1.3fr_1fr]">
+            <ol className="space-y-5">
+              {[
+                {
+                  t: "Enrol at Alpha High or Alpha Girls",
+                  b: "Aviation is open to secondary students at both campuses. Complete the standard Alpha admission first.",
+                },
+                {
+                  t: "Register interest in the aviation programme",
+                  b: "Tell admissions you'd like to join — they'll add your child to the aviation roster and KSOF intake list.",
+                },
+                {
+                  t: "Ground school + simulator hours during term",
+                  b: "11 modules taught alongside the NECTA curriculum, with simulator practice scheduled into the academic week.",
+                },
+                {
+                  t: "Holiday flying programs at KSOF (Nairobi)",
+                  b: "Students travel to Kenya School of Flying during school holidays to build their 40+ flying hours.",
+                },
+                {
+                  t: "PPL on completion",
+                  b: "After Form Four (or Form Six for A-Level joiners) and the required hours, students sit the PPL.",
+                },
+              ].map((s, i) => (
+                <li
+                  key={i}
+                  className="flex gap-5 rounded-2xl border border-[var(--color-deep-blue)]/10 bg-[var(--color-off-white)] p-5"
+                >
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-deep-blue)] font-display text-sm font-black text-[var(--color-gold)]">
+                    {String(i + 1).padStart(2, "0")}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="font-display text-lg font-bold text-[var(--color-deep-blue)]">
+                      {s.t}
+                    </div>
+                    <div className="mt-1 text-sm text-[var(--color-ink)]/75">{s.b}</div>
+                  </div>
+                </li>
+              ))}
+            </ol>
+
+            <aside className="rounded-3xl border-2 border-dashed border-[var(--color-gold)]/50 bg-[var(--color-gold)]/5 p-6">
+              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-gold)]">
+                To confirm with the school
+              </div>
+              <ul className="mt-4 space-y-4 text-sm text-[var(--color-ink)]/80">
+                {/* TODO: replace with confirmed numbers once admissions provides them */}
+                <li>
+                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
+                    Programme cost
+                  </div>
+                  <div className="mt-1 italic text-[var(--color-ink)]/60">
+                    [To confirm — termly aviation fee per student]
+                  </div>
+                </li>
+                <li>
+                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
+                    Flying hours fee
+                  </div>
+                  <div className="mt-1 italic text-[var(--color-ink)]/60">
+                    [To confirm — whether KSOF flying hours carry an additional charge]
+                  </div>
+                </li>
+                <li>
+                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
+                    Sign-up process
+                  </div>
+                  <div className="mt-1 italic text-[var(--color-ink)]/60">
+                    [To confirm — specific aviation enrolment form, deadlines, medical requirements]
+                  </div>
+                </li>
+              </ul>
+
+              <Link
+                to="/admission"
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-brand-blue)]"
+              >
+                Talk to admissions →
+              </Link>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. GOLD CTA BANNER */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          background:
+            "linear-gradient(135deg, var(--color-gold) 0%, #f0b240 60%, #d68f15 100%)",
+        }}
+      >
+        <div
+          className="pointer-events-none absolute -right-10 -top-10 h-64 w-64 rounded-full bg-white/15 blur-2xl"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-16 left-10 h-72 w-72 rounded-full bg-[var(--color-deep-blue)]/15 blur-3xl"
+          aria-hidden
+        />
+        <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between md:py-16">
+          <div className="max-w-2xl">
+            <h2 className="font-display text-3xl font-black leading-tight text-[#1a1a18] sm:text-4xl">
+              Ready to give your child a head start in the sky?
+            </h2>
+            <p className="mt-3 text-[#1a1a18]/80">
+              Visit a campus and ask about the aviation programme.
+            </p>
+          </div>
+          <Link
+            to="/contact"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/15 transition hover:scale-[1.03] hover:bg-[#08365f]"
+          >
+            Book a Visit →
+          </Link>
+        </div>
+      </section>
+
+      <SiteFooter />
+    </div>
+  );
+}
