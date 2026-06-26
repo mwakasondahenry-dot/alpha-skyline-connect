@@ -1,7 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import heroFloatplane from "@/assets/hero-floatplane.jpg.asset.json";
-import aviationUniform from "@/assets/aviation-uniform.jpg.asset.json";
+import avPreFlight from "@/assets/av-pre-flight-check.jpg.asset.json";
+import avCessnaBriefing from "@/assets/av-cessna-briefing.jpg.asset.json";
+import avTailInspection from "@/assets/av-tail-inspection.jpg.asset.json";
+import avGroundSchool1 from "@/assets/av-ground-school-1.jpg.asset.json";
+import avFlightline from "@/assets/av-flightline-group.jpg.asset.json";
+import avGroundSchool2 from "@/assets/av-ground-school-2.jpg.asset.json";
+import avInstrumentDemo from "@/assets/av-instrument-demo.jpg.asset.json";
+import avEngineering from "@/assets/av-engineering-hands-on.jpg.asset.json";
+
+// Real Alpha aviation student photos — KSOF holiday program.
+// NOTE: names below remain placeholders until written media-release
+// consent is on file for each named student.
+const FLYING_STUDENTS = [
+  { src: avFlightline.url, caption: "Pre-flight briefing on the flightline · KSOF, Nairobi" },
+  { src: avCessnaBriefing.url, caption: "Walk-around checks before take-off" },
+  { src: avPreFlight.url, caption: "Equipment review with KSOF instructors" },
+  { src: avTailInspection.url, caption: "Control-surface inspection — empennage" },
+  { src: avEngineering.url, caption: "Hands-on aircraft engineering practical" },
+  { src: avInstrumentDemo.url, caption: "Instrument demonstration during ground school" },
+  { src: avGroundSchool1.url, caption: "Ground school — Kenya School of Flying" },
+  { src: avGroundSchool2.url, caption: "Theory class — Aviation Technology module" },
+];
+
 
 export const Route = createFileRoute("/aviation")({
   head: () => ({
