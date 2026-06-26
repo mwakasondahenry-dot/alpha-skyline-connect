@@ -106,7 +106,7 @@ function NurseryHeader() {
           to="/admission"
           className="rounded-full bg-[var(--color-bright-blue)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
         >
-          Apply Now
+          Enroll Now
         </Link>
       </div>
     </header>
@@ -133,7 +133,7 @@ function Hero() {
               to="/admission"
               className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
             >
-              Apply Now
+              Enroll Now
             </Link>
             <Link
               to="/contact"
