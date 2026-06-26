@@ -3,6 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { Reveal } from "@/components/reveal";
 import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.functions";
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
 import cadetsImage from "@/assets/alpha-cadets.png.asset.json";
@@ -198,38 +199,41 @@ function Home() {
 
       {/* FIND THE RIGHT CAMPUS */}
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
-          Three schools · One Alpha
-        </p>
-        <h2 className="mt-3 max-w-2xl font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
-          Find the right campus<br />for your child.
-        </h2>
+        <Reveal direction="up">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            Three schools · One Alpha
+          </p>
+          <h2 className="mt-3 max-w-2xl font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
+            Find the right campus<br />for your child.
+          </h2>
+        </Reveal>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {SCHOOLS.map((s) => (
-            <article
-              key={s.slug}
-              className="flex flex-col rounded-2xl bg-white p-6 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-lg"
-            >
-              <span className="self-start rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18]">
-                {s.badge}
-              </span>
-              <h3 className="mt-16 font-display text-2xl font-600 text-[var(--color-deep-blue)]">
-                {s.name}
-              </h3>
-              <p className="mt-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
-                {s.campus}
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/80">
-                {s.blurb}
-              </p>
-              <Link
-                to={s.to}
-                className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] transition-transform hover:translate-x-0.5"
+          {SCHOOLS.map((s, i) => (
+            <Reveal key={s.slug} direction="up" delay={i * 100}>
+              <article
+                className="flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-lg"
               >
-                Explore the School →
-              </Link>
-            </article>
+                <span className="self-start rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18]">
+                  {s.badge}
+                </span>
+                <h3 className="mt-16 font-display text-2xl font-600 text-[var(--color-deep-blue)]">
+                  {s.name}
+                </h3>
+                <p className="mt-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
+                  {s.campus}
+                </p>
+                <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/80">
+                  {s.blurb}
+                </p>
+                <Link
+                  to={s.to}
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] transition-transform hover:translate-x-0.5"
+                >
+                  Explore the School →
+                </Link>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -237,7 +241,7 @@ function Home() {
       {/* AVIATION + CODING split */}
       <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-          <div className="relative min-h-[280px] overflow-hidden rounded-2xl">
+          <Reveal direction="left" className="relative min-h-[280px] overflow-hidden rounded-2xl">
             <img
               src={aviationUniformAsset.url}
               alt="Alpha Schools aviation cadet in uniform at the airport"
@@ -261,9 +265,9 @@ function Home() {
                 Inside the programme →
               </Link>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
+          <Reveal direction="right" className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Right behind it</p>
             <h3 className="mt-2 font-display text-3xl font-600 text-[var(--color-deep-blue)]">
               Coding &amp; digital skills
@@ -274,7 +278,7 @@ function Home() {
             <Link to="/coding" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5">
               See the curriculum →
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -286,14 +290,14 @@ function Home() {
         </div>
         <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
           {STATS.map((s, i) => (
-            <div key={i} className="px-2 animate-fade-in" style={{ animationDelay: `${i * 120}ms`, animationFillMode: "both" }}>
+            <Reveal key={i} direction="up" delay={i * 100} className="px-2">
               <div className="font-display text-5xl font-600 text-[var(--color-gold)] sm:text-6xl">
                 <CountUp to={s.value} />{s.suffix ?? ""}
               </div>
               <div className="mt-2 text-sm leading-snug text-white/90">
                 {s.label[0]}<br />{s.label[1]}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
@@ -301,7 +305,7 @@ function Home() {
       {/* OUR STORY */}
       <section className="bg-white">
         <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
-          <div>
+          <Reveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
             <h2 className="mt-3 font-display text-4xl font-600 tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
               Since 19 March 2007.
@@ -312,8 +316,8 @@ function Home() {
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
               With that vision embraced by every staff member and carried swiftly to our students, Alpha has become the nurturing ground of professionals and leaders — locally and globally.
             </p>
-          </div>
-          <div className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
+          </Reveal>
+          <Reveal direction="right" className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Our mission</p>
             <ul className="mt-4 space-y-4">
               {[
@@ -329,39 +333,40 @@ function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* WHERE DO YOU START */}
       <section className="bg-[var(--color-off-white)]">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <div className="text-center">
+          <Reveal direction="up" className="text-center">
             <h2 className="font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
               Where do you start?
             </h2>
             <p className="mt-3 text-sm text-[var(--color-ink)]/70">
               Tell us about your child and we'll point you to the right school.
             </p>
-          </div>
+          </Reveal>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {START_PATHS.map((p) => (
-              <Link
-                key={p.title}
-                to={p.to}
-                className="group rounded-xl bg-white p-5 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md"
-                style={{ borderTop: `3px solid ${p.accent}` }}
-              >
-                <p className="text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
-                  {p.age}
-                </p>
-                <h3 className="mt-2 font-display text-lg font-600 text-[var(--color-deep-blue)]">
-                  {p.title}
-                </h3>
-                <p className="mt-2 text-sm text-[var(--color-ink)]/75 transition-transform group-hover:translate-x-0.5">
-                  {p.sub} →
-                </p>
-              </Link>
+            {START_PATHS.map((p, i) => (
+              <Reveal key={p.title} direction="up" delay={i * 100}>
+                <Link
+                  to={p.to}
+                  className="group block h-full rounded-xl bg-white p-5 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md"
+                  style={{ borderTop: `3px solid ${p.accent}` }}
+                >
+                  <p className="text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
+                    {p.age}
+                  </p>
+                  <h3 className="mt-2 font-display text-lg font-600 text-[var(--color-deep-blue)]">
+                    {p.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-[var(--color-ink)]/75 transition-transform group-hover:translate-x-0.5">
+                    {p.sub} →
+                  </p>
+                </Link>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -373,20 +378,22 @@ function Home() {
       {/* CTA BAND */}
       <section className="bg-[var(--color-gold)]">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
-          <div>
+          <Reveal direction="left">
             <h2 className="font-display text-3xl font-600 text-[var(--color-deep-blue)] sm:text-4xl">
               Come and see Alpha for yourself.
             </h2>
             <p className="mt-2 text-sm text-[var(--color-deep-blue)]/85">
               Book a campus visit — we'll match you to the right school.
             </p>
-          </div>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
-          >
-            Book a Visit →
-          </Link>
+          </Reveal>
+          <Reveal direction="right">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+            >
+              Book a Visit →
+            </Link>
+          </Reveal>
         </div>
       </section>
 
@@ -419,7 +426,7 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
   return (
     <section className="bg-[var(--color-off-white)]">
       <div className="mx-auto max-w-7xl px-6 pb-20 pt-4 lg:px-10">
-        <div className="flex items-end justify-between gap-6">
+        <Reveal direction="up" className="flex items-end justify-between gap-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
               What's new
@@ -434,36 +441,38 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
           <Link to="/news" className="hidden text-sm font-semibold text-[var(--color-brand-blue)] hover:underline sm:inline">
             View all →
           </Link>
-        </div>
+        </Reveal>
 
         <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
           <div>
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]/60">Recent news</p>
             <div className="mt-4 grid gap-5 sm:grid-cols-2">
-              {news.map((n) => (
-                <article key={n.id} className="flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md">
-                  {n.cover_url ? (
-                    <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover" />
-                  ) : (
-                    <div aria-hidden className="aspect-[16/10] w-full bg-[var(--color-bright-blue)]/30" />
-                  )}
-                  <div className="flex flex-1 flex-col p-4">
-                    <div className="flex items-center gap-2 text-[11px] text-[var(--color-ink)]/60">
-                      <span className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
-                        {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
-                      </span>
-                      {n.published_at && <span>Posted {relativeDate(n.published_at)}</span>}
-                    </div>
-                    <h3 className="mt-3 font-display text-base font-600 leading-snug text-[var(--color-deep-blue)]">
-                      {n.title}
-                    </h3>
-                    {n.body && (
-                      <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink)]/75">
-                        {n.body}
-                      </p>
+              {news.map((n, i) => (
+                <Reveal key={n.id} direction="up" delay={i * 100}>
+                  <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md">
+                    {n.cover_url ? (
+                      <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover" />
+                    ) : (
+                      <div aria-hidden className="aspect-[16/10] w-full bg-[var(--color-bright-blue)]/30" />
                     )}
-                  </div>
-                </article>
+                    <div className="flex flex-1 flex-col p-4">
+                      <div className="flex items-center gap-2 text-[11px] text-[var(--color-ink)]/60">
+                        <span className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
+                          {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
+                        </span>
+                        {n.published_at && <span>Posted {relativeDate(n.published_at)}</span>}
+                      </div>
+                      <h3 className="mt-3 font-display text-base font-600 leading-snug text-[var(--color-deep-blue)]">
+                        {n.title}
+                      </h3>
+                      {n.body && (
+                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink)]/75">
+                          {n.body}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                </Reveal>
               ))}
             </div>
           </div>
