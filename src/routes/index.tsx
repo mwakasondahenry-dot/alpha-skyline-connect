@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.functions";
+import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
 import cadetsImage from "@/assets/alpha-cadets.png.asset.json";
 import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
@@ -19,6 +19,12 @@ const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
 const whatsNewQuery = queryOptions({
   queryKey: ["home", "whats-new"],
   queryFn: () => getHomeWhatsNew(),
+  staleTime: 5 * 60 * 1000,
+});
+
+const upcomingEventsQuery = queryOptions({
+  queryKey: ["home", "upcoming-events"],
+  queryFn: () => getHomeUpcomingEvents(),
   staleTime: 5 * 60 * 1000,
 });
 
@@ -40,7 +46,11 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(whatsNewQuery),
+  loader: ({ context }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(whatsNewQuery),
+      context.queryClient.ensureQueryData(upcomingEventsQuery),
+    ]),
   errorComponent: ({ error }) => (
     <div className="p-12 text-center text-sm text-muted-foreground">
       Couldn't load the homepage: {error.message}
@@ -139,6 +149,7 @@ function CountUp({ to, duration = 1400 }: { to: number; duration?: number }) {
 
 function Home() {
   const { data } = useSuspenseQuery(whatsNewQuery);
+  const { data: upcomingEvents } = useSuspenseQuery(upcomingEventsQuery);
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
@@ -354,7 +365,7 @@ function Home() {
       </section>
 
       {/* UPDATES + EVENTS */}
-      <WhatsNew data={data} />
+      <WhatsNew news={data.news} events={upcomingEvents} />
 
 
       {/* CTA BAND */}
@@ -401,8 +412,7 @@ function eventMonth(iso: string) {
   return new Date(iso).toLocaleString(undefined, { month: "short" }).toUpperCase();
 }
 
-function WhatsNew({ data }: { data: HomeWhatsNew }) {
-  const { news, events } = data;
+function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEventItem[] }) {
   if (news.length === 0 && events.length === 0) return null;
 
   return (
@@ -516,7 +526,7 @@ function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
   );
 }
 
-function EventsRail({ events }: { events: HomeWhatsNew["events"] }) {
+function EventsRail({ events }: { events: HomeEventItem[] }) {
   return (
     <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
       <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
