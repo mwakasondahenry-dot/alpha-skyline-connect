@@ -48,7 +48,6 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
   async (): Promise<HomeWhatsNew> => {
     try {
       const sb = serverClient();
-      const today = new Date().toISOString().slice(0, 10);
 
       const [newsRes, eventsRes] = await Promise.all([
         sb
@@ -61,9 +60,8 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
           .from("events")
           .select("id,title,description,event_date,location,school_slug")
           .eq("published", true)
-          .gte("event_date", today)
-          .order("event_date", { ascending: true })
-          .limit(6),
+          .order("event_date", { ascending: false })
+          .limit(5),
       ]);
 
       return {
