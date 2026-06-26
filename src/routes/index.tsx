@@ -86,12 +86,6 @@ const SCHOOLS = [
   },
 ] as const;
 
-const START_PATHS = [
-  { age: "AGE 2 – 5", title: "Just starting out", sub: "Nursery & early years", to: "/schools/nursery-primary", accent: "var(--color-bright-blue)" },
-  { age: "AGE 6 – 12", title: "Primary years", sub: "Building strong foundations", to: "/schools/nursery-primary", accent: "var(--color-bright-blue)" },
-  { age: "FORM 1 – 6", title: "Secondary, mixed", sub: "Alpha High, Mikocheni", to: "/schools/alpha-high", accent: "var(--color-deep-blue)" },
-  { age: "FORM 1 – 6", title: "Secondary, girls", sub: "Alpha Girls, Kunduchi", to: "/schools/alpha-girls", accent: "var(--color-blue-violet)" },
-] as const;
 
 const STATS: ReadonlyArray<{ value: number; suffix?: string; prefix?: string; display?: string; label: [string, string] }> = [
   { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"] },
