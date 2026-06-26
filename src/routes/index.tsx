@@ -413,15 +413,14 @@ function eventMonth(iso: string) {
 }
 
 function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEventItem[] }) {
-  if (news.length === 0 && events.length === 0) return null;
-
   return (
     <>
-      {news.length > 0 && <UpdatesSlideshow news={news} />}
-      {events.length > 0 && <EventsRail events={events} />}
+      <UpdatesSlideshow news={news} />
+      <EventsRail events={events} />
     </>
   );
 }
+
 
 function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
   const [idx, setIdx] = useState(0);
