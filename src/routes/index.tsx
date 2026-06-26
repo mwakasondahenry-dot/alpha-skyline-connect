@@ -100,6 +100,35 @@ const SCHOOL_BADGE: Record<string, string> = {
   "alpha-girls": "bg-[var(--color-blue-violet)] text-white",
 };
 
+function CountUp({ to, duration = 1400 }: { to: number; duration?: number }) {
+  const [n, setN] = useState(0);
+  const ref = useRef<HTMLSpanElement>(null);
+  const started = useRef(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      if (started.current) return;
+      if (entries.some((e) => e.isIntersecting)) {
+        started.current = true;
+        const start = performance.now();
+        const step = (t: number) => {
+          const p = Math.min(1, (t - start) / duration);
+          const eased = 1 - Math.pow(1 - p, 3);
+          setN(to * eased);
+          if (p < 1) requestAnimationFrame(step);
+          else setN(to);
+        };
+        requestAnimationFrame(step);
+      }
+    }, { threshold: 0.3 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [to, duration]);
+  const display = to % 1 === 0 ? Math.round(n).toString() : n.toFixed(1);
+  return <span ref={ref}>{display}</span>;
+}
+
 function Home() {
   const { data } = useSuspenseQuery(whatsNewQuery);
 
