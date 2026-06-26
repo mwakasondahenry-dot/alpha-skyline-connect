@@ -4,7 +4,8 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
-import type { Database, NewsRow, EventRow } from "@/integrations/alpha-supabase/types";
+import type { Database, NewsRow, EventRow, GalleryRow, SchoolRow, SchoolSlug } from "@/integrations/alpha-supabase/types";
+
 
 function serverClient() {
   const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER;
