@@ -365,7 +365,7 @@ function Home() {
       </section>
 
       {/* UPDATES + EVENTS */}
-      <WhatsNew data={data} />
+      <WhatsNew news={data.news} events={upcomingEvents} />
 
 
       {/* CTA BAND */}
