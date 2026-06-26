@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ScholarshipsRouteImport } from './routes/scholarships'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as ContactRouteImport } from './routes/contact'
@@ -21,6 +22,11 @@ import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nurs
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 
+const ScholarshipsRoute = ScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
@@ -86,6 +92,7 @@ export interface FileRoutesByFullPath {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -99,6 +106,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -113,6 +121,7 @@ export interface FileRoutesById {
   '/contact': typeof ContactRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -128,6 +137,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/news'
+    | '/scholarships'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -141,6 +151,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/news'
+    | '/scholarships'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -154,6 +165,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/gallery'
     | '/news'
+    | '/scholarships'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -168,6 +180,7 @@ export interface RootRouteChildren {
   ContactRoute: typeof ContactRoute
   GalleryRoute: typeof GalleryRoute
   NewsRoute: typeof NewsRoute
+  ScholarshipsRoute: typeof ScholarshipsRoute
   SchoolsAlphaGirlsRoute: typeof SchoolsAlphaGirlsRoute
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
@@ -175,6 +188,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/scholarships': {
+      id: '/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof ScholarshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news': {
       id: '/news'
       path: '/news'
@@ -264,6 +284,7 @@ const rootRouteChildren: RootRouteChildren = {
   ContactRoute: ContactRoute,
   GalleryRoute: GalleryRoute,
   NewsRoute: NewsRoute,
+  ScholarshipsRoute: ScholarshipsRoute,
   SchoolsAlphaGirlsRoute: SchoolsAlphaGirlsRoute,
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
