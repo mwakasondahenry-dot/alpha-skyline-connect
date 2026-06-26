@@ -9,38 +9,221 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CodingRouteImport } from './routes/coding'
+import { Route as AviationRouteImport } from './routes/aviation'
+import { Route as AdmissionRouteImport } from './routes/admission'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
+import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
+import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CodingRoute = CodingRouteImport.update({
+  id: '/coding',
+  path: '/coding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AviationRoute = AviationRouteImport.update({
+  id: '/aviation',
+  path: '/aviation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmissionRoute = AdmissionRouteImport.update({
+  id: '/admission',
+  path: '/admission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
+  id: '/schools/nursery-primary',
+  path: '/schools/nursery-primary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchoolsAlphaHighRoute = SchoolsAlphaHighRouteImport.update({
+  id: '/schools/alpha-high',
+  path: '/schools/alpha-high',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
+  id: '/schools/alpha-girls',
+  path: '/schools/alpha-girls',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admission': typeof AdmissionRoute
+  '/aviation': typeof AviationRoute
+  '/coding': typeof CodingRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/news': typeof NewsRoute
+  '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
+  '/schools/alpha-high': typeof SchoolsAlphaHighRoute
+  '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admission': typeof AdmissionRoute
+  '/aviation': typeof AviationRoute
+  '/coding': typeof CodingRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/news': typeof NewsRoute
+  '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
+  '/schools/alpha-high': typeof SchoolsAlphaHighRoute
+  '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/admission': typeof AdmissionRoute
+  '/aviation': typeof AviationRoute
+  '/coding': typeof CodingRoute
+  '/contact': typeof ContactRoute
+  '/gallery': typeof GalleryRoute
+  '/news': typeof NewsRoute
+  '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
+  '/schools/alpha-high': typeof SchoolsAlphaHighRoute
+  '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/admission'
+    | '/aviation'
+    | '/coding'
+    | '/contact'
+    | '/gallery'
+    | '/news'
+    | '/schools/alpha-girls'
+    | '/schools/alpha-high'
+    | '/schools/nursery-primary'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/admission'
+    | '/aviation'
+    | '/coding'
+    | '/contact'
+    | '/gallery'
+    | '/news'
+    | '/schools/alpha-girls'
+    | '/schools/alpha-high'
+    | '/schools/nursery-primary'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/admission'
+    | '/aviation'
+    | '/coding'
+    | '/contact'
+    | '/gallery'
+    | '/news'
+    | '/schools/alpha-girls'
+    | '/schools/alpha-high'
+    | '/schools/nursery-primary'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  AdmissionRoute: typeof AdmissionRoute
+  AviationRoute: typeof AviationRoute
+  CodingRoute: typeof CodingRoute
+  ContactRoute: typeof ContactRoute
+  GalleryRoute: typeof GalleryRoute
+  NewsRoute: typeof NewsRoute
+  SchoolsAlphaGirlsRoute: typeof SchoolsAlphaGirlsRoute
+  SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
+  SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coding': {
+      id: '/coding'
+      path: '/coding'
+      fullPath: '/coding'
+      preLoaderRoute: typeof CodingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aviation': {
+      id: '/aviation'
+      path: '/aviation'
+      fullPath: '/aviation'
+      preLoaderRoute: typeof AviationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admission': {
+      id: '/admission'
+      path: '/admission'
+      fullPath: '/admission'
+      preLoaderRoute: typeof AdmissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +231,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/schools/nursery-primary': {
+      id: '/schools/nursery-primary'
+      path: '/schools/nursery-primary'
+      fullPath: '/schools/nursery-primary'
+      preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schools/alpha-high': {
+      id: '/schools/alpha-high'
+      path: '/schools/alpha-high'
+      fullPath: '/schools/alpha-high'
+      preLoaderRoute: typeof SchoolsAlphaHighRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schools/alpha-girls': {
+      id: '/schools/alpha-girls'
+      path: '/schools/alpha-girls'
+      fullPath: '/schools/alpha-girls'
+      preLoaderRoute: typeof SchoolsAlphaGirlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  AdmissionRoute: AdmissionRoute,
+  AviationRoute: AviationRoute,
+  CodingRoute: CodingRoute,
+  ContactRoute: ContactRoute,
+  GalleryRoute: GalleryRoute,
+  NewsRoute: NewsRoute,
+  SchoolsAlphaGirlsRoute: SchoolsAlphaGirlsRoute,
+  SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
+  SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
