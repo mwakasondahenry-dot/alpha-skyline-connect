@@ -272,20 +272,6 @@ function WhatWeOffer() {
       arrowBg: "var(--color-gold)",
       arrowColor: "var(--color-deep-blue)",
     },
-    {
-      tone: "gold" as const,
-      label: "IMG · CLUBS & SPORT",
-      age: "EVERY AFTERNOON · ENRICHMENT",
-      title: "Clubs & Enrichment",
-      body:
-        "Coding club, art, music and sport — room to discover what they love and the confidence to try something new.",
-      bg: "white",
-      ageColor: "var(--color-gold)",
-      titleColor: "var(--color-deep-blue)",
-      bodyColor: "var(--color-ink)",
-      arrowBg: "#fbeed1",
-      arrowColor: "var(--color-gold)",
-    },
   ];
 
   return (
