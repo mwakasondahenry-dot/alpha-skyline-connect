@@ -151,8 +151,8 @@ function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
-          <div className="grid items-center gap-10 lg:grid-cols-12">
+        <div className="relative mx-auto max-w-7xl px-6 pt-20 lg:px-10 lg:pt-28">
+          <div className="grid items-end gap-10 lg:grid-cols-12">
             <div className="lg:col-span-7">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
