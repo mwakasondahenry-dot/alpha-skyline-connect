@@ -9,8 +9,11 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ScholarshipsRouteImport } from './routes/scholarships'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as FacilitiesRouteImport } from './routes/facilities'
+import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CodingRouteImport } from './routes/coding'
 import { Route as AviationRouteImport } from './routes/aviation'
@@ -21,6 +24,11 @@ import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nurs
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 
+const ScholarshipsRoute = ScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NewsRoute = NewsRouteImport.update({
   id: '/news',
   path: '/news',
@@ -29,6 +37,16 @@ const NewsRoute = NewsRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacilitiesRoute = FacilitiesRouteImport.update({
+  id: '/facilities',
+  path: '/facilities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -84,8 +102,11 @@ export interface FileRoutesByFullPath {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/events': typeof EventsRoute
+  '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -97,8 +118,11 @@ export interface FileRoutesByTo {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/events': typeof EventsRoute
+  '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -111,8 +135,11 @@ export interface FileRoutesById {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/events': typeof EventsRoute
+  '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
+  '/scholarships': typeof ScholarshipsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -126,8 +153,11 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/events'
+    | '/facilities'
     | '/gallery'
     | '/news'
+    | '/scholarships'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -139,8 +169,11 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/events'
+    | '/facilities'
     | '/gallery'
     | '/news'
+    | '/scholarships'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -152,8 +185,11 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/events'
+    | '/facilities'
     | '/gallery'
     | '/news'
+    | '/scholarships'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -166,8 +202,11 @@ export interface RootRouteChildren {
   AviationRoute: typeof AviationRoute
   CodingRoute: typeof CodingRoute
   ContactRoute: typeof ContactRoute
+  EventsRoute: typeof EventsRoute
+  FacilitiesRoute: typeof FacilitiesRoute
   GalleryRoute: typeof GalleryRoute
   NewsRoute: typeof NewsRoute
+  ScholarshipsRoute: typeof ScholarshipsRoute
   SchoolsAlphaGirlsRoute: typeof SchoolsAlphaGirlsRoute
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
@@ -175,6 +214,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/scholarships': {
+      id: '/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof ScholarshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/news': {
       id: '/news'
       path: '/news'
@@ -187,6 +233,20 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/facilities': {
+      id: '/facilities'
+      path: '/facilities'
+      fullPath: '/facilities'
+      preLoaderRoute: typeof FacilitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -262,8 +322,11 @@ const rootRouteChildren: RootRouteChildren = {
   AviationRoute: AviationRoute,
   CodingRoute: CodingRoute,
   ContactRoute: ContactRoute,
+  EventsRoute: EventsRoute,
+  FacilitiesRoute: FacilitiesRoute,
   GalleryRoute: GalleryRoute,
   NewsRoute: NewsRoute,
+  ScholarshipsRoute: ScholarshipsRoute,
   SchoolsAlphaGirlsRoute: SchoolsAlphaGirlsRoute,
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
