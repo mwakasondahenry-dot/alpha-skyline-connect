@@ -8,6 +8,9 @@ import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.function
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
 import cadetsImage from "@/assets/alpha-cadets.png.asset.json";
 import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
+import campusNurseryImage from "@/assets/campus-nursery.jpg.asset.json";
+import campusHighImage from "@/assets/campus-high.jpg.asset.json";
+import campusGirlsImage from "@/assets/campus-girls.jpg.asset.json";
 
 
 const FOUNDED_YEAR = 2007;
@@ -56,6 +59,8 @@ const SCHOOLS = [
     blurb:
       "Where curiosity starts. Play-led early years into a strong, structured primary foundation.",
     to: "/schools/nursery-primary",
+    image: campusNurseryImage.url,
+    alt: "Young Alpha primary students in green sports kit",
   },
   {
     slug: "alpha-high",
@@ -65,6 +70,8 @@ const SCHOOLS = [
     blurb:
       "Our flagship secondary. NECTA pathways, aviation and coding at the core.",
     to: "/schools/alpha-high",
+    image: campusHighImage.url,
+    alt: "Alpha High aviation students in safety vests at JNIA",
   },
   {
     slug: "alpha-girls",
@@ -74,6 +81,8 @@ const SCHOOLS = [
     blurb:
       "A secondary built for girls to lead — same rigour, same aviation and coding, room to thrive.",
     to: "/schools/alpha-girls",
+    image: campusGirlsImage.url,
+    alt: "Alpha Girls debate team celebrating with medals and certificates",
   },
 ] as const;
 
@@ -211,28 +220,41 @@ function Home() {
         <div className="mt-10 grid gap-6 md:grid-cols-3">
           {SCHOOLS.map((s, i) => (
             <Reveal key={s.slug} direction="up" delay={i * 100}>
-              <article
-                className="flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-lg"
+              <Link
+                to={s.to}
+                className="group relative flex h-[460px] flex-col justify-end overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1"
               >
-                <span className="self-start rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18]">
+                {/* Background image */}
+                <img
+                  src={s.image}
+                  alt={s.alt}
+                  loading="lazy"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                />
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10 transition-opacity duration-500 group-hover:from-black/95 group-hover:via-black/60" />
+                {/* Top badge */}
+                <span className="absolute left-5 top-5 z-10 rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18] shadow-md">
                   {s.badge}
                 </span>
-                <h3 className="mt-16 font-display text-2xl font-600 text-[var(--color-deep-blue)]">
-                  {s.name}
-                </h3>
-                <p className="mt-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
-                  {s.campus}
-                </p>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/80">
-                  {s.blurb}
-                </p>
-                <Link
-                  to={s.to}
-                  className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] transition-transform hover:translate-x-0.5"
-                >
-                  Explore the School →
-                </Link>
-              </article>
+                {/* Bottom content */}
+                <div className="relative z-10 p-6 text-white">
+                  <p className="text-[10px] font-bold tracking-[0.18em] text-[var(--color-gold)]">
+                    {s.campus}
+                  </p>
+                  <h3 className="mt-2 font-display text-3xl font-600 leading-tight">
+                    {s.name}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-white/85">
+                    {s.blurb}
+                  </p>
+                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white transition-transform group-hover:translate-x-1">
+                    Explore the School
+                    <ArrowRight className="h-4 w-4" />
+                  </span>
+                </div>
+              </Link>
             </Reveal>
           ))}
         </div>
