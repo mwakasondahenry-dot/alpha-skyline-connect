@@ -5,6 +5,7 @@ import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getHomeWhatsNew, type HomeWhatsNew } from "@/lib/alpha-content.functions";
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
+import cadetsImage from "@/assets/alpha-cadets.png.asset.json";
 
 const FOUNDED_YEAR = 2007;
 const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
@@ -150,31 +151,43 @@ function Home() {
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-28 lg:px-10 lg:py-40">
-          <div className="max-w-2xl">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
-              <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
-              First high school in Tanzania to teach aviation
-            </span>
-            <h1 className="mt-6 font-display text-6xl font-600 leading-[1.02] tracking-tight text-white sm:text-7xl drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]">
-              Learning that<br />takes <span className="italic text-[var(--color-gold)]">off.</span>
-            </h1>
-            <p className="mt-6 max-w-md text-base leading-relaxed text-white/85">
-              From nursery to A-Level across two Dar es Salaam campuses — one school where ambition has a runway.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/schools/alpha-high"
-                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
-              >
-                Explore Our Schools
-              </Link>
-              <Link
-                to="/aviation"
-                className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-              >
-                Inside the aviation programme →
-              </Link>
+        <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+          <div className="grid items-center gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
+                <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
+                First high school in Tanzania to teach aviation
+              </span>
+              <h1 className="mt-6 font-display text-6xl font-600 leading-[1.02] tracking-tight text-white sm:text-7xl drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)]">
+                Learning that<br />takes <span className="italic text-[var(--color-gold)]">off.</span>
+              </h1>
+              <p className="mt-6 max-w-md text-base leading-relaxed text-white/85">
+                From nursery to A-Level across two Dar es Salaam campuses — one school where ambition has a runway.
+              </p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  to="/schools/alpha-high"
+                  className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
+                >
+                  Explore Our Schools
+                </Link>
+                <Link
+                  to="/aviation"
+                  className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+                >
+                  Inside the aviation programme →
+                </Link>
+              </div>
+            </div>
+            <div className="relative hidden lg:col-span-5 lg:block">
+              <div className="pointer-events-none absolute -inset-10 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
+              <img
+                src={cadetsImage.url}
+                alt="Two Alpha Schools aviation cadets in uniform"
+                className="relative z-10 mx-auto h-auto w-full max-w-[520px] drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)]"
+                loading="eager"
+                decoding="async"
+              />
             </div>
           </div>
         </div>
