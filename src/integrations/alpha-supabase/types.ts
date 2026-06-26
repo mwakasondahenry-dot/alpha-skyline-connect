@@ -49,6 +49,16 @@ export interface GalleryRow {
   created_at: string;
 }
 
+export interface StaffRow {
+  id: string;
+  school_slug: SchoolSlug;
+  name: string;
+  title: string | null;
+  photo_url: string | null;
+  sort_order: number;
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -56,6 +66,7 @@ export interface Database {
       news: { Row: NewsRow; Insert: Partial<NewsRow>; Update: Partial<NewsRow> };
       events: { Row: EventRow; Insert: Partial<EventRow>; Update: Partial<EventRow> };
       gallery: { Row: GalleryRow; Insert: Partial<GalleryRow>; Update: Partial<GalleryRow> };
+      staff: { Row: StaffRow; Insert: Partial<StaffRow>; Update: Partial<StaffRow> };
     };
   };
 }
