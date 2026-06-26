@@ -149,6 +149,7 @@ function CountUp({ to, duration = 1400 }: { to: number; duration?: number }) {
 
 function Home() {
   const { data } = useSuspenseQuery(whatsNewQuery);
+  const { data: upcomingEvents } = useSuspenseQuery(upcomingEventsQuery);
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
