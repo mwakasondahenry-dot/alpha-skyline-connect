@@ -1,7 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import heroFloatplane from "@/assets/hero-floatplane.jpg.asset.json";
-import aviationUniform from "@/assets/aviation-uniform.jpg.asset.json";
+import avPreFlight from "@/assets/av-pre-flight-check.jpg.asset.json";
+import avCessnaBriefing from "@/assets/av-cessna-briefing.jpg.asset.json";
+import avTailInspection from "@/assets/av-tail-inspection.jpg.asset.json";
+import avGroundSchool1 from "@/assets/av-ground-school-1.jpg.asset.json";
+import avFlightline from "@/assets/av-flightline-group.jpg.asset.json";
+import avGroundSchool2 from "@/assets/av-ground-school-2.jpg.asset.json";
+import avInstrumentDemo from "@/assets/av-instrument-demo.jpg.asset.json";
+import avEngineering from "@/assets/av-engineering-hands-on.jpg.asset.json";
+
+// Real Alpha aviation student photos — KSOF holiday program.
+// NOTE: names below remain placeholders until written media-release
+// consent is on file for each named student.
+const FLYING_STUDENTS = [
+  { src: avFlightline.url, caption: "Pre-flight briefing on the flightline · KSOF, Nairobi" },
+  { src: avCessnaBriefing.url, caption: "Walk-around checks before take-off" },
+  { src: avPreFlight.url, caption: "Equipment review with KSOF instructors" },
+  { src: avTailInspection.url, caption: "Control-surface inspection — empennage" },
+  { src: avEngineering.url, caption: "Hands-on aircraft engineering practical" },
+  { src: avInstrumentDemo.url, caption: "Instrument demonstration during ground school" },
+  { src: avGroundSchool1.url, caption: "Ground school — Kenya School of Flying" },
+  { src: avGroundSchool2.url, caption: "Theory class — Aviation Technology module" },
+];
+
 
 export const Route = createFileRoute("/aviation")({
   head: () => ({
@@ -65,15 +87,8 @@ const PATHWAY = [
   },
 ];
 
-// NOTE: real Class of 2022 student names and faces only go live once
-// media-release consent is confirmed for each student. Until then we show
-// non-identifying flight imagery in this section.
-const STUDENT_PLACEHOLDERS = [
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-];
+// (Real student photos imported above as FLYING_STUDENTS.)
+
 
 function AviationPage() {
   return (
@@ -335,8 +350,9 @@ function AviationPage() {
             />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
               <img
-                src={heroFloatplane.url}
-                alt="Aircraft on approach — training environment"
+                src={avPreFlight.url}
+                alt="Alpha students on the apron with KSOF aircraft, Nairobi"
+
                 loading="lazy"
                 decoding="async"
                 className="aspect-[4/3] w-full object-cover"
@@ -354,56 +370,67 @@ function AviationPage() {
         </div>
       </section>
 
-      {/* 6. OUR FLYING STUDENTS */}
-      {/* NOTE: real Class of 2022 student names and faces only go live once
-          media-release consent is confirmed for each student. Until then,
-          this section uses non-identifying flight imagery and placeholder names. */}
+      {/* 6. OUR FLYING STUDENTS — real photos from the KSOF holiday program */}
+      {/* NOTE: photos are published with school approval. Individual student
+          NAMES remain withheld until written media-release consent is on
+          file for each student. Add names to the FLYING_STUDENTS array
+          once consents are confirmed. */}
       <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
-              Our flying students
-            </p>
-            <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-              Class of 2022.
-            </h2>
-            <p className="mt-4 text-[var(--color-ink)]/75">
-              Real Alpha students in flight gear, pre-flight checks, and post-solo grins.
-              Names and photos publish here once each family has signed a media-release form.
-            </p>
+          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+                Our flying students
+              </p>
+              <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+                From classroom to flightline.
+              </h2>
+              <p className="mt-4 text-[var(--color-ink)]/75">
+                Real Alpha students on the June holiday program at the Kenya School of
+                Flying — ground school in Nairobi, pre-flight checks on the apron,
+                hands-on engineering with KSOF instructors.
+              </p>
+            </div>
+            <div className="rounded-full border border-[var(--color-gold)]/40 bg-[var(--color-gold)]/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--color-deep-blue)]">
+              June Holiday Program · KSOF
+            </div>
           </div>
 
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {STUDENT_PLACEHOLDERS.map((s, i) => (
+          {/* Mosaic: first tile is taller, rest fill the grid */}
+          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:grid-rows-2">
+            {FLYING_STUDENTS.map((s, i) => (
               <figure
                 key={i}
-                className="group overflow-hidden rounded-2xl border border-[var(--color-deep-blue)]/10 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                className={`group relative overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl ${
+                  i === 0 ? "col-span-2 row-span-2 aspect-square md:aspect-auto" : "aspect-[4/5]"
+                }`}
               >
-                <div className="relative aspect-[3/4] overflow-hidden bg-[var(--color-deep-blue)]/5">
-                  <img
-                    src={aviationUniform.url}
-                    alt="Alpha aviation student in uniform"
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute right-3 top-3 rounded-full bg-[var(--color-gold)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-[#1a1a18]">
-                    Pending consent
+                <img
+                  src={s.src}
+                  alt={s.caption}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                />
+                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-90" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-4">
+                  <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-gold)]">
+                    KSOF · Nairobi
                   </div>
-                </div>
-                <figcaption className="p-4">
-                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
-                    {s.name}
-                  </div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-[var(--color-ink)]/60">
-                    {s.role}
+                  <div className="mt-1 font-display text-sm font-bold leading-tight text-white sm:text-base">
+                    {s.caption}
                   </div>
                 </figcaption>
               </figure>
             ))}
           </div>
+
+          <p className="mt-6 text-xs italic text-[var(--color-ink)]/55">
+            Individual student names are withheld pending written media-release consent.
+          </p>
         </div>
       </section>
+
 
       {/* 7. HOW TO JOIN */}
       <section className="bg-white py-20 sm:py-28">
