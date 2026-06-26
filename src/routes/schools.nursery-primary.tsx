@@ -272,20 +272,6 @@ function WhatWeOffer() {
       arrowBg: "var(--color-gold)",
       arrowColor: "var(--color-deep-blue)",
     },
-    {
-      tone: "gold" as const,
-      label: "IMG · CLUBS & SPORT",
-      age: "EVERY AFTERNOON · ENRICHMENT",
-      title: "Clubs & Enrichment",
-      body:
-        "Coding club, art, music and sport — room to discover what they love and the confidence to try something new.",
-      bg: "white",
-      ageColor: "var(--color-gold)",
-      titleColor: "var(--color-deep-blue)",
-      bodyColor: "var(--color-ink)",
-      arrowBg: "#fbeed1",
-      arrowColor: "var(--color-gold)",
-    },
   ];
 
   return (
@@ -298,15 +284,14 @@ function WhatWeOffer() {
           What we <span className="text-[var(--color-gold)]">offer</span>
         </h2>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
           {cards.map((c) => (
             <article
               key={c.title}
-              className="overflow-hidden rounded-3xl p-4 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.18)] transition-transform duration-500 hover:-translate-y-1"
+              className="overflow-hidden rounded-3xl p-6 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.18)] transition-transform duration-500 hover:-translate-y-1"
               style={{ background: c.bg }}
             >
-              <StripePanel tone={c.tone} label={c.label} className="h-40 sm:h-48" />
-              <div className="px-3 pb-4 pt-6">
+              <div className="px-1 pb-2 pt-2">
                 <p
                   className="text-[10px] font-bold uppercase tracking-[0.18em]"
                   style={{ color: c.ageColor }}
