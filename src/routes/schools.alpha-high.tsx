@@ -261,7 +261,19 @@ const O_LEVEL = [
   { name: "Optional", items: "Additional Maths, Literature in English, French, ICS" },
 ];
 
-const A_COMBOS = ["PCM", "PCB", "PGM", "PMC", "CBG", "HGL", "HKL", "KLF", "EGM", "ECA", "HGE"];
+const A_COMBOS: { code: string; subjects: string }[] = [
+  { code: "PCM", subjects: "Physics · Chemistry · Mathematics" },
+  { code: "PCB", subjects: "Physics · Chemistry · Biology" },
+  { code: "PGM", subjects: "Physics · Geography · Mathematics" },
+  { code: "PMC", subjects: "Physics · Mathematics · Computer Science" },
+  { code: "CBG", subjects: "Chemistry · Biology · Geography" },
+  { code: "HGL", subjects: "History · Geography · Language" },
+  { code: "HKL", subjects: "History · Kiswahili · Language" },
+  { code: "KLF", subjects: "Kiswahili · Language · French" },
+  { code: "EGM", subjects: "Economics · Geography · Mathematics" },
+  { code: "ECA", subjects: "Economics · Commerce · Accountancy" },
+  { code: "HGE", subjects: "History · Geography · Economics" },
+];
 
 function Academics() {
   return (
@@ -308,27 +320,53 @@ function Academics() {
 
           <Reveal direction="right">
             <div
-              className="h-full rounded-2xl p-7 text-white shadow-xl"
+              className="group relative h-full overflow-hidden rounded-2xl p-7 text-white shadow-xl transition-shadow duration-500 hover:shadow-2xl"
               style={{ background: ACCENT }}
             >
-              <div className="flex items-baseline gap-3">
-                <h3 className="font-display text-xl font-bold">A-Level combinations</h3>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/65">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-25 blur-3xl transition-opacity duration-700 group-hover:opacity-60"
+                style={{ background: GOLD }}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full opacity-15 blur-3xl"
+                style={{ background: "#1e7fc2" }}
+              />
+
+              <div className="relative flex items-baseline gap-3">
+                <h3 className="font-display text-xl font-bold text-white">A-Level combinations</h3>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-white/80">
                   Form 5–6 · ACSEE
                 </span>
               </div>
-              <p className="mt-3 text-sm text-white/80">All 11 combinations on offer:</p>
-              <div className="mt-5 flex flex-wrap gap-2">
-                {A_COMBOS.map((c) => (
+              <p className="relative mt-3 text-sm text-white/90">
+                All <span className="font-bold text-white">11</span> combinations on offer — hover a code to see its subjects.
+              </p>
+
+              <div className="relative mt-5 flex flex-wrap gap-2.5">
+                {A_COMBOS.map((c, i) => (
                   <span
-                    key={c}
-                    className="rounded-md bg-white/10 px-3 py-1.5 font-mono text-sm font-bold tracking-wider ring-1 ring-white/20 transition hover:bg-white/20"
-                    style={{ color: GOLD }}
+                    key={c.code}
+                    title={c.subjects}
+                    style={{
+                      animation: `comboIn 480ms ${i * 55}ms cubic-bezier(.2,.8,.2,1) both`,
+                    }}
+                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-110 hover:border-[var(--combo-gold)] hover:bg-white hover:text-[#0C447C] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
                   >
-                    {c}
+                    {c.code}
+                    <span className="pointer-events-none absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-[var(--combo-gold)] transition-all duration-300 group-hover/chip:w-3/4" />
                   </span>
                 ))}
               </div>
+
+              <style>{`
+                :root { --combo-gold: ${GOLD}; }
+                @keyframes comboIn {
+                  0%   { opacity: 0; transform: translateY(8px) scale(.9); }
+                  100% { opacity: 1; transform: translateY(0) scale(1); }
+                }
+              `}</style>
             </div>
           </Reveal>
         </div>
@@ -343,6 +381,7 @@ function Distinctive() {
   return (
     <section className="bg-[var(--color-off-white)]">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+
         <Reveal direction="up" className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
             Distinctive at Alpha High
