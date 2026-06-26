@@ -4,6 +4,7 @@ import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.function
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import graduate from "@/assets/alpha-high-graduate.png.asset.json";
+import campusAerial from "@/assets/alpha-high-campus-aerial.jpg.asset.json";
 import campusHigh from "@/assets/campus-high.jpg.asset.json";
 import campusGirls from "@/assets/campus-girls.jpg.asset.json";
 import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
@@ -65,6 +66,32 @@ function Hero() {
       className="relative isolate overflow-hidden"
       style={{ background: ACCENT }}
     >
+      {/* Aerial campus background */}
+      <img
+        src={campusAerial.url}
+        alt=""
+        aria-hidden
+        className="absolute inset-0 h-full w-full object-cover opacity-55"
+        loading="eager"
+        decoding="async"
+      />
+      {/* Blue fade overlays */}
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(135deg, rgba(12,68,124,0.92) 0%, rgba(12,68,124,0.78) 40%, rgba(12,68,124,0.55) 100%)",
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to top, rgba(8,40,80,0.85) 0%, rgba(8,40,80,0) 60%)",
+        }}
+      />
       {/* decorative blurs */}
       <div
         aria-hidden
@@ -73,9 +100,10 @@ function Hero() {
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 bottom-0 h-[24rem] w-[24rem] rounded-full opacity-20 blur-3xl"
+        className="pointer-events-none absolute -right-24 bottom-0 h-[24rem] w-[24rem] rounded-full opacity-25 blur-3xl"
         style={{ background: GOLD }}
       />
+
       <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pt-14 pb-12 sm:pt-20 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10 lg:pt-24 lg:pb-20">
         <Reveal direction="up" className="max-w-2xl text-white">
           <span
