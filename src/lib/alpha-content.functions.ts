@@ -4,7 +4,7 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
-import type { Database, NewsRow, EventRow, GalleryRow, SchoolRow, SchoolSlug } from "@/integrations/alpha-supabase/types";
+import type { Database, NewsRow, EventRow, GalleryRow, SchoolRow, SchoolSlug, StaffRow } from "@/integrations/alpha-supabase/types";
 
 
 function serverClient() {
@@ -83,23 +83,25 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
 export type SchoolNewsItem = Pick<NewsRow, "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug">;
 export type SchoolEventItem = Pick<EventRow, "id" | "title" | "description" | "event_date" | "location" | "school_slug">;
 export type SchoolGalleryItem = Pick<GalleryRow, "id" | "image_url" | "caption">;
+export type SchoolStaffItem = Pick<StaffRow, "id" | "name" | "title" | "photo_url">;
 
 export type SchoolBundle = {
   school: SchoolRow | null;
   news: SchoolNewsItem[];
   events: SchoolEventItem[];
   gallery: SchoolGalleryItem[];
+  staff: SchoolStaffItem[];
 };
 
 export const getSchoolBundle = createServerFn({ method: "GET" })
   .inputValidator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<SchoolBundle> => {
-    const empty: SchoolBundle = { school: null, news: [], events: [], gallery: [] };
+    const empty: SchoolBundle = { school: null, news: [], events: [], gallery: [], staff: [] };
     try {
       const sb = serverClient();
       const slugFilter = [data.slug, "group-wide"];
 
-      const [schoolRes, newsRes, eventsRes, galleryRes] = await Promise.all([
+      const [schoolRes, newsRes, eventsRes, galleryRes, staffRes] = await Promise.all([
         sb.from("schools").select("*").eq("slug", data.slug).maybeSingle(),
         sb
           .from("news")
@@ -121,6 +123,12 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
           .eq("school_slug", data.slug)
           .order("sort_order", { ascending: true })
           .limit(8),
+        sb
+          .from("staff")
+          .select("id,name,title,photo_url")
+          .eq("school_slug", data.slug)
+          .order("sort_order", { ascending: true })
+          .limit(12),
       ]);
 
       return {
@@ -128,6 +136,7 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
         news: newsRes.data ?? [],
         events: eventsRes.data ?? [],
         gallery: galleryRes.data ?? [],
+        staff: staffRes.data ?? [],
       };
     } catch (err) {
       console.error("[getSchoolBundle]", err);
