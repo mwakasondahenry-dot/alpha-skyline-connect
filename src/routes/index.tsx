@@ -180,11 +180,11 @@ function Home() {
               </div>
             </div>
             <div className="relative hidden lg:col-span-5 lg:block">
-              <div className="pointer-events-none absolute -inset-10 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
+              <div className="pointer-events-none absolute -inset-6 rounded-full bg-[var(--color-gold)]/8 blur-2xl" />
               <img
                 src={cadetsImage.url}
                 alt="Two Alpha Schools aviation cadets in uniform"
-                className="relative z-10 mx-auto h-auto w-full max-w-[520px] drop-shadow-[0_30px_50px_rgba(0,0,0,0.55)]"
+                className="relative z-10 mx-auto h-auto w-full max-w-[520px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.4)]"
                 loading="eager"
                 decoding="async"
               />
