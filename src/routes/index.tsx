@@ -236,24 +236,31 @@ function Home() {
       <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
           <div className="relative min-h-[280px] overflow-hidden rounded-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-brand-blue)] to-[var(--color-gold)]" />
-            <div className="absolute inset-0 bg-black/45" />
+            <img
+              src={aviationUniformAsset.url}
+              alt="Alpha Schools aviation cadet in uniform at the airport"
+              className="absolute inset-0 h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/20" />
             <div className="relative flex h-full flex-col justify-end p-8 text-white">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/85">The Alpha Difference</p>
-              <h3 className="mt-2 font-display text-3xl font-600 leading-tight sm:text-4xl">
+              <h3 className="mt-2 font-display text-3xl font-600 leading-tight drop-shadow-md sm:text-4xl">
                 Aviation, taught here.
               </h3>
-              <p className="mt-3 max-w-md text-sm text-white/90">
+              <p className="mt-3 max-w-md text-sm text-white/90 drop-shadow">
                 Ground school, simulator hours and first principles of flight — the first programme of its kind in any Tanzanian school.
               </p>
               <Link
                 to="/aviation"
-                className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--color-gold)] px-4 py-2.5 text-sm font-semibold text-[#1a1a18] transition-transform hover:scale-[1.02]"
+                className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--color-gold)] px-4 py-2.5 text-sm font-semibold text-[#1a1a18] shadow-lg transition-transform hover:scale-[1.02]"
               >
                 Inside the programme →
               </Link>
             </div>
           </div>
+
           <div className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Right behind it</p>
             <h3 className="mt-2 font-display text-3xl font-600 text-[var(--color-deep-blue)]">
