@@ -8,6 +8,8 @@ import photoBallPit from "@/assets/np-ball-pit.jpg.asset.json";
 import photoTelescope from "@/assets/np-telescope.jpg.asset.json";
 import photoTeacher from "@/assets/np-teacher-pupils.jpg.asset.json";
 import photoTeam from "@/assets/np-team-thumbs.jpg.asset.json";
+import photoGirlPortrait from "@/assets/np-girl-portrait.jpg.asset.json";
+import photoHippoRide from "@/assets/np-hippo-ride.jpg.asset.json";
 
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
