@@ -241,7 +241,7 @@ function Home() {
       {/* AVIATION + CODING split */}
       <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
         <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-          <div className="relative min-h-[280px] overflow-hidden rounded-2xl">
+          <Reveal direction="left" className="relative min-h-[280px] overflow-hidden rounded-2xl">
             <img
               src={aviationUniformAsset.url}
               alt="Alpha Schools aviation cadet in uniform at the airport"
@@ -265,9 +265,9 @@ function Home() {
                 Inside the programme →
               </Link>
             </div>
-          </div>
+          </Reveal>
 
-          <div className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
+          <Reveal direction="right" className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Right behind it</p>
             <h3 className="mt-2 font-display text-3xl font-600 text-[var(--color-deep-blue)]">
               Coding &amp; digital skills
@@ -278,7 +278,7 @@ function Home() {
             <Link to="/coding" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5">
               See the curriculum →
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
