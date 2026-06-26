@@ -170,7 +170,7 @@ function Home() {
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
                 <span className="truncate">First high school in Tanzania to teach aviation</span>
               </span>
-              <h1 className="mt-5 font-display text-5xl font-600 leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:mt-6 sm:text-6xl lg:text-7xl">
+              <h1 className="mt-5 font-display text-5xl font-black leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:mt-6 sm:text-6xl lg:text-7xl">
                 Learning that<br />takes <span className="italic text-[var(--color-gold)]">off.</span>
               </h1>
               <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/85 sm:mt-6 sm:text-base">
