@@ -2,6 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 import girlCutout from "@/assets/alpha-girl-uniform.png.asset.json";
+import photoDance from "@/assets/np-traditional-dance.jpg.asset.json";
+import photoMusicalChairs from "@/assets/np-musical-chairs.jpg.asset.json";
+import photoBallPit from "@/assets/np-ball-pit.jpg.asset.json";
+import photoTelescope from "@/assets/np-telescope.jpg.asset.json";
+import photoTeacher from "@/assets/np-teacher-pupils.jpg.asset.json";
+import photoTeam from "@/assets/np-team-thumbs.jpg.asset.json";
 
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
@@ -180,7 +186,7 @@ function Hero() {
           >
             <div className="overflow-hidden rounded-xl">
               <img
-                src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=900&q=80"
+                src={photoDance.url}
                 alt="Children in chef hats"
                 className="h-56 w-full object-cover"
                 loading="eager"
@@ -192,7 +198,7 @@ function Hero() {
           <div className="absolute -left-2 top-36 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80"
+                src={photoTelescope.url}
                 alt="Young pupil"
                 className="h-72 w-full object-cover"
                 loading="eager"
@@ -204,7 +210,7 @@ function Hero() {
           <div className="absolute bottom-0 right-0 w-[58%] rotate-[3deg] rounded-2xl bg-[var(--color-deep-blue)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src="https://images.unsplash.com/photo-1597392582469-a697322d5c16?w=900&q=80"
+                src={photoTeam.url}
                 alt="Pupils waving"
                 className="h-52 w-full object-cover"
                 loading="eager"
@@ -619,12 +625,12 @@ function PeekInside() {
         </div>
 
         <div className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
-          <StripePanel tone="blue" label="IMG · CIRCLE TIME" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
-          <StripePanel tone="gold" label="IMG · ART CORNER" className="h-44" />
-          <StripePanel tone="blue-dark" label="IMG · STORY TIME" className="h-44" />
-          <StripePanel tone="blue-light" label="IMG · OUTDOOR PLAY" className="md:col-span-2 h-44" />
-          <StripePanel tone="blue" label="IMG · CODING CLUB" className="h-40" />
-          <StripePanel tone="gold" label="IMG · MUSIC & SONG" className="h-40" />
+          <GalleryTile src={photoBallPit.url} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
+          <GalleryTile src={photoTeacher.url} caption="One-on-one learning" className="h-44" />
+          <GalleryTile src={photoTelescope.url} caption="Curious minds" className="h-44" />
+          <GalleryTile src={photoTeam.url} caption="Sports & teamwork" className="md:col-span-2 h-44" />
+          <GalleryTile src={photoMusicalChairs.url} caption="Active play" className="h-40" />
+          <GalleryTile src={photoDance.url} caption="Culture & dance" className="h-40" />
         </div>
 
         {/* Come and meet us ribbon */}
@@ -651,6 +657,17 @@ function PeekInside() {
 
 function ComeMeetUs() {
   return null;
+}
+
+function GalleryTile({ src, caption, className = "" }: { src: string; caption: string; className?: string }) {
+  return (
+    <figure className={`group relative overflow-hidden rounded-2xl shadow-md ring-1 ring-[var(--color-deep-blue)]/10 ${className}`}>
+      <img src={src} alt={caption} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+      <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-3 text-xs font-semibold uppercase tracking-wider text-white">
+        {caption}
+      </figcaption>
+    </figure>
+  );
 }
 
 // ---------- Footer ----------
