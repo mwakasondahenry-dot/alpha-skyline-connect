@@ -1,37 +1,37 @@
 import { Link } from "@tanstack/react-router";
 
 const NAV = [
-  { to: "/schools/nursery-primary", label: "Nursery & Primary" },
-  { to: "/schools/alpha-high", label: "Alpha High" },
-  { to: "/schools/alpha-girls", label: "Alpha Girls" },
-  { to: "/aviation", label: "Aviation" },
-  { to: "/about", label: "About" },
-  { to: "/news", label: "News" },
-  { to: "/contact", label: "Contact" },
-] as const;
+  { to: "/schools/alpha-high" as const, label: "Schools" },
+  { to: "/aviation" as const, label: "Aviation" },
+  { to: "/coding" as const, label: "Coding" },
+  { to: "/admission" as const, label: "Admission" },
+  { to: "/about" as const, label: "About" },
+];
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 bg-[var(--color-deep-blue)] text-white">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+    <header className="sticky top-0 z-40 bg-[var(--color-deep-blue)] text-white shadow-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3 lg:px-10">
         <Link to="/" className="flex items-center gap-3 hover:opacity-90">
-          <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[var(--color-deep-blue)] font-bold">
+          <span className="grid h-11 w-11 place-items-center rounded-full bg-white text-[var(--color-deep-blue)] font-display font-bold text-lg">
             A
           </span>
           <span className="leading-tight">
-            <span className="block text-sm font-semibold tracking-wide">ALPHA SCHOOLS</span>
+            <span className="block font-display text-sm font-bold tracking-wider">
+              ALPHA <span className="font-normal text-white/80">SCHOOLS</span>
+            </span>
             <span className="block text-[10px] uppercase tracking-[0.18em] text-white/70">
               Dar es Salaam
             </span>
           </span>
         </Link>
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-7 lg:flex">
           {NAV.map((item) => (
             <Link
-              key={item.to}
+              key={item.label}
               to={item.to}
-              className="text-sm text-white/85 transition-colors hover:text-white"
-              activeProps={{ className: "text-white font-medium" }}
+              className="text-sm text-white/90 transition-colors hover:text-white"
+              activeProps={{ className: "text-white font-semibold" }}
             >
               {item.label}
             </Link>
@@ -39,7 +39,7 @@ export function SiteHeader() {
         </nav>
         <Link
           to="/admission"
-          className="hidden rounded-full bg-[var(--color-gold)] px-4 py-2 text-sm font-medium text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02] sm:inline-flex"
+          className="rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
         >
           Apply Now
         </Link>
@@ -50,73 +50,50 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="mt-24 bg-[var(--color-deep-blue)] text-white/90">
-      <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+    <footer className="bg-[var(--color-deep-blue)] text-white/90">
+      <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[var(--color-deep-blue)] font-bold">
+            <span className="grid h-10 w-10 place-items-center rounded-full bg-white text-[var(--color-deep-blue)] font-display font-bold">
               A
             </span>
-            <span className="text-sm font-semibold tracking-wide">ALPHA SCHOOLS</span>
+            <span className="font-display text-sm font-bold tracking-wider">
+              ALPHA <span className="font-normal text-white/80">SCHOOLS</span>
+            </span>
           </div>
           <p className="mt-4 max-w-xs text-sm text-white/70">
-            Three schools, two campuses in Dar es Salaam. The first school in Tanzania to teach
-            aviation.
+            Alpha Education Centre Limited. Three schools, two campuses across Dar es Salaam, Tanzania.
           </p>
         </div>
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Schools</h4>
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">Schools</h4>
           <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li>
-              <Link to="/schools/nursery-primary" className="hover:text-white">
-                Nursery &amp; Primary · Kunduchi
-              </Link>
-            </li>
-            <li>
-              <Link to="/schools/alpha-high" className="hover:text-white">
-                Alpha High · Mikocheni
-              </Link>
-            </li>
-            <li>
-              <Link to="/schools/alpha-girls" className="hover:text-white">
-                Alpha Girls · Kunduchi
-              </Link>
-            </li>
+            <li><Link to="/schools/nursery-primary" className="hover:text-white">Nursery &amp; Primary</Link></li>
+            <li><Link to="/schools/alpha-high" className="hover:text-white">Alpha High</Link></li>
+            <li><Link to="/schools/alpha-girls" className="hover:text-white">Alpha Girls</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Explore</h4>
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">Explore</h4>
           <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li><Link to="/aviation" className="hover:text-white">Aviation programme</Link></li>
-            <li><Link to="/coding" className="hover:text-white">Coding &amp; digital</Link></li>
-            <li><Link to="/admission" className="hover:text-white">Admissions</Link></li>
-            <li><Link to="/news" className="hover:text-white">News &amp; events</Link></li>
+            <li><Link to="/aviation" className="hover:text-white">Aviation</Link></li>
+            <li><Link to="/coding" className="hover:text-white">Coding</Link></li>
+            <li><Link to="/admission" className="hover:text-white">Admission</Link></li>
+            <li><Link to="/scholarships" className="hover:text-white">Scholarships</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-white">Contact</h4>
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">Visit</h4>
           <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li>Kunduchi, Dar es Salaam</li>
-            <li>
-              <a href="tel:+255734036010" className="hover:text-white">
-                0734 036 010
-              </a>{" "}
-              · admissions{" "}
-              <a href="tel:+255756299302" className="hover:text-white">
-                0756 299 302
-              </a>
-            </li>
-            <li>
-              <a href="mailto:alphaschoolsdsm@gmail.com" className="hover:text-white">
-                alphaschoolsdsm@gmail.com
-              </a>
-            </li>
-            <li>Instagram @alphaschoolstz</li>
+            <li><Link to="/about" className="hover:text-white">About</Link></li>
+            <li><Link to="/facilities" className="hover:text-white">Facilities</Link></li>
+            <li><Link to="/events" className="hover:text-white">Events</Link></li>
+            <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
           </ul>
         </div>
       </div>
       <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-5 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-5 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <span>© {new Date().getFullYear()} Alpha Education Centre Limited.</span>
           <span>3 schools · 2 campuses · ages 2–18</span>
         </div>
