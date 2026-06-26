@@ -200,8 +200,8 @@ function Hero() {
           <div className="absolute -left-2 top-36 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoTelescope.url}
-                alt="Young pupil"
+                src={photoGirlPortrait.url}
+                alt="Smiling Alpha primary pupil in uniform"
                 className="h-72 w-full object-cover"
                 loading="eager"
               />
