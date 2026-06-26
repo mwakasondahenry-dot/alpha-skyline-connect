@@ -4,7 +4,8 @@
 
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
-import type { Database, NewsRow, EventRow } from "@/integrations/alpha-supabase/types";
+import type { Database, NewsRow, EventRow, GalleryRow, SchoolRow, SchoolSlug } from "@/integrations/alpha-supabase/types";
+
 
 function serverClient() {
   const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER;
@@ -78,3 +79,59 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
     }
   },
 );
+
+export type SchoolNewsItem = Pick<NewsRow, "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug">;
+export type SchoolEventItem = Pick<EventRow, "id" | "title" | "description" | "event_date" | "location" | "school_slug">;
+export type SchoolGalleryItem = Pick<GalleryRow, "id" | "image_url" | "caption">;
+
+export type SchoolBundle = {
+  school: SchoolRow | null;
+  news: SchoolNewsItem[];
+  events: SchoolEventItem[];
+  gallery: SchoolGalleryItem[];
+};
+
+export const getSchoolBundle = createServerFn({ method: "GET" })
+  .inputValidator((data: { slug: SchoolSlug }) => data)
+  .handler(async ({ data }): Promise<SchoolBundle> => {
+    const empty: SchoolBundle = { school: null, news: [], events: [], gallery: [] };
+    try {
+      const sb = serverClient();
+      const slugFilter = [data.slug, "group-wide"];
+
+      const [schoolRes, newsRes, eventsRes, galleryRes] = await Promise.all([
+        sb.from("schools").select("*").eq("slug", data.slug).maybeSingle(),
+        sb
+          .from("news")
+          .select("id,title,body,cover_url,published_at,school_slug")
+          .in("school_slug", slugFilter)
+          .eq("published", true)
+          .order("published_at", { ascending: false, nullsFirst: false })
+          .limit(3),
+        sb
+          .from("events")
+          .select("id,title,description,event_date,location,school_slug")
+          .in("school_slug", slugFilter)
+          .eq("published", true)
+          .order("event_date", { ascending: true })
+          .limit(4),
+        sb
+          .from("gallery")
+          .select("id,image_url,caption")
+          .eq("school_slug", data.slug)
+          .order("sort_order", { ascending: true })
+          .limit(8),
+      ]);
+
+      return {
+        school: schoolRes.data ?? null,
+        news: newsRes.data ?? [],
+        events: eventsRes.data ?? [],
+        gallery: galleryRes.data ?? [],
+      };
+    } catch (err) {
+      console.error("[getSchoolBundle]", err);
+      return empty;
+    }
+  });
+
