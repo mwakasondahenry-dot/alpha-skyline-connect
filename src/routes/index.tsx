@@ -290,14 +290,14 @@ function Home() {
         </div>
         <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
           {STATS.map((s, i) => (
-            <div key={i} className="px-2 animate-fade-in" style={{ animationDelay: `${i * 120}ms`, animationFillMode: "both" }}>
+            <Reveal key={i} direction="up" delay={i * 100} className="px-2">
               <div className="font-display text-5xl font-600 text-[var(--color-gold)] sm:text-6xl">
                 <CountUp to={s.value} />{s.suffix ?? ""}
               </div>
               <div className="mt-2 text-sm leading-snug text-white/90">
                 {s.label[0]}<br />{s.label[1]}
               </div>
-            </div>
+            </Reveal>
           ))}
         </div>
       </section>
