@@ -199,38 +199,41 @@ function Home() {
 
       {/* FIND THE RIGHT CAMPUS */}
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
-          Three schools · One Alpha
-        </p>
-        <h2 className="mt-3 max-w-2xl font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
-          Find the right campus<br />for your child.
-        </h2>
+        <Reveal direction="up">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            Three schools · One Alpha
+          </p>
+          <h2 className="mt-3 max-w-2xl font-display text-4xl font-600 tracking-tight text-[var(--color-ink)] sm:text-5xl">
+            Find the right campus<br />for your child.
+          </h2>
+        </Reveal>
 
         <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {SCHOOLS.map((s) => (
-            <article
-              key={s.slug}
-              className="flex flex-col rounded-2xl bg-white p-6 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-lg"
-            >
-              <span className="self-start rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18]">
-                {s.badge}
-              </span>
-              <h3 className="mt-16 font-display text-2xl font-600 text-[var(--color-deep-blue)]">
-                {s.name}
-              </h3>
-              <p className="mt-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
-                {s.campus}
-              </p>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/80">
-                {s.blurb}
-              </p>
-              <Link
-                to={s.to}
-                className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] transition-transform hover:translate-x-0.5"
+          {SCHOOLS.map((s, i) => (
+            <Reveal key={s.slug} direction="up" delay={i * 100}>
+              <article
+                className="flex h-full flex-col rounded-2xl bg-white p-6 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-lg"
               >
-                Explore the School →
-              </Link>
-            </article>
+                <span className="self-start rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18]">
+                  {s.badge}
+                </span>
+                <h3 className="mt-16 font-display text-2xl font-600 text-[var(--color-deep-blue)]">
+                  {s.name}
+                </h3>
+                <p className="mt-1.5 text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
+                  {s.campus}
+                </p>
+                <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/80">
+                  {s.blurb}
+                </p>
+                <Link
+                  to={s.to}
+                  className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] transition-transform hover:translate-x-0.5"
+                >
+                  Explore the School →
+                </Link>
+              </article>
+            </Reveal>
           ))}
         </div>
       </section>
