@@ -17,10 +17,34 @@ function serverClient() {
   });
 }
 
+export type HomeNewsItem = Pick<NewsRow, "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug">;
+export type HomeEventItem = Pick<EventRow, "id" | "title" | "description" | "event_date" | "location" | "school_slug">;
+
 export type HomeWhatsNew = {
-  news: Pick<NewsRow, "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug">[];
-  events: Pick<EventRow, "id" | "title" | "description" | "event_date" | "location" | "school_slug">[];
+  news: HomeNewsItem[];
+  events: HomeEventItem[];
 };
+
+export const getHomeUpcomingEvents = createServerFn({ method: "GET" }).handler(
+  async (): Promise<HomeEventItem[]> => {
+    try {
+      const sb = serverClient();
+      const today = new Date().toISOString().slice(0, 10);
+      const { data, error } = await sb
+        .from("events")
+        .select("id,title,description,event_date,location,school_slug")
+        .eq("published", true)
+        .gte("event_date", today)
+        .order("event_date", { ascending: true })
+        .limit(6);
+      if (error) throw error;
+      return data ?? [];
+    } catch (err) {
+      console.error("[getHomeUpcomingEvents]", err);
+      return [];
+    }
+  },
+);
 
 export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
   async (): Promise<HomeWhatsNew> => {
@@ -41,7 +65,7 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
           .eq("published", true)
           .gte("event_date", today)
           .order("event_date", { ascending: true })
-          .limit(4),
+          .limit(6),
       ]);
 
       return {
