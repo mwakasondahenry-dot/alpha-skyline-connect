@@ -198,7 +198,7 @@ function Hero() {
           <div className="absolute -left-2 top-36 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?w=800&q=80"
+                src={photoTelescope.url}
                 alt="Young pupil"
                 className="h-72 w-full object-cover"
                 loading="eager"
