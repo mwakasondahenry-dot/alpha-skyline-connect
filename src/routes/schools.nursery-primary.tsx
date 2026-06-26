@@ -659,6 +659,17 @@ function ComeMeetUs() {
   return null;
 }
 
+function GalleryTile({ src, caption, className = "" }: { src: string; caption: string; className?: string }) {
+  return (
+    <figure className={`group relative overflow-hidden rounded-2xl shadow-md ring-1 ring-[var(--color-deep-blue)]/10 ${className}`}>
+      <img src={src} alt={caption} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+      <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-3 text-xs font-semibold uppercase tracking-wider text-white">
+        {caption}
+      </figcaption>
+    </figure>
+  );
+}
+
 // ---------- Footer ----------
 
 function NurseryFooter() {
