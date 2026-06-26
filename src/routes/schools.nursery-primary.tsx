@@ -8,6 +8,8 @@ import photoBallPit from "@/assets/np-ball-pit.jpg.asset.json";
 import photoTelescope from "@/assets/np-telescope.jpg.asset.json";
 import photoTeacher from "@/assets/np-teacher-pupils.jpg.asset.json";
 import photoTeam from "@/assets/np-team-thumbs.jpg.asset.json";
+import photoGirlPortrait from "@/assets/np-girl-portrait.jpg.asset.json";
+import photoHippoRide from "@/assets/np-hippo-ride.jpg.asset.json";
 
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
@@ -186,8 +188,8 @@ function Hero() {
           >
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoDance.url}
-                alt="Children in chef hats"
+                src={photoHippoRide.url}
+                alt="Pupil on a play hippo in the courtyard"
                 className="h-56 w-full object-cover"
                 loading="eager"
               />
@@ -198,8 +200,8 @@ function Hero() {
           <div className="absolute -left-2 top-36 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoTelescope.url}
-                alt="Young pupil"
+                src={photoGirlPortrait.url}
+                alt="Smiling Alpha primary pupil in uniform"
                 className="h-72 w-full object-cover"
                 loading="eager"
               />
@@ -210,8 +212,8 @@ function Hero() {
           <div className="absolute bottom-0 right-0 w-[58%] rotate-[3deg] rounded-2xl bg-[var(--color-deep-blue)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoTeam.url}
-                alt="Pupils waving"
+                src={photoTeacher.url}
+                alt="Teacher working with two pupils"
                 className="h-52 w-full object-cover"
                 loading="eager"
               />
