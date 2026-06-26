@@ -153,7 +153,7 @@ function Home() {
 
         <div className="relative mx-auto max-w-7xl px-6 pt-20 lg:px-10 lg:pt-28">
           <div className="grid items-end gap-10 lg:grid-cols-12">
-            <div className="lg:col-span-7">
+            <div className="pb-20 lg:col-span-7 lg:pb-28">
               <span className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-gold)]" />
                 First high school in Tanzania to teach aviation
