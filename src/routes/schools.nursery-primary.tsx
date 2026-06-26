@@ -633,6 +633,11 @@ function PeekInside() {
 
         <div className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
           <GalleryTile src={photoBallPit.url} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
+          <GalleryTile src={photoShapesClass.url} caption="Learning shapes" className="h-44" />
+          <GalleryTile src={photoToyCar.url} caption="Little drivers" className="h-44" />
+          <GalleryTile src={photoPlayground.url} caption="Outdoor adventures" className="md:col-span-2 h-44" />
+          <GalleryTile src={photoSpeakersTeam.url} caption="Junior Speakers team" className="h-40" />
+          <GalleryTile src={photoSpeakersGroup.url} caption="Speakers Challenge 2025" className="h-40" />
           <GalleryTile src={photoTeacher.url} caption="One-on-one learning" className="h-44" />
           <GalleryTile src={photoTelescope.url} caption="Curious minds" className="h-44" />
           <GalleryTile src={photoTeam.url} caption="Sports & teamwork" className="md:col-span-2 h-44" />
