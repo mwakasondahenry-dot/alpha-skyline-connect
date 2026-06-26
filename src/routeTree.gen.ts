@@ -13,6 +13,7 @@ import { Route as ScholarshipsRouteImport } from './routes/scholarships'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as GalleryRouteImport } from './routes/gallery'
 import { Route as FacilitiesRouteImport } from './routes/facilities'
+import { Route as EventsRouteImport } from './routes/events'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CodingRouteImport } from './routes/coding'
 import { Route as AviationRouteImport } from './routes/aviation'
@@ -41,6 +42,11 @@ const GalleryRoute = GalleryRouteImport.update({
 const FacilitiesRoute = FacilitiesRouteImport.update({
   id: '/facilities',
   path: '/facilities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/events': typeof EventsRoute
   '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
@@ -111,6 +118,7 @@ export interface FileRoutesByTo {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/events': typeof EventsRoute
   '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
@@ -127,6 +135,7 @@ export interface FileRoutesById {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/events': typeof EventsRoute
   '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
@@ -144,6 +153,7 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/events'
     | '/facilities'
     | '/gallery'
     | '/news'
@@ -159,6 +169,7 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/events'
     | '/facilities'
     | '/gallery'
     | '/news'
@@ -174,6 +185,7 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/events'
     | '/facilities'
     | '/gallery'
     | '/news'
@@ -190,6 +202,7 @@ export interface RootRouteChildren {
   AviationRoute: typeof AviationRoute
   CodingRoute: typeof CodingRoute
   ContactRoute: typeof ContactRoute
+  EventsRoute: typeof EventsRoute
   FacilitiesRoute: typeof FacilitiesRoute
   GalleryRoute: typeof GalleryRoute
   NewsRoute: typeof NewsRoute
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/facilities'
       fullPath: '/facilities'
       preLoaderRoute: typeof FacilitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -302,6 +322,7 @@ const rootRouteChildren: RootRouteChildren = {
   AviationRoute: AviationRoute,
   CodingRoute: CodingRoute,
   ContactRoute: ContactRoute,
+  EventsRoute: EventsRoute,
   FacilitiesRoute: FacilitiesRoute,
   GalleryRoute: GalleryRoute,
   NewsRoute: NewsRoute,
