@@ -1,13 +1,138 @@
 import { Link } from "@tanstack/react-router";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, GraduationCap, School, Sparkles } from "lucide-react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 
+const SCHOOLS = [
+  {
+    to: "/schools/nursery-primary" as const,
+    label: "Nursery & Primary",
+    blurb: "Ages 2–12 · Foundations for life",
+    Icon: School,
+  },
+  {
+    to: "/schools/alpha-high" as const,
+    label: "Alpha High",
+    blurb: "Form 1–6 · Mixed secondary, Mikocheni",
+    Icon: GraduationCap,
+  },
+  {
+    to: "/schools/alpha-girls" as const,
+    label: "Alpha Girls",
+    blurb: "Form 1–6 · Girls' secondary, Kunduchi",
+    Icon: Sparkles,
+  },
+];
+
 const NAV = [
-  { to: "/schools/alpha-high" as const, label: "Schools" },
   { to: "/aviation" as const, label: "Aviation" },
   { to: "/coding" as const, label: "Coding" },
   { to: "/admission" as const, label: "Admission" },
   { to: "/about" as const, label: "About" },
 ];
+
+function SchoolsDropdown() {
+  const [open, setOpen] = useState(false);
+  const wrapRef = useRef<HTMLDivElement | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    function onDoc(e: MouseEvent) {
+      if (!wrapRef.current?.contains(e.target as Node)) setOpen(false);
+    }
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDoc);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, []);
+
+  const cancelClose = () => {
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+  };
+  const scheduleClose = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpen(false), 140);
+  };
+
+  return (
+    <div
+      ref={wrapRef}
+      className="relative"
+      onMouseEnter={() => {
+        cancelClose();
+        setOpen(true);
+      }}
+      onMouseLeave={scheduleClose}
+    >
+      <button
+        type="button"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        onClick={() => setOpen((v) => !v)}
+        className="group inline-flex items-center gap-1.5 text-sm text-white/90 transition-colors hover:text-[var(--color-gold)]"
+      >
+        Schools
+        <ChevronDown
+          className={`h-3.5 w-3.5 transition-transform duration-300 ${open ? "rotate-180 text-[var(--color-gold)]" : ""}`}
+        />
+      </button>
+
+      <div
+        role="menu"
+        className={`absolute left-1/2 top-full z-50 -translate-x-1/2 pt-3 transition-all duration-200 ease-out ${
+          open
+            ? "pointer-events-auto translate-y-0 opacity-100"
+            : "pointer-events-none -translate-y-1 opacity-0"
+        }`}
+      >
+        <div className="w-[22rem] overflow-hidden rounded-xl border border-[var(--color-gold)]/40 bg-gradient-to-b from-[#fff8e6] to-[var(--color-off-white)] text-[var(--color-ink)] shadow-2xl shadow-black/30 ring-1 ring-black/5">
+          <div className="h-1 w-full bg-gradient-to-r from-[var(--color-gold)] via-[#f5c14b] to-[var(--color-gold)]" />
+          <div className="p-2">
+            {SCHOOLS.map((s, i) => (
+              <Link
+                key={s.to}
+                to={s.to}
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                style={{
+                  animation: open
+                    ? `schoolItemIn 320ms ${i * 60 + 60}ms cubic-bezier(.2,.8,.2,1) both`
+                    : undefined,
+                }}
+                className="group/item flex items-start gap-3 rounded-lg px-3 py-3 transition-all duration-200 hover:bg-[var(--color-gold)]/15 hover:translate-x-1"
+              >
+                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-md bg-[var(--color-gold)]/20 text-[var(--color-deep-blue)] transition-all duration-300 group-hover/item:bg-[var(--color-gold)] group-hover/item:text-[var(--color-deep-blue)] group-hover/item:rotate-[-6deg]">
+                  <s.Icon className="h-4.5 w-4.5" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block font-display text-[15px] font-bold text-[var(--color-deep-blue)]">
+                    {s.label}
+                  </span>
+                  <span className="block text-xs text-[var(--color-ink)]/70">{s.blurb}</span>
+                </span>
+                <span className="self-center text-[var(--color-gold)] opacity-0 transition-opacity duration-200 group-hover/item:opacity-100">
+                  →
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        @keyframes schoolItemIn {
+          0% { opacity: 0; transform: translateY(-6px) scale(.98); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+      `}</style>
+    </div>
+  );
+}
 
 export function SiteHeader() {
   return (
@@ -27,11 +152,12 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="hidden items-center gap-7 lg:flex">
+          <SchoolsDropdown />
           {NAV.map((item) => (
             <Link
               key={item.label}
               to={item.to}
-              className="text-sm text-white/90 transition-colors hover:text-white"
+              className="text-sm text-white/90 transition-colors hover:text-[var(--color-gold)]"
               activeProps={{ className: "text-white font-semibold" }}
             >
               {item.label}
