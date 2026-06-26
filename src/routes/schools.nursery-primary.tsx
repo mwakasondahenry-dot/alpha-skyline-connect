@@ -212,8 +212,8 @@ function Hero() {
           <div className="absolute bottom-0 right-0 w-[58%] rotate-[3deg] rounded-2xl bg-[var(--color-deep-blue)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoTeam.url}
-                alt="Pupils waving"
+                src={photoTeacher.url}
+                alt="Teacher working with two pupils"
                 className="h-52 w-full object-cover"
                 loading="eager"
               />
