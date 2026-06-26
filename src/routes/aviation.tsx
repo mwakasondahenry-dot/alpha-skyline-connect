@@ -87,15 +87,8 @@ const PATHWAY = [
   },
 ];
 
-// NOTE: real Class of 2022 student names and faces only go live once
-// media-release consent is confirmed for each student. Until then we show
-// non-identifying flight imagery in this section.
-const STUDENT_PLACEHOLDERS = [
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-  { name: "Student name pending consent", role: "Class of 2022 · PPL candidate" },
-];
+// (Real student photos imported above as FLYING_STUDENTS.)
+
 
 function AviationPage() {
   return (
