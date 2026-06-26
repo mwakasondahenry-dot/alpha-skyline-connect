@@ -350,8 +350,9 @@ function AviationPage() {
             />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
               <img
-                src={heroFloatplane.url}
-                alt="Aircraft on approach — training environment"
+                src={avPreFlight.url}
+                alt="Alpha students on the apron with KSOF aircraft, Nairobi"
+
                 loading="lazy"
                 decoding="async"
                 className="aspect-[4/3] w-full object-cover"
