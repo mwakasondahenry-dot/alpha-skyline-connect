@@ -80,26 +80,75 @@ function AviationPage() {
     <div className="min-h-screen bg-[var(--color-off-white)]">
       <SiteHeader />
 
-      {/* 1. HERO */}
-      <section className="relative overflow-hidden bg-[#0C447C] text-white">
+      {/* 1. HERO — sky gradient with drifting CSS clouds */}
+      <section className="alpha-sky relative overflow-hidden text-white">
+        {/* Soft horizon glow */}
         <div
-          className="absolute inset-0 bg-cover bg-center opacity-60"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
+          style={{ background: "linear-gradient(to top, rgba(255,255,255,0.18), transparent)" }}
+          aria-hidden
+        />
+
+        {/* Drifting clouds — CSS only, prefers-reduced-motion handled in styles.css */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+          <div
+            className="alpha-cloud"
+            style={{
+              top: "14%", width: "180px", height: "44px",
+              ["--cloud-duration" as never]: "62s",
+              ["--cloud-delay" as never]: "-8s",
+              ["--cloud-opacity" as never]: "0.5",
+              ["--cloud-static-x" as never]: "20vw",
+            }}
+          />
+          <div
+            className="alpha-cloud"
+            style={{
+              top: "32%", width: "240px", height: "56px",
+              ["--cloud-duration" as never]: "85s",
+              ["--cloud-delay" as never]: "-30s",
+              ["--cloud-opacity" as never]: "0.45",
+              ["--cloud-static-x" as never]: "55vw",
+            }}
+          />
+          <div
+            className="alpha-cloud"
+            style={{
+              top: "58%", width: "140px", height: "36px",
+              ["--cloud-duration" as never]: "50s",
+              ["--cloud-delay" as never]: "-18s",
+              ["--cloud-opacity" as never]: "0.4",
+              ["--cloud-static-x" as never]: "75vw",
+            }}
+          />
+          <div
+            className="alpha-cloud"
+            style={{
+              top: "72%", width: "200px", height: "48px",
+              ["--cloud-duration" as never]: "95s",
+              ["--cloud-delay" as never]: "-45s",
+              ["--cloud-opacity" as never]: "0.35",
+              ["--cloud-static-x" as never]: "10vw",
+            }}
+          />
+        </div>
+
+        {/* Subtle aircraft silhouette via photo, kept very low so text stays readable */}
+        <div
+          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.18] mix-blend-luminosity"
           style={{ backgroundImage: `url(${heroFloatplane.url})` }}
           aria-hidden
         />
+        {/* Left-side darken so headline contrast is bulletproof */}
         <div
-          className="absolute inset-0"
+          className="pointer-events-none absolute inset-0"
           style={{
             background:
-              "linear-gradient(115deg, rgba(12,68,124,0.92) 0%, rgba(12,68,124,0.7) 45%, rgba(12,68,124,0.25) 100%)",
+              "linear-gradient(115deg, rgba(12,68,124,0.55) 0%, rgba(12,68,124,0.25) 50%, transparent 100%)",
           }}
           aria-hidden
         />
-        <div
-          className="absolute -bottom-20 -right-10 h-72 w-72 rounded-full"
-          style={{ background: "radial-gradient(circle, rgba(232,160,32,0.35) 0%, transparent 70%)" }}
-          aria-hidden
-        />
+
 
         <div className="relative mx-auto max-w-7xl px-4 pb-28 pt-24 sm:px-6 sm:pt-32 lg:pb-40 lg:pt-40">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
