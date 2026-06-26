@@ -46,7 +46,11 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(whatsNewQuery),
+  loader: ({ context }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(whatsNewQuery),
+      context.queryClient.ensureQueryData(upcomingEventsQuery),
+    ]),
   errorComponent: ({ error }) => (
     <div className="p-12 text-center text-sm text-muted-foreground">
       Couldn't load the homepage: {error.message}
