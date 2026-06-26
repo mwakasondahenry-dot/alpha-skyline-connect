@@ -261,7 +261,7 @@ function WhatWeOffer() {
     {
       tone: "blue-dark" as const,
       label: "IMG · PRIMARY CLASS",
-      age: "AGE 6 – 12 · PRIMARY",
+      age: "GRADE 1 - 7 · PRIMARY",
       title: "Primary School",
       body:
         "A structured, ambitious curriculum — strong literacy and numeracy, plus coding from the very start and a head full of questions.",
