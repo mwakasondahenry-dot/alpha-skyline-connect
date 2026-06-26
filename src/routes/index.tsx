@@ -86,12 +86,6 @@ const SCHOOLS = [
   },
 ] as const;
 
-const START_PATHS = [
-  { age: "AGE 2 – 5", title: "Just starting out", sub: "Nursery & early years", to: "/schools/nursery-primary", accent: "var(--color-bright-blue)" },
-  { age: "AGE 6 – 12", title: "Primary years", sub: "Building strong foundations", to: "/schools/nursery-primary", accent: "var(--color-bright-blue)" },
-  { age: "FORM 1 – 6", title: "Secondary, mixed", sub: "Alpha High, Mikocheni", to: "/schools/alpha-high", accent: "var(--color-deep-blue)" },
-  { age: "FORM 1 – 6", title: "Secondary, girls", sub: "Alpha Girls, Kunduchi", to: "/schools/alpha-girls", accent: "var(--color-blue-violet)" },
-] as const;
 
 const STATS: ReadonlyArray<{ value: number; suffix?: string; prefix?: string; display?: string; label: [string, string] }> = [
   { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"] },
@@ -359,43 +353,9 @@ function Home() {
         </div>
       </section>
 
-      {/* WHERE DO YOU START */}
-      <section className="bg-[var(--color-off-white)]">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <Reveal direction="up" className="text-center">
-            <h2 className="font-display text-4xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-5xl">
-              Where do you start?
-            </h2>
-            <p className="mt-3 text-sm text-[var(--color-ink)]/70">
-              Tell us about your child and we'll point you to the right school.
-            </p>
-          </Reveal>
-          <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {START_PATHS.map((p, i) => (
-              <Reveal key={p.title} direction="up" delay={i * 100}>
-                <Link
-                  to={p.to}
-                  className="group block h-full rounded-xl bg-white p-5 ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md"
-                  style={{ borderTop: `3px solid ${p.accent}` }}
-                >
-                  <p className="text-[11px] font-bold tracking-[0.14em] text-[var(--color-brand-blue)]">
-                    {p.age}
-                  </p>
-                  <h3 className="mt-2 font-display text-lg font-semibold text-[var(--color-deep-blue)]">
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-[var(--color-ink)]/75 transition-transform group-hover:translate-x-0.5">
-                    {p.sub} →
-                  </p>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* WHAT'S NEW */}
+      {/* UPDATES + EVENTS */}
       <WhatsNew data={data} />
+
 
       {/* CTA BAND */}
       <section className="bg-[var(--color-gold)]">
@@ -446,92 +406,183 @@ function WhatsNew({ data }: { data: HomeWhatsNew }) {
   if (news.length === 0 && events.length === 0) return null;
 
   return (
+    <>
+      {news.length > 0 && <UpdatesSlideshow news={news} />}
+      {events.length > 0 && <EventsRail events={events} />}
+    </>
+  );
+}
+
+function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const count = news.length;
+
+  useEffect(() => {
+    if (paused || count <= 1) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % count), 5500);
+    return () => clearInterval(t);
+  }, [paused, count]);
+
+  return (
     <section className="bg-[var(--color-off-white)]">
-      <div className="mx-auto max-w-7xl px-6 pb-20 pt-4 lg:px-10">
+      <div className="mx-auto max-w-7xl px-6 pb-16 pt-8 lg:px-10">
         <Reveal direction="up" className="flex items-end justify-between gap-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
-              What's new
+              Updates
             </p>
             <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-              Announcements &amp; upcoming events
+              The latest from Alpha.
             </h2>
-            <p className="mt-3 text-sm text-[var(--color-ink)]/70">
-              The latest from across Alpha Schools — updated as it happens.
-            </p>
           </div>
           <Link to="/news" className="hidden text-sm font-semibold text-[var(--color-brand-blue)] hover:underline sm:inline">
             View all →
           </Link>
         </Reveal>
 
-        <div className="mt-10 grid gap-8 lg:grid-cols-[1.5fr_1fr]">
-          <div>
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]/60">Recent news</p>
-            <div className="mt-4 grid gap-5 sm:grid-cols-2">
-              {news.map((n, i) => (
-                <Reveal key={n.id} direction="up" delay={i * 100}>
-                  <article className="flex h-full flex-col overflow-hidden rounded-xl bg-white ring-1 ring-[var(--color-deep-blue)]/10 transition-shadow hover:shadow-md">
-                    {n.cover_url ? (
-                      <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="aspect-[16/10] w-full object-cover" />
-                    ) : (
-                      <div aria-hidden className="aspect-[16/10] w-full bg-[var(--color-bright-blue)]/30" />
+        <div
+          className="relative mt-8 overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-[var(--color-deep-blue)]/10"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div
+            className="flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
+            style={{ transform: `translateX(-${idx * 100}%)` }}
+          >
+            {news.map((n) => (
+              <article key={n.id} className="grid w-full shrink-0 grid-cols-1 md:grid-cols-2">
+                <div className="relative aspect-[16/11] md:aspect-auto md:min-h-[420px]">
+                  {n.cover_url ? (
+                    <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
+                  ) : (
+                    <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-bright-blue)] to-[var(--color-gold)]" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/10" />
+                </div>
+                <div className="flex flex-col justify-center gap-4 p-8 sm:p-10 lg:p-14">
+                  <div className="flex items-center gap-2 text-[11px]">
+                    <span className={`rounded px-2 py-0.5 font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
+                      {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
+                    </span>
+                    {n.published_at && (
+                      <span className="text-[var(--color-ink)]/60">Posted {relativeDate(n.published_at)}</span>
                     )}
-                    <div className="flex flex-1 flex-col p-4">
-                      <div className="flex items-center gap-2 text-[11px] text-[var(--color-ink)]/60">
-                        <span className={`rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
-                          {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
-                        </span>
-                        {n.published_at && <span>Posted {relativeDate(n.published_at)}</span>}
-                      </div>
-                      <h3 className="mt-3 font-display text-base font-semibold leading-snug text-[var(--color-deep-blue)]">
-                        {n.title}
-                      </h3>
-                      {n.body && (
-                        <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-[var(--color-ink)]/75">
-                          {n.body}
-                        </p>
-                      )}
-                    </div>
-                  </article>
-                </Reveal>
-              ))}
-            </div>
+                  </div>
+                  <h3 className="font-display text-2xl font-semibold leading-tight text-[var(--color-deep-blue)] sm:text-3xl lg:text-4xl">
+                    {n.title}
+                  </h3>
+                  {n.body && (
+                    <p className="line-clamp-4 text-sm leading-relaxed text-[var(--color-ink)]/75 sm:text-base">
+                      {n.body}
+                    </p>
+                  )}
+                </div>
+              </article>
+            ))}
           </div>
 
-          <aside>
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-ink)]/60">Upcoming events</p>
-            <div className="mt-4 rounded-xl bg-white p-4 ring-1 ring-[var(--color-deep-blue)]/10">
-              <ul className="divide-y divide-[var(--color-deep-blue)]/10">
-                {events.map((e) => (
-                  <li key={e.id} className="flex gap-4 py-4">
-                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-lg bg-[var(--color-off-white)] ring-1 ring-[var(--color-deep-blue)]/10">
-                      <span className="font-display text-xl font-semibold leading-none text-[var(--color-deep-blue)]">
-                        {eventDay(e.event_date)}
-                      </span>
-                      <span className="text-[9px] font-bold tracking-wider text-[var(--color-brand-blue)]">
-                        {eventMonth(e.event_date)}
-                      </span>
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="font-display text-sm font-semibold text-[var(--color-deep-blue)]">{e.title}</div>
-                      <div className="mt-1 flex items-center gap-2 text-[11px]">
-                        <span className={`rounded px-2 py-0.5 font-bold uppercase tracking-wider ${SCHOOL_BADGE[e.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
-                          {SCHOOL_LABELS[e.school_slug] ?? e.school_slug}
-                        </span>
-                        {e.location && <span className="text-[var(--color-ink)]/60">· {e.location}</span>}
-                      </div>
-                    </div>
-                  </li>
+          {count > 1 && (
+            <>
+              <button
+                aria-label="Previous update"
+                onClick={() => setIdx((i) => (i - 1 + count) % count)}
+                className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--color-deep-blue)] shadow-md ring-1 ring-black/5 backdrop-blur transition hover:scale-105 hover:bg-white"
+              >
+                ‹
+              </button>
+              <button
+                aria-label="Next update"
+                onClick={() => setIdx((i) => (i + 1) % count)}
+                className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--color-deep-blue)] shadow-md ring-1 ring-black/5 backdrop-blur transition hover:scale-105 hover:bg-white"
+              >
+                ›
+              </button>
+              <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
+                {news.map((_, i) => (
+                  <button
+                    key={i}
+                    aria-label={`Go to slide ${i + 1}`}
+                    onClick={() => setIdx(i)}
+                    className={`h-1.5 rounded-full transition-all duration-500 ${i === idx ? "w-8 bg-[var(--color-gold)]" : "w-1.5 bg-white/70 hover:bg-white"}`}
+                  />
                 ))}
-              </ul>
-              <Link to="/events" className="mt-3 block text-center text-sm font-semibold text-[var(--color-brand-blue)] hover:underline">
-                View the full calendar →
-              </Link>
-            </div>
-          </aside>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </section>
   );
 }
+
+function EventsRail({ events }: { events: HomeWhatsNew["events"] }) {
+  return (
+    <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
+        <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)] blur-3xl" />
+        <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)] blur-3xl" />
+      </div>
+      <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <Reveal direction="up" className="flex items-end justify-between gap-6">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-gold)]">
+              Upcoming
+            </p>
+            <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+              What's coming up next.
+            </h2>
+          </div>
+          <Link to="/events" className="hidden text-sm font-semibold text-[var(--color-gold)] hover:underline sm:inline">
+            Full calendar →
+          </Link>
+        </Reveal>
+
+        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+          {events.map((e, i) => (
+            <Reveal key={e.id} direction="up" delay={i * 90}>
+              <article
+                className="group relative h-full overflow-hidden rounded-2xl bg-white/[0.07] p-6 ring-1 ring-white/15 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.12] hover:ring-[var(--color-gold)]/50"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-gold)]/20 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-[var(--color-gold)]/30"
+                />
+                <div className="relative flex items-start gap-5">
+                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[#d68f1c] text-[#1a1a18] shadow-lg ring-1 ring-white/30 transition-transform duration-500 group-hover:rotate-[-4deg] group-hover:scale-105">
+                    <span className="font-display text-3xl font-black leading-none">
+                      {eventDay(e.event_date)}
+                    </span>
+                    <span className="absolute bottom-2 text-[9px] font-bold tracking-[0.18em]">
+                      {eventMonth(e.event_date)}
+                    </span>
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[e.school_slug] ?? "bg-white/20 text-white"}`}>
+                      {SCHOOL_LABELS[e.school_slug] ?? e.school_slug}
+                    </span>
+                    <h3 className="mt-3 font-display text-lg font-semibold leading-snug text-white">
+                      {e.title}
+                    </h3>
+                    {e.location && (
+                      <p className="mt-2 text-xs text-white/70">📍 {e.location}</p>
+                    )}
+                  </div>
+                </div>
+                <div className="relative mt-5 flex items-center justify-between border-t border-white/10 pt-4">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
+                    {new Date(e.event_date).toLocaleDateString(undefined, { weekday: "long" })}
+                  </span>
+                  <span className="text-sm font-semibold text-[var(--color-gold)] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2">
+                    Details →
+                  </span>
+                </div>
+              </article>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
