@@ -412,8 +412,7 @@ function eventMonth(iso: string) {
   return new Date(iso).toLocaleString(undefined, { month: "short" }).toUpperCase();
 }
 
-function WhatsNew({ data }: { data: HomeWhatsNew }) {
-  const { news, events } = data;
+function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEventItem[] }) {
   if (news.length === 0 && events.length === 0) return null;
 
   return (
