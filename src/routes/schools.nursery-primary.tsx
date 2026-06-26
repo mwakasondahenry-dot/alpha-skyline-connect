@@ -397,7 +397,7 @@ function AlphaChild() {
               alt="Alpha pupil"
               className="absolute left-1/2 top-1/2 h-[22rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] object-cover object-top drop-shadow-[0_18px_18px_rgba(12,68,124,0.35)]"
             />
-            <div className="absolute -bottom-2 left-1/2 h-5 w-56 -translate-x-1/2 rounded-full bg-[var(--color-gold)] shadow-md" />
+            
           </div>
 
           <div className="space-y-8">
