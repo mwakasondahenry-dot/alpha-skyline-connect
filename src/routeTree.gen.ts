@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ScholarshipsRouteImport } from './routes/scholarships'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as FacilitiesRouteImport } from './routes/facilities'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CodingRouteImport } from './routes/coding'
 import { Route as AviationRouteImport } from './routes/aviation'
@@ -35,6 +36,11 @@ const NewsRoute = NewsRouteImport.update({
 const GalleryRoute = GalleryRouteImport.update({
   id: '/gallery',
   path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacilitiesRoute = FacilitiesRouteImport.update({
+  id: '/facilities',
+  path: '/facilities',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -90,6 +96,7 @@ export interface FileRoutesByFullPath {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
@@ -104,6 +111,7 @@ export interface FileRoutesByTo {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
@@ -119,6 +127,7 @@ export interface FileRoutesById {
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
   '/contact': typeof ContactRoute
+  '/facilities': typeof FacilitiesRoute
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
@@ -135,6 +144,7 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/facilities'
     | '/gallery'
     | '/news'
     | '/scholarships'
@@ -149,6 +159,7 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/facilities'
     | '/gallery'
     | '/news'
     | '/scholarships'
@@ -163,6 +174,7 @@ export interface FileRouteTypes {
     | '/aviation'
     | '/coding'
     | '/contact'
+    | '/facilities'
     | '/gallery'
     | '/news'
     | '/scholarships'
@@ -178,6 +190,7 @@ export interface RootRouteChildren {
   AviationRoute: typeof AviationRoute
   CodingRoute: typeof CodingRoute
   ContactRoute: typeof ContactRoute
+  FacilitiesRoute: typeof FacilitiesRoute
   GalleryRoute: typeof GalleryRoute
   NewsRoute: typeof NewsRoute
   ScholarshipsRoute: typeof ScholarshipsRoute
@@ -207,6 +220,13 @@ declare module '@tanstack/react-router' {
       path: '/gallery'
       fullPath: '/gallery'
       preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/facilities': {
+      id: '/facilities'
+      path: '/facilities'
+      fullPath: '/facilities'
+      preLoaderRoute: typeof FacilitiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -282,6 +302,7 @@ const rootRouteChildren: RootRouteChildren = {
   AviationRoute: AviationRoute,
   CodingRoute: CodingRoute,
   ContactRoute: ContactRoute,
+  FacilitiesRoute: FacilitiesRoute,
   GalleryRoute: GalleryRoute,
   NewsRoute: NewsRoute,
   ScholarshipsRoute: ScholarshipsRoute,
