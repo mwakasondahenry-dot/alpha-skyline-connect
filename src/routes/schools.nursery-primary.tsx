@@ -369,16 +369,35 @@ function AlphaChild() {
             ))}
           </div>
 
-          {/* Center portrait with striped circle backdrop + gold ground bar */}
-          <div className="relative mx-auto">
-            <StripePanel tone="blue" label="" className="h-72 w-72 rounded-full" />
+          {/* Center portrait with blue oval gradient backdrop + gold ground bar */}
+          <div className="relative mx-auto h-[24rem] w-[22rem]">
+            {/* Soft outer glow */}
+            <div
+              aria-hidden
+              className="absolute left-1/2 top-1/2 h-[26rem] w-[24rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] blur-3xl opacity-60"
+              style={{ background: "radial-gradient(ellipse at center, rgba(47,143,205,0.55), rgba(47,143,205,0) 70%)" }}
+            />
+            {/* Main oval */}
+            <div
+              aria-hidden
+              className="absolute left-1/2 top-1/2 h-[22rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] shadow-[0_25px_60px_-20px_rgba(12,68,124,0.45)]"
+              style={{
+                background:
+                  "radial-gradient(ellipse at 30% 25%, #6fb4e0 0%, #2f8fcd 45%, #0e4977 100%)",
+              }}
+            />
+            {/* Subtle highlight */}
+            <div
+              aria-hidden
+              className="absolute left-1/2 top-1/2 h-[8rem] w-[10rem] -translate-x-[120%] -translate-y-[140%] rounded-[50%] opacity-40 blur-2xl"
+              style={{ background: "rgba(255,255,255,0.55)" }}
+            />
             <img
               src={girlCutout.url}
               alt="Alpha pupil"
-              className="absolute inset-0 mx-auto h-[22rem] w-auto -translate-y-6 object-contain"
-              style={{ left: "50%", transform: "translate(-50%, -1.5rem)" }}
+              className="absolute left-1/2 top-1/2 h-[22rem] w-auto -translate-x-1/2 -translate-y-[55%] object-contain drop-shadow-[0_18px_18px_rgba(12,68,124,0.35)]"
             />
-            <div className="absolute -bottom-4 left-1/2 h-5 w-56 -translate-x-1/2 rounded-full bg-[var(--color-gold)] shadow-md" />
+            <div className="absolute -bottom-2 left-1/2 h-5 w-56 -translate-x-1/2 rounded-full bg-[var(--color-gold)] shadow-md" />
           </div>
 
           <div className="space-y-8">
