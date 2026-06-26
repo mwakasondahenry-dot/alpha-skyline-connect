@@ -109,8 +109,8 @@ function SchoolsDropdown() {
                 }}
                 className="group/item flex items-start gap-3 rounded-lg px-3 py-3 transition-all duration-200 hover:bg-[var(--color-gold)]/15 hover:translate-x-1"
               >
-                <span className="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-md bg-[var(--color-gold)]/20 text-[var(--color-deep-blue)] transition-all duration-300 group-hover/item:bg-[var(--color-gold)] group-hover/item:text-[var(--color-deep-blue)] group-hover/item:rotate-[-6deg]">
-                  <s.Icon className="h-4.5 w-4.5" />
+                <span className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-lg ring-2 ring-[var(--color-gold)]/40 transition-all duration-300 group-hover/item:ring-[var(--color-gold)] group-hover/item:scale-105">
+                  <img src={s.photo} alt={s.label} className="h-full w-full object-cover transition-transform duration-500 group-hover/item:scale-110" loading="lazy" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-display text-[15px] font-bold text-[var(--color-deep-blue)]">
