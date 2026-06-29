@@ -1,3 +1,4 @@
+import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
@@ -754,6 +755,7 @@ function AlphaHighFooter() {
           Mikocheni campus · Dar es Salaam · part of Alpha Education Centre Limited
         </div>
       </div>
+      <SchoolFacilitiesSection slug="alpha-high" accent="#0C447C" />
       <SiteFooter />
     </>
   );

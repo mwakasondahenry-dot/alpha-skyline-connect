@@ -181,3 +181,50 @@ create policy "media staff update"  on storage.objects for update
   using (bucket_id = 'media' and auth.role() = 'authenticated');
 create policy "media staff delete"  on storage.objects for delete
   using (bucket_id = 'media' and auth.role() = 'authenticated');
+
+-- ============================================================
+-- 6. FACILITIES & CONTACT MESSAGES (Phase 4 — Events/Facilities/Contact)
+-- Run this block on top of the original schema.
+-- ============================================================
+
+create table if not exists public.facilities (
+  id           uuid primary key default gen_random_uuid(),
+  school_slug  text not null references public.schools(slug),
+  name         text not null,
+  description  text,
+  image_url    text,
+  category     text default 'general',      -- 'academic' | 'sports' | 'boarding' | 'arts' | 'general'
+  sort_order   int not null default 0,
+  published    boolean not null default true,
+  created_at   timestamptz not null default now()
+);
+create index if not exists facilities_school_idx on public.facilities (school_slug, sort_order);
+
+alter table public.facilities enable row level security;
+create policy "facilities public read" on public.facilities for select using (published = true);
+create policy "facilities staff all"   on public.facilities for all
+  using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+
+-- Contact messages: anyone may INSERT; only staff may read/update.
+create table if not exists public.contact_messages (
+  id           uuid primary key default gen_random_uuid(),
+  name         text not null,
+  email        text not null,
+  phone        text,
+  school_slug  text references public.schools(slug),
+  subject      text,
+  message      text not null,
+  status       text not null default 'new',   -- 'new' | 'read' | 'archived'
+  created_at   timestamptz not null default now()
+);
+create index if not exists contact_messages_created_idx on public.contact_messages (created_at desc);
+
+alter table public.contact_messages enable row level security;
+create policy "contact insert anon"   on public.contact_messages for insert
+  to anon, authenticated with check (true);
+create policy "contact staff read"    on public.contact_messages for select
+  using (auth.role() = 'authenticated');
+create policy "contact staff update"  on public.contact_messages for update
+  using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+create policy "contact staff delete"  on public.contact_messages for delete
+  using (auth.role() = 'authenticated');

@@ -1,3 +1,4 @@
+import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
@@ -687,6 +688,7 @@ function GirlsFooter() {
           Kunduchi campus · Dar es Salaam · part of Alpha Education Centre Limited
         </div>
       </div>
+      <SchoolFacilitiesSection slug="alpha-girls" accent="#3C3489" />
       <SiteFooter />
     </>
   );

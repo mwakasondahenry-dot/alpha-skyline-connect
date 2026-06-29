@@ -1,3 +1,4 @@
+import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
@@ -75,6 +76,7 @@ function NurseryPrimaryPage() {
       <WhatParentsSay />
       <PeekInside />
       <ComeMeetUs />
+      <SchoolFacilitiesSection slug="nursery-primary" accent="#1E7FC2" />
       <NurseryFooter />
     </div>
   );

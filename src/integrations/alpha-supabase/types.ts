@@ -1,4 +1,4 @@
-// Hand-written types matching alpha_schema.sql (Phase 1).
+// Hand-written types matching alpha_schema.sql.
 // Regenerate when the schema changes.
 
 export type SchoolSlug =
@@ -59,6 +59,30 @@ export interface StaffRow {
   created_at: string;
 }
 
+export interface FacilityRow {
+  id: string;
+  school_slug: SchoolSlug;
+  name: string;
+  description: string | null;
+  image_url: string | null;
+  category: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+}
+
+export interface ContactMessageRow {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  school_slug: SchoolSlug | null;
+  subject: string | null;
+  message: string;
+  status: "new" | "read" | "archived";
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -67,6 +91,8 @@ export interface Database {
       events: { Row: EventRow; Insert: Partial<EventRow>; Update: Partial<EventRow> };
       gallery: { Row: GalleryRow; Insert: Partial<GalleryRow>; Update: Partial<GalleryRow> };
       staff: { Row: StaffRow; Insert: Partial<StaffRow>; Update: Partial<StaffRow> };
+      facilities: { Row: FacilityRow; Insert: Partial<FacilityRow>; Update: Partial<FacilityRow> };
+      contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow> };
     };
   };
 }
