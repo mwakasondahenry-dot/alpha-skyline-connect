@@ -21,7 +21,7 @@ const SCHOOL_LABEL: Record<string, string> = {
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  return new Date(iso).toLocaleDateString("en-GB", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 }
 
 function EventsPage() {
@@ -76,10 +76,15 @@ function EventCard({ item, dim = false }: { item: PublicEventItem; dim?: boolean
   const d = new Date(item.event_date);
   return (
     <li className={`group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:shadow-lg ${dim ? "opacity-80" : ""}`}>
+      {item.cover_url ? (
+        <div className="relative aspect-[16/9] overflow-hidden bg-[var(--color-deep-blue)]/5">
+          <img src={item.cover_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+        </div>
+      ) : null}
       <div className="flex">
         <div className="flex w-20 flex-shrink-0 flex-col items-center justify-center bg-[var(--color-deep-blue)] py-4 text-white">
           <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-gold)]">
-            {d.toLocaleString(undefined, { month: "short" })}
+            {d.toLocaleString("en-GB", { month: "short" })}
           </span>
           <span className="font-display text-3xl font-bold leading-none">{d.getDate()}</span>
           <span className="mt-1 text-[10px] text-white/70">{d.getFullYear()}</span>
