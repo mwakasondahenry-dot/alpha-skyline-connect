@@ -311,22 +311,22 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" seed={23} />
+      <TornEdge topColor="#ffffff" bottomColor="#f6f7f9" intensity="playful" seed={23} />
 
       {/* STAT BAR */}
-      <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
+      <section className="relative overflow-hidden bg-[var(--color-surface-muted)] text-[var(--color-ink)]">
 
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
-          <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)] blur-3xl animate-pulse" />
-          <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)] blur-3xl animate-pulse [animation-delay:1s]" />
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-30">
+          <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)]/40 blur-3xl" />
+          <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)]/30 blur-3xl" />
         </div>
         <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
           {STATS.map((s, i) => (
             <Reveal key={i} direction="up" delay={i * 100} className="px-2">
-              <div className="font-display text-5xl font-semibold text-[var(--color-gold)] sm:text-6xl">
-                <CountUp to={s.value} />{s.suffix ?? ""}
+              <div className="font-display text-5xl font-semibold text-[var(--color-deep-blue)] sm:text-6xl">
+                <CountUp to={s.value} /><span className="text-[var(--color-gold)]">{s.suffix ?? ""}</span>
               </div>
-              <div className="mt-2 text-sm leading-snug text-white/90">
+              <div className="mt-2 text-sm leading-snug text-[var(--color-ink-soft)]">
                 {s.label[0]}<br />{s.label[1]}
               </div>
             </Reveal>
@@ -334,7 +334,7 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#0c447c" bottomColor="#ffffff" intensity="playful" seed={41} />
+      <TornEdge topColor="#f6f7f9" bottomColor="#ffffff" intensity="playful" seed={41} />
 
       {/* OUR STORY */}
       <section className="bg-white">
