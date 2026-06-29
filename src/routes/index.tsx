@@ -431,10 +431,12 @@ function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEv
   return (
     <>
       <UpdatesSlideshow news={news} />
+      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" />
       <EventsRail events={events} />
     </>
   );
 }
+
 
 
 function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
