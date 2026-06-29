@@ -161,7 +161,7 @@ function Home() {
           src={heroCollage.url}
           alt="Alpha Schools students across nursery, primary, secondary and aviation"
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "grayscale(100%) contrast(1.15) brightness(1.05) saturate(0)" }}
+          style={{ filter: "saturate(1.15) contrast(1.05)" }}
           loading="eager"
           decoding="async"
           fetchPriority="high"
