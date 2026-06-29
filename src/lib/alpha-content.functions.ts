@@ -67,6 +67,28 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
   },
 );
 
+export type UrgentNewsItem = Pick<NewsRow, "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug">;
+
+export const getUrgentNews = createServerFn({ method: "GET" }).handler(
+  async (): Promise<UrgentNewsItem[]> => {
+    try {
+      const sb = serverClient();
+      const { data, error } = await sb
+        .from("news")
+        .select("id,title,body,cover_url,published_at,school_slug")
+        .eq("published", true)
+        .eq("urgent", true)
+        .order("published_at", { ascending: false, nullsFirst: false })
+        .limit(3);
+      if (error) throw error;
+      return data ?? [];
+    } catch (err) {
+      console.error("[getUrgentNews]", err);
+      return [];
+    }
+  },
+);
+
 // ---- Events page ---------------------------------------------------------
 export type PublicEventItem = Pick<EventRow,
   "id" | "title" | "description" | "event_date" | "location" | "cover_url" | "school_slug">;
