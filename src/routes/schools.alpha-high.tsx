@@ -754,6 +754,7 @@ function AlphaHighFooter() {
           Mikocheni campus · Dar es Salaam · part of Alpha Education Centre Limited
         </div>
       </div>
+      <SchoolFacilitiesSection slug="alpha-high" accent="#0C447C" />
       <SiteFooter />
     </>
   );

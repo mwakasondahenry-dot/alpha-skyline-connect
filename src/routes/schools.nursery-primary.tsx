@@ -75,6 +75,7 @@ function NurseryPrimaryPage() {
       <WhatParentsSay />
       <PeekInside />
       <ComeMeetUs />
+      <SchoolFacilitiesSection slug="nursery-primary" accent="#1E7FC2" />
       <NurseryFooter />
     </div>
   );

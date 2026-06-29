@@ -687,6 +687,7 @@ function GirlsFooter() {
           Kunduchi campus · Dar es Salaam · part of Alpha Education Centre Limited
         </div>
       </div>
+      <SchoolFacilitiesSection slug="alpha-girls" accent="#3C3489" />
       <SiteFooter />
     </>
   );
