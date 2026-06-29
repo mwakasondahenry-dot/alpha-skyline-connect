@@ -212,8 +212,11 @@ function Home() {
 
       </section>
 
+      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" />
+
       {/* FIND THE RIGHT CAMPUS */}
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
+
         <Reveal direction="up">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
             Three schools · One Alpha
