@@ -13,6 +13,7 @@ import heroSolo from "@/assets/av-hero-solo.jpg.asset.json";
 import heroDronePair from "@/assets/av-hero-drone-pair.jpg.asset.json";
 import heroDroneGirls from "@/assets/av-hero-drone-girls.jpg.asset.json";
 import heroCockpit from "@/assets/av-hero-cockpit-girl.jpg.asset.json";
+import avCockpitStudents from "@/assets/av-cockpit-students.jpg.asset.json";
 
 // Real Alpha aviation student photos — KSOF holiday program.
 // NOTE: names below remain placeholders until written media-release
@@ -434,8 +435,8 @@ function AviationPage() {
             />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
               <img
-                src={avPreFlight.url}
-                alt="Alpha students on the apron with KSOF aircraft, Nairobi"
+                src={avCockpitStudents.url}
+                alt="Alpha student pilots training inside a Cessna cockpit"
 
                 loading="lazy"
                 decoding="async"
