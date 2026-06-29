@@ -179,50 +179,50 @@ export function SiteHeader() {
 
 export function SiteFooter() {
   return (
-    <footer className="bg-[var(--color-deep-blue)] text-white/90">
+    <footer className="border-t border-[var(--color-hairline)] bg-[var(--color-surface-muted)] text-[var(--color-ink-soft)]">
       <div className="mx-auto grid max-w-7xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
         <div>
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-white">
+            <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-[var(--color-hairline)]">
               <img src={alphaLogo.url} alt="Alpha Schools" className="h-9 w-9 object-contain" />
             </span>
-            <span className="font-display text-sm font-bold tracking-wider">
-              ALPHA <span className="font-normal text-white/80">SCHOOLS</span>
+            <span className="font-display text-sm font-bold tracking-wider text-[var(--color-deep-blue)]">
+              ALPHA <span className="font-normal text-[var(--color-ink-soft)]">SCHOOLS</span>
             </span>
           </div>
-          <p className="mt-4 max-w-xs text-sm text-white/70">
+          <p className="mt-4 max-w-xs text-sm text-[var(--color-ink-soft)]">
             Alpha Education Centre Limited. Three schools, two campuses across Dar es Salaam, Tanzania.
           </p>
         </div>
         <div>
-          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">Schools</h4>
-          <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li><Link to="/schools/nursery-primary" className="hover:text-white">Nursery &amp; Primary</Link></li>
-            <li><Link to="/schools/alpha-high" className="hover:text-white">Alpha High</Link></li>
-            <li><Link to="/schools/alpha-girls" className="hover:text-white">Alpha Girls</Link></li>
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-deep-blue)]">Schools</h4>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li><Link to="/schools/nursery-primary" className="hover:text-[var(--color-deep-blue)]">Nursery &amp; Primary</Link></li>
+            <li><Link to="/schools/alpha-high" className="hover:text-[var(--color-deep-blue)]">Alpha High</Link></li>
+            <li><Link to="/schools/alpha-girls" className="hover:text-[var(--color-deep-blue)]">Alpha Girls</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">Explore</h4>
-          <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li><Link to="/aviation" className="hover:text-white">Aviation</Link></li>
-            <li><Link to="/coding" className="hover:text-white">Coding</Link></li>
-            <li><Link to="/admission" className="hover:text-white">Admission</Link></li>
-            <li><Link to="/scholarships" className="hover:text-white">Scholarships</Link></li>
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-deep-blue)]">Explore</h4>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li><Link to="/aviation" className="hover:text-[var(--color-deep-blue)]">Aviation</Link></li>
+            <li><Link to="/coding" className="hover:text-[var(--color-deep-blue)]">Coding</Link></li>
+            <li><Link to="/admission" className="hover:text-[var(--color-deep-blue)]">Admission</Link></li>
+            <li><Link to="/scholarships" className="hover:text-[var(--color-deep-blue)]">Scholarships</Link></li>
           </ul>
         </div>
         <div>
-          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-white">Visit</h4>
-          <ul className="mt-4 space-y-2 text-sm text-white/80">
-            <li><Link to="/about" className="hover:text-white">About</Link></li>
-            <li><Link to="/facilities" className="hover:text-white">Facilities</Link></li>
-            <li><Link to="/events" className="hover:text-white">Events</Link></li>
-            <li><Link to="/contact" className="hover:text-white">Contact</Link></li>
+          <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-deep-blue)]">Visit</h4>
+          <ul className="mt-4 space-y-2 text-sm">
+            <li><Link to="/about" className="hover:text-[var(--color-deep-blue)]">About</Link></li>
+            <li><Link to="/facilities" className="hover:text-[var(--color-deep-blue)]">Facilities</Link></li>
+            <li><Link to="/events" className="hover:text-[var(--color-deep-blue)]">Events</Link></li>
+            <li><Link to="/contact" className="hover:text-[var(--color-deep-blue)]">Contact</Link></li>
           </ul>
         </div>
       </div>
-      <div className="border-t border-white/10">
-        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-5 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between lg:px-10">
+      <div className="border-t border-[var(--color-hairline)]">
+        <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-5 text-xs text-[var(--color-ink-soft)]/80 sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <span>© {new Date().getFullYear()} Alpha Education Centre Limited.</span>
           <span>{"\n"}</span>
         </div>
