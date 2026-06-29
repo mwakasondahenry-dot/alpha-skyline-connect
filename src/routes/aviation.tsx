@@ -9,6 +9,10 @@ import avFlightline from "@/assets/av-flightline-group.jpg.asset.json";
 import avGroundSchool2 from "@/assets/av-ground-school-2.jpg.asset.json";
 import avInstrumentDemo from "@/assets/av-instrument-demo.jpg.asset.json";
 import avEngineering from "@/assets/av-engineering-hands-on.jpg.asset.json";
+import heroSolo from "@/assets/av-hero-solo.jpg.asset.json";
+import heroDronePair from "@/assets/av-hero-drone-pair.jpg.asset.json";
+import heroDroneGirls from "@/assets/av-hero-drone-girls.jpg.asset.json";
+import heroCockpit from "@/assets/av-hero-cockpit-girl.jpg.asset.json";
 
 // Real Alpha aviation student photos — KSOF holiday program.
 // NOTE: names below remain placeholders until written media-release
