@@ -3,6 +3,7 @@ import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
+import profMayo from "@/assets/prof-mayo.jpeg.asset.json";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
