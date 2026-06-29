@@ -224,7 +224,7 @@ export function SiteFooter() {
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-5 text-xs text-white/60 sm:flex-row sm:items-center sm:justify-between lg:px-10">
           <span>© {new Date().getFullYear()} Alpha Education Centre Limited.</span>
-          <span>3 schools · 2 campuses · ages 2–18</span>
+          <span>{"\n"}</span>
         </div>
       </div>
     </footer>
