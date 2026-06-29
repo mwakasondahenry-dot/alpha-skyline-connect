@@ -12,7 +12,7 @@ export const SCHOOL_OPTIONS: { value: SchoolSlug; label: string }[] = [
   { value: "alpha-girls", label: "Alpha Girls" },
 ];
 
-export type FieldKind = "text" | "textarea" | "date" | "image" | "school" | "boolean" | "select" | "number";
+export type FieldKind = "text" | "textarea" | "date" | "image" | "school" | "boolean" | "select" | "number" | "dynamicSelect";
 
 export type FieldDef = {
   name: string;
@@ -23,7 +23,15 @@ export type FieldDef = {
   options?: { value: string; label: string }[];
   placeholder?: string;
   helpText?: string;
+  /** For kind === "dynamicSelect": reload options when these field names change. */
+  dependsOn?: string[];
+  /** For kind === "dynamicSelect": returns options given the current form + supabase client. */
+  loadOptions?: (
+    form: Record<string, unknown>,
+    client: import("@supabase/supabase-js").SupabaseClient,
+  ) => Promise<{ value: string; label: string }[]>;
 };
+
 
 export type CrudConfig = {
   table: string;
