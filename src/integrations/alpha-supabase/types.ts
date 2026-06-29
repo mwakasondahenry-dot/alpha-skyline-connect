@@ -23,6 +23,7 @@ export interface NewsRow {
   body: string | null;
   cover_url: string | null;
   published: boolean;
+  urgent: boolean;
   published_at: string | null;
   author_id: string | null;
   created_at: string;
