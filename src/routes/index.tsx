@@ -3,6 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
@@ -211,8 +212,11 @@ function Home() {
 
       </section>
 
+      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" />
+
       {/* FIND THE RIGHT CAMPUS */}
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
+
         <Reveal direction="up">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
             Three schools · One Alpha
@@ -309,8 +313,11 @@ function Home() {
         </div>
       </section>
 
+      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" />
+
       {/* STAT BAR */}
       <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
+
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
           <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)] blur-3xl animate-pulse" />
           <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)] blur-3xl animate-pulse [animation-delay:1s]" />
@@ -329,8 +336,11 @@ function Home() {
         </div>
       </section>
 
+      <TornEdge topColor="#0c447c" bottomColor="#ffffff" intensity="playful" />
+
       {/* OUR STORY */}
       <section className="bg-white">
+
         <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
           <Reveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
@@ -364,12 +374,17 @@ function Home() {
         </div>
       </section>
 
+      <TornEdge topColor="#ffffff" bottomColor="#f7f5ef" intensity="playful" />
+
       {/* UPDATES + EVENTS */}
       <WhatsNew news={data.news} events={upcomingEvents} />
 
 
+      <TornEdge topColor="#0c447c" bottomColor="#e8a020" intensity="playful" />
+
       {/* CTA BAND */}
       <section className="bg-[var(--color-gold)]">
+
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
           <Reveal direction="left">
             <h2 className="font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
@@ -416,10 +431,12 @@ function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEv
   return (
     <>
       <UpdatesSlideshow news={news} />
+      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" />
       <EventsRail events={events} />
     </>
   );
 }
+
 
 
 function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {

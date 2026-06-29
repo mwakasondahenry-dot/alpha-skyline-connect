@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import graduate from "@/assets/alpha-high-graduate.png.asset.json";
 import campusAerial from "@/assets/alpha-high-campus-aerial.jpg.asset.json";
@@ -57,17 +58,19 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
     <div className="min-h-screen bg-white text-[var(--color-ink)]">
       <SiteHeader />
       <Hero />
+      <TornEdge topColor={ACCENT} bottomColor="#f7f5ef" intensity="restrained" />
       <About />
       <Academics />
       <Distinctive />
       <BeyondClassroom />
       <LifeAtMikocheni />
-      
+      <TornEdge topColor="#f7f5ef" bottomColor={GOLD} intensity="restrained" />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
   );
 }
+
 
 // ---------- Hero ----------
 
