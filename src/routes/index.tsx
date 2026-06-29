@@ -313,8 +313,11 @@ function Home() {
         </div>
       </section>
 
+      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" />
+
       {/* STAT BAR */}
       <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
+
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
           <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)] blur-3xl animate-pulse" />
           <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)] blur-3xl animate-pulse [animation-delay:1s]" />
