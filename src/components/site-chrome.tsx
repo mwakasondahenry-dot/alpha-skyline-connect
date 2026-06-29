@@ -154,7 +154,7 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav className="hidden items-center gap-7 lg:flex">
-          <SchoolsDropdownLight />
+          <SchoolsDropdown />
           {NAV.map((item) => (
             <Link
               key={item.label}
