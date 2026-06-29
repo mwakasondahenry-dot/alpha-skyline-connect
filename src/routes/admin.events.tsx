@@ -25,7 +25,7 @@ const CONFIG: CrudConfig = {
     { name: "event_date", label: "Event date", kind: "date", required: true },
     { name: "location", label: "Location", kind: "text" },
     { name: "description", label: "Description", kind: "textarea" },
-    { name: "cover_url", label: "Cover image", kind: "image" },
+    { name: "cover_url", label: "Poster image (optional)", kind: "image", helpText: "Shown above the event card on the homepage rail and /events." },
     { name: "published", label: "Published", kind: "boolean" },
   ],
 };

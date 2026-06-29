@@ -22,7 +22,7 @@ const CONFIG: CrudConfig = {
     { name: "title", label: "Title", kind: "text", required: true },
     { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "group-wide" },
     { name: "body", label: "Body", kind: "textarea" },
-    { name: "cover_url", label: "Cover image", kind: "image" },
+    { name: "cover_url", label: "Poster image (optional)", kind: "image", helpText: "Shown on the homepage slideshow and news cards." },
     { name: "published", label: "Published", kind: "boolean", placeholder: "Show on the public site" },
     { name: "published_at", label: "Publish date", kind: "date", helpText: "Used to sort the homepage slideshow." },
   ],
