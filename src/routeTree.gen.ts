@@ -18,11 +18,14 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CodingRouteImport } from './routes/coding'
 import { Route as AviationRouteImport } from './routes/aviation'
 import { Route as AdmissionRouteImport } from './routes/admission'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
 
 const ScholarshipsRoute = ScholarshipsRouteImport.update({
   id: '/scholarships',
@@ -69,6 +72,11 @@ const AdmissionRoute = AdmissionRouteImport.update({
   path: '/admission',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -78,6 +86,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
 } as any)
 const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
   id: '/schools/nursery-primary',
@@ -94,10 +107,16 @@ const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
   path: '/schools/alpha-girls',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/admission': typeof AdmissionRoute
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
@@ -107,9 +126,11 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -123,14 +144,17 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/admin': typeof AdminRouteWithChildren
   '/admission': typeof AdmissionRoute
   '/aviation': typeof AviationRoute
   '/coding': typeof CodingRoute
@@ -140,15 +164,18 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
+  '/admin/login': typeof AdminLoginRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/about'
+    | '/admin'
     | '/admission'
     | '/aviation'
     | '/coding'
@@ -158,9 +185,11 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/news'
     | '/scholarships'
+    | '/admin/login'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -174,13 +203,16 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/news'
     | '/scholarships'
+    | '/admin/login'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
+    | '/admin'
   id:
     | '__root__'
     | '/'
     | '/about'
+    | '/admin'
     | '/admission'
     | '/aviation'
     | '/coding'
@@ -190,14 +222,17 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/news'
     | '/scholarships'
+    | '/admin/login'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  AdminRoute: typeof AdminRouteWithChildren
   AdmissionRoute: typeof AdmissionRoute
   AviationRoute: typeof AviationRoute
   CodingRoute: typeof CodingRoute
@@ -277,6 +312,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdmissionRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -290,6 +332,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
     }
     '/schools/nursery-primary': {
       id: '/schools/nursery-primary'
@@ -312,12 +361,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolsAlphaGirlsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
+
+interface AdminRouteChildren {
+  AdminLoginRoute: typeof AdminLoginRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminLoginRoute: AdminLoginRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  AdminRoute: AdminRouteWithChildren,
   AdmissionRoute: AdmissionRoute,
   AviationRoute: AviationRoute,
   CodingRoute: CodingRoute,
