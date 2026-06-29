@@ -336,8 +336,11 @@ function Home() {
         </div>
       </section>
 
+      <TornEdge topColor="#0c447c" bottomColor="#ffffff" intensity="playful" />
+
       {/* OUR STORY */}
       <section className="bg-white">
+
         <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
           <Reveal direction="left">
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
