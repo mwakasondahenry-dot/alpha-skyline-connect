@@ -145,14 +145,17 @@ export const submitContactMessage = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }): Promise<{ ok: true }> => {
     const sb = serverClient();
-    const { error } = await sb.from("contact_messages").insert({
+    const payload = {
       name: data.name.trim(),
       email: data.email.trim(),
       phone: data.phone?.trim() || null,
       school_slug: (data.school_slug as SchoolSlug) || null,
       subject: data.subject?.trim() || null,
       message: data.message.trim(),
-    });
+    };
+    const { error } = await (sb.from("contact_messages") as unknown as {
+      insert: (v: typeof payload) => Promise<{ error: { message: string } | null }>;
+    }).insert(payload);
     if (error) {
       console.error("[submitContactMessage]", error);
       throw new Error("Could not send your message. Please try again or call us.");
