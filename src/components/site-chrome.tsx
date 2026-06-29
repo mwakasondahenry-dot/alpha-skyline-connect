@@ -138,29 +138,29 @@ function SchoolsDropdown() {
 
 export function SiteHeader() {
   return (
-    <header className="sticky top-0 z-40 bg-[var(--color-deep-blue)] text-white shadow-sm">
+    <header className="sticky top-0 z-40 border-b border-[var(--color-hairline)] bg-white/90 text-[var(--color-ink)] backdrop-blur-md">
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3 lg:px-10">
         <Link to="/" className="flex items-center gap-3 hover:opacity-90">
-          <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-white">
+          <span className="grid h-11 w-11 place-items-center overflow-hidden rounded-full bg-[var(--color-surface-muted)] ring-1 ring-[var(--color-hairline)]">
             <img src={alphaLogo.url} alt="Alpha Schools" className="h-10 w-10 object-contain" />
           </span>
           <span className="leading-tight">
-            <span className="block font-display text-sm font-bold tracking-wider">
-              ALPHA <span className="font-normal text-white/80">SCHOOLS</span>
+            <span className="block font-display text-sm font-bold tracking-wider text-[var(--color-deep-blue)]">
+              ALPHA <span className="font-normal text-[var(--color-ink-soft)]">SCHOOLS</span>
             </span>
-            <span className="block text-[10px] uppercase tracking-[0.18em] text-white/70">
+            <span className="block text-[10px] uppercase tracking-[0.18em] text-[var(--color-ink-soft)]">
               Dar es Salaam
             </span>
           </span>
         </Link>
         <nav className="hidden items-center gap-7 lg:flex">
-          <SchoolsDropdown />
+          <SchoolsDropdownLight />
           {NAV.map((item) => (
             <Link
               key={item.label}
               to={item.to}
-              className="text-sm text-white/90 transition-colors hover:text-[var(--color-gold)]"
-              activeProps={{ className: "text-white font-semibold" }}
+              className="text-sm text-[var(--color-ink-soft)] transition-colors hover:text-[var(--color-deep-blue)]"
+              activeProps={{ className: "text-[var(--color-deep-blue)] font-semibold" }}
             >
               {item.label}
             </Link>
