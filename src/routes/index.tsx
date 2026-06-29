@@ -3,6 +3,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
 import heroImage from "@/assets/hero-floatplane.jpg.asset.json";
