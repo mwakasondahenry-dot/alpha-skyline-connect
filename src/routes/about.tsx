@@ -166,12 +166,13 @@ function AboutPage() {
             <div className="relative w-full max-w-sm">
               <div aria-hidden className="absolute -inset-3 rounded-2xl bg-[var(--color-gold)]/20 blur-xl" />
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/90 ring-1 ring-[var(--color-deep-blue)]/20">
-                <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center text-white/80">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
-                    Photo placeholder
-                  </span>
-                  <span className="mt-3 text-sm leading-relaxed">[Founder photo — to be provided]</span>
-                </div>
+                <img
+                  src={profMayo.url}
+                  alt="Professor Wenceslaus Aloyce Mayo, founder of Alpha Schools"
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
             </div>
           </Reveal>
