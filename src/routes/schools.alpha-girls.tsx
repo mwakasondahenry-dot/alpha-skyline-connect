@@ -1,3 +1,4 @@
+import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";

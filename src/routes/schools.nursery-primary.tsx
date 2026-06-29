@@ -1,3 +1,4 @@
+import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
