@@ -374,12 +374,17 @@ function Home() {
         </div>
       </section>
 
+      <TornEdge topColor="#ffffff" bottomColor="#f7f5ef" intensity="playful" />
+
       {/* UPDATES + EVENTS */}
       <WhatsNew news={data.news} events={upcomingEvents} />
 
 
+      <TornEdge topColor="#0c447c" bottomColor="#e8a020" intensity="playful" />
+
       {/* CTA BAND */}
       <section className="bg-[var(--color-gold)]">
+
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
           <Reveal direction="left">
             <h2 className="font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
