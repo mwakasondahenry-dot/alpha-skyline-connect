@@ -351,3 +351,50 @@ function renderInput(
   }
   return <input type="text" value={(v as string) ?? ""} onChange={(e) => set(f.name, e.target.value)} placeholder={f.placeholder} className={cls} />;
 }
+
+function DynamicSelect({
+  field,
+  form,
+  set,
+  client,
+  cls,
+  value,
+}: {
+  field: FieldDef;
+  form: Record<string, unknown>;
+  set: (k: string, v: unknown) => void;
+  client: import("@supabase/supabase-js").SupabaseClient | null;
+  cls: string;
+  value: string;
+}) {
+  const [opts, setOpts] = useState<{ value: string; label: string }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const depKey = (field.dependsOn ?? []).map((k) => String(form[k] ?? "")).join("|");
+
+  useEffect(() => {
+    if (!client || !field.loadOptions) { setOpts([]); return; }
+    let cancelled = false;
+    setLoading(true);
+    field.loadOptions(form, client)
+      .then((rows) => { if (!cancelled) setOpts(rows); })
+      .catch((err) => { console.error("[dynamicSelect]", err); if (!cancelled) setOpts([]); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client, depKey]);
+
+  // Clear the current value if it's no longer a valid option after deps change.
+  useEffect(() => {
+    if (!value) return;
+    if (opts.length > 0 && !opts.some((o) => o.value === value)) set(field.name, "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opts]);
+
+  return (
+    <select value={value} onChange={(e) => set(field.name, e.target.value)} className={cls} disabled={loading || opts.length === 0}>
+      <option value="">{loading ? "Loading…" : opts.length === 0 ? "— select a school first —" : "—"}</option>
+      {opts.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+    </select>
+  );
+}
+
