@@ -164,37 +164,30 @@ function Home() {
       <SiteHeader />
 
       {/* HERO */}
-      <section className="relative isolate overflow-hidden">
-        <img
-          src={heroImage.url}
-          alt="Floatplane against an open blue sky"
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="eager"
-          decoding="async"
-        />
-        {/* Fade to black: heavy at bottom + left for legibility, lighter at top */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/20 to-transparent" />
+      <section className="relative isolate overflow-hidden bg-[var(--color-deep-blue)]">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(232,160,32,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(12,68,124,0.9),#08203f_75%)]" />
+        <div className="pointer-events-none absolute -left-32 top-1/3 h-96 w-96 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-6 pt-16 sm:pt-20 lg:px-10 lg:pt-28">
-          <div className="grid items-end gap-6 lg:grid-cols-12 lg:gap-10">
-            <div className="pb-8 lg:col-span-7 lg:pb-28">
+        <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-16 sm:pt-20 lg:px-10 lg:pb-28 lg:pt-24">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
+            {/* LEFT — copy */}
+            <div className="lg:col-span-6">
               <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur sm:text-[11px]">
                 <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
-                <span className="truncate">First high school in Tanzania to teach aviation</span>
+                <span className="truncate">Nursery · Primary · Secondary · Aviation</span>
               </span>
-              <h1 className="mt-5 font-display text-5xl font-black leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:mt-6 sm:text-6xl lg:text-7xl">
+              <h1 className="mt-5 font-display text-5xl font-black leading-[1.02] tracking-tight text-white sm:mt-6 sm:text-6xl lg:text-7xl">
                 Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
               </h1>
-              <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/85 sm:mt-6 sm:text-base">
+              <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/85 sm:mt-6 sm:text-base">
                 Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and the first aviation programme in any Tanzanian school.
               </p>
               <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
                 <Link
-                  to="/schools/alpha-high"
+                  to="/admission"
                   className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
                 >
-                  Explore Our Schools
+                  Enroll Now
                 </Link>
                 <Link
                   to="/aviation"
@@ -204,22 +197,46 @@ function Home() {
                 </Link>
               </div>
             </div>
-            <div className="relative lg:col-span-5">
-              <div className="pointer-events-none absolute -inset-6 rounded-full bg-[var(--color-gold)]/8 blur-2xl" />
-              <img
-                src={cadetsImage.url}
-                alt="Two Alpha Schools aviation cadets in uniform"
-                className="relative z-10 mx-auto block h-auto w-full max-w-[280px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.4)] sm:max-w-[360px] lg:max-w-[520px]"
-                loading="eager"
-                decoding="async"
-              />
+
+            {/* RIGHT — tight collage mosaic */}
+            <div className="relative lg:col-span-6">
+              <div className="pointer-events-none absolute -inset-4 rounded-[28px] bg-[var(--color-gold)]/10 blur-2xl" />
+              <div className="relative grid h-[460px] grid-cols-6 grid-rows-6 gap-2 sm:h-[540px] sm:gap-2.5 lg:h-[580px]">
+                {[
+                  { src: collage1.url, alt: "Form Four graduate", cls: "col-span-2 row-span-3", rot: "-rotate-1" },
+                  { src: collage5.url, alt: "Primary school pupil", cls: "col-span-2 row-span-2", rot: "rotate-1" },
+                  { src: collage9.url, alt: "Nursery pilot in uniform", cls: "col-span-2 row-span-3", rot: "rotate-2" },
+                  { src: collage7.url, alt: "Primary pupils waving", cls: "col-span-2 row-span-2", rot: "rotate-1" },
+                  { src: collage3.url, alt: "Environment club at the beach", cls: "col-span-3 row-span-3", rot: "-rotate-1" },
+                  { src: collage2.url, alt: "Form Four graduate", cls: "col-span-2 row-span-3", rot: "rotate-1" },
+                  { src: collage6.url, alt: "Junior speakers champion", cls: "col-span-2 row-span-2", rot: "-rotate-2" },
+                  { src: collage4.url, alt: "Nursery pupils on toy cars", cls: "col-span-3 row-span-2", rot: "rotate-1" },
+                  { src: collage8.url, alt: "Secondary student in library", cls: "col-span-2 row-span-2", rot: "-rotate-1" },
+                ].map((t, i) => (
+                  <figure
+                    key={i}
+                    className={`group relative overflow-hidden rounded-xl ring-1 ring-white/15 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.55)] transition-transform duration-500 hover:z-10 hover:scale-[1.04] ${t.cls} ${t.rot}`}
+                    style={{ animation: `heroPop 700ms ${i * 70}ms both` }}
+                  >
+                    <img
+                      src={t.src}
+                      alt={t.alt}
+                      className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
+                      loading={i < 3 ? "eager" : "lazy"}
+                      decoding="async"
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-60" />
+                  </figure>
+                ))}
+              </div>
+              <style>{`@keyframes heroPop{0%{opacity:0;transform:translateY(14px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
             </div>
           </div>
         </div>
-
       </section>
 
-      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" seed={7} />
+      <TornEdge topColor="#08203f" bottomColor="#f7f5ef" intensity="playful" seed={7} />
+
 
       {/* FIND THE RIGHT CAMPUS */}
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
