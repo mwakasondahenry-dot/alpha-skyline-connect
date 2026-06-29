@@ -283,6 +283,7 @@ function renderInput(
   form: Record<string, unknown>,
   set: (k: string, v: unknown) => void,
   uploadImage: (file: File) => Promise<string | null>,
+  client: import("@supabase/supabase-js").SupabaseClient | null,
 ) {
   const v = form[f.name];
   const cls = "w-full rounded-lg border border-[#0C447C]/20 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8A020] focus:ring-2 focus:ring-[#E8A020]/30";
@@ -310,6 +311,10 @@ function renderInput(
       </select>
     );
   }
+  if (f.kind === "dynamicSelect") {
+    return <DynamicSelect field={f} form={form} set={set} client={client} cls={cls} value={(v as string) ?? ""} />;
+  }
+
   if (f.kind === "number") {
     return <input type="number" value={(v as number | string) ?? ""} onChange={(e) => set(f.name, e.target.value)} className={cls} />;
   }
