@@ -169,50 +169,130 @@ function AviationPage() {
         />
 
 
-        <div className="relative mx-auto max-w-7xl px-4 pb-28 pt-24 sm:px-6 sm:pt-32 lg:pb-40 lg:pt-40">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
-            The Alpha difference
-          </p>
-          <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
-            Learning that <span className="text-[var(--color-gold)]">takes off.</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
-            Alpha is the first school in Tanzania to teach flying. In partnership with the
-            Kenya School of Flying, our students train toward a real Private Pilot Licence —
-            ground school, simulator hours, and time in the air.
-          </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Link
-              to="/admission"
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[#1a1a18] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl"
-            >
-              How to join →
-            </Link>
-            <a
-              href="#pathway"
-              className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
-            >
-              See the pathway
-            </a>
-          </div>
+        <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-24 sm:px-6 sm:pt-32 lg:pb-32 lg:pt-36">
+          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+            {/* LEFT — copy */}
+            <div className="relative z-10">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+                The Alpha difference
+              </p>
+              <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+                Learning that <span className="text-[var(--color-gold)]">takes off.</span>
+              </h1>
+              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
+                Alpha is the first school in Tanzania to teach flying. In partnership with the
+                Kenya School of Flying, our students train toward a real Private Pilot Licence —
+                ground school, simulator hours, and time in the air.
+              </p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <Link
+                  to="/admission"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[#1a1a18] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl"
+                >
+                  How to join →
+                </Link>
+                <a
+                  href="#pathway"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
+                >
+                  See the pathway
+                </a>
+              </div>
 
-          {/* mini stat strip */}
-          <div className="mt-14 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
-            <div>
-              <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">1st</div>
-              <div className="mt-1 text-xs uppercase tracking-wider text-white/70">School in Tanzania to fly</div>
+              {/* mini stat strip */}
+              <div className="mt-12 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
+                <div>
+                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">1st</div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">School in Tanzania to fly</div>
+                </div>
+                <div>
+                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">40h+</div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Minimum flying hours</div>
+                </div>
+                <div>
+                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">11</div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Aviation modules</div>
+                </div>
+              </div>
             </div>
-            <div>
-              <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">40h+</div>
-              <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Minimum flying hours</div>
-            </div>
-            <div>
-              <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">11</div>
-              <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Aviation modules</div>
+
+            {/* RIGHT — layered photo collage */}
+            <div className="relative mx-auto h-[460px] w-full max-w-[560px] sm:h-[540px] lg:h-[600px]">
+              {/* Soft gold halo */}
+              <div
+                className="pointer-events-none absolute inset-0 -z-10"
+                style={{
+                  background:
+                    "radial-gradient(60% 55% at 55% 45%, rgba(232,160,32,0.35), transparent 70%)",
+                  filter: "blur(20px)",
+                }}
+                aria-hidden
+              />
+
+              {/* Card 1 — solo pilot on wing (anchor, large) */}
+              <figure
+                className="alpha-hero-card absolute left-[6%] top-[4%] h-[58%] w-[54%] overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-white/20"
+                style={{ ["--float-delay" as never]: "0s" }}
+              >
+                <img
+                  src={heroSolo.url}
+                  alt="Alpha student pilot after his first solo flight"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                />
+                <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-[11px] font-medium uppercase tracking-wider text-white/90">
+                  First solo · KSOF
+                </figcaption>
+              </figure>
+
+              {/* Card 2 — cockpit girl (top right) */}
+              <figure
+                className="alpha-hero-card absolute right-[2%] top-0 h-[40%] w-[44%] overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-[var(--color-gold)]/40"
+                style={{ ["--float-delay" as never]: "-2.5s" }}
+              >
+                <img
+                  src={heroCockpit.url}
+                  alt="Alpha aviation student at the controls of a training aircraft"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                />
+              </figure>
+
+              {/* Card 3 — drone training pair (bottom right) */}
+              <figure
+                className="alpha-hero-card absolute bottom-[2%] right-[4%] h-[44%] w-[52%] overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-white/20"
+                style={{ ["--float-delay" as never]: "-5s" }}
+              >
+                <img
+                  src={heroDronePair.url}
+                  alt="Alpha aviation students during practical drone training"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                />
+              </figure>
+
+              {/* Card 4 — drone girls (bottom left, smaller accent) */}
+              <figure
+                className="alpha-hero-card absolute bottom-[8%] left-0 h-[34%] w-[38%] overflow-hidden rounded-3xl shadow-xl shadow-black/40 ring-1 ring-white/20"
+                style={{ ["--float-delay" as never]: "-1.2s" }}
+              >
+                <img
+                  src={heroDroneGirls.url}
+                  alt="Alpha girls operating drones during aviation practical"
+                  className="h-full w-full object-cover"
+                  loading="eager"
+                />
+              </figure>
+
+              {/* Floating badge */}
+              <div className="absolute -left-3 top-[36%] hidden rounded-2xl border border-white/15 bg-[#0C447C]/85 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-gold)] shadow-lg backdrop-blur sm:block">
+                ✈ Class of 2024
+              </div>
             </div>
           </div>
         </div>
       </section>
+
 
       {/* 2. WHY IT MATTERS */}
       <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
