@@ -58,17 +58,19 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
     <div className="min-h-screen bg-white text-[var(--color-ink)]">
       <SiteHeader />
       <Hero />
+      <TornEdge topColor={ACCENT} bottomColor="#f7f5ef" intensity="restrained" />
       <About />
       <Academics />
       <Distinctive />
       <BeyondClassroom />
       <LifeAtMikocheni />
-      
+      <TornEdge topColor="#f7f5ef" bottomColor={GOLD} intensity="restrained" />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
   );
 }
+
 
 // ---------- Hero ----------
 
