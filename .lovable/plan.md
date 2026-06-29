@@ -1,68 +1,53 @@
-## Build the three school pages
+## Goal
 
-Target routes (already stubbed):
-- `/schools/nursery-primary`
-- `/schools/alpha-high`
-- `/schools/alpha-girls`
+Add a dedicated **Facilities Gallery** so admins can upload multiple up-to-date photos for a specific facility at a specific school. Keep the existing `/admin/gallery` for activities and rename its label to "Activities Gallery" to remove ambiguity.
 
-Each page gets the same section skeleton so the three feel like one family, with school-specific accent colour, hero image, and copy slots you'll fill in.
+## Schema (new migration)
 
-### Section skeleton (per school)
+New table `facility_photos`:
 
-1. **Sub-site header band** — sits under the global header. School name, campus, tagline, "Apply Now" + "Book a visit" CTAs, on a tinted background using the school's accent.
-2. **Hero** — full-bleed campus photo, dark fade, headline + intro paragraph, breadcrumb back to Home.
-3. **About this school** — 2-column: narrative on the left, key facts card on the right (ages, campus, language of instruction, curriculum).
-4. **Programs & curriculum** — 3–4 cards (e.g. Early Years / Lower Primary / Upper Primary, or O-Level / A-Level / Aviation / Coding depending on the school).
-5. **Daily life / Facilities** — image + bullet list (classrooms, labs, sports, boarding where relevant).
-6. **Latest from this school** — live Supabase: 3 most recent published `news` rows where `school_slug = <this school>`, with empty state.
-7. **Upcoming events at this school** — live Supabase: next 4 published `events` rows for this school, with empty state.
-8. **Gallery strip** — live Supabase: up to 8 `gallery` rows for this school in a horizontal scroller (graceful empty state).
-9. **Admission CTA band** — accent-coloured strip linking to `/admission` and `/contact`.
+```text
+id            uuid PK default gen_random_uuid()
+school_slug   text  not null  (FK schools.slug)
+facility_id   uuid  not null  (FK facilities.id on delete cascade)
+image_url     text  not null
+caption       text  nullable
+sort_order    int   default 0
+published     bool  default true
+created_at    timestamptz default now()
+```
 
-### Data layer additions
+- Grants: `SELECT, INSERT, UPDATE, DELETE` to `authenticated`; `SELECT` to `anon`; `ALL` to `service_role`.
+- RLS: public `SELECT` where `published = true`; authenticated full manage (mirrors `gallery`/`facilities`).
+- Index on `(facility_id, sort_order)` and `(school_slug, published)`.
+- Update `alpha_schema.sql` to match.
 
-New server functions in `src/lib/alpha-content.functions.ts`, all filtered by `school_slug` and `published = true`:
+Both `school_slug` and `facility_id` are required — every photo is tied to one facility at one school.
 
-- `getSchoolBundle(slug)` → returns `{ school, news, events, gallery }` in one round-trip for SSR. Hard-fails to empty arrays on Supabase error (same defensive pattern as the homepage). Uses the existing publishable server client.
+## Data layer (`src/lib/alpha-content.functions.ts`)
 
-Wired into each route's loader via `ensureQueryData` + `useSuspenseQuery`, matching the homepage pattern. Each route sets its own `head()` meta (title, description, og:title, og:description) — no shared metadata.
+- `getFacilityPhotosByFacility({ facilityId })` — published photos for a facility, ordered by `sort_order asc, created_at desc`.
+- `getFacilityPhotosBySchool({ slug })` — published photos for a school joined with facility name (used by `/facilities`).
+- Both use the existing publishable server client.
 
-### Shared building blocks (new)
+## Admin portal
 
-- `src/components/school/SchoolHero.tsx` — image + overlay + intro slot.
-- `src/components/school/SchoolFacts.tsx` — key facts card.
-- `src/components/school/ProgramCard.tsx` — program tile.
-- `src/components/school/SchoolNewsGrid.tsx` — reuses the homepage news card styling, school-scoped.
-- `src/components/school/SchoolEventsList.tsx` — vertical list variant of the events rail.
-- `src/components/school/GalleryStrip.tsx` — horizontal-scroll thumbnails with lightbox-on-click (simple `<dialog>`).
+- Rename `/admin/gallery` heading + sidebar label to **"Activities Gallery"** (table stays `gallery`).
+- New route `/admin/facility-photos` titled **"Facilities Gallery"** built on `AdminCrud`:
+  - Fields: school (required), facility (required — select populated from `facilities` filtered by the chosen school), image (required), caption, sort order, published.
+  - The school→facility dependency needs a small extension to the CRUD form: a `dependentSelect` field kind that re-loads options from a table when another field changes. Add this generically to `admin-crud.tsx` so future modules can reuse it.
+  - List columns: photo, school, facility name, caption, order, published.
+- Add sidebar entry in `src/routes/admin.tsx` and a dashboard card in `src/routes/admin.index.tsx`.
 
-These keep the three route files thin — each route just supplies copy, image, accent colour, and the school slug.
+## Public site
 
-### Per-school config
+- `SchoolFacilitiesSection` (`src/components/school/facilities-section.tsx`): under each facility card, render a thumbnail strip of its `facility_photos` (lazy-loaded, horizontal scroll on overflow). Cards with no extra photos render unchanged.
+- `/facilities` page: add a "Latest facility photos" rail per school grouping `facility_photos` by facility name.
+- `/gallery` (activities) unchanged.
 
-A small static map in `src/lib/schools.ts` holds non-CMS content per school: accent hex, hero image asset, headline, intro, key facts, program tiles, facilities bullets. This is the **content surface you'll fill in**. Until copy lands, I'll use clearly-marked `TODO copy:` placeholders so nothing ships looking polished but fake.
+## Out of scope
 
-### Copy I need from you (per school)
+- The existing single `image_url` on `facilities` stays as the card cover.
+- No bulk multi-file uploader in this pass (one photo per row, same UX as today). Easy to add later.
 
-For each of Nursery & Primary / Alpha High / Alpha Girls:
-
-- Tagline (one line under the school name)
-- Intro paragraph (2–4 sentences for the hero)
-- "About this school" narrative (1–2 paragraphs)
-- Key facts: ages, campus, curriculum, language, boarding y/n, anything else
-- 3–4 programs with title + 1-sentence description each
-- 4–6 facility bullets
-- Admission CTA line
-
-You can drop it all in one message per school, or section by section — I'll wire it as it comes.
-
-### Build order
-
-1. Data layer (`getSchoolBundle`) + per-school config scaffold + shared components.
-2. `/schools/nursery-primary` end-to-end with placeholder copy, verified against live Supabase.
-3. `/schools/alpha-high` and `/schools/alpha-girls` (same skeleton, different config).
-4. Swap in your real copy as you send it.
-
-### Out of scope for this pass
-
-Aviation/Coding program pages, Admission/Scholarships, About/Contact/Facilities, and News/Events/Gallery archive index pages. Those come next once schools are signed off.
+Ready to build on approval.
