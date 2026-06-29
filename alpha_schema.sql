@@ -246,6 +246,10 @@ create table if not exists public.facility_photos (
 create index if not exists facility_photos_facility_idx on public.facility_photos (facility_id, sort_order);
 create index if not exists facility_photos_school_idx   on public.facility_photos (school_slug, published);
 
+grant select on public.facility_photos to anon;
+grant select, insert, update, delete on public.facility_photos to authenticated;
+grant all on public.facility_photos to service_role;
+
 alter table public.facility_photos enable row level security;
 create policy "facility_photos public read" on public.facility_photos for select using (published = true);
 create policy "facility_photos staff all"   on public.facility_photos for all
