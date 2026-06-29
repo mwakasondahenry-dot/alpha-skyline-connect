@@ -250,10 +250,11 @@ function CrudForm({
               <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#0C447C]/80">
                 {f.label}{f.required ? <span className="text-red-600"> *</span> : null}
               </label>
-              {renderInput(f, form, set, uploadImage)}
+              {renderInput(f, form, set, uploadImage, client)}
               {f.helpText ? <p className="mt-1 text-xs text-[#2C2C2A]/60">{f.helpText}</p> : null}
             </div>
           ))}
+
 
           {error ? (
             <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
