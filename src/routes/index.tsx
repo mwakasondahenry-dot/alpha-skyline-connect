@@ -177,10 +177,10 @@ function Home() {
                 <span className="truncate">First high school in Tanzania to teach aviation</span>
               </span>
               <h1 className="mt-5 font-display text-5xl font-black leading-[1.02] tracking-tight text-white drop-shadow-[0_2px_20px_rgba(0,0,0,0.4)] sm:mt-6 sm:text-6xl lg:text-7xl">
-                Learning that<br />takes <span className="italic text-[var(--color-gold)]">off.</span>
+                Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
               </h1>
               <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/85 sm:mt-6 sm:text-base">
-                From nursery to A-Level across two Dar es Salaam campuses — one school where ambition has a runway.
+                Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and the first aviation programme in any Tanzanian school.
               </p>
               <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
                 <Link
