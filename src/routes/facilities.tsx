@@ -60,6 +60,8 @@ function FacilitiesPage() {
       {SCHOOLS.map((school) => {
         const items = all.filter((f) => f.school_slug === school.slug);
         if (items.length === 0) return null;
+        const facilityNameById = new Map(items.map((f) => [f.id, f.name]));
+        const schoolPhotos = (photos[school.slug] ?? []).filter((p) => facilityNameById.has(p.facility_id));
         return (
           <section key={school.slug} className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
             <div className="mb-6 flex items-end justify-between gap-4">
@@ -81,9 +83,40 @@ function FacilitiesPage() {
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((f) => <FacilityCard key={f.id} item={f} />)}
             </div>
+
+            {schoolPhotos.length > 0 ? (
+              <div className="mt-10">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
+                  Latest facility photos
+                </p>
+                <div className="mt-3 flex gap-3 overflow-x-auto pb-2">
+                  {schoolPhotos.map((p) => (
+                    <a
+                      key={p.id}
+                      href={p.image_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="group shrink-0"
+                      title={p.caption ?? facilityNameById.get(p.facility_id) ?? ""}
+                    >
+                      <img
+                        src={p.image_url}
+                        alt={p.caption ?? facilityNameById.get(p.facility_id) ?? "Facility photo"}
+                        loading="lazy"
+                        className="h-32 w-48 rounded-xl object-cover ring-1 ring-black/5 transition group-hover:opacity-90"
+                      />
+                      <div className="mt-1 max-w-[12rem] truncate text-xs text-[var(--color-ink)]/70">
+                        {p.caption ?? facilityNameById.get(p.facility_id)}
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </section>
         );
       })}
+
 
       {all.length === 0 && (
         <section className="mx-auto max-w-3xl px-6 py-20 text-center lg:px-10">
