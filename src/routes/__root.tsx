@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Alpha Schools — Dar es Salaam" },
+      { title: "Alpha Schools" },
       {
         name: "description",
         content:
@@ -86,6 +86,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:title", content: "Alpha Schools" },
+      { name: "twitter:title", content: "Alpha Schools" },
+      { name: "description", content: "Alpha Schools website showcases educational offerings, campus finder, news, and events." },
+      { property: "og:description", content: "Alpha Schools website showcases educational offerings, campus finder, news, and events." },
+      { name: "twitter:description", content: "Alpha Schools website showcases educational offerings, campus finder, news, and events." },
+      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9fsIYijJomVf9VXNEbIilVCAzqB2/social-images/social-1782718904373-5R5A4481.webp" },
+      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9fsIYijJomVf9VXNEbIilVCAzqB2/social-images/social-1782718904373-5R5A4481.webp" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
