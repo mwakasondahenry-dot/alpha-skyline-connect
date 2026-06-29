@@ -29,7 +29,6 @@ const SCHOOLS = [
 
 const NAV = [
   { to: "/aviation" as const, label: "Aviation" },
-  { to: "/coding" as const, label: "Coding" },
   { to: "/admission" as const, label: "Admission" },
   { to: "/about" as const, label: "About" },
 ];
