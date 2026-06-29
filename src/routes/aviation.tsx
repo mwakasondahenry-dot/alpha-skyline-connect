@@ -435,8 +435,8 @@ function AviationPage() {
             />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
               <img
-                src={avPreFlight.url}
-                alt="Alpha students on the apron with KSOF aircraft, Nairobi"
+                src={avCockpitStudents.url}
+                alt="Alpha student pilots training inside a Cessna cockpit"
 
                 loading="lazy"
                 decoding="async"
