@@ -528,7 +528,7 @@ function AviationPage() {
             </h2>
           </div>
 
-          <div className="mt-12 grid gap-8 lg:grid-cols-[1.3fr_1fr]">
+          <div className="mt-12">
             <ol className="space-y-5">
               {[
                 {
@@ -568,46 +568,6 @@ function AviationPage() {
                 </li>
               ))}
             </ol>
-
-            <aside className="rounded-3xl border-2 border-dashed border-[var(--color-gold)]/50 bg-[var(--color-gold)]/5 p-6">
-              <div className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-gold)]">
-                To confirm with the school
-              </div>
-              <ul className="mt-4 space-y-4 text-sm text-[var(--color-ink)]/80">
-                {/* TODO: replace with confirmed numbers once admissions provides them */}
-                <li>
-                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
-                    Programme cost
-                  </div>
-                  <div className="mt-1 italic text-[var(--color-ink)]/60">
-                    [To confirm — termly aviation fee per student]
-                  </div>
-                </li>
-                <li>
-                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
-                    Flying hours fee
-                  </div>
-                  <div className="mt-1 italic text-[var(--color-ink)]/60">
-                    [To confirm — whether KSOF flying hours carry an additional charge]
-                  </div>
-                </li>
-                <li>
-                  <div className="font-display font-bold text-[var(--color-deep-blue)]">
-                    Sign-up process
-                  </div>
-                  <div className="mt-1 italic text-[var(--color-ink)]/60">
-                    [To confirm — specific aviation enrolment form, deadlines, medical requirements]
-                  </div>
-                </li>
-              </ul>
-
-              <Link
-                to="/admission"
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[var(--color-brand-blue)]"
-              >
-                Talk to admissions →
-              </Link>
-            </aside>
           </div>
         </div>
       </section>
