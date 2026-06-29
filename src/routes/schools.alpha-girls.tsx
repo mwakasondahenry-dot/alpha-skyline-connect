@@ -46,6 +46,7 @@ function AlphaGirlsRoute() {
       <Distinctive />
       <BeyondClassroom />
       <LifeAtKunduchi />
+      <Staff staff={data.staff} />
       <ApplyBanner />
       <GirlsFooter />
       <MotionStyles />
