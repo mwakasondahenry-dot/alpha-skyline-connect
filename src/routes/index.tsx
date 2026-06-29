@@ -372,30 +372,30 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#ffffff" bottomColor="#f7f5ef" intensity="playful" seed={58} />
+      <TornEdge topColor="#ffffff" bottomColor="#f6f7f9" intensity="playful" seed={58} />
 
       {/* UPDATES + EVENTS */}
       <WhatsNew news={data.news} events={upcomingEvents} />
 
 
-      <TornEdge topColor="#0c447c" bottomColor="#e8a020" intensity="playful" seed={72} />
+      <TornEdge topColor="#ffffff" bottomColor="#ffffff" intensity="playful" seed={72} />
 
       {/* CTA BAND */}
-      <section className="bg-[var(--color-gold)]">
+      <section className="border-y border-[var(--color-hairline)] bg-white">
 
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-14 sm:flex-row sm:items-center lg:px-10">
           <Reveal direction="left">
             <h2 className="font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
               Come and see Alpha for yourself.
             </h2>
-            <p className="mt-2 text-sm text-[var(--color-deep-blue)]/85">
+            <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
               Book a campus visit — we'll match you to the right school.
             </p>
           </Reveal>
           <Reveal direction="right">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
             >
               Book a Visit →
             </Link>
