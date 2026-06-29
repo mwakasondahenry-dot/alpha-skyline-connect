@@ -10,6 +10,7 @@ import type {
   SchoolSlug,
   StaffRow,
   FacilityRow,
+  FacilityPhotoRow,
 } from "@/integrations/alpha-supabase/types";
 
 function serverClient() {
