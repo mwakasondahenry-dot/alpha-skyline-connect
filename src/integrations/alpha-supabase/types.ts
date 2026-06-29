@@ -71,6 +71,18 @@ export interface FacilityRow {
   created_at: string;
 }
 
+export interface FacilityPhotoRow {
+  id: string;
+  school_slug: SchoolSlug;
+  facility_id: string;
+  image_url: string;
+  caption: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+}
+
+
 export interface ContactMessageRow {
   id: string;
   name: string;
