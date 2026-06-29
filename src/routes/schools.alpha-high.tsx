@@ -3,6 +3,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import graduate from "@/assets/alpha-high-graduate.png.asset.json";
 import campusAerial from "@/assets/alpha-high-campus-aerial.jpg.asset.json";
