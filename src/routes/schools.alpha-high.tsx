@@ -135,7 +135,7 @@ function Hero() {
               className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-md transition-transform hover:scale-[1.03]"
               style={{ background: GOLD }}
             >
-              Apply Now →
+              Enroll Now →
             </Link>
             <Link
               to="/contact"
@@ -728,7 +728,7 @@ function ApplyBanner() {
             className="inline-flex items-center rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-transform hover:scale-[1.03]"
             style={{ background: ACCENT }}
           >
-            Apply Now →
+            Enroll Now →
           </Link>
           <Link
             to="/contact"
