@@ -42,15 +42,22 @@
 
 :root {
   --radius: 0.75rem;
-  --background: #f7f5ef;
-  --foreground: #2c2c2a;
+  --background: #ffffff;
+  --foreground: #1f2330;
   --card: #ffffff;
-  --card-foreground: #2c2c2a;
-  --muted: #efece4;
-  --muted-foreground: #5b5b58;
-  --border: #e4e0d4;
-  --input: #e4e0d4;
+  --card-foreground: #1f2330;
+  --muted: #f3f4f6;
+  --muted-foreground: #5b6271;
+  --border: #e6e8ec;
+  --input: #e6e8ec;
   --ring: #185fa5;
+
+  /* Neutral surface scale used across chrome + sections */
+  --color-surface: #ffffff;
+  --color-surface-muted: #f6f7f9;
+  --color-surface-soft: #eef0f3;
+  --color-hairline: #e6e8ec;
+  --color-ink-soft: #4b5160;
 }
 
 @layer base {
