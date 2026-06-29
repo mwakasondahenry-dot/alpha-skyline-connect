@@ -555,31 +555,31 @@ function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
 
 function EventsRail({ events }: { events: HomeEventItem[] }) {
   return (
-    <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-20">
-        <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)] blur-3xl" />
-        <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)] blur-3xl" />
+    <section className="relative overflow-hidden bg-white text-[var(--color-ink)]">
+      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40">
+        <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
+        <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)]/15 blur-3xl" />
       </div>
       <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="flex items-end justify-between gap-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-gold)]">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
               Upcoming
             </p>
-            <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight sm:text-5xl">
+            <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
               What's coming up next.
             </h2>
           </div>
-          <Link to="/events" className="hidden text-sm font-semibold text-[var(--color-gold)] hover:underline sm:inline">
+          <Link to="/events" className="hidden text-sm font-semibold text-[var(--color-brand-blue)] hover:underline sm:inline">
             Full calendar →
           </Link>
         </Reveal>
 
         {events.length === 0 ? (
-          <div className="mt-10 grid place-items-center rounded-2xl border border-dashed border-white/20 bg-white/[0.05] px-6 py-16 text-center">
+          <div className="mt-10 grid place-items-center rounded-2xl border border-dashed border-[var(--color-hairline)] bg-[var(--color-surface-muted)] px-6 py-16 text-center">
             <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--color-gold)]/20 text-2xl">📅</div>
-            <h3 className="mt-4 font-display text-xl font-semibold text-white">No upcoming events scheduled</h3>
-            <p className="mt-2 max-w-md text-sm text-white/65">
+            <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-deep-blue)]">No upcoming events scheduled</h3>
+            <p className="mt-2 max-w-md text-sm text-[var(--color-ink-soft)]">
               We're between events right now. The next one will appear here as soon as it's announced.
             </p>
           </div>
@@ -588,14 +588,14 @@ function EventsRail({ events }: { events: HomeEventItem[] }) {
           {events.map((e, i) => (
             <Reveal key={e.id} direction="up" delay={i * 90}>
               <article
-                className="group relative h-full overflow-hidden rounded-2xl bg-white/[0.07] p-6 ring-1 ring-white/15 backdrop-blur-sm transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.12] hover:ring-[var(--color-gold)]/50"
+                className="group relative h-full overflow-hidden rounded-2xl bg-[var(--color-surface-muted)] p-6 ring-1 ring-[var(--color-hairline)] transition-all duration-500 hover:-translate-y-1 hover:bg-white hover:ring-[var(--color-gold)]/60 hover:shadow-lg"
               >
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-gold)]/20 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-[var(--color-gold)]/30"
+                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-gold)]/15 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-[var(--color-gold)]/25"
                 />
                 <div className="relative flex items-start gap-5">
-                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[#d68f1c] text-[#1a1a18] shadow-lg ring-1 ring-white/30 transition-transform duration-500 group-hover:rotate-[-4deg] group-hover:scale-105">
+                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[#d68f1c] text-[#1a1a18] shadow-md ring-1 ring-white/40 transition-transform duration-500 group-hover:rotate-[-4deg] group-hover:scale-105">
                     <span className="font-display text-3xl font-black leading-none">
                       {eventDay(e.event_date)}
                     </span>
@@ -604,22 +604,22 @@ function EventsRail({ events }: { events: HomeEventItem[] }) {
                     </span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[e.school_slug] ?? "bg-white/20 text-white"}`}>
+                    <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[e.school_slug] ?? "bg-[var(--color-surface-soft)] text-[var(--color-ink)]"}`}>
                       {SCHOOL_LABELS[e.school_slug] ?? e.school_slug}
                     </span>
-                    <h3 className="mt-3 font-display text-lg font-semibold leading-snug text-white">
+                    <h3 className="mt-3 font-display text-lg font-semibold leading-snug text-[var(--color-deep-blue)]">
                       {e.title}
                     </h3>
                     {e.location && (
-                      <p className="mt-2 text-xs text-white/70">📍 {e.location}</p>
+                      <p className="mt-2 text-xs text-[var(--color-ink-soft)]">📍 {e.location}</p>
                     )}
                   </div>
                 </div>
-                <div className="relative mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-white/60">
+                <div className="relative mt-5 flex items-center justify-between border-t border-[var(--color-hairline)] pt-4">
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-ink-soft)]">
                     {new Date(e.event_date).toLocaleDateString(undefined, { weekday: "long" })}
                   </span>
-                  <span className="text-sm font-semibold text-[var(--color-gold)] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2">
+                  <span className="text-sm font-semibold text-[var(--color-brand-blue)] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2">
                     Details →
                   </span>
                 </div>
