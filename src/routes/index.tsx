@@ -161,14 +161,14 @@ function Home() {
           src={heroCollage.url}
           alt="Alpha Schools students across nursery, primary, secondary and aviation"
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "grayscale(100%) contrast(1.18) brightness(0.78) saturate(0)" }}
+          style={{ filter: "grayscale(100%) contrast(1.15) brightness(1.05) saturate(0)" }}
           loading="eager"
           decoding="async"
           fetchPriority="high"
         />
-        {/* Cinematic overlays for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+        {/* Light overlays — keep images visible, only darken behind text */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
         <div className="pointer-events-none absolute -left-40 top-1/3 h-[28rem] w-[28rem] rounded-full bg-[var(--color-gold)]/20 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-24 lg:px-10">
