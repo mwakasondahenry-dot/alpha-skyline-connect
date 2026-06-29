@@ -131,6 +131,51 @@ export const getFacilitiesBySchool = createServerFn({ method: "GET" })
     }
   });
 
+// ---- Facility photos (multiple per facility) -----------------------------
+export type PublicFacilityPhoto = Pick<FacilityPhotoRow,
+  "id" | "facility_id" | "school_slug" | "image_url" | "caption" | "sort_order">;
+
+export const getFacilityPhotosByFacility = createServerFn({ method: "GET" })
+  .inputValidator((data: { facilityId: string }) => data)
+  .handler(async ({ data }): Promise<PublicFacilityPhoto[]> => {
+    try {
+      const sb = serverClient();
+      const { data: rows, error } = await sb
+        .from("facility_photos")
+        .select("id,facility_id,school_slug,image_url,caption,sort_order")
+        .eq("published", true)
+        .eq("facility_id", data.facilityId)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return rows ?? [];
+    } catch (err) {
+      console.error("[getFacilityPhotosByFacility]", err);
+      return [];
+    }
+  });
+
+export const getFacilityPhotosBySchool = createServerFn({ method: "GET" })
+  .inputValidator((data: { slug: SchoolSlug }) => data)
+  .handler(async ({ data }): Promise<PublicFacilityPhoto[]> => {
+    try {
+      const sb = serverClient();
+      const { data: rows, error } = await sb
+        .from("facility_photos")
+        .select("id,facility_id,school_slug,image_url,caption,sort_order")
+        .eq("published", true)
+        .eq("school_slug", data.slug)
+        .order("sort_order", { ascending: true })
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return rows ?? [];
+    } catch (err) {
+      console.error("[getFacilityPhotosBySchool]", err);
+      return [];
+    }
+  });
+
+
 // ---- Contact form --------------------------------------------------------
 export const submitContactMessage = createServerFn({ method: "POST" })
   .inputValidator((data: {
