@@ -49,10 +49,13 @@ create table public.news (
   body         text,
   cover_url    text,                         -- Supabase Storage public URL
   published    boolean not null default false,
+  urgent       boolean not null default false, -- shows as a site-wide popup on first visit
   published_at timestamptz,
   author_id    uuid references public.profiles(id),
   created_at   timestamptz not null default now()
 );
+-- Migration for existing installs:
+-- alter table public.news add column if not exists urgent boolean not null default false;
 
 create table public.events (
   id           uuid primary key default gen_random_uuid(),
