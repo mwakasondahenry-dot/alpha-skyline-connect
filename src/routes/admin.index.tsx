@@ -22,7 +22,8 @@ function AdminDashboard() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <DashCard title="News" href="/admin/news" hint="Post updates" />
         <DashCard title="Events" href="/admin/events" hint="Add upcoming events" />
-        <DashCard title="Gallery" href="/admin/gallery" hint="Upload photos" />
+        <DashCard title="Activities Gallery" href="/admin/gallery" hint="School-life photos" />
+        <DashCard title="Facilities Gallery" href="/admin/facility-photos" hint="Photos per facility" />
         <DashCard title="Staff" href="/admin/staff" hint="Manage team profiles" />
       </div>
 

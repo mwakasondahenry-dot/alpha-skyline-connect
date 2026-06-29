@@ -228,3 +228,26 @@ create policy "contact staff update"  on public.contact_messages for update
   using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
 create policy "contact staff delete"  on public.contact_messages for delete
   using (auth.role() = 'authenticated');
+
+-- ============================================================
+-- 7. FACILITY PHOTOS (multiple up-to-date photos per facility)
+-- Run this block on top of the existing schema.
+-- ============================================================
+create table if not exists public.facility_photos (
+  id           uuid primary key default gen_random_uuid(),
+  school_slug  text not null references public.schools(slug),
+  facility_id  uuid not null references public.facilities(id) on delete cascade,
+  image_url    text not null,
+  caption      text,
+  sort_order   int  not null default 0,
+  published    boolean not null default true,
+  created_at   timestamptz not null default now()
+);
+create index if not exists facility_photos_facility_idx on public.facility_photos (facility_id, sort_order);
+create index if not exists facility_photos_school_idx   on public.facility_photos (school_slug, published);
+
+alter table public.facility_photos enable row level security;
+create policy "facility_photos public read" on public.facility_photos for select using (published = true);
+create policy "facility_photos staff all"   on public.facility_photos for all
+  using (auth.role() = 'authenticated') with check (auth.role() = 'authenticated');
+

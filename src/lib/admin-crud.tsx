@@ -12,7 +12,7 @@ export const SCHOOL_OPTIONS: { value: SchoolSlug; label: string }[] = [
   { value: "alpha-girls", label: "Alpha Girls" },
 ];
 
-export type FieldKind = "text" | "textarea" | "date" | "image" | "school" | "boolean" | "select" | "number";
+export type FieldKind = "text" | "textarea" | "date" | "image" | "school" | "boolean" | "select" | "number" | "dynamicSelect";
 
 export type FieldDef = {
   name: string;
@@ -23,7 +23,15 @@ export type FieldDef = {
   options?: { value: string; label: string }[];
   placeholder?: string;
   helpText?: string;
+  /** For kind === "dynamicSelect": reload options when these field names change. */
+  dependsOn?: string[];
+  /** For kind === "dynamicSelect": returns options given the current form + supabase client. */
+  loadOptions?: (
+    form: Record<string, unknown>,
+    client: import("@supabase/supabase-js").SupabaseClient,
+  ) => Promise<{ value: string; label: string }[]>;
 };
+
 
 export type CrudConfig = {
   table: string;
@@ -242,10 +250,11 @@ function CrudForm({
               <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#0C447C]/80">
                 {f.label}{f.required ? <span className="text-red-600"> *</span> : null}
               </label>
-              {renderInput(f, form, set, uploadImage)}
+              {renderInput(f, form, set, uploadImage, client)}
               {f.helpText ? <p className="mt-1 text-xs text-[#2C2C2A]/60">{f.helpText}</p> : null}
             </div>
           ))}
+
 
           {error ? (
             <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
@@ -274,6 +283,7 @@ function renderInput(
   form: Record<string, unknown>,
   set: (k: string, v: unknown) => void,
   uploadImage: (file: File) => Promise<string | null>,
+  client: import("@supabase/supabase-js").SupabaseClient | null,
 ) {
   const v = form[f.name];
   const cls = "w-full rounded-lg border border-[#0C447C]/20 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8A020] focus:ring-2 focus:ring-[#E8A020]/30";
@@ -301,6 +311,10 @@ function renderInput(
       </select>
     );
   }
+  if (f.kind === "dynamicSelect") {
+    return <DynamicSelect field={f} form={form} set={set} client={client} cls={cls} value={(v as string) ?? ""} />;
+  }
+
   if (f.kind === "number") {
     return <input type="number" value={(v as number | string) ?? ""} onChange={(e) => set(f.name, e.target.value)} className={cls} />;
   }
@@ -337,3 +351,50 @@ function renderInput(
   }
   return <input type="text" value={(v as string) ?? ""} onChange={(e) => set(f.name, e.target.value)} placeholder={f.placeholder} className={cls} />;
 }
+
+function DynamicSelect({
+  field,
+  form,
+  set,
+  client,
+  cls,
+  value,
+}: {
+  field: FieldDef;
+  form: Record<string, unknown>;
+  set: (k: string, v: unknown) => void;
+  client: import("@supabase/supabase-js").SupabaseClient | null;
+  cls: string;
+  value: string;
+}) {
+  const [opts, setOpts] = useState<{ value: string; label: string }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const depKey = (field.dependsOn ?? []).map((k) => String(form[k] ?? "")).join("|");
+
+  useEffect(() => {
+    if (!client || !field.loadOptions) { setOpts([]); return; }
+    let cancelled = false;
+    setLoading(true);
+    field.loadOptions(form, client)
+      .then((rows) => { if (!cancelled) setOpts(rows); })
+      .catch((err) => { console.error("[dynamicSelect]", err); if (!cancelled) setOpts([]); })
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client, depKey]);
+
+  // Clear the current value if it's no longer a valid option after deps change.
+  useEffect(() => {
+    if (!value) return;
+    if (opts.length > 0 && !opts.some((o) => o.value === value)) set(field.name, "");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [opts]);
+
+  return (
+    <select value={value} onChange={(e) => set(field.name, e.target.value)} className={cls} disabled={loading || opts.length === 0}>
+      <option value="">{loading ? "Loading…" : opts.length === 0 ? "— select a school first —" : "—"}</option>
+      {opts.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+    </select>
+  );
+}
+

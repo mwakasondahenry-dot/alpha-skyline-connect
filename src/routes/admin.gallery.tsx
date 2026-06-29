@@ -2,14 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { AdminCrud, type CrudConfig } from "@/lib/admin-crud";
 
 export const Route = createFileRoute("/admin/gallery")({
-  head: () => ({ meta: [{ title: "Gallery · Alpha Admin" }] }),
+  head: () => ({ meta: [{ title: "Activities Gallery · Alpha Admin" }] }),
   component: () => <AdminCrud config={CONFIG} />,
 });
 
 const CONFIG: CrudConfig = {
   table: "gallery",
-  title: "Gallery",
-  description: "Photos shown on each school's gallery section.",
+  title: "Activities Gallery",
+  description: "Photos of school life, activities and events. For facility photos, use the Facilities Gallery.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
     { key: "image_url", label: "Photo" },

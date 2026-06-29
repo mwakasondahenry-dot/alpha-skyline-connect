@@ -30,6 +30,7 @@ import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminFacilityPhotosRouteImport } from './routes/admin.facility-photos'
 import { Route as AdminFacilitiesRouteImport } from './routes/admin.facilities'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
 
@@ -138,6 +139,11 @@ const AdminGalleryRoute = AdminGalleryRouteImport.update({
   path: '/gallery',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminFacilityPhotosRoute = AdminFacilityPhotosRouteImport.update({
+  id: '/facility-photos',
+  path: '/facility-photos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminFacilitiesRoute = AdminFacilitiesRouteImport.update({
   id: '/facilities',
   path: '/facilities',
@@ -164,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/scholarships': typeof ScholarshipsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/facilities': typeof AdminFacilitiesRoute
+  '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -188,6 +195,7 @@ export interface FileRoutesByTo {
   '/scholarships': typeof ScholarshipsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/facilities': typeof AdminFacilitiesRoute
+  '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -214,6 +222,7 @@ export interface FileRoutesById {
   '/scholarships': typeof ScholarshipsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/facilities': typeof AdminFacilitiesRoute
+  '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
@@ -241,6 +250,7 @@ export interface FileRouteTypes {
     | '/scholarships'
     | '/admin/events'
     | '/admin/facilities'
+    | '/admin/facility-photos'
     | '/admin/gallery'
     | '/admin/login'
     | '/admin/messages'
@@ -265,6 +275,7 @@ export interface FileRouteTypes {
     | '/scholarships'
     | '/admin/events'
     | '/admin/facilities'
+    | '/admin/facility-photos'
     | '/admin/gallery'
     | '/admin/login'
     | '/admin/messages'
@@ -290,6 +301,7 @@ export interface FileRouteTypes {
     | '/scholarships'
     | '/admin/events'
     | '/admin/facilities'
+    | '/admin/facility-photos'
     | '/admin/gallery'
     | '/admin/login'
     | '/admin/messages'
@@ -468,6 +480,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGalleryRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/facility-photos': {
+      id: '/admin/facility-photos'
+      path: '/facility-photos'
+      fullPath: '/admin/facility-photos'
+      preLoaderRoute: typeof AdminFacilityPhotosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/facilities': {
       id: '/admin/facilities'
       path: '/facilities'
@@ -488,6 +507,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminEventsRoute: typeof AdminEventsRoute
   AdminFacilitiesRoute: typeof AdminFacilitiesRoute
+  AdminFacilityPhotosRoute: typeof AdminFacilityPhotosRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
@@ -499,6 +519,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminEventsRoute: AdminEventsRoute,
   AdminFacilitiesRoute: AdminFacilitiesRoute,
+  AdminFacilityPhotosRoute: AdminFacilityPhotosRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminMessagesRoute: AdminMessagesRoute,

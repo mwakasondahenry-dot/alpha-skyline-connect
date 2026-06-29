@@ -71,6 +71,18 @@ export interface FacilityRow {
   created_at: string;
 }
 
+export interface FacilityPhotoRow {
+  id: string;
+  school_slug: SchoolSlug;
+  facility_id: string;
+  image_url: string;
+  caption: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+}
+
+
 export interface ContactMessageRow {
   id: string;
   name: string;
@@ -92,6 +104,7 @@ export interface Database {
       gallery: { Row: GalleryRow; Insert: Partial<GalleryRow>; Update: Partial<GalleryRow> };
       staff: { Row: StaffRow; Insert: Partial<StaffRow>; Update: Partial<StaffRow> };
       facilities: { Row: FacilityRow; Insert: Partial<FacilityRow>; Update: Partial<FacilityRow> };
+      facility_photos: { Row: FacilityPhotoRow; Insert: Partial<FacilityPhotoRow>; Update: Partial<FacilityPhotoRow> };
       contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow> };
     };
   };
