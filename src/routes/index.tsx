@@ -429,7 +429,7 @@ function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEv
   return (
     <>
       <UpdatesSlideshow news={news} />
-      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" seed={91} />
+      <TornEdge topColor="#f6f7f9" bottomColor="#ffffff" intensity="playful" seed={91} />
       <EventsRail events={events} />
     </>
   );
