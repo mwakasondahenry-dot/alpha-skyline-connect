@@ -1,6 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { getAllFacilities, type PublicFacilityItem } from "@/lib/alpha-content.functions";
+import {
+  getAllFacilities,
+  getFacilityPhotosBySchool,
+  type PublicFacilityItem,
+  type PublicFacilityPhoto,
+} from "@/lib/alpha-content.functions";
+import type { SchoolSlug } from "@/integrations/alpha-supabase/types";
+
+type LoaderData = {
+  facilities: PublicFacilityItem[];
+  photos: Record<string, PublicFacilityPhoto[]>;
+};
 
 export const Route = createFileRoute("/facilities")({
   head: () => ({
@@ -9,18 +20,28 @@ export const Route = createFileRoute("/facilities")({
       { name: "description", content: "Tour facilities across our three Dar es Salaam campuses." },
     ],
   }),
-  loader: () => getAllFacilities(),
+  loader: async (): Promise<LoaderData> => {
+    const slugs: SchoolSlug[] = ["nursery-primary", "alpha-high", "alpha-girls"];
+    const [facilities, ...photoLists] = await Promise.all([
+      getAllFacilities(),
+      ...slugs.map((slug) => getFacilityPhotosBySchool({ data: { slug } })),
+    ]);
+    const photos: Record<string, PublicFacilityPhoto[]> = {};
+    slugs.forEach((slug, i) => { photos[slug] = photoLists[i] ?? []; });
+    return { facilities, photos };
+  },
   component: FacilitiesPage,
 });
 
-const SCHOOLS: { slug: string; label: string; href: "/schools/nursery-primary" | "/schools/alpha-high" | "/schools/alpha-girls" }[] = [
+const SCHOOLS: { slug: SchoolSlug; label: string; href: "/schools/nursery-primary" | "/schools/alpha-high" | "/schools/alpha-girls" }[] = [
   { slug: "nursery-primary", label: "Nursery & Primary", href: "/schools/nursery-primary" },
   { slug: "alpha-high", label: "Alpha High", href: "/schools/alpha-high" },
   { slug: "alpha-girls", label: "Alpha Girls", href: "/schools/alpha-girls" },
 ];
 
 function FacilitiesPage() {
-  const all = Route.useLoaderData() as PublicFacilityItem[];
+  const { facilities: all, photos } = Route.useLoaderData() as LoaderData;
+
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
