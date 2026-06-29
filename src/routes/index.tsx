@@ -6,15 +6,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
-import collage1 from "@/assets/hero-h1-grad-girl.jpg.asset.json";
-import collage2 from "@/assets/hero-h2-grad-boy.jpg.asset.json";
-import collage3 from "@/assets/hero-h3-env-club.webp.asset.json";
-import collage4 from "@/assets/hero-h4-toy-cars.jpg.asset.json";
-import collage5 from "@/assets/hero-h5-primary-girl.jpg.asset.json";
-import collage6 from "@/assets/hero-h6-speakers.jpg.asset.json";
-import collage7 from "@/assets/hero-h7-kids-wave.webp.asset.json";
-import collage8 from "@/assets/hero-h8-library.jpg.asset.json";
-import collage9 from "@/assets/hero-h9-pilot-kid.jpg.asset.json";
+import heroCollage from "@/assets/hero-collage.png.asset.json";
 import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
 import campusNurseryImage from "@/assets/campus-nursery.jpg.asset.json";
 import campusHighImage from "@/assets/campus-high.jpg.asset.json";
@@ -163,79 +155,61 @@ function Home() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      {/* HERO */}
-      <section className="relative isolate overflow-hidden bg-[var(--color-deep-blue)]">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(232,160,32,0.18),transparent_55%),radial-gradient(ellipse_at_bottom_right,rgba(12,68,124,0.9),#08203f_75%)]" />
-        <div className="pointer-events-none absolute -left-32 top-1/3 h-96 w-96 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
+      {/* HERO — full screen B&W collage */}
+      <section className="relative isolate flex min-h-screen w-full items-center overflow-hidden bg-black">
+        <img
+          src={heroCollage.url}
+          alt="Alpha Schools students across nursery, primary, secondary and aviation"
+          className="absolute inset-0 h-full w-full object-cover"
+          style={{ filter: "grayscale(100%) contrast(1.18) brightness(0.78) saturate(0)" }}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+        />
+        {/* Cinematic overlays for legibility */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/40" />
+        <div className="pointer-events-none absolute -left-40 top-1/3 h-[28rem] w-[28rem] rounded-full bg-[var(--color-gold)]/20 blur-3xl" />
 
-        <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-16 sm:pt-20 lg:px-10 lg:pb-28 lg:pt-24">
-          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-12">
-            {/* LEFT — copy */}
-            <div className="lg:col-span-6">
-              <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur sm:text-[11px]">
-                <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
-                <span className="truncate">Nursery · Primary · Secondary · Aviation</span>
-              </span>
-              <h1 className="mt-5 font-display text-5xl font-black leading-[1.02] tracking-tight text-white sm:mt-6 sm:text-6xl lg:text-7xl">
-                Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
-              </h1>
-              <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-white/85 sm:mt-6 sm:text-base">
-                Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and the first aviation programme in any Tanzanian school.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
-                <Link
-                  to="/admission"
-                  className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
-                >
-                  Enroll Now
-                </Link>
-                <Link
-                  to="/aviation"
-                  className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
-                >
-                  Inside the aviation programme →
-                </Link>
-              </div>
+        <div className="relative mx-auto w-full max-w-7xl px-6 py-24 lg:px-10">
+          <div className="max-w-2xl">
+            <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur sm:text-[11px]">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
+              <span className="truncate">Nursery · Primary · Secondary · Aviation</span>
+            </span>
+            <h1 className="mt-6 font-display text-5xl font-black leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-8xl">
+              Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
+            </h1>
+            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
+              Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and the first aviation programme in any Tanzanian school.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/admission"
+                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[#1a1a18] shadow-lg transition-transform hover:scale-[1.02]"
+              >
+                Enroll Now
+              </Link>
+              <Link
+                to="/aviation"
+                className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+              >
+                Inside the aviation programme →
+              </Link>
             </div>
+          </div>
+        </div>
 
-            {/* RIGHT — tight collage mosaic */}
-            <div className="relative lg:col-span-6">
-              <div className="pointer-events-none absolute -inset-4 rounded-[28px] bg-[var(--color-gold)]/10 blur-2xl" />
-              <div className="relative grid h-[460px] grid-cols-6 grid-rows-6 gap-2 sm:h-[540px] sm:gap-2.5 lg:h-[580px]">
-                {[
-                  { src: collage1.url, alt: "Form Four graduate", cls: "col-span-2 row-span-3", rot: "-rotate-1" },
-                  { src: collage5.url, alt: "Primary school pupil", cls: "col-span-2 row-span-2", rot: "rotate-1" },
-                  { src: collage9.url, alt: "Nursery pilot in uniform", cls: "col-span-2 row-span-3", rot: "rotate-2" },
-                  { src: collage7.url, alt: "Primary pupils waving", cls: "col-span-2 row-span-2", rot: "rotate-1" },
-                  { src: collage3.url, alt: "Environment club at the beach", cls: "col-span-3 row-span-3", rot: "-rotate-1" },
-                  { src: collage2.url, alt: "Form Four graduate", cls: "col-span-2 row-span-3", rot: "rotate-1" },
-                  { src: collage6.url, alt: "Junior speakers champion", cls: "col-span-2 row-span-2", rot: "-rotate-2" },
-                  { src: collage4.url, alt: "Nursery pupils on toy cars", cls: "col-span-3 row-span-2", rot: "rotate-1" },
-                  { src: collage8.url, alt: "Secondary student in library", cls: "col-span-2 row-span-2", rot: "-rotate-1" },
-                ].map((t, i) => (
-                  <figure
-                    key={i}
-                    className={`group relative overflow-hidden rounded-xl ring-1 ring-white/15 shadow-[0_10px_30px_-12px_rgba(0,0,0,0.55)] transition-transform duration-500 hover:z-10 hover:scale-[1.04] ${t.cls} ${t.rot}`}
-                    style={{ animation: `heroPop 700ms ${i * 70}ms both` }}
-                  >
-                    <img
-                      src={t.src}
-                      alt={t.alt}
-                      className="h-full w-full object-cover transition-transform duration-[1200ms] group-hover:scale-110"
-                      loading={i < 3 ? "eager" : "lazy"}
-                      decoding="async"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent opacity-60" />
-                  </figure>
-                ))}
-              </div>
-              <style>{`@keyframes heroPop{0%{opacity:0;transform:translateY(14px) scale(.96)}100%{opacity:1;transform:translateY(0) scale(1)}}`}</style>
-            </div>
+        {/* Scroll cue */}
+        <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70">
+          <div className="flex flex-col items-center gap-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">Scroll</span>
+            <span className="block h-8 w-px animate-pulse bg-white/60" />
           </div>
         </div>
       </section>
 
-      <TornEdge topColor="#08203f" bottomColor="#f7f5ef" intensity="playful" seed={7} />
+      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" seed={7} />
 
 
       {/* FIND THE RIGHT CAMPUS */}
