@@ -1,68 +1,172 @@
 /**
  * TornEdge — organic hand-torn divider between two coloured sections.
  *
- * Pure SVG, no JS animation, no images. The shape is a rectangle whose
- * bottom is an irregular torn path in `topColor`, sitting on top of
- * `bottomColor`. A handful of `topColor` specks scattered below the edge
- * give the distressed ink-paper feel from the brief.
+ * The edge is generated from a seeded PRNG so every instance can be a
+ * different irregular path (pass a distinct `seed` per placement). Each
+ * segment is one of: a soft torn bump (quadratic curve), a sharp jag, a
+ * micro chip, or — occasionally — a deep torn chunk missing. Scattered
+ * fibre flecks sit below the edge in the section colour; tiny "holes"
+ * sit just inside the edge in the opposite colour, like the bits of
+ * paper that came away with the tear.
  *
- * Use as a band BETWEEN two sections, not inside them:
+ * Pure SVG, no JS animation, no images. Path + specks are computed once
+ * per (seed, intensity) and memoised.
+ *
  *   <SectionA />
- *   <TornEdge topColor="#0C447C" bottomColor="#f7f5ef" />
+ *   <TornEdge topColor="#0C447C" bottomColor="#f7f5ef" seed={17} />
  *   <SectionB />
- *
- * `intensity` tunes the edge roughness and speck density per brand:
- *   - "restrained" → Alpha High (serious flagship)
- *   - "balanced"   → Alpha Girls (confident)
- *   - "playful"    → Nursery & Primary + homepage (loud, energetic)
  */
+
+import { useMemo } from "react";
 
 type Intensity = "restrained" | "balanced" | "playful";
 
-// Pre-computed irregular paths so the SVG stays cacheable and inert.
-// Coordinate system: 1440 wide, 120 tall. Top edge straight, bottom torn.
-const EDGE_PATHS: Record<Intensity, string> = {
-  restrained:
-    "M0 0 H1440 V72 L1410 76 1378 70 1342 80 1306 72 1268 84 1226 74 1188 86 1148 78 1108 90 1066 80 1024 92 982 82 938 94 894 84 850 96 804 86 760 98 716 88 672 100 626 90 582 102 538 92 494 104 450 94 406 106 362 96 318 108 274 98 230 110 186 100 142 112 98 102 54 114 22 104 0 110 Z",
-  balanced:
-    "M0 0 H1440 V64 L1418 78 1392 60 1360 86 1322 64 1284 92 1240 68 1200 96 1156 72 1112 100 1066 76 1020 104 974 78 928 108 880 82 832 112 784 84 736 116 686 84 638 118 588 86 540 116 490 84 442 114 392 82 344 112 296 80 248 110 198 78 150 108 102 76 56 106 24 80 0 100 Z",
-  playful:
-    "M0 0 H1440 V56 L1424 96 1396 54 1362 102 1320 58 1278 110 1230 60 1184 116 1132 62 1082 120 1030 64 980 116 928 60 876 112 824 58 772 116 718 62 664 118 610 60 556 116 502 58 448 114 394 60 342 112 288 56 236 110 184 54 134 108 84 60 36 104 12 74 0 96 Z",
+const W = 1440;
+const H = 120;
+
+// Per-intensity tuning. Amplitude is how far the edge can swing vertically;
+// chunkChance is how often a deep "ripped chunk" appears.
+const TUNING: Record<
+  Intensity,
+  {
+    baseY: number;
+    amp: number;
+    minStep: number;
+    maxStep: number;
+    chunkChance: number;
+    fibres: number;
+    holes: number;
+    heightClass: string;
+  }
+> = {
+  restrained: {
+    baseY: 70, amp: 14, minStep: 28, maxStep: 70,
+    chunkChance: 0.04, fibres: 14, holes: 6,
+    heightClass: "h-10 sm:h-14",
+  },
+  balanced: {
+    baseY: 64, amp: 22, minStep: 22, maxStep: 64,
+    chunkChance: 0.07, fibres: 22, holes: 10,
+    heightClass: "h-14 sm:h-20",
+  },
+  playful: {
+    baseY: 56, amp: 32, minStep: 18, maxStep: 58,
+    chunkChance: 0.11, fibres: 34, holes: 16,
+    heightClass: "h-16 sm:h-24",
+  },
 };
 
-// Speck clouds (relative coords inside the 1440x120 band, below the edge).
-const SPECKS: Record<Intensity, ReadonlyArray<[number, number, number]>> = {
-  restrained: [
-    [120, 92, 2], [260, 100, 1.5], [410, 96, 2.2], [560, 104, 1.6],
-    [720, 98, 2], [880, 102, 1.8], [1030, 96, 2.2], [1180, 100, 1.6], [1320, 104, 2],
-  ],
-  balanced: [
-    [80, 92, 2.4], [170, 102, 1.6], [260, 96, 2], [340, 106, 1.4], [430, 94, 2.6],
-    [520, 102, 1.8], [610, 96, 2.2], [700, 108, 1.6], [790, 94, 2.4], [880, 104, 1.8],
-    [970, 96, 2.2], [1060, 106, 1.6], [1150, 94, 2.6], [1240, 102, 1.8], [1330, 96, 2.2],
-    [200, 114, 1.2], [620, 116, 1.2], [1050, 115, 1.2],
-  ],
-  playful: [
-    [40, 88, 3], [110, 102, 1.8], [180, 94, 2.4], [250, 108, 1.6], [320, 92, 3.2],
-    [390, 104, 2], [460, 96, 2.6], [530, 110, 1.8], [600, 90, 3], [670, 102, 2.2],
-    [740, 96, 2.8], [810, 108, 1.8], [880, 92, 3], [950, 104, 2.2], [1020, 96, 2.6],
-    [1090, 108, 1.8], [1160, 92, 3.2], [1230, 104, 2.2], [1300, 96, 2.6], [1370, 108, 1.8],
-    [80, 116, 1.4], [300, 114, 1.4], [560, 117, 1.4], [820, 115, 1.4], [1100, 117, 1.4],
-    [1340, 115, 1.4], [220, 84, 2], [640, 82, 2], [1040, 84, 2],
-  ],
+// Mulberry32 — tiny deterministic PRNG.
+function mulberry32(seed: number) {
+  let s = seed >>> 0;
+  return () => {
+    s = (s + 0x6d2b79f5) >>> 0;
+    let t = s;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+type Built = {
+  path: string;
+  fibres: Array<{ cx: number; cy: number; rx: number; ry: number; rot: number }>;
+  holes: Array<{ cx: number; cy: number; rx: number; ry: number; rot: number }>;
 };
 
-const HEIGHT: Record<Intensity, string> = {
-  restrained: "h-10 sm:h-14",
-  balanced:   "h-14 sm:h-20",
-  playful:    "h-16 sm:h-24",
-};
+function buildEdge(seed: number, intensity: Intensity): Built {
+  const t = TUNING[intensity];
+  const rand = mulberry32(seed * 9301 + 49297);
+  const r = (a: number, b: number) => a + rand() * (b - a);
+
+  // Walk x left → right, picking irregular segments.
+  const points: Array<{ x: number; y: number; kind: "curve" | "jag" | "chip" | "chunk" }> = [];
+  let x = 0;
+  let y = t.baseY + r(-t.amp * 0.4, t.amp * 0.4);
+  points.push({ x: 0, y, kind: "curve" });
+
+  while (x < W) {
+    const step = r(t.minStep, t.maxStep);
+    x = Math.min(W, x + step);
+    const roll = rand();
+    let kind: "curve" | "jag" | "chip" | "chunk";
+    if (roll < t.chunkChance) kind = "chunk";
+    else if (roll < t.chunkChance + 0.18) kind = "jag";
+    else if (roll < t.chunkChance + 0.32) kind = "chip";
+    else kind = "curve";
+
+    // Irregular y: pull strongly away from previous y so it never feels periodic.
+    const swing = r(-t.amp, t.amp);
+    let ny = t.baseY + swing;
+    // Sometimes spike further down (extra torn) or up (paper still hanging).
+    if (kind === "jag") ny = t.baseY + r(t.amp * 0.4, t.amp * 1.4) * (rand() < 0.5 ? -1 : 1);
+    if (kind === "chunk") ny = t.baseY + t.amp * r(1.3, 2.2); // deep gouge downward
+    points.push({ x, y: ny, kind });
+    y = ny;
+  }
+  // Ensure last point lands at W.
+  if (points[points.length - 1].x < W) points.push({ x: W, y: t.baseY, kind: "curve" });
+
+  // Build path: start top-left, across the top, down the right side, then
+  // walk the torn edge back to (0, points[0].y) and close.
+  let d = `M0 0 H${W} V${points[points.length - 1].y} `;
+  for (let i = points.length - 2; i >= 0; i--) {
+    const cur = points[i];
+    const next = points[i + 1];
+    if (cur.kind === "curve") {
+      // Quadratic with off-centre control for asymmetry.
+      const cx = (cur.x + next.x) / 2 + r(-12, 12);
+      const cy = Math.min(cur.y, next.y) - r(0, t.amp * 0.5);
+      d += `Q ${cx.toFixed(1)} ${cy.toFixed(1)}, ${cur.x.toFixed(1)} ${cur.y.toFixed(1)} `;
+    } else if (cur.kind === "jag") {
+      // Sharp two-segment notch via an intermediate point.
+      const mx = cur.x + (next.x - cur.x) * r(0.35, 0.65);
+      const my = cur.y + (next.y - cur.y) * r(0.2, 0.5) + r(-t.amp * 0.4, t.amp * 0.4);
+      d += `L ${mx.toFixed(1)} ${my.toFixed(1)} L ${cur.x.toFixed(1)} ${cur.y.toFixed(1)} `;
+    } else if (cur.kind === "chip") {
+      // Tiny missing chip: dip then climb.
+      const mx1 = cur.x + (next.x - cur.x) * 0.35;
+      const mx2 = cur.x + (next.x - cur.x) * 0.65;
+      const dipY = Math.max(cur.y, next.y) + r(3, 8);
+      d += `L ${mx2.toFixed(1)} ${dipY.toFixed(1)} L ${mx1.toFixed(1)} ${dipY.toFixed(1)} L ${cur.x.toFixed(1)} ${cur.y.toFixed(1)} `;
+    } else {
+      // Deep ripped chunk: drop down sharply on one side, rough across, climb back.
+      const mx1 = cur.x + (next.x - cur.x) * r(0.2, 0.4);
+      const mx2 = cur.x + (next.x - cur.x) * r(0.6, 0.8);
+      const deepY = cur.y + r(-2, 4);
+      const ridgeY = deepY - r(2, 6);
+      d += `L ${mx2.toFixed(1)} ${deepY.toFixed(1)} L ${mx1.toFixed(1)} ${ridgeY.toFixed(1)} L ${cur.x.toFixed(1)} ${cur.y.toFixed(1)} `;
+    }
+  }
+  d += "Z";
+
+  // Fibres: topColor flecks scattered just below the edge baseline.
+  const fibres = Array.from({ length: t.fibres }, () => {
+    const fx = r(4, W - 4);
+    // Place below the torn baseline; deeper specks are smaller (further fibre dust).
+    const depth = r(0, H - t.baseY - 4);
+    const fy = t.baseY + t.amp * 0.3 + depth;
+    const size = r(0.6, 2.6) * (1 - depth / (H * 1.2));
+    return { cx: fx, cy: fy, rx: size, ry: size * r(0.5, 0.9), rot: r(0, 180) };
+  });
+
+  // Holes: tiny bottomColor flecks just inside the torn area (above baseline).
+  const holes = Array.from({ length: t.holes }, () => {
+    const hx = r(8, W - 8);
+    const hy = t.baseY - r(2, t.amp * 0.9);
+    const size = r(0.5, 1.8);
+    return { cx: hx, cy: hy, rx: size, ry: size * r(0.5, 1), rot: r(0, 180) };
+  });
+
+  return { path: d, fibres, holes };
+}
 
 export function TornEdge({
   topColor,
   bottomColor,
   intensity = "balanced",
   flip = false,
+  seed = 1,
   className = "",
 }: {
   topColor: string;
@@ -70,30 +174,47 @@ export function TornEdge({
   intensity?: Intensity;
   /** Mirror vertically so the torn edge faces up instead of down. */
   flip?: boolean;
+  /** Distinct seed → distinct irregular path. Vary across the site. */
+  seed?: number;
   className?: string;
 }) {
+  const built = useMemo(() => buildEdge(seed, intensity), [seed, intensity]);
+  const t = TUNING[intensity];
+
   return (
     <div
       aria-hidden
-      className={`relative w-full overflow-hidden ${HEIGHT[intensity]} ${className}`}
+      className={`relative w-full overflow-hidden ${t.heightClass} ${className}`}
       style={{ backgroundColor: bottomColor }}
     >
       <svg
-        viewBox="0 0 1440 120"
+        viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="none"
         className={`block h-full w-full ${flip ? "-scale-y-100" : ""}`}
         aria-hidden
         focusable="false"
       >
-        <path d={EDGE_PATHS[intensity]} fill={topColor} />
-        {SPECKS[intensity].map(([cx, cy, r], i) => (
+        <path d={built.path} fill={topColor} />
+        {built.holes.map((h, i) => (
           <ellipse
-            key={i}
-            cx={cx}
-            cy={cy}
-            rx={r}
-            ry={r * 0.7}
+            key={`h${i}`}
+            cx={h.cx}
+            cy={h.cy}
+            rx={h.rx}
+            ry={h.ry}
+            fill={bottomColor}
+            transform={`rotate(${h.rot} ${h.cx} ${h.cy})`}
+          />
+        ))}
+        {built.fibres.map((f, i) => (
+          <ellipse
+            key={`f${i}`}
+            cx={f.cx}
+            cy={f.cy}
+            rx={Math.max(0.3, f.rx)}
+            ry={Math.max(0.2, f.ry)}
             fill={topColor}
+            transform={`rotate(${f.rot} ${f.cx} ${f.cy})`}
           />
         ))}
       </svg>
