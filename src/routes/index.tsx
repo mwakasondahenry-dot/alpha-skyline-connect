@@ -209,7 +209,7 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" seed={7} />
+      
 
 
       {/* FIND THE RIGHT CAMPUS */}
