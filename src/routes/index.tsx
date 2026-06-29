@@ -212,7 +212,7 @@ function Home() {
 
       </section>
 
-      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" />
+      <TornEdge topColor="#000000" bottomColor="#f7f5ef" intensity="playful" seed={7} />
 
       {/* FIND THE RIGHT CAMPUS */}
       <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
@@ -313,7 +313,7 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" />
+      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" seed={23} />
 
       {/* STAT BAR */}
       <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
@@ -336,7 +336,7 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#0c447c" bottomColor="#ffffff" intensity="playful" />
+      <TornEdge topColor="#0c447c" bottomColor="#ffffff" intensity="playful" seed={41} />
 
       {/* OUR STORY */}
       <section className="bg-white">
@@ -374,13 +374,13 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#ffffff" bottomColor="#f7f5ef" intensity="playful" />
+      <TornEdge topColor="#ffffff" bottomColor="#f7f5ef" intensity="playful" seed={58} />
 
       {/* UPDATES + EVENTS */}
       <WhatsNew news={data.news} events={upcomingEvents} />
 
 
-      <TornEdge topColor="#0c447c" bottomColor="#e8a020" intensity="playful" />
+      <TornEdge topColor="#0c447c" bottomColor="#e8a020" intensity="playful" seed={72} />
 
       {/* CTA BAND */}
       <section className="bg-[var(--color-gold)]">
@@ -431,7 +431,7 @@ function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEv
   return (
     <>
       <UpdatesSlideshow news={news} />
-      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" />
+      <TornEdge topColor="#f7f5ef" bottomColor="#0c447c" intensity="playful" seed={91} />
       <EventsRail events={events} />
     </>
   );
