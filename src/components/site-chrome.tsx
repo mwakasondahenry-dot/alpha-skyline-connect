@@ -76,7 +76,7 @@ function SchoolsDropdown() {
         aria-haspopup="menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="group inline-flex items-center gap-1.5 text-sm text-white/90 transition-colors hover:text-[var(--color-gold)]"
+        className="group inline-flex items-center gap-1.5 text-sm text-[var(--color-ink-soft)] transition-colors hover:text-[var(--color-deep-blue)]"
       >
         Schools
         <ChevronDown
