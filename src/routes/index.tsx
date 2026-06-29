@@ -169,6 +169,8 @@ function Home() {
         {/* Light overlays — keep images visible, only darken behind text */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+        {/* Smooth fade into the white section below */}
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent via-[var(--color-off-white)]/60 to-[var(--color-off-white)]" />
         <div className="pointer-events-none absolute -left-40 top-1/3 h-[28rem] w-[28rem] rounded-full bg-[var(--color-gold)]/20 blur-3xl" />
 
         <div className="relative mx-auto w-full max-w-7xl px-6 py-24 lg:px-10">
