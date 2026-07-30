@@ -1,53 +1,83 @@
-## Goal
+# Alpha Schools — client feedback round
 
-Add a dedicated **Facilities Gallery** so admins can upload multiple up-to-date photos for a specific facility at a specific school. Keep the existing `/admin/gallery` for activities and rename its label to "Activities Gallery" to remove ambiguity.
+Sixteen changes: a critical mobile-nav fix, a vibrant blue redesign, copy corrections, and several new/reworked sections. Two new database tables (hero slides, testimonials) with admin screens.
 
-## Schema (new migration)
+## 1. Mobile navigation (top priority)
 
-New table `facility_photos`:
+The header nav is currently `hidden lg:flex`, so on phones there is no navigation at all. Add a hamburger button visible below `lg` that opens a full-screen slide-in panel containing: About Us, Schools (expandable to the three schools), Admission, Contacts, Testimonials, Aviation, plus the Enroll Now button. Closes on link tap, Escape, and backdrop tap; locks body scroll while open; respects reduced motion. Verified at 375px width with a screenshot.
 
-```text
-id            uuid PK default gen_random_uuid()
-school_slug   text  not null  (FK schools.slug)
-facility_id   uuid  not null  (FK facilities.id on delete cascade)
-image_url     text  not null
-caption       text  nullable
-sort_order    int   default 0
-published     bool  default true
-created_at    timestamptz default now()
-```
+## 2. Vibrant blue direction
 
-- Grants: `SELECT, INSERT, UPDATE, DELETE` to `authenticated`; `SELECT` to `anon`; `ALL` to `service_role`.
-- RLS: public `SELECT` where `published = true`; authenticated full manage (mirrors `gallery`/`facilities`).
-- Index on `(facility_id, sort_order)` and `(school_slug, published)`.
-- Update `alpha_schema.sql` to match.
+Revert the white/grey minimal pass. Rebuild the palette around deep blue #0C447C and brand blue #185FA5 with gold #E8A020 accents and per-school accents (bright blue, blue-violet):
 
-Both `school_slug` and `facility_id` are required — every photo is tied to one facility at one school.
+- Deep-blue header and footer instead of white/grey.
+- Alternating section backgrounds: white, soft blue tint, and full deep-blue bands with gold detailing.
+- Blue-to-gold gradient accents on cards, stat figures, buttons and dividers, replacing hairline grey.
+- All values stay as tokens in `src/styles.css`; no hardcoded colours in components.
 
-## Data layer (`src/lib/alpha-content.functions.ts`)
+Kept modern and clean — more colour and contrast, not more clutter.
 
-- `getFacilityPhotosByFacility({ facilityId })` — published photos for a facility, ordered by `sort_order asc, created_at desc`.
-- `getFacilityPhotosBySchool({ slug })` — published photos for a school joined with facility name (used by `/facilities`).
-- Both use the existing publishable server client.
+## 3. Navigation items
 
-## Admin portal
+Header and mobile menu become exactly: About Us, Schools, Admission, Contacts, Testimonials, Aviation. "Contacts" points to /contact; "Testimonials" to the new /testimonials page.
 
-- Rename `/admin/gallery` heading + sidebar label to **"Activities Gallery"** (table stays `gallery`).
-- New route `/admin/facility-photos` titled **"Facilities Gallery"** built on `AdminCrud`:
-  - Fields: school (required), facility (required — select populated from `facilities` filtered by the chosen school), image (required), caption, sort order, published.
-  - The school→facility dependency needs a small extension to the CRUD form: a `dependentSelect` field kind that re-loads options from a table when another field changes. Add this generically to `admin-crud.tsx` so future modules can reuse it.
-  - List columns: photo, school, facility name, caption, order, published.
-- Add sidebar entry in `src/routes/admin.tsx` and a dashboard card in `src/routes/admin.index.tsx`.
+## 4–5. Copy changes site-wide
 
-## Public site
+- Testimonials heading → "Parent Testimonials"
+- "Aviation, taught here" → "Aviation Program in Alpha Schools"
+- "Mixed" / "Mixed Secondary" → "Co-education"
+- "Owned by" → "Operated by"
+- Motto/tagline → "Your Child's Education is Our Priority"
+- Founding line rewritten to begin "We were founded to enable..."
+- "Alpha Education Centre Limited" → "ALFA EDUCATION CENTRE" (footer, about, contact, school page footers)
 
-- `SchoolFacilitiesSection` (`src/components/school/facilities-section.tsx`): under each facility card, render a thumbnail strip of its `facility_photos` (lazy-loaded, horizontal scroll on overflow). Cards with no extra photos render unchanged.
-- `/facilities` page: add a "Latest facility photos" rail per school grouping `facility_photos` by facility name.
-- `/gallery` (activities) unchanged.
+## 6. Stat bar → vertical
 
-## Out of scope
+Homepage stat bar becomes a vertical stacked list (one stat per row, figure + label, gold rule between) instead of the horizontal strip. Count-up animation kept.
 
-- The existing single `image_url` on `facilities` stays as the card cover.
-- No bulk multi-file uploader in this pass (one photo per row, same UX as today). Easy to add later.
+## 7. Hero slideshow on all pages
 
-Ready to build on approval.
+A shared `HeroSlideshow` component replaces the single hero image on the homepage, three school pages, aviation, about and admission. Auto-advances every ~6s with a cross-fade, pauses on hover/focus, freezes on `prefers-reduced-motion`, has dot controls and swipe on touch. Slides come from a new `hero_slides` table (page key, image URL, alt, sort order, active) with images in a Supabase Storage bucket; the current hero image on each page stays as the fallback until you upload real photos.
+
+New admin screen "Hero slides" lets you pick the page, upload the photo, set alt text and order.
+
+## 8. Footer social links
+
+Instagram (@alphaschoolstz) and YouTube added to the footer with icons, plus dimmed placeholder slots for Facebook, X and LinkedIn ready to switch on when you have the handles.
+
+## 9–11. Nursery & Primary page
+
+- Nursery levels listed: Day Care, Baby Class, Middle Class, Pre-Unit. Primary shown as ages 6–12.
+- "What they'll explore" replaced with the nine given items (Reading & Writing, Science & Technology, Arithmetic, Environmental Care, Life Skills, Social Studies, Vocational Skills, Foreign Languages, Introduction to Aviation).
+- New "Outstanding Extracurriculum" section with the eight given activities as illustrated tiles.
+
+## 12. Admission process
+
+The step list is replaced by the six given steps, rendered as a numbered visual flow.
+
+## 13. Requirements on school pages
+
+Each of the three school pages gains a Requirements section with the placeholder text "[Entry requirements — to be confirmed with academic offices]". The Admission page keeps its own requirements summary.
+
+## 14. About timeline
+
+Redesigned as a clean vertical (mobile) / horizontal (desktop) visual timeline with year markers on a gold rail: Alpha High School 2007, Alpha Girls 2020, Alpha Nursery & Primary 2022, Aviation programme 2022.
+
+## 15–16. Aviation claims and modules
+
+- The 11-module list is removed and replaced with "[Aviation modules — to be provided by school]" in a clearly-marked placeholder card.
+- Every "first/1st in Tanzania to teach aviation" claim (homepage stat bar, aviation page, about page, meta descriptions) is replaced with "[Aviation positioning statement — wording to be confirmed]".
+
+## 17. Testimonials page + admin
+
+New `/testimonials` page with a "Parent Testimonials" heading and quote cards, backed by a new `testimonials` table (name, relationship, school, quote, photo, published, sort order) and a matching admin screen. Ships with clearly-marked placeholder quotes until you add real ones.
+
+## Technical notes
+
+- Stack is TanStack Start, not Next.js, so images use plain `<img>` with lazy loading and explicit sizing (there is no `next/image` here). Reduced-motion and mobile-first are respected throughout.
+- Two new tables (`hero_slides`, `testimonials`) and one storage bucket are needed. Because this site uses your own external Supabase project, I will give you a single SQL snippet to paste into its SQL editor, and create the bucket instructions alongside it. Admin screens reuse the existing `admin-crud` engine and auth gate.
+- Colour work is confined to `src/styles.css` tokens plus component classes; no data or business logic changes.
+
+## What you'll see at the end
+
+Screenshots of the homepage (desktop and phone width, with the mobile menu open) and the Nursery & Primary school page.
