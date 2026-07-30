@@ -198,8 +198,8 @@ function AviationPage() {
                   <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Minimum flying hours</div>
                 </div>
                 <div>
-                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">11</div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Aviation modules</div>
+                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">KSOF</div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Training partner</div>
                 </div>
               </div>
             </div>
