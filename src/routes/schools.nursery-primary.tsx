@@ -72,6 +72,7 @@ function NurseryPrimaryPage() {
       <WhatWeOffer />
       <AlphaChild />
       <WhatTheyExplore />
+      <OutstandingExtracurriculum />
       <LetsGetStarted />
       <WhatParentsSay />
       <PeekInside />
@@ -249,10 +250,10 @@ function WhatWeOffer() {
     {
       tone: "blue" as const,
       label: "IMG · NURSERY ROOM",
-      age: "AGE 2 – 5 · EARLY YEARS",
+      age: "EARLY YEARS",
       title: "Nursery",
       body:
-        "Learning through play, songs and stories — building confidence, language and friendships in a calm, joyful space.",
+        "Day Care, Baby Class, Middle Class and Pre-Unit — learning through play, songs and stories, building confidence, language and friendships in a calm, joyful space.",
       bg: "white",
       ageColor: "var(--color-gold)",
       titleColor: "var(--color-deep-blue)",
@@ -263,7 +264,7 @@ function WhatWeOffer() {
     {
       tone: "blue-dark" as const,
       label: "IMG · PRIMARY CLASS",
-      age: "GRADE 1 - 7 · PRIMARY",
+      age: "AGES 6 – 12 · PRIMARY",
       title: "Primary School",
       body:
         "A structured, ambitious curriculum — strong literacy and numeracy, plus coding from the very start and a head full of questions.",
@@ -417,15 +418,17 @@ function AlphaChild() {
 
 function WhatTheyExplore() {
   const subjects = [
-    { name: "Reading", bg: "#e0ecfb", icon: "📖" },
-    { name: "Writing", bg: "#fbeed1", icon: "✏️" },
-    { name: "Numeracy", bg: "#dbeafe", icon: "🔢" },
-    { name: "Science", bg: "#e7e3f7", icon: "🔬" },
-    { name: "Coding", bg: "#e7e3f7", icon: "💻" },
-    { name: "Music", bg: "#fbeed1", icon: "🎵" },
-    { name: "Art & craft", bg: "#fbe1d4", icon: "🎨" },
-    { name: "Play & sport", bg: "#e0ecfb", icon: "⚽" },
+    { name: "Reading & Writing", bg: "#e0ecfb", icon: "📖" },
+    { name: "Science & Technology", bg: "#e7e3f7", icon: "🔬" },
+    { name: "Arithmetic", bg: "#dbeafe", icon: "🔢" },
+    { name: "Environmental Care", bg: "#dff3e4", icon: "🌱" },
+    { name: "Life Skills", bg: "#fbeed1", icon: "🧩" },
+    { name: "Social Studies", bg: "#fbe1d4", icon: "🌍" },
+    { name: "Vocational Skills", bg: "#f6e4f1", icon: "🛠️" },
+    { name: "Foreign Languages", bg: "#e0ecfb", icon: "🗣️" },
+    { name: "Introduction to Aviation", bg: "#e7e3f7", icon: "✈️" },
   ];
+
 
   return (
     <section id="primary" className="bg-[#f7f5ef] py-20">
@@ -437,7 +440,7 @@ function WhatTheyExplore() {
           What they'll <span className="text-[var(--color-gold)]">explore</span>
         </h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
+        <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3">
           {subjects.map((s) => (
             <div
               key={s.name}
@@ -461,6 +464,51 @@ function WhatTheyExplore() {
           >
             View the full curriculum →
           </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Outstanding Extracurriculum ----------
+
+const EXTRACURRICULUM = [
+  { name: "Sports & Games", icon: "⚽", bg: "#e0ecfb" },
+  { name: "Swimming", icon: "🏊", bg: "#dbeafe" },
+  { name: "Music", icon: "🎵", bg: "#fbeed1" },
+  { name: "Coding & Digital Skills", icon: "💻", bg: "#e7e3f7" },
+  { name: "Scouts", icon: "🏕️", bg: "#dff3e4" },
+  { name: "DJ", icon: "🎧", bg: "#f6e4f1" },
+  { name: "Cookery", icon: "🍳", bg: "#fbe1d4" },
+  { name: "Debate & Public Speaking", icon: "🎤", bg: "#e0ecfb" },
+];
+
+function OutstandingExtracurriculum() {
+  return (
+    <section id="extracurriculum" className="bg-white py-20">
+      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          Beyond the classroom
+        </p>
+        <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+          Outstanding <span className="text-[var(--color-gold)]">Extracurriculum</span>
+        </h2>
+
+        <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
+          {EXTRACURRICULUM.map((a) => (
+            <div
+              key={a.name}
+              className="group flex flex-col items-center justify-center rounded-2xl px-5 py-8 text-center transition-transform duration-300 hover:-translate-y-1"
+              style={{ background: a.bg }}
+            >
+              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white text-2xl shadow-sm">
+                {a.icon}
+              </div>
+              <p className="mt-5 font-display text-base font-extrabold text-[var(--color-deep-blue)]">
+                {a.name}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </section>
