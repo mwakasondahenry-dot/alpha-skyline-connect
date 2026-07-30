@@ -1,4 +1,5 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
@@ -65,12 +66,38 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
       <BeyondClassroom />
       <LifeAtMikocheni />
       <TornEdge topColor="#f7f5ef" bottomColor={GOLD} intensity="restrained" />
+      <EntryRequirements />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
   );
 }
 
+
+// ---------- Entry requirements ----------
+
+function EntryRequirements() {
+  return (
+    <section id="requirements" className="bg-white py-16">
+      <div className="mx-auto max-w-4xl px-6 lg:px-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          Admissions
+        </p>
+        <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-4xl">
+          Requirements
+        </h2>
+        <div className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
+          <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
+            [Entry requirements — to be confirmed with academic offices]
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/70">
+            Placeholder — the confirmed entry requirements for this school will be published here.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 // ---------- Hero ----------
 
@@ -81,13 +108,10 @@ function Hero() {
       style={{ background: ACCENT }}
     >
       {/* Aerial campus background */}
-      <img
-        src={campusAerial.url}
-        alt=""
-        aria-hidden
-        className="absolute inset-0 h-full w-full object-cover opacity-55"
-        loading="eager"
-        decoding="async"
+      <HeroSlideshow
+        pageKey="alpha-high"
+        fallback={[{ src: campusAerial.url, alt: "" }]}
+        imgClassName="opacity-55"
       />
       {/* Blue fade overlays */}
       <div
@@ -124,7 +148,7 @@ function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
-            Mixed Secondary · Form 1–6 · Mikocheni Campus
+            Co-education · Form 1–6 · Mikocheni Campus
           </span>
           <h1 className="mt-6 font-display text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
             The flagship.{" "}
@@ -398,7 +422,7 @@ function Distinctive() {
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           <SignpostCard
             eyebrow="Aviation"
-            title="The first school in Tanzania to teach flying."
+            title="Aviation Program in Alpha Schools"
             body="Ground school, PPL pathway and simulator training — built into the timetable, not bolted on."
             href="/aviation"
             cta="Inside the aviation programme"
@@ -755,7 +779,7 @@ function AlphaHighFooter() {
       <div className="bg-[var(--color-deep-blue)] py-5 text-center text-xs font-bold uppercase tracking-[0.22em] text-white/80">
         ALPHA SCHOOLS · <span style={{ color: GOLD }}>Alpha High</span>
         <div className="mt-1 text-[11px] font-semibold tracking-[0.18em] text-white/55">
-          Mikocheni campus · Dar es Salaam · part of Alpha Education Centre Limited
+          Mikocheni campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </div>
       </div>
       <SchoolFacilitiesSection slug="alpha-high" accent="#0C447C" />

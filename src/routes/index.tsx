@@ -5,6 +5,7 @@ import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
 import heroCollage from "@/assets/hero-collage.png.asset.json";
 import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
@@ -35,13 +36,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Three schools, two campuses in Dar es Salaam. The first school in Tanzania to teach aviation. NECTA O-Level and A-Level.",
+          "Three schools, two campuses in Dar es Salaam. NECTA O-Level and A-Level, coding and an aviation programme.",
       },
       { property: "og:title", content: "Alpha Schools — Learning that takes off" },
       {
         property: "og:description",
         content:
-          "Nursery & Primary, Alpha High, Alpha Girls. The first school in Tanzania to teach aviation.",
+          "Nursery & Primary, Alpha High, Alpha Girls — Your Child's Education is Our Priority.",
       },
       { property: "og:type", content: "website" },
     ],
@@ -100,7 +101,7 @@ const SCHOOLS = [
 const STATS: ReadonlyArray<{ value: number; suffix?: string; prefix?: string; display?: string; label: [string, string] }> = [
   { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"] },
   { value: 3, label: ["schools across", "Dar es Salaam"] },
-  { value: 1, suffix: "st", label: ["in Tanzania to", "teach aviation"] },
+  { value: 1, label: ["aviation programme", "across our schools"] },
   { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"] },
 ] as const;
 
@@ -157,14 +158,15 @@ function Home() {
 
       {/* HERO — full screen B&W collage */}
       <section className="relative isolate flex min-h-screen w-full items-center overflow-hidden bg-black">
-        <img
-          src={heroCollage.url}
-          alt="Alpha Schools students across nursery, primary, secondary and aviation"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "grayscale(100%) contrast(1.1) brightness(0.95)" }}
-          loading="eager"
-          decoding="async"
-          fetchPriority="high"
+        <HeroSlideshow
+          pageKey="home"
+          fallback={[
+            {
+              src: heroCollage.url,
+              alt: "Alpha Schools students across nursery, primary, secondary and aviation",
+            },
+          ]}
+          imgStyle={{ filter: "grayscale(100%) contrast(1.1) brightness(0.95)" }}
         />
         {/* Light overlays — keep images visible, only darken behind text */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
@@ -189,7 +191,7 @@ function Home() {
               Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
-              Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and the first aviation programme in any Tanzanian school.
+              Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and an aviation programme.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -290,10 +292,10 @@ function Home() {
             <div className="relative flex h-full flex-col justify-end p-8 text-white">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/85">The Alpha Difference</p>
               <h3 className="mt-2 font-display text-3xl font-semibold leading-tight drop-shadow-md sm:text-4xl">
-                Aviation, taught here.
+                Aviation Program in Alpha Schools
               </h3>
               <p className="mt-3 max-w-md text-sm text-white/90 drop-shadow">
-                Ground school, simulator hours and first principles of flight — the first programme of its kind in any Tanzanian school.
+                Ground school, simulator hours and first principles of flight. [Aviation positioning statement — wording to be confirmed]
               </p>
               <Link
                 to="/aviation"
@@ -328,17 +330,21 @@ function Home() {
           <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)]/40 blur-3xl" />
           <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)]/30 blur-3xl" />
         </div>
-        <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
-          {STATS.map((s, i) => (
-            <Reveal key={i} direction="up" delay={i * 100} className="px-2">
-              <div className="font-display text-5xl font-semibold text-[var(--color-deep-blue)] sm:text-6xl">
-                <CountUp to={s.value} /><span className="text-[var(--color-gold)]">{s.suffix ?? ""}</span>
-              </div>
-              <div className="mt-2 text-sm leading-snug text-[var(--color-ink-soft)]">
-                {s.label[0]}<br />{s.label[1]}
-              </div>
-            </Reveal>
-          ))}
+        <div className="relative mx-auto max-w-3xl px-6 py-16 lg:px-10">
+          <ul className="divide-y divide-[var(--color-gold)]/40">
+            {STATS.map((s, i) => (
+              <li key={i}>
+                <Reveal direction="up" delay={i * 100} className="flex items-center gap-6 py-6">
+                  <div className="min-w-[5.5rem] font-display text-5xl font-semibold leading-none text-[var(--color-deep-blue)] sm:text-6xl">
+                    <CountUp to={s.value} /><span className="text-[var(--color-gold)]">{s.suffix ?? ""}</span>
+                  </div>
+                  <div className="text-base leading-snug text-[var(--color-ink-soft)]">
+                    {s.label[0]} {s.label[1]}
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 

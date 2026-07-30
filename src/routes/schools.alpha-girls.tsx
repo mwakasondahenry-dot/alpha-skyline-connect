@@ -48,10 +48,36 @@ function AlphaGirlsRoute() {
       <BeyondClassroom />
       <LifeAtKunduchi />
       <Staff staff={data.staff} />
+      <EntryRequirements />
       <ApplyBanner />
       <GirlsFooter />
       <MotionStyles />
     </div>
+  );
+}
+
+// ---------- Entry requirements ----------
+
+function EntryRequirements() {
+  return (
+    <section id="requirements" className="bg-white py-16">
+      <div className="mx-auto max-w-4xl px-6 lg:px-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          Admissions
+        </p>
+        <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-4xl">
+          Requirements
+        </h2>
+        <div className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
+          <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
+            [Entry requirements — to be confirmed with academic offices]
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/70">
+            Placeholder — the confirmed entry requirements for this school will be published here.
+          </p>
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -360,7 +386,7 @@ function Distinctive() {
           <SignpostCard
             eyebrow="Aviation"
             title="Yes, girls fly here."
-            body="The first school in Tanzania to teach flying — girls train toward a PPL alongside everyone else."
+            body="[Aviation positioning statement — wording to be confirmed] Girls train toward a PPL alongside everyone else."
             href="/aviation"
             cta="Inside the aviation programme"
           />
@@ -685,7 +711,7 @@ function GirlsFooter() {
       >
         ALPHA SCHOOLS · <span style={{ color: GOLD }}>Alpha Girls</span>
         <div className="mt-1 text-[11px] font-semibold tracking-[0.18em] text-white/60">
-          Kunduchi campus · Dar es Salaam · part of Alpha Education Centre Limited
+          Kunduchi campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </div>
       </div>
       <SchoolFacilitiesSection slug="alpha-girls" accent="#3C3489" />

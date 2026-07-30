@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import aboutHeroFallback from "@/assets/campus-high.jpg.asset.json";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
@@ -18,7 +20,7 @@ export const Route = createFileRoute("/about")({
       {
         property: "og:description",
         content:
-          "Mission, vision, values and the story of Alpha Education Centre — founded 2007 in Dar es Salaam.",
+          "Mission, vision, values and the story of ALFA EDUCATION CENTRE — founded 2007 in Dar es Salaam.",
       },
     ],
   }),
@@ -33,37 +35,34 @@ const VALUES = [
   { name: "Service", blurb: "Education that gives back to family, community and country." },
 ] as const;
 
-const TIMELINE: ReadonlyArray<{ year: string; title: string; body: string; placeholder?: boolean }> = [
+const TIMELINE: ReadonlyArray<{ year: string; title: string; body: string }> = [
   {
     year: "2007",
-    title: "Alpha Schools founded",
-    body: "Alpha High established on 19 March 2007 by the late Professor Wenceslaus Aloyce Mayo.",
+    title: "Alpha High School",
+    body: "Established on 19 March 2007 by the late Professor Wenceslaus Aloyce Mayo, in Mikocheni.",
   },
   {
-    year: "[Year — TBC]",
-    title: "Nursery & Primary opens",
-    body: "[Opening date for the Kunduchi Nursery & Primary campus — to be provided by the school.]",
-    placeholder: true,
+    year: "2020",
+    title: "Alpha Girls",
+    body: "A girls-only secondary school opens at the Kunduchi campus.",
   },
   {
-    year: "[Year — TBC]",
-    title: "Alpha Girls opens",
-    body: "[Opening date for Alpha Girls (Kunduchi) — to be provided by the school.]",
-    placeholder: true,
+    year: "2022",
+    title: "Alpha Nursery & Primary",
+    body: "Early years and primary join the group, completing the journey from age 2 to Form 6.",
   },
   {
-    year: "[Year — TBC]",
-    title: "Aviation programme launches",
-    body: "[Launch year of the aviation programme — first of its kind in Tanzania. To be confirmed.]",
-    placeholder: true,
+    year: "2022",
+    title: "Aviation programme",
+    body: "Aviation joins the timetable in partnership with the Kenya School of Flying.",
   },
 ];
 
 const RECORD = [
   {
     icon: Plane,
-    title: "First in Tanzania to teach aviation",
-    body: "Alpha is the first school in the country to put aviation on the timetable — ground school, modules and flying hours through KSOF.",
+    title: "Aviation Program in Alpha Schools",
+    body: "[Aviation positioning statement — wording to be confirmed] Ground school, modules and flying hours through KSOF.",
     href: "/aviation" as const,
     cta: "Inside the aviation programme",
   },
@@ -86,6 +85,12 @@ function AboutPage() {
 
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-[var(--color-deep-blue)] text-white">
+        <HeroSlideshow
+          pageKey="about"
+          fallback={[{ src: aboutHeroFallback.url, alt: "" }]}
+          className="opacity-25"
+          showDots={false}
+        />
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-30">
           <div className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)] blur-3xl" />
           <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)] blur-3xl" />
@@ -129,7 +134,7 @@ function AboutPage() {
             </h2>
             <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/85">
               Alpha Schools comprises <strong>Alpha High</strong> (Mikocheni), <strong>Alpha Girls</strong> (Kunduchi),
-              and <strong>Nursery & Primary</strong> (Kunduchi) — operating under Alpha Education Centre Limited,
+              and <strong>Nursery & Primary</strong> (Kunduchi) — operating under ALFA EDUCATION CENTRE,
               P.O. Box 35136, Dar es Salaam.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
@@ -146,7 +151,7 @@ function AboutPage() {
                 ["Founded", "19 March 2007"],
                 ["Schools", "Nursery & Primary · Alpha High · Alpha Girls"],
                 ["Campuses", "Kunduchi & Mikocheni, Dar es Salaam"],
-                ["Operator", "Alpha Education Centre Limited"],
+                ["Operator", "ALFA EDUCATION CENTRE"],
                 ["Postal", "P.O. Box 35136, Dar es Salaam"],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-6 border-b border-[var(--color-deep-blue)]/10 pb-3 last:border-0 last:pb-0">
@@ -248,25 +253,24 @@ function AboutPage() {
               From one classroom<br />to three schools.
             </h2>
           </Reveal>
-          <ol className="mt-12 relative border-l-2 border-[var(--color-gold)]/40 pl-8">
+          <ol className="mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
             {TIMELINE.map((t, i) => (
-              <Reveal key={i} direction="up" delay={i * 80}>
-                <li className="relative mb-10 last:mb-0">
+              <Reveal key={i} direction="up" delay={i * 90}>
+                <li className="relative pl-8 md:pl-0 md:pt-10">
+                  {/* rail */}
                   <span
                     aria-hidden
-                    className={`absolute -left-[42px] top-1 flex h-6 w-6 items-center justify-center rounded-full ring-4 ring-[var(--color-off-white)] ${
-                      t.placeholder
-                        ? "bg-white border-2 border-dashed border-[var(--color-gold)]"
-                        : "bg-[var(--color-gold)]"
-                    }`}
+                    className="absolute left-[7px] top-2 h-full w-0.5 bg-[var(--color-gold)]/40 md:left-0 md:top-[7px] md:h-0.5 md:w-full"
                   />
-                  <p className={`font-display text-2xl font-semibold ${
-                    t.placeholder ? "text-[var(--color-ink)]/40" : "text-[var(--color-deep-blue)]"
-                  }`}>
+                  <span
+                    aria-hidden
+                    className="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-[var(--color-gold)] ring-4 ring-[var(--color-off-white)] md:top-0"
+                  />
+                  <p className="font-display text-3xl font-semibold text-[var(--color-deep-blue)]">
                     {t.year}
                   </p>
-                  <p className="mt-1 text-base font-semibold text-[var(--color-ink)]">{t.title}</p>
-                  <p className="mt-1 max-w-2xl text-sm leading-relaxed text-[var(--color-ink)]/75">{t.body}</p>
+                  <p className="mt-2 font-display text-base font-bold text-[var(--color-ink)]">{t.title}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/75">{t.body}</p>
                 </li>
               </Reveal>
             ))}

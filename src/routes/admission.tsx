@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import admissionHeroFallback from "@/assets/campus-nursery.jpg.asset.json";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
@@ -16,7 +18,7 @@ export const Route = createFileRoute("/admission")({
       {
         property: "og:description",
         content:
-          "How to apply to Alpha Schools — five-step admission process, required documents, entry requirements, intake and fees.",
+          "How to apply to Alpha Schools — six-step admission process, required documents, entry requirements, intake and fees.",
       },
     ],
   }),
@@ -29,31 +31,12 @@ export const Route = createFileRoute("/admission")({
 const APPLICATION_FORM_URL = "/application-form-placeholder.pdf";
 
 const STEPS = [
-  {
-    n: "01",
-    title: "Download & complete the form",
-    body: "Download our application form, complete every section, and have it ready to submit with your supporting documents.",
-  },
-  {
-    n: "02",
-    title: "Submit academic documents",
-    body: "Submit the required academic documents along with your completed application form, in person at the campus or by email.",
-  },
-  {
-    n: "03",
-    title: "Interview or assessment",
-    body: "Where applicable, attend an interview or assessment conducted according to the school's schedule.",
-  },
-  {
-    n: "04",
-    title: "Receive your admission offer",
-    body: "Successful applicants receive an admission offer from the school's admissions office.",
-  },
-  {
-    n: "05",
-    title: "Register & pay fees",
-    body: "Complete registration and the relevant fee payment to confirm your child's place at Alpha.",
-  },
+  { n: "01", title: "Pay application fees", body: "Pay the application fee at the campus or by bank transfer, and keep the receipt for your file." },
+  { n: "02", title: "Download and complete the form", body: "Download the application form, complete every section and gather the supporting documents." },
+  { n: "03", title: "Submit", body: "Submit the completed form and documents in person at the campus or by email to the admissions office." },
+  { n: "04", title: "Selection / Entrance exams", body: "Applicants sit an entrance assessment or interview according to each school's schedule." },
+  { n: "05", title: "Admission and joining instructions", body: "Successful applicants receive an admission letter together with joining instructions." },
+  { n: "06", title: "Fees payment", body: "Complete the fee payment to confirm your child's place at Alpha." },
 ] as const;
 
 const REQUIRED_DOCS = [
@@ -96,6 +79,12 @@ function AdmissionPage() {
 
       {/* 1. Hero */}
       <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
+        <HeroSlideshow
+          pageKey="admission"
+          fallback={[{ src: admissionHeroFallback.url, alt: "" }]}
+          className="opacity-25"
+          showDots={false}
+        />
         <div
           aria-hidden
           className="absolute inset-0 opacity-30"
@@ -140,18 +129,18 @@ function AdmissionPage() {
         </div>
       </section>
 
-      {/* 2. Admission process — 5 steps */}
+      {/* 2. Admission process — 6 steps */}
       <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal>
           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
             The admission process
           </p>
           <h2 className="mt-3 font-display text-3xl font-bold text-[var(--color-deep-blue)] sm:text-4xl">
-            Five simple steps.
+            Six simple steps.
           </h2>
         </Reveal>
 
-        <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-5">
+        <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {STEPS.map((step, i) => (
             <Reveal key={step.n} delay={i * 80}>
               <li className="group relative h-full overflow-hidden rounded-2xl border border-black/5 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl">
