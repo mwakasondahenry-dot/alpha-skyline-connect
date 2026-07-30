@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import heroFloatplane from "@/assets/hero-floatplane.jpg.asset.json";
 import avPreFlight from "@/assets/av-pre-flight-check.jpg.asset.json";
@@ -141,10 +142,11 @@ function AviationPage() {
         </div>
 
         {/* Subtle aircraft silhouette via photo, kept very low so text stays readable */}
-        <div
-          className="pointer-events-none absolute inset-0 bg-cover bg-center opacity-[0.18] mix-blend-luminosity"
-          style={{ backgroundImage: `url(${heroFloatplane.url})` }}
-          aria-hidden
+        <HeroSlideshow
+          pageKey="aviation"
+          fallback={[{ src: heroFloatplane.url, alt: "" }]}
+          className="pointer-events-none opacity-[0.18] mix-blend-luminosity"
+          showDots={false}
         />
         {/* Left-side darken so headline contrast is bulletproof */}
         <div

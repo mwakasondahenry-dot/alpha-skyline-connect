@@ -1,4 +1,5 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
@@ -81,13 +82,10 @@ function Hero() {
       style={{ background: ACCENT }}
     >
       {/* Aerial campus background */}
-      <img
-        src={campusAerial.url}
-        alt=""
-        aria-hidden
-        className="absolute inset-0 h-full w-full object-cover opacity-55"
-        loading="eager"
-        decoding="async"
+      <HeroSlideshow
+        pageKey="alpha-high"
+        fallback={[{ src: campusAerial.url, alt: "" }]}
+        imgClassName="opacity-55"
       />
       {/* Blue fade overlays */}
       <div
