@@ -5,6 +5,7 @@ import { Plane, ArrowRight } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
 import heroCollage from "@/assets/hero-collage.png.asset.json";
 import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
