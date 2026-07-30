@@ -1,4 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import aboutHeroFallback from "@/assets/campus-high.jpg.asset.json";
+import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
@@ -86,6 +88,12 @@ function AboutPage() {
 
       {/* HERO */}
       <section className="relative isolate overflow-hidden bg-[var(--color-deep-blue)] text-white">
+        <HeroSlideshow
+          pageKey="about"
+          fallback={[{ src: aboutHeroFallback.url, alt: "" }]}
+          className="opacity-25"
+          showDots={false}
+        />
         <div aria-hidden className="pointer-events-none absolute inset-0 opacity-30">
           <div className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)] blur-3xl" />
           <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)] blur-3xl" />
