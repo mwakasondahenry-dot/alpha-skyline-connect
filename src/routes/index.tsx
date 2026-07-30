@@ -328,17 +328,21 @@ function Home() {
           <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)]/40 blur-3xl" />
           <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)]/30 blur-3xl" />
         </div>
-        <div className="relative mx-auto grid max-w-7xl grid-cols-2 gap-y-8 px-6 py-14 md:grid-cols-4 lg:px-10">
-          {STATS.map((s, i) => (
-            <Reveal key={i} direction="up" delay={i * 100} className="px-2">
-              <div className="font-display text-5xl font-semibold text-[var(--color-deep-blue)] sm:text-6xl">
-                <CountUp to={s.value} /><span className="text-[var(--color-gold)]">{s.suffix ?? ""}</span>
-              </div>
-              <div className="mt-2 text-sm leading-snug text-[var(--color-ink-soft)]">
-                {s.label[0]}<br />{s.label[1]}
-              </div>
-            </Reveal>
-          ))}
+        <div className="relative mx-auto max-w-3xl px-6 py-16 lg:px-10">
+          <ul className="divide-y divide-[var(--color-gold)]/40">
+            {STATS.map((s, i) => (
+              <li key={i}>
+                <Reveal direction="up" delay={i * 100} className="flex items-center gap-6 py-6">
+                  <div className="min-w-[5.5rem] font-display text-5xl font-semibold leading-none text-[var(--color-deep-blue)] sm:text-6xl">
+                    <CountUp to={s.value} /><span className="text-[var(--color-gold)]">{s.suffix ?? ""}</span>
+                  </div>
+                  <div className="text-base leading-snug text-[var(--color-ink-soft)]">
+                    {s.label[0]} {s.label[1]}
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
 
