@@ -28,8 +28,8 @@
   --color-bright-blue: #1e7fc2;   /* Nursery & Primary accent */
   --color-blue-violet: #3c3489;   /* Alpha Girls accent */
   --color-gold: #e8a020;
-  --color-off-white: #f6f7f9;
-  --color-ink: #2c2c2a;
+  --color-off-white: #eef4fb;     /* soft blue-tinted page base */
+  --color-ink: #1d2a3a;
 
   --color-primary: var(--color-brand-blue);
   --color-primary-foreground: #ffffff;
@@ -43,22 +43,41 @@
 :root {
   --radius: 0.75rem;
   --background: #ffffff;
-  --foreground: #1f2330;
+  --foreground: #16233a;
   --card: #ffffff;
-  --card-foreground: #1f2330;
-  --muted: #f3f4f6;
-  --muted-foreground: #5b6271;
-  --border: #e6e8ec;
-  --input: #e6e8ec;
+  --card-foreground: #16233a;
+  --muted: #e7f0fa;
+  --muted-foreground: #3f5670;
+  --border: #cfe1f4;
+  --input: #cfe1f4;
   --ring: #185fa5;
 
-  /* Neutral surface scale used across chrome + sections */
+  /* Blue-tinted surface scale used across chrome + sections */
   --color-surface: #ffffff;
-  --color-surface-muted: #f6f7f9;
-  --color-surface-soft: #eef0f3;
-  --color-hairline: #e6e8ec;
-  --color-ink-soft: #4b5160;
+  --color-surface-muted: #e9f2fc;
+  --color-surface-soft: #d8e8f8;
+  --color-hairline: #cfe1f4;
+  --color-ink-soft: #3f5670;
 }
+
+/* Vibrant brand helpers */
+.alpha-band-blue {
+  background:
+    radial-gradient(ellipse at 15% 0%, rgba(232, 160, 32, 0.22) 0%, transparent 55%),
+    linear-gradient(135deg, #0c447c 0%, #14559a 45%, #1e7fc2 100%);
+  color: #ffffff;
+}
+.alpha-band-tint {
+  background:
+    radial-gradient(ellipse at 85% 0%, rgba(30, 127, 194, 0.16) 0%, transparent 55%),
+    linear-gradient(180deg, #eef4fb 0%, #e2eefb 100%);
+}
+.alpha-gold-rule {
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(to right, var(--color-gold), var(--color-bright-blue));
+}
+
 
 @layer base {
   * {

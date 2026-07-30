@@ -64,7 +64,10 @@ function AdminGate() {
             <AdminNavLink to="/admin/events">Events</AdminNavLink>
             <AdminNavLink to="/admin/gallery">Activities</AdminNavLink>
             <AdminNavLink to="/admin/facility-photos">Facilities Gallery</AdminNavLink>
+            <AdminNavLink to="/admin/hero-slides">Hero slides</AdminNavLink>
+            <AdminNavLink to="/admin/testimonials">Testimonials</AdminNavLink>
             <AdminNavLink to="/admin/staff">Staff</AdminNavLink>
+
             <button
               type="button"
               onClick={() => {

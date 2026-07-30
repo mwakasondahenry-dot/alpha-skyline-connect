@@ -96,6 +96,29 @@ export interface ContactMessageRow {
   created_at: string;
 }
 
+export interface HeroSlideRow {
+  id: string;
+  page_key: string;
+  image_url: string;
+  alt_text: string | null;
+  caption: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+}
+
+export interface TestimonialRow {
+  id: string;
+  school_slug: SchoolSlug | null;
+  author_name: string;
+  relationship: string | null;
+  quote: string;
+  photo_url: string | null;
+  sort_order: number;
+  published: boolean;
+  created_at: string;
+}
+
 export interface Database {
   public: {
     Tables: {
@@ -107,6 +130,8 @@ export interface Database {
       facilities: { Row: FacilityRow; Insert: Partial<FacilityRow>; Update: Partial<FacilityRow> };
       facility_photos: { Row: FacilityPhotoRow; Insert: Partial<FacilityPhotoRow>; Update: Partial<FacilityPhotoRow> };
       contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow> };
+      hero_slides: { Row: HeroSlideRow; Insert: Partial<HeroSlideRow>; Update: Partial<HeroSlideRow> };
+      testimonials: { Row: TestimonialRow; Insert: Partial<TestimonialRow>; Update: Partial<TestimonialRow> };
     };
   };
 }
