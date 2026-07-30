@@ -157,14 +157,15 @@ function Home() {
 
       {/* HERO — full screen B&W collage */}
       <section className="relative isolate flex min-h-screen w-full items-center overflow-hidden bg-black">
-        <img
-          src={heroCollage.url}
-          alt="Alpha Schools students across nursery, primary, secondary and aviation"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "grayscale(100%) contrast(1.1) brightness(0.95)" }}
-          loading="eager"
-          decoding="async"
-          fetchPriority="high"
+        <HeroSlideshow
+          pageKey="home"
+          fallback={[
+            {
+              src: heroCollage.url,
+              alt: "Alpha Schools students across nursery, primary, secondary and aviation",
+            },
+          ]}
+          imgStyle={{ filter: "grayscale(100%) contrast(1.1) brightness(0.95)" }}
         />
         {/* Light overlays — keep images visible, only darken behind text */}
         <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
