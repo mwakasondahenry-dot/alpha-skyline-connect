@@ -360,7 +360,7 @@ function Distinctive() {
           <SignpostCard
             eyebrow="Aviation"
             title="Yes, girls fly here."
-            body="The first school in Tanzania to teach flying — girls train toward a PPL alongside everyone else."
+            body="[Aviation positioning statement — wording to be confirmed] Girls train toward a PPL alongside everyone else."
             href="/aviation"
             cta="Inside the aviation programme"
           />

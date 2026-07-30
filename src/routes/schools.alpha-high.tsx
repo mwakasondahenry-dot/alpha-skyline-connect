@@ -398,7 +398,7 @@ function Distinctive() {
         <div className="mt-8 grid gap-5 md:grid-cols-2">
           <SignpostCard
             eyebrow="Aviation"
-            title="The first school in Tanzania to teach flying."
+            title="Aviation Program in Alpha Schools"
             body="Ground school, PPL pathway and simulator training — built into the timetable, not bolted on."
             href="/aviation"
             cta="Inside the aviation programme"

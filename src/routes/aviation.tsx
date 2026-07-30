@@ -37,7 +37,7 @@ export const Route = createFileRoute("/aviation")({
       {
         name: "description",
         content:
-          "Alpha is the first school in Tanzania to teach flying. In partnership with the Kenya School of Flying, students train toward a real Private Pilot Licence.",
+          "In partnership with the Kenya School of Flying, students train toward a real Private Pilot Licence.",
       },
       { property: "og:title", content: "Aviation Programme · Alpha Schools" },
       {
@@ -181,7 +181,7 @@ function AviationPage() {
                 Learning that <span className="text-[var(--color-gold)]">takes off.</span>
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
-                Alpha is the first school in Tanzania to teach flying. In partnership with the
+                [Aviation positioning statement — wording to be confirmed] In partnership with the
                 Kenya School of Flying, our students train toward a real Private Pilot Licence —
                 ground school, simulator hours, and time in the air.
               </p>
@@ -302,7 +302,7 @@ function AviationPage() {
             Why it matters
           </p>
           <p className="mx-auto mt-6 max-w-4xl font-display text-3xl font-bold leading-snug text-[var(--color-deep-blue)] sm:text-4xl lg:text-[2.75rem]">
-            Alpha schools are the <span className="text-[var(--color-gold)]">first in Tanzania</span> to introduce aviation
+            Alpha schools introduce aviation
             and flying through extra-curricular activities — giving students the chance to explore
             aviation technology, build confidence, and open a genuine career pathway.
           </p>

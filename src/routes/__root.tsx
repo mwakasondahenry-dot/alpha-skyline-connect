@@ -82,7 +82,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         name: "description",
         content:
-          "Three schools, two campuses in Dar es Salaam. The first school in Tanzania to teach aviation.",
+          "Three schools, two campuses in Dar es Salaam. [Aviation positioning statement — wording to be confirmed]",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

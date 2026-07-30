@@ -54,7 +54,7 @@ const TIMELINE: ReadonlyArray<{ year: string; title: string; body: string; place
   {
     year: "[Year — TBC]",
     title: "Aviation programme launches",
-    body: "[Launch year of the aviation programme — first of its kind in Tanzania. To be confirmed.]",
+    body: "[Launch year of the aviation programme — to be confirmed.]",
     placeholder: true,
   },
 ];
@@ -63,7 +63,7 @@ const RECORD = [
   {
     icon: Plane,
     title: "First in Tanzania to teach aviation",
-    body: "Alpha is the first school in the country to put aviation on the timetable — ground school, modules and flying hours through KSOF.",
+    body: "[Aviation positioning statement — wording to be confirmed] Ground school, modules and flying hours through KSOF.",
     href: "/aviation" as const,
     cta: "Inside the aviation programme",
   },

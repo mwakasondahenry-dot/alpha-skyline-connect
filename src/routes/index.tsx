@@ -35,13 +35,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Three schools, two campuses in Dar es Salaam. The first school in Tanzania to teach aviation. NECTA O-Level and A-Level.",
+          "Three schools, two campuses in Dar es Salaam. NECTA O-Level and A-Level, coding and an aviation programme.",
       },
       { property: "og:title", content: "Alpha Schools — Learning that takes off" },
       {
         property: "og:description",
         content:
-          "Nursery & Primary, Alpha High, Alpha Girls. The first school in Tanzania to teach aviation.",
+          "Nursery & Primary, Alpha High, Alpha Girls — Your Child's Education is Our Priority.",
       },
       { property: "og:type", content: "website" },
     ],
@@ -100,7 +100,7 @@ const SCHOOLS = [
 const STATS: ReadonlyArray<{ value: number; suffix?: string; prefix?: string; display?: string; label: [string, string] }> = [
   { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"] },
   { value: 3, label: ["schools across", "Dar es Salaam"] },
-  { value: 1, suffix: "st", label: ["in Tanzania to", "teach aviation"] },
+  { value: 1, label: ["aviation programme", "across our schools"] },
   { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"] },
 ] as const;
 
@@ -189,7 +189,7 @@ function Home() {
               Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
             </h1>
             <p className="mt-6 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
-              Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and the first aviation programme in any Tanzanian school.
+              Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and an aviation programme.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -293,7 +293,7 @@ function Home() {
                 Aviation Program in Alpha Schools
               </h3>
               <p className="mt-3 max-w-md text-sm text-white/90 drop-shadow">
-                Ground school, simulator hours and first principles of flight — the first programme of its kind in any Tanzanian school.
+                Ground school, simulator hours and first principles of flight. [Aviation positioning statement — wording to be confirmed]
               </p>
               <Link
                 to="/aviation"
