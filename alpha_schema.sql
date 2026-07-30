@@ -1,8 +1,15 @@
 -- ============================================================
--- ALPHA SCHOOLS — Supabase schema (Phase 1)
--- Paste into Supabase SQL editor and run top to bottom.
+-- ALPHA SCHOOLS — Supabase schema (FULL HISTORY REFERENCE)
+--
+-- ⚠ DO NOT re-run this whole file against an existing database.
+--   It recreates tables from day one and will fail with
+--   'ERROR: 42P07: relation "schools" already exists'.
+--   For a database that already exists, paste the incremental
+--   file instead: alpha_migration_hero_testimonials.sql
+--
 -- Public site reads PUBLISHED content. Admin dashboard writes.
 -- ============================================================
+
 
 -- ---- 1. SCHOOLS (a table, not an enum, so staff can add/rename without a migration)
 create table public.schools (
