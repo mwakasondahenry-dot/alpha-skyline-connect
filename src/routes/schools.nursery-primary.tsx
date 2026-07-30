@@ -77,6 +77,7 @@ function NurseryPrimaryPage() {
       <WhatParentsSay />
       <PeekInside />
       <ComeMeetUs />
+      <EntryRequirements />
       <SchoolFacilitiesSection slug="nursery-primary" accent="#1E7FC2" />
       <NurseryFooter />
     </div>
@@ -464,6 +465,31 @@ function WhatTheyExplore() {
           >
             View the full curriculum →
           </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Entry requirements ----------
+
+function EntryRequirements() {
+  return (
+    <section id="requirements" className="bg-white py-16">
+      <div className="mx-auto max-w-4xl px-6 lg:px-10">
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          Admissions
+        </p>
+        <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-4xl">
+          Requirements
+        </h2>
+        <div className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
+          <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
+            [Entry requirements — to be confirmed with academic offices]
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/70">
+            Placeholder — the confirmed entry requirements for this school will be published here.
+          </p>
         </div>
       </div>
     </section>
