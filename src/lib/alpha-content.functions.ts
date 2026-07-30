@@ -11,6 +11,8 @@ import type {
   StaffRow,
   FacilityRow,
   FacilityPhotoRow,
+  HeroSlideRow,
+  TestimonialRow,
 } from "@/integrations/alpha-supabase/types";
 
 function serverClient() {
@@ -283,3 +285,47 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
       return empty;
     }
   });
+
+// ---- Hero slides ---------------------------------------------------------
+export type HeroSlideItem = Pick<HeroSlideRow, "id" | "image_url" | "alt_text" | "caption" | "sort_order">;
+
+export const getHeroSlides = createServerFn({ method: "GET" })
+  .inputValidator((data: { page: string }) => data)
+  .handler(async ({ data }): Promise<HeroSlideItem[]> => {
+    try {
+      const sb = serverClient();
+      const { data: rows, error } = await sb
+        .from("hero_slides")
+        .select("id,image_url,alt_text,caption,sort_order")
+        .eq("published", true)
+        .eq("page_key", data.page)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return rows ?? [];
+    } catch (err) {
+      console.error("[getHeroSlides]", err);
+      return [];
+    }
+  });
+
+// ---- Testimonials --------------------------------------------------------
+export type TestimonialItem = Pick<TestimonialRow,
+  "id" | "author_name" | "relationship" | "quote" | "photo_url" | "school_slug">;
+
+export const getTestimonials = createServerFn({ method: "GET" }).handler(
+  async (): Promise<TestimonialItem[]> => {
+    try {
+      const sb = serverClient();
+      const { data, error } = await sb
+        .from("testimonials")
+        .select("id,author_name,relationship,quote,photo_url,school_slug")
+        .eq("published", true)
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    } catch (err) {
+      console.error("[getTestimonials]", err);
+      return [];
+    }
+  },
+);

@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as ScholarshipsRouteImport } from './routes/scholarships'
 import { Route as NewsRouteImport } from './routes/news'
 import { Route as GalleryRouteImport } from './routes/gallery'
@@ -25,15 +26,22 @@ import { Route as AdminIndexRouteImport } from './routes/admin.index'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
+import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminHeroSlidesRouteImport } from './routes/admin.hero-slides'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminFacilityPhotosRouteImport } from './routes/admin.facility-photos'
 import { Route as AdminFacilitiesRouteImport } from './routes/admin.facilities'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
 
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScholarshipsRoute = ScholarshipsRouteImport.update({
   id: '/scholarships',
   path: '/scholarships',
@@ -114,6 +122,11 @@ const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
   path: '/schools/alpha-girls',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminStaffRoute = AdminStaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -132,6 +145,11 @@ const AdminMessagesRoute = AdminMessagesRouteImport.update({
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHeroSlidesRoute = AdminHeroSlidesRouteImport.update({
+  id: '/hero-slides',
+  path: '/hero-slides',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminGalleryRoute = AdminGalleryRouteImport.update({
@@ -168,14 +186,17 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/facilities': typeof AdminFacilitiesRoute
   '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/hero-slides': typeof AdminHeroSlidesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
   '/admin/staff': typeof AdminStaffRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -193,14 +214,17 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/facilities': typeof AdminFacilitiesRoute
   '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/hero-slides': typeof AdminHeroSlidesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
   '/admin/staff': typeof AdminStaffRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -220,14 +244,17 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/news': typeof NewsRoute
   '/scholarships': typeof ScholarshipsRoute
+  '/testimonials': typeof TestimonialsRoute
   '/admin/events': typeof AdminEventsRoute
   '/admin/facilities': typeof AdminFacilitiesRoute
   '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
+  '/admin/hero-slides': typeof AdminHeroSlidesRoute
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
   '/admin/staff': typeof AdminStaffRoute
+  '/admin/testimonials': typeof AdminTestimonialsRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -248,14 +275,17 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/news'
     | '/scholarships'
+    | '/testimonials'
     | '/admin/events'
     | '/admin/facilities'
     | '/admin/facility-photos'
     | '/admin/gallery'
+    | '/admin/hero-slides'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
     | '/admin/staff'
+    | '/admin/testimonials'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -273,14 +303,17 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/news'
     | '/scholarships'
+    | '/testimonials'
     | '/admin/events'
     | '/admin/facilities'
     | '/admin/facility-photos'
     | '/admin/gallery'
+    | '/admin/hero-slides'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
     | '/admin/staff'
+    | '/admin/testimonials'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -299,14 +332,17 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/news'
     | '/scholarships'
+    | '/testimonials'
     | '/admin/events'
     | '/admin/facilities'
     | '/admin/facility-photos'
     | '/admin/gallery'
+    | '/admin/hero-slides'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
     | '/admin/staff'
+    | '/admin/testimonials'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -326,6 +362,7 @@ export interface RootRouteChildren {
   GalleryRoute: typeof GalleryRoute
   NewsRoute: typeof NewsRoute
   ScholarshipsRoute: typeof ScholarshipsRoute
+  TestimonialsRoute: typeof TestimonialsRoute
   SchoolsAlphaGirlsRoute: typeof SchoolsAlphaGirlsRoute
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
@@ -333,6 +370,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/scholarships': {
       id: '/scholarships'
       path: '/scholarships'
@@ -445,6 +489,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolsAlphaGirlsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/testimonials': {
+      id: '/admin/testimonials'
+      path: '/testimonials'
+      fullPath: '/admin/testimonials'
+      preLoaderRoute: typeof AdminTestimonialsRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/staff': {
       id: '/admin/staff'
       path: '/staff'
@@ -471,6 +522,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/admin/login'
       preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hero-slides': {
+      id: '/admin/hero-slides'
+      path: '/hero-slides'
+      fullPath: '/admin/hero-slides'
+      preLoaderRoute: typeof AdminHeroSlidesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/gallery': {
@@ -509,10 +567,12 @@ interface AdminRouteChildren {
   AdminFacilitiesRoute: typeof AdminFacilitiesRoute
   AdminFacilityPhotosRoute: typeof AdminFacilityPhotosRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
+  AdminHeroSlidesRoute: typeof AdminHeroSlidesRoute
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminNewsRoute: typeof AdminNewsRoute
   AdminStaffRoute: typeof AdminStaffRoute
+  AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
@@ -521,10 +581,12 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFacilitiesRoute: AdminFacilitiesRoute,
   AdminFacilityPhotosRoute: AdminFacilityPhotosRoute,
   AdminGalleryRoute: AdminGalleryRoute,
+  AdminHeroSlidesRoute: AdminHeroSlidesRoute,
   AdminLoginRoute: AdminLoginRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminNewsRoute: AdminNewsRoute,
   AdminStaffRoute: AdminStaffRoute,
+  AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
@@ -543,6 +605,7 @@ const rootRouteChildren: RootRouteChildren = {
   GalleryRoute: GalleryRoute,
   NewsRoute: NewsRoute,
   ScholarshipsRoute: ScholarshipsRoute,
+  TestimonialsRoute: TestimonialsRoute,
   SchoolsAlphaGirlsRoute: SchoolsAlphaGirlsRoute,
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
@@ -550,13 +613,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
