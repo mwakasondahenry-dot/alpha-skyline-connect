@@ -131,7 +131,7 @@ function ContactPage() {
             </a>
           </InfoCard>
           <InfoCard title="Postal address">
-            <p className="text-sm text-[var(--color-ink)]/80">Alpha Education Centre Limited<br />P.O. Box 35136<br />Dar es Salaam, Tanzania</p>
+            <p className="text-sm text-[var(--color-ink)]/80">ALFA EDUCATION CENTRE<br />P.O. Box 35136<br />Dar es Salaam, Tanzania</p>
           </InfoCard>
           <InfoCard title="Campuses">
             <ul className="space-y-1 text-sm text-[var(--color-ink)]/80">

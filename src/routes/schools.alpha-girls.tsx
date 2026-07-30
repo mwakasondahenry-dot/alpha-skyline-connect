@@ -685,7 +685,7 @@ function GirlsFooter() {
       >
         ALPHA SCHOOLS · <span style={{ color: GOLD }}>Alpha Girls</span>
         <div className="mt-1 text-[11px] font-semibold tracking-[0.18em] text-white/60">
-          Kunduchi campus · Dar es Salaam · part of Alpha Education Centre Limited
+          Kunduchi campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </div>
       </div>
       <SchoolFacilitiesSection slug="alpha-girls" accent="#3C3489" />

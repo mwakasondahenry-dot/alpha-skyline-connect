@@ -715,7 +715,7 @@ function NurseryFooter() {
           </span>
         </Link>
         <p className="text-sm text-white/70">
-          Combined campus · Dar es Salaam · part of Alpha Education Centre Limited
+          Combined campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </p>
       </div>
     </footer>

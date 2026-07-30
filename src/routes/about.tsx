@@ -18,7 +18,7 @@ export const Route = createFileRoute("/about")({
       {
         property: "og:description",
         content:
-          "Mission, vision, values and the story of Alpha Education Centre — founded 2007 in Dar es Salaam.",
+          "Mission, vision, values and the story of ALFA EDUCATION CENTRE — founded 2007 in Dar es Salaam.",
       },
     ],
   }),
@@ -129,7 +129,7 @@ function AboutPage() {
             </h2>
             <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/85">
               Alpha Schools comprises <strong>Alpha High</strong> (Mikocheni), <strong>Alpha Girls</strong> (Kunduchi),
-              and <strong>Nursery & Primary</strong> (Kunduchi) — operating under Alpha Education Centre Limited,
+              and <strong>Nursery & Primary</strong> (Kunduchi) — operating under ALFA EDUCATION CENTRE,
               P.O. Box 35136, Dar es Salaam.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
@@ -146,7 +146,7 @@ function AboutPage() {
                 ["Founded", "19 March 2007"],
                 ["Schools", "Nursery & Primary · Alpha High · Alpha Girls"],
                 ["Campuses", "Kunduchi & Mikocheni, Dar es Salaam"],
-                ["Operator", "Alpha Education Centre Limited"],
+                ["Operator", "ALFA EDUCATION CENTRE"],
                 ["Postal", "P.O. Box 35136, Dar es Salaam"],
               ].map(([k, v]) => (
                 <div key={k} className="flex justify-between gap-6 border-b border-[var(--color-deep-blue)]/10 pb-3 last:border-0 last:pb-0">

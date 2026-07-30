@@ -65,7 +65,7 @@ export const SCHOOL_CONFIGS: Record<Exclude<SchoolSlug, "group-wide">, SchoolCon
   "alpha-high": {
     slug: "alpha-high",
     name: "Alpha High",
-    campus: "Mixed secondary · Mikocheni · Form 1–6",
+    campus: "Co-education · Mikocheni · Form 1–6",
     accent: "var(--color-deep-blue)",
     accentSoft: "rgba(15, 35, 88, 0.08)",
     heroImage: campusHighImage.url,

@@ -290,7 +290,7 @@ function Home() {
             <div className="relative flex h-full flex-col justify-end p-8 text-white">
               <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/85">The Alpha Difference</p>
               <h3 className="mt-2 font-display text-3xl font-semibold leading-tight drop-shadow-md sm:text-4xl">
-                Aviation, taught here.
+                Aviation Program in Alpha Schools
               </h3>
               <p className="mt-3 max-w-md text-sm text-white/90 drop-shadow">
                 Ground school, simulator hours and first principles of flight — the first programme of its kind in any Tanzanian school.

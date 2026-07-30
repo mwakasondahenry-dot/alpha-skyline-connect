@@ -124,7 +124,7 @@ function Hero() {
             className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
-            Mixed Secondary · Form 1–6 · Mikocheni Campus
+            Co-education · Form 1–6 · Mikocheni Campus
           </span>
           <h1 className="mt-6 font-display text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
             The flagship.{" "}
@@ -755,7 +755,7 @@ function AlphaHighFooter() {
       <div className="bg-[var(--color-deep-blue)] py-5 text-center text-xs font-bold uppercase tracking-[0.22em] text-white/80">
         ALPHA SCHOOLS · <span style={{ color: GOLD }}>Alpha High</span>
         <div className="mt-1 text-[11px] font-semibold tracking-[0.18em] text-white/55">
-          Mikocheni campus · Dar es Salaam · part of Alpha Education Centre Limited
+          Mikocheni campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </div>
       </div>
       <SchoolFacilitiesSection slug="alpha-high" accent="#0C447C" />
