@@ -203,8 +203,8 @@ function AviationPage() {
               {/* mini stat strip */}
               <div className="mt-12 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
                 <div>
-                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">1st</div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">School in Tanzania to fly</div>
+                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">PPL</div>
+                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Pathway with KSOF</div>
                 </div>
                 <div>
                   <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">40h+</div>
