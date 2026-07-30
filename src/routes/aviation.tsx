@@ -51,19 +51,6 @@ export const Route = createFileRoute("/aviation")({
   component: AviationPage,
 });
 
-const MODULES = [
-  "Aviation Technology",
-  "Basic Aeronautics",
-  "Flight Operations & Regulations",
-  "Safety in Aviation",
-  "Meteorology & Weather",
-  "Aircraft Engineering & Maintenance",
-  "Air Traffic Control",
-  "Electrical Systems in Aircraft",
-  "Flight Dispatch Procedures",
-  "Cabin Crew",
-  "Aerodynamics",
-];
 
 const PATHWAY = [
   {
@@ -347,39 +334,28 @@ function AviationPage() {
         </div>
       </section>
 
-      {/* 4. 11 MODULES — tarmac */}
+      {/* 4. MODULES — tarmac */}
       <section className="alpha-tarmac relative py-20 text-white sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          {/* Runway centre-line marking */}
           <div className="alpha-runway-divider mx-auto mb-14 w-40" aria-hidden />
 
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
-                What students learn
-              </p>
-              <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
-                Eleven modules. One real licence.
-              </h2>
-            </div>
-            <p className="max-w-md text-white/70">
-              Ground school content runs alongside flying hours so students arrive at every
-              lesson prepared for the cockpit.
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              What students learn
             </p>
+            <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
+              Ground school curriculum
+            </h2>
           </div>
 
-          <div className="mt-12 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {MODULES.map((m, i) => (
-              <div
-                key={m}
-                className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-5 backdrop-blur-sm transition hover:-translate-y-0.5 hover:border-[var(--color-gold)]/60 hover:bg-white/[0.08]"
-              >
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-[var(--color-gold)] font-display text-sm font-black text-[#1a1a18]">
-                  {String(i + 1).padStart(2, "0")}
-                </div>
-                <div className="font-display font-semibold text-white">{m}</div>
-              </div>
-            ))}
+          <div className="mt-10 rounded-2xl border border-dashed border-[var(--color-gold)]/60 bg-white/[0.04] p-8 text-center backdrop-blur-sm">
+            <p className="font-display text-lg font-semibold text-[var(--color-gold)]">
+              [Aviation modules — to be provided by school]
+            </p>
+            <p className="mx-auto mt-3 max-w-xl text-sm text-white/70">
+              Placeholder — the confirmed module list will be published here once the school
+              provides it.
+            </p>
           </div>
         </div>
       </section>
@@ -418,7 +394,7 @@ function AviationPage() {
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wider text-white/60">Ground school</dt>
-                <dd className="mt-1 font-display text-xl font-bold">11 modules</dd>
+                <dd className="mt-1 font-display text-xl font-bold">[To be confirmed]</dd>
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wider text-white/60">Outcome</dt>
@@ -542,7 +518,7 @@ function AviationPage() {
                 },
                 {
                   t: "Ground school + simulator hours during term",
-                  b: "11 modules taught alongside the NECTA curriculum, with simulator practice scheduled into the academic week.",
+                  b: "Ground school taught alongside the NECTA curriculum, with simulator practice scheduled into the academic week.",
                 },
                 {
                   t: "Holiday flying programs at KSOF (Nairobi)",
