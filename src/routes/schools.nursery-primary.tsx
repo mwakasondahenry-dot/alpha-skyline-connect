@@ -1,6 +1,10 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import {
+  BookOpen, FlaskConical, Calculator, Leaf, Puzzle, Globe2, Wrench, Languages, Plane,
+  Trophy, Waves, Music, Laptop, Tent, Disc3, ChefHat, Mic,
+} from "lucide-react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 import girlCutout from "@/assets/alpha-girl-uniform.png.asset.json";
 import photoDance from "@/assets/np-traditional-dance.jpg.asset.json";
@@ -419,16 +423,17 @@ function AlphaChild() {
 
 function WhatTheyExplore() {
   const subjects = [
-    { name: "Reading & Writing", bg: "#e0ecfb", icon: "📖" },
-    { name: "Science & Technology", bg: "#e7e3f7", icon: "🔬" },
-    { name: "Arithmetic", bg: "#dbeafe", icon: "🔢" },
-    { name: "Environmental Care", bg: "#dff3e4", icon: "🌱" },
-    { name: "Life Skills", bg: "#fbeed1", icon: "🧩" },
-    { name: "Social Studies", bg: "#fbe1d4", icon: "🌍" },
-    { name: "Vocational Skills", bg: "#f6e4f1", icon: "🛠️" },
-    { name: "Foreign Languages", bg: "#e0ecfb", icon: "🗣️" },
-    { name: "Introduction to Aviation", bg: "#e7e3f7", icon: "✈️" },
+    { name: "Reading & Writing", bg: "#e0ecfb", Icon: BookOpen },
+    { name: "Science & Technology", bg: "#e7e3f7", Icon: FlaskConical },
+    { name: "Arithmetic", bg: "#dbeafe", Icon: Calculator },
+    { name: "Environmental Care", bg: "#dff3e4", Icon: Leaf },
+    { name: "Life Skills", bg: "#fbeed1", Icon: Puzzle },
+    { name: "Social Studies", bg: "#fbe1d4", Icon: Globe2 },
+    { name: "Vocational Skills", bg: "#f6e4f1", Icon: Wrench },
+    { name: "Foreign Languages", bg: "#e0ecfb", Icon: Languages },
+    { name: "Introduction to Aviation", bg: "#e7e3f7", Icon: Plane },
   ];
+
 
 
   return (
@@ -448,8 +453,8 @@ function WhatTheyExplore() {
               className="group flex flex-col items-center justify-center rounded-2xl px-6 py-8 transition-transform duration-300 hover:-translate-y-1"
               style={{ background: s.bg }}
             >
-              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white text-2xl shadow-sm">
-                {s.icon}
+              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm">
+                <s.Icon className="h-7 w-7 text-[var(--color-bright-blue)]" aria-hidden />
               </div>
               <p className="mt-5 font-display text-base font-extrabold text-[var(--color-deep-blue)]">
                 {s.name}
@@ -499,14 +504,14 @@ function EntryRequirements() {
 // ---------- Outstanding Extracurriculum ----------
 
 const EXTRACURRICULUM = [
-  { name: "Sports & Games", icon: "⚽", bg: "#e0ecfb" },
-  { name: "Swimming", icon: "🏊", bg: "#dbeafe" },
-  { name: "Music", icon: "🎵", bg: "#fbeed1" },
-  { name: "Coding & Digital Skills", icon: "💻", bg: "#e7e3f7" },
-  { name: "Scouts", icon: "🏕️", bg: "#dff3e4" },
-  { name: "DJ", icon: "🎧", bg: "#f6e4f1" },
-  { name: "Cookery", icon: "🍳", bg: "#fbe1d4" },
-  { name: "Debate & Public Speaking", icon: "🎤", bg: "#e0ecfb" },
+  { name: "Sports & Games", Icon: Trophy, bg: "#e0ecfb" },
+  { name: "Swimming", Icon: Waves, bg: "#dbeafe" },
+  { name: "Music", Icon: Music, bg: "#fbeed1" },
+  { name: "Coding & Digital Skills", Icon: Laptop, bg: "#e7e3f7" },
+  { name: "Scouts", Icon: Tent, bg: "#dff3e4" },
+  { name: "DJ", Icon: Disc3, bg: "#f6e4f1" },
+  { name: "Cookery", Icon: ChefHat, bg: "#fbe1d4" },
+  { name: "Debate & Public Speaking", Icon: Mic, bg: "#e0ecfb" },
 ];
 
 function OutstandingExtracurriculum() {
@@ -527,8 +532,8 @@ function OutstandingExtracurriculum() {
               className="group flex flex-col items-center justify-center rounded-2xl px-5 py-8 text-center transition-transform duration-300 hover:-translate-y-1"
               style={{ background: a.bg }}
             >
-              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white text-2xl shadow-sm">
-                {a.icon}
+              <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm">
+                <a.Icon className="h-7 w-7 text-[var(--color-bright-blue)]" aria-hidden />
               </div>
               <p className="mt-5 font-display text-base font-extrabold text-[var(--color-deep-blue)]">
                 {a.name}
