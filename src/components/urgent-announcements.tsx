@@ -54,14 +54,14 @@ export function UrgentAnnouncements() {
     >
       <div className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-black/10 animate-scale-in">
         {/* Urgent ribbon */}
-        <div className="flex items-center gap-2 bg-[var(--color-gold)] px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[#1a1a18]">
+        <div className="flex items-center gap-2 bg-[var(--color-gold)] px-5 py-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-accent-foreground)]">
           <span className="relative flex h-2 w-2">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-600 opacity-75" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-red-600" />
           </span>
           Urgent announcement
           {visible.length > 1 && (
-            <span className="ml-auto text-[10px] font-semibold text-[#1a1a18]/70">
+            <span className="ml-auto text-[10px] font-semibold text-[var(--color-accent-foreground)]/70">
               {Math.min(index, visible.length - 1) + 1} of {visible.length}
             </span>
           )}

@@ -34,7 +34,7 @@ function AdminGate() {
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F7F5EF]">
-        <div className="text-sm text-[#0C447C]">Loading admin…</div>
+        <div className="text-sm text-[var(--color-deep-blue)]">Loading admin…</div>
       </div>
     );
   }
@@ -46,17 +46,17 @@ function AdminGate() {
   if (!session) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F7F5EF]">
-        <div className="text-sm text-[#0C447C]">Redirecting to sign in…</div>
+        <div className="text-sm text-[var(--color-deep-blue)]">Redirecting to sign in…</div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#F7F5EF] text-[#2C2C2A]">
-      <header className="border-b border-[#0C447C]/10 bg-white">
+      <header className="border-b border-[var(--color-deep-blue)]/10 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <Link to="/admin" className="text-base font-semibold text-[#0C447C]">
-            Alpha Schools <span className="text-[#E8A020]">Admin</span>
+          <Link to="/admin" className="text-base font-semibold text-[var(--color-deep-blue)]">
+            Alpha Schools <span className="text-[var(--color-gold)]">Admin</span>
           </Link>
           <nav className="flex flex-wrap items-center gap-1 text-sm">
             <AdminNavLink to="/admin">Dashboard</AdminNavLink>
@@ -73,7 +73,7 @@ function AdminGate() {
               onClick={() => {
                 void signOut();
               }}
-              className="ml-2 rounded-md border border-[#0C447C]/20 px-3 py-1.5 text-[#0C447C] transition hover:bg-[#0C447C] hover:text-white"
+              className="ml-2 rounded-md border border-[var(--color-deep-blue)]/20 px-3 py-1.5 text-[var(--color-deep-blue)] transition hover:bg-[var(--color-deep-blue)] hover:text-white"
             >
               Log out
             </button>
@@ -92,8 +92,8 @@ function AdminNavLink({ to, children }: { to: string; children: React.ReactNode 
     <Link
       to={to}
       activeOptions={{ exact: to === "/admin" }}
-      className="rounded-md px-3 py-1.5 text-[#2C2C2A] transition hover:bg-[#0C447C]/5"
-      activeProps={{ className: "rounded-md px-3 py-1.5 bg-[#0C447C] text-white" }}
+      className="rounded-md px-3 py-1.5 text-[#2C2C2A] transition hover:bg-[var(--color-deep-blue)]/5"
+      activeProps={{ className: "rounded-md px-3 py-1.5 bg-[var(--color-deep-blue)] text-white" }}
     >
       {children}
     </Link>

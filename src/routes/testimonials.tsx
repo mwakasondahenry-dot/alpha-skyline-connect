@@ -150,7 +150,7 @@ function TestimonialsPage() {
           </div>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[#1a1a18] shadow-lg transition-transform hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]"
           >
             Book a Visit →
           </Link>

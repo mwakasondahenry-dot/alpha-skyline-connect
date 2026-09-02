@@ -82,7 +82,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#0C447C]">{config.title}</h1>
+          <h1 className="text-2xl font-bold text-[var(--color-deep-blue)]">{config.title}</h1>
           {config.description ? (
             <p className="mt-1 text-sm text-[#2C2C2A]/70">{config.description}</p>
           ) : null}
@@ -91,7 +91,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
           <button
             type="button"
             onClick={() => setCreating(true)}
-            className="rounded-md bg-[#E8A020] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[#d18f15]"
+            className="rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow hover:bg-[var(--color-gold-dark)]"
           >
             + New
           </button>
@@ -102,14 +102,14 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
         <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
       ) : null}
 
-      <div className="overflow-hidden rounded-xl border border-[#0C447C]/10 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-xl border border-[var(--color-deep-blue)]/10 bg-white shadow-sm">
         {loading ? (
-          <div className="p-6 text-sm text-[#0C447C]">Loading…</div>
+          <div className="p-6 text-sm text-[var(--color-deep-blue)]">Loading…</div>
         ) : rows.length === 0 ? (
           <div className="p-6 text-sm text-[#2C2C2A]/70">No items yet.</div>
         ) : (
           <table className="w-full text-sm">
-            <thead className="bg-[#0C447C]/5 text-left text-[11px] font-semibold uppercase tracking-wide text-[#0C447C]">
+            <thead className="bg-[var(--color-deep-blue)]/5 text-left text-[11px] font-semibold uppercase tracking-wide text-[var(--color-deep-blue)]">
               <tr>
                 {config.listColumns.map((c) => (
                   <th key={c.key} className="px-4 py-2.5">{c.label}</th>
@@ -117,9 +117,9 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
                 <th className="px-4 py-2.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#0C447C]/5">
+            <tbody className="divide-y divide-[var(--color-deep-blue)]/5">
               {rows.map((row) => (
-                <tr key={String(row.id)} className="hover:bg-[#0C447C]/5">
+                <tr key={String(row.id)} className="hover:bg-[var(--color-deep-blue)]/5">
                   {config.listColumns.map((c) => (
                     <td key={c.key} className="px-4 py-2.5 align-top text-[#2C2C2A]">
                       {c.render ? c.render(row[c.key], row) : renderCell(row[c.key])}
@@ -130,7 +130,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
                       <button
                         type="button"
                         onClick={() => setEditing(row)}
-                        className="mr-2 rounded border border-[#0C447C]/20 px-2.5 py-1 text-xs font-semibold text-[#0C447C] hover:bg-[#0C447C] hover:text-white"
+                        className="mr-2 rounded border border-[var(--color-deep-blue)]/20 px-2.5 py-1 text-xs font-semibold text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)] hover:text-white"
                       >
                         Edit
                       </button>
@@ -237,8 +237,8 @@ function CrudForm({
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-auto bg-black/40 p-4 sm:p-8">
       <div className="w-full max-w-2xl rounded-2xl bg-white shadow-2xl">
-        <header className="flex items-center justify-between border-b border-[#0C447C]/10 px-6 py-4">
-          <h2 className="text-lg font-semibold text-[#0C447C]">
+        <header className="flex items-center justify-between border-b border-[var(--color-deep-blue)]/10 px-6 py-4">
+          <h2 className="text-lg font-semibold text-[var(--color-deep-blue)]">
             {initial?.id ? "Edit" : "New"} {config.title.replace(/s$/, "").toLowerCase()}
           </h2>
           <button onClick={onClose} className="text-xl leading-none text-[#2C2C2A]/60 hover:text-[#2C2C2A]" aria-label="Close">×</button>
@@ -247,7 +247,7 @@ function CrudForm({
         <form onSubmit={onSubmit} className="space-y-4 px-6 py-5" noValidate>
           {config.fields.map((f) => (
             <div key={f.name}>
-              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[#0C447C]/80">
+              <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-[var(--color-deep-blue)]/80">
                 {f.label}{f.required ? <span className="text-red-600"> *</span> : null}
               </label>
               {renderInput(f, form, set, uploadImage, client)}
@@ -260,14 +260,14 @@ function CrudForm({
             <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
           ) : null}
 
-          <div className="flex justify-end gap-2 border-t border-[#0C447C]/10 pt-4">
+          <div className="flex justify-end gap-2 border-t border-[var(--color-deep-blue)]/10 pt-4">
             <button type="button" onClick={onClose} className="rounded-md px-4 py-2 text-sm text-[#2C2C2A] hover:bg-black/5">
               Cancel
             </button>
             <button
               type="submit"
               disabled={busy}
-              className="rounded-md bg-[#E8A020] px-4 py-2 text-sm font-semibold text-white shadow disabled:opacity-60"
+              className="rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-white shadow disabled:opacity-60"
             >
               {busy ? "Saving…" : "Save"}
             </button>
@@ -286,7 +286,7 @@ function renderInput(
   client: import("@supabase/supabase-js").SupabaseClient | null,
 ) {
   const v = form[f.name];
-  const cls = "w-full rounded-lg border border-[#0C447C]/20 bg-white px-3 py-2 text-sm outline-none focus:border-[#E8A020] focus:ring-2 focus:ring-[#E8A020]/30";
+  const cls = "w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2 text-sm outline-none focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30";
 
   if (f.kind === "textarea") {
     return <textarea rows={5} value={(v as string) ?? ""} onChange={(e) => set(f.name, e.target.value)} className={cls} placeholder={f.placeholder} />;
@@ -329,7 +329,7 @@ function renderInput(
           className={cls}
         />
         <div className="flex items-center gap-3">
-          <label className="cursor-pointer rounded-md border border-dashed border-[#0C447C]/30 px-3 py-1.5 text-xs font-semibold text-[#0C447C] hover:bg-[#0C447C]/5">
+          <label className="cursor-pointer rounded-md border border-dashed border-[var(--color-deep-blue)]/30 px-3 py-1.5 text-xs font-semibold text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)]/5">
             Upload image
             <input
               type="file"

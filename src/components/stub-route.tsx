@@ -18,7 +18,7 @@ export function makeStubRoute(title: string, blurb: string) {
           </p>
           <Link
             to="/"
-            className="mt-8 inline-flex items-center rounded-full bg-[var(--color-gold)] px-5 py-3 text-sm font-medium text-[#1a1a18]"
+            className="mt-8 inline-flex items-center rounded-full bg-[var(--color-gold)] px-5 py-3 text-sm font-medium text-[var(--color-accent-foreground)]"
           >
             Back to home
           </Link>

@@ -177,7 +177,7 @@ function AviationPage() {
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link
                   to="/admission"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[#1a1a18] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl"
                 >
                   How to join →
                 </Link>
@@ -275,7 +275,7 @@ function AviationPage() {
               </figure>
 
               {/* Floating badge */}
-              <div className="absolute -left-3 top-[36%] hidden rounded-2xl border border-white/15 bg-[#0C447C]/85 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-gold)] shadow-lg backdrop-blur sm:block">
+              <div className="absolute -left-3 top-[36%] hidden rounded-2xl border border-white/15 bg-[var(--color-deep-blue)]/85 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-gold)] shadow-lg backdrop-blur sm:block">
                 ✈ Class of 2024
               </div>
             </div>
@@ -299,7 +299,7 @@ function AviationPage() {
       </section>
 
       {/* 3. PATHWAY */}
-      <section id="pathway" className="relative overflow-hidden bg-[#0C447C] py-20 text-white sm:py-28">
+      <section id="pathway" className="relative overflow-hidden bg-[var(--color-deep-blue)] py-20 text-white sm:py-28">
         <div
           className="pointer-events-none absolute -left-32 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full opacity-30"
           style={{ background: "radial-gradient(circle, rgba(232,160,32,0.4), transparent 70%)" }}
@@ -556,7 +556,7 @@ function AviationPage() {
         className="relative overflow-hidden"
         style={{
           background:
-            "linear-gradient(135deg, var(--color-gold) 0%, #f0b240 60%, #d68f15 100%)",
+            "linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 60%, var(--color-gold-dark) 100%)",
         }}
       >
         <div
@@ -569,10 +569,10 @@ function AviationPage() {
         />
         <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between md:py-16">
           <div className="max-w-2xl">
-            <h2 className="font-display text-3xl font-black leading-tight text-[#1a1a18] sm:text-4xl">
+            <h2 className="font-display text-3xl font-black leading-tight text-[var(--color-accent-foreground)] sm:text-4xl">
               Ready to give your child a head start in the sky?
             </h2>
-            <p className="mt-3 text-[#1a1a18]/80">
+            <p className="mt-3 text-[var(--color-accent-foreground)]/80">
               Visit a campus and ask about the aviation programme.
             </p>
           </div>

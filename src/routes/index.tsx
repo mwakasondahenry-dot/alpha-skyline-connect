@@ -196,7 +196,7 @@ function Home() {
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 to="/admission"
-                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[#1a1a18] shadow-lg transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]"
               >
                 Enroll Now
               </Link>
@@ -252,7 +252,7 @@ function Home() {
                 {/* Gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10 transition-opacity duration-500 group-hover:from-black/95 group-hover:via-black/60" />
                 {/* Top badge */}
-                <span className="absolute left-5 top-5 z-10 rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[#1a1a18] shadow-md">
+                <span className="absolute left-5 top-5 z-10 rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[var(--color-accent-foreground)] shadow-md">
                   {s.badge}
                 </span>
                 {/* Bottom content */}
@@ -299,7 +299,7 @@ function Home() {
               </p>
               <Link
                 to="/aviation"
-                className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--color-gold)] px-4 py-2.5 text-sm font-semibold text-[#1a1a18] shadow-lg transition-transform hover:scale-[1.02]"
+                className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--color-gold)] px-4 py-2.5 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]"
               >
                 Inside the programme →
               </Link>
@@ -321,7 +321,7 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#ffffff" bottomColor="#f6f7f9" intensity="playful" seed={23} />
+      <TornEdge topColor="var(--color-surface)" bottomColor="#f6f7f9" intensity="playful" seed={23} />
 
       {/* STAT BAR */}
       <section className="relative overflow-hidden bg-[var(--color-surface-muted)] text-[var(--color-ink)]">
@@ -348,7 +348,7 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#f6f7f9" bottomColor="#ffffff" intensity="playful" seed={41} />
+      <TornEdge topColor="#f6f7f9" bottomColor="var(--color-surface)" intensity="playful" seed={41} />
 
       {/* OUR STORY */}
       <section className="bg-white">
@@ -386,13 +386,13 @@ function Home() {
         </div>
       </section>
 
-      <TornEdge topColor="#ffffff" bottomColor="#f6f7f9" intensity="playful" seed={58} />
+      <TornEdge topColor="var(--color-surface)" bottomColor="#f6f7f9" intensity="playful" seed={58} />
 
       {/* UPDATES + EVENTS */}
       <WhatsNew news={data.news} events={upcomingEvents} />
 
 
-      <TornEdge topColor="#ffffff" bottomColor="#ffffff" intensity="playful" seed={72} />
+      <TornEdge topColor="var(--color-surface)" bottomColor="var(--color-surface)" intensity="playful" seed={72} />
 
       {/* CTA BAND */}
       <section className="border-y border-[var(--color-hairline)] bg-white">
@@ -409,7 +409,7 @@ function Home() {
           <Reveal direction="right">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]"
             >
               Book a Visit →
             </Link>
@@ -443,7 +443,7 @@ function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEv
   return (
     <>
       <UpdatesSlideshow news={news} />
-      <TornEdge topColor="#f6f7f9" bottomColor="#ffffff" intensity="playful" seed={91} />
+      <TornEdge topColor="#f6f7f9" bottomColor="var(--color-surface)" intensity="playful" seed={91} />
       <EventsRail events={events} />
     </>
   );
@@ -609,7 +609,7 @@ function EventsRail({ events }: { events: HomeEventItem[] }) {
                   className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-gold)]/15 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-[var(--color-gold)]/25"
                 />
                 <div className="relative flex items-start gap-5">
-                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[#d68f1c] text-[#1a1a18] shadow-md ring-1 ring-white/40 transition-transform duration-500 group-hover:rotate-[-4deg] group-hover:scale-105">
+                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[var(--color-gold-dark)] text-[var(--color-accent-foreground)] shadow-md ring-1 ring-white/40 transition-transform duration-500 group-hover:rotate-[-4deg] group-hover:scale-105">
                     <span className="font-display text-3xl font-black leading-none">
                       {eventDay(e.event_date)}
                     </span>

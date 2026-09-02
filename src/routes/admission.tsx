@@ -48,7 +48,7 @@ const REQUIRED_DOCS = [
 const SCHOOL_CARDS = [
   {
     name: "Nursery & Primary",
-    accent: "#1E7FC2",
+    accent: "var(--color-bright-blue)",
     campus: "Kunduchi campus",
     entry: "From 2 years old (Nursery) and 5 years old (Primary).",
     note: null,
@@ -56,7 +56,7 @@ const SCHOOL_CARDS = [
   },
   {
     name: "Alpha High",
-    accent: "#0C447C",
+    accent: "var(--color-deep-blue)",
     campus: "Mikocheni campus",
     entry: "Form 1–6, mixed secondary. Entry by assessment.",
     note: "[Specific academic entry requirements — to be confirmed]",
@@ -64,7 +64,7 @@ const SCHOOL_CARDS = [
   },
   {
     name: "Alpha Girls",
-    accent: "#3C3489",
+    accent: "var(--color-blue-violet)",
     campus: "Kunduchi campus",
     entry: "Form 1–6, girls' secondary. Entry by assessment.",
     note: "[Specific academic entry requirements — to be confirmed]",
@@ -110,7 +110,7 @@ function AdmissionPage() {
                 href={APPLICATION_FORM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md"
+                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md"
               >
                 <Download className="h-4 w-4" />
                 Download Application Form
@@ -193,7 +193,7 @@ function AdmissionPage() {
               <ul className="space-y-3 rounded-2xl border border-black/5 bg-[var(--color-cream)] p-6 shadow-sm">
                 {REQUIRED_DOCS.map((d) => (
                   <li key={d} className="flex items-start gap-3">
-                    <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[#1a1a18]">
+                    <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
                       <Check className="h-3.5 w-3.5" strokeWidth={3} />
                     </span>
                     <span className="font-medium text-[var(--color-ink)]">{d}</span>
@@ -355,7 +355,7 @@ function AdmissionPage() {
                   href={APPLICATION_FORM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]"
                 >
                   <Download className="h-4 w-4" /> Download Application Form
                 </a>
@@ -365,7 +365,7 @@ function AdmissionPage() {
             <Reveal direction="left">
               <ul className="space-y-4 rounded-2xl border border-white/15 bg-white/5 p-7 backdrop-blur">
                 <li className="flex items-start gap-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[#1a1a18]">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
                     <Phone className="h-4 w-4" />
                   </span>
                   <div>
@@ -386,7 +386,7 @@ function AdmissionPage() {
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[#1a1a18]">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
                     <Mail className="h-4 w-4" />
                   </span>
                   <div>
@@ -404,7 +404,7 @@ function AdmissionPage() {
                   </div>
                 </li>
                 <li className="flex items-start gap-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[#1a1a18]">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
                     <MapPin className="h-4 w-4" />
                   </span>
                   <div>
@@ -423,13 +423,13 @@ function AdmissionPage() {
       </section>
 
       {/* 8. CTA banner */}
-      <section className="bg-[var(--color-gold)] text-[#1a1a18]">
+      <section className="bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
         <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-14 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <div>
             <h2 className="font-display text-2xl font-bold sm:text-3xl">
               Ready to take the first step?
             </h2>
-            <p className="mt-2 max-w-2xl text-[#1a1a18]/85">
+            <p className="mt-2 max-w-2xl text-[var(--color-accent-foreground)]/85">
               Visit a campus, meet our team, and see Alpha for yourself.
             </p>
           </div>

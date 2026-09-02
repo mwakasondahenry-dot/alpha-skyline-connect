@@ -276,7 +276,7 @@ function MobileNav() {
           <Link
             to="/admission"
             onClick={close}
-            className="mt-6 block rounded-lg bg-[var(--color-gold)] px-4 py-3.5 text-center text-sm font-bold text-[#1a1a18] shadow-lg"
+            className="mt-6 block rounded-lg bg-[var(--color-gold)] px-4 py-3.5 text-center text-sm font-bold text-[var(--color-accent-foreground)] shadow-lg"
           >
             Enroll Now
           </Link>
@@ -292,8 +292,8 @@ function MobileNav() {
 
 function SocialLinks({ compact = false }: { compact?: boolean }) {
   const cls = compact
-    ? "grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[var(--color-gold)] hover:text-[#1a1a18]"
-    : "grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[var(--color-gold)] hover:text-[#1a1a18]";
+    ? "grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[var(--color-gold)] hover:text-[var(--color-accent-foreground)]"
+    : "grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white transition-colors hover:bg-[var(--color-gold)] hover:text-[var(--color-accent-foreground)]";
   return (
     <>
       <a
@@ -378,7 +378,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <Link
             to="/admission"
-            className="hidden rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02] sm:inline-flex"
+            className="hidden rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02] sm:inline-flex"
           >
             Enroll Now
           </Link>

@@ -12,9 +12,20 @@ import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
 import aviation from "@/assets/aviation-uniform.jpg.asset.json";
 
 const slug = "alpha-girls" as const;
-const ACCENT = "#3C3489";
-const GOLD = "#E8A020";
-const SOFT = "#F4F2FB";
+const ACCENT = "var(--color-blue-violet)";
+const GOLD = "var(--color-gold)";
+
+/**
+ * Page-local violet ramp for Alpha Girls -- decorative tints and shades built
+ * around --color-blue-violet. Deliberately NOT in styles.css: used only on
+ * this page, not part of the Alpha brand palette.
+ */
+const VIOLET = {
+  soft: "#F4F2FB",
+  mid: "#E8E3F7",
+  deep: "#D7CEF0",
+  bright: "#6549C8",
+} as const;
 
 const bundleQuery = queryOptions({
   queryKey: ["school-bundle", slug],
@@ -88,7 +99,7 @@ function Hero() {
     <section
       className="relative isolate overflow-hidden ag-hero"
       style={{
-        background: `linear-gradient(135deg, ${SOFT} 0%, #E8E3F7 45%, #D7CEF0 100%)`,
+        background: `linear-gradient(135deg, ${VIOLET.soft} 0%, ${VIOLET.mid} 45%, ${VIOLET.deep} 100%)`,
       }}
     >
       {/* drifting violet/gold blooms */}
@@ -107,7 +118,7 @@ function Hero() {
         <Reveal direction="up" className="max-w-2xl pb-12 lg:pb-20">
           <span
             className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
-            style={{ borderColor: `${ACCENT}33`, background: "#ffffffaa", color: ACCENT }}
+            style={{ borderColor: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, background: "#ffffffaa", color: ACCENT }}
           >
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
             Girls Only · Form 1–6 · Kunduchi Campus
@@ -124,7 +135,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/admission"
-              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-md transition-transform hover:scale-[1.03]"
+              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03]"
               style={{ background: GOLD }}
             >
               Enroll Now →
@@ -278,7 +289,7 @@ const A_COMBOS = [
 
 function Academics() {
   return (
-    <section style={{ background: SOFT }}>
+    <section style={{ background: VIOLET.soft }}>
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-3xl">
           <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
@@ -352,7 +363,7 @@ function Academics() {
                     style={{
                       animation: `agComboIn 480ms ${i * 55}ms cubic-bezier(.2,.8,.2,1) both`,
                     }}
-                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-110 hover:border-[var(--ag-gold)] hover:bg-white hover:text-[#3C3489] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
+                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-110 hover:border-[var(--ag-gold)] hover:bg-white hover:text-[var(--color-blue-violet)] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
                   >
                     {c.code}
                     <span className="pointer-events-none absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-[var(--ag-gold)] transition-all duration-300 group-hover/chip:w-3/4" />
@@ -464,7 +475,7 @@ const SPORTS = ["Football", "Basketball", "Volleyball", "Netball", "Athletics"];
 
 function BeyondClassroom() {
   return (
-    <section style={{ background: SOFT }}>
+    <section style={{ background: VIOLET.soft }}>
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
@@ -609,7 +620,7 @@ function LifeAtKunduchi() {
 function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
   if (staff.length === 0) return null;
   return (
-    <section style={{ background: SOFT }}>
+    <section style={{ background: VIOLET.soft }}>
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
           <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
@@ -637,7 +648,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                     <div
                       aria-hidden
                       className="absolute inset-0 grid place-items-center"
-                      style={{ background: `linear-gradient(135deg, ${ACCENT}, #6549C8)` }}
+                      style={{ background: `linear-gradient(135deg, ${ACCENT}, ${VIOLET.bright})` }}
                     >
                       <span className="font-display text-6xl font-black text-white/30">
                         {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
@@ -675,7 +686,7 @@ function ApplyBanner() {
           <h2 className="font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
             Applications for the next intake are open.
           </h2>
-          <p className="mt-2 max-w-xl text-sm font-semibold text-[#1a1a18]/80">
+          <p className="mt-2 max-w-xl text-sm font-semibold text-[var(--color-accent-foreground)]/80">
             Visit Kunduchi, sit the assessment, claim your place.
           </p>
         </Reveal>
@@ -714,7 +725,7 @@ function GirlsFooter() {
           Kunduchi campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </div>
       </div>
-      <SchoolFacilitiesSection slug="alpha-girls" accent="#3C3489" />
+      <SchoolFacilitiesSection slug="alpha-girls" accent="var(--color-blue-violet)" />
       <SiteFooter />
     </>
   );

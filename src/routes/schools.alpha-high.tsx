@@ -24,8 +24,8 @@ import clubUn from "@/assets/club-un.jpg.asset.json";
 import clubEnvironment from "@/assets/club-environment.jpg.asset.json";
 
 const slug = "alpha-high" as const;
-const ACCENT = "#0C447C";
-const GOLD = "#E8A020";
+const ACCENT = "var(--color-deep-blue)";
+const GOLD = "var(--color-gold)";
 
 const bundleQuery = queryOptions({
   queryKey: ["school-bundle", slug],
@@ -134,7 +134,7 @@ function Hero() {
       <div
         aria-hidden
         className="pointer-events-none absolute -left-32 -top-32 h-[28rem] w-[28rem] rounded-full opacity-30 blur-3xl"
-        style={{ background: "#1e7fc2" }}
+        style={{ background: "var(--color-bright-blue)" }}
       />
       <div
         aria-hidden
@@ -160,7 +160,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/admission"
-              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[#1a1a18] shadow-md transition-transform hover:scale-[1.03]"
+              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03]"
               style={{ background: GOLD }}
             >
               Enroll Now →
@@ -359,7 +359,7 @@ function Academics() {
               <div
                 aria-hidden
                 className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full opacity-15 blur-3xl"
-                style={{ background: "#1e7fc2" }}
+                style={{ background: "var(--color-bright-blue)" }}
               />
 
               <div className="relative flex items-baseline gap-3">
@@ -380,7 +380,7 @@ function Academics() {
                     style={{
                       animation: `comboIn 480ms ${i * 55}ms cubic-bezier(.2,.8,.2,1) both`,
                     }}
-                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-110 hover:border-[var(--combo-gold)] hover:bg-white hover:text-[#0C447C] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
+                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-110 hover:border-[var(--combo-gold)] hover:bg-white hover:text-[var(--color-deep-blue)] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
                   >
                     {c.code}
                     <span className="pointer-events-none absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-[var(--combo-gold)] transition-all duration-300 group-hover/chip:w-3/4" />
@@ -708,7 +708,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                     <div
                       aria-hidden
                       className="absolute inset-0 grid place-items-center"
-                      style={{ background: `linear-gradient(135deg, ${ACCENT}, #1e7fc2)` }}
+                      style={{ background: `linear-gradient(135deg, ${ACCENT}, var(--color-bright-blue))` }}
                     >
                       <span className="font-display text-6xl font-black text-white/30">
                         {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
@@ -746,7 +746,7 @@ function ApplyBanner() {
           <h2 className="font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
             Applications for the next intake are open.
           </h2>
-          <p className="mt-2 max-w-xl text-sm font-semibold text-[#1a1a18]/80">
+          <p className="mt-2 max-w-xl text-sm font-semibold text-[var(--color-accent-foreground)]/80">
             Visit Mikocheni, sit the assessment, join the climb.
           </p>
         </Reveal>
@@ -782,7 +782,7 @@ function AlphaHighFooter() {
           Mikocheni campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
         </div>
       </div>
-      <SchoolFacilitiesSection slug="alpha-high" accent="#0C447C" />
+      <SchoolFacilitiesSection slug="alpha-high" accent="var(--color-deep-blue)" />
       <SiteFooter />
     </>
   );

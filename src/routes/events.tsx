@@ -34,7 +34,7 @@ function EventsPage() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      <section className="bg-gradient-to-b from-[#0C447C] to-[#08305a] py-20 text-white">
+      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-20 text-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">Calendar</p>
           <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">Events at Alpha Schools</h1>

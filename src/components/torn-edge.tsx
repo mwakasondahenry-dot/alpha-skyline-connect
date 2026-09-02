@@ -7,7 +7,7 @@
  * boundary that works site-wide.
  *
  *   <SectionA />
- *   <TornEdge topColor="#0C447C" bottomColor="#f7f5ef" seed={17} />
+ *   <TornEdge topColor="var(--color-deep-blue)" bottomColor="#f7f5ef" seed={17} />
  *   <SectionB />
  */
 
@@ -97,7 +97,7 @@ export function TornEdge({
         aria-hidden
         focusable="false"
       >
-        <path d={path} fill={topColor} />
+        <path d={path} style={{ fill: topColor }} />
       </svg>
     </div>
   );

@@ -43,7 +43,7 @@ export function SchoolPage({ config, bundle }: { config: SchoolConfig; bundle: S
           <div className="flex flex-wrap gap-2">
             <Link
               to="/admission"
-              className="inline-flex items-center rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-[#1a1a18] shadow-sm transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center rounded-md bg-[var(--color-gold)] px-4 py-2 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]"
             >
               Enroll Now
             </Link>
@@ -219,7 +219,7 @@ export function SchoolPage({ config, bundle }: { config: SchoolConfig; bundle: S
               {bundle.events.map((e, i) => (
                 <Reveal key={e.id} direction="up" delay={i * 80}>
                   <li className="group flex items-start gap-5 rounded-2xl bg-white/[0.07] p-5 ring-1 ring-white/15 backdrop-blur-sm transition-all duration-500 hover:-translate-y-0.5 hover:bg-white/[0.12] hover:ring-[var(--color-gold)]/40">
-                    <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[#d68f1c] text-[#1a1a18] shadow-lg ring-1 ring-white/30">
+                    <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[var(--color-gold-dark)] text-[var(--color-accent-foreground)] shadow-lg ring-1 ring-white/30">
                       <span className="font-display text-3xl font-black leading-none">{dayOf(e.event_date)}</span>
                       <span className="absolute mt-12 text-[9px] font-bold tracking-[0.18em]">{monthOf(e.event_date)}</span>
                     </div>

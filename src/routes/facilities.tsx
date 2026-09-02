@@ -47,7 +47,7 @@ function FacilitiesPage() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      <section className="bg-gradient-to-b from-[#0C447C] to-[#08305a] py-20 text-white">
+      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-20 text-white">
         <div className="mx-auto max-w-7xl px-6 lg:px-10">
           <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">Campus tour</p>
           <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">Facilities across Alpha Schools</h1>
@@ -131,7 +131,7 @@ function FacilitiesPage() {
       <section className="bg-[var(--color-deep-blue)] py-14 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row lg:px-10">
           <p className="font-display text-2xl font-semibold">See it for yourself — book a visit.</p>
-          <Link to="/contact" className="rounded-md bg-[var(--color-gold)] px-5 py-2.5 text-sm font-semibold text-[#1a1a18]">
+          <Link to="/contact" className="rounded-md bg-[var(--color-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--color-accent-foreground)]">
             Book a Visit →
           </Link>
         </div>

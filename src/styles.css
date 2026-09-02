@@ -28,8 +28,15 @@
   --color-bright-blue: #1e7fc2;   /* Nursery & Primary accent */
   --color-blue-violet: #3c3489;   /* Alpha Girls accent */
   --color-gold: #e8a020;
+  --color-gold-dark: #d68f1c;     /* gold hover + gradient foot */
+  --color-gold-light: #f0b240;    /* gold gradient head */
   --color-off-white: #eef4fb;     /* soft blue-tinted page base */
   --color-ink: #1d2a3a;
+
+  /* Tailwind red-600 for error states. Deliberately NOT the logo red
+     #E22321, which is logo-only per design/README.md and
+     ALPHA_MASTER_BUILD.md. */
+  --color-danger: #dc2626;
 
   --color-primary: var(--color-brand-blue);
   --color-primary-foreground: #ffffff;

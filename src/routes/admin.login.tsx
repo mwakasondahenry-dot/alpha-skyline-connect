@@ -34,11 +34,11 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[#0C447C] via-[#0C447C] to-[#08305a] px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-deep-blue)] to-[#08305a] px-4 py-12">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         <div className="mb-6 flex flex-col items-center text-center">
-          <img src={logo.url} alt="Alpha Schools" className="h-14 w-14 rounded-full ring-2 ring-[#E8A020]" />
-          <h1 className="mt-4 text-xl font-bold text-[#0C447C]">Alpha Schools Admin</h1>
+          <img src={logo.url} alt="Alpha Schools" className="h-14 w-14 rounded-full ring-2 ring-[var(--color-gold)]" />
+          <h1 className="mt-4 text-xl font-bold text-[var(--color-deep-blue)]">Alpha Schools Admin</h1>
           <p className="mt-1 text-sm text-[#2C2C2A]/70">
             Sign in to manage news, events, gallery and staff.
           </p>
@@ -46,7 +46,7 @@ function LoginPage() {
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
-            <label htmlFor="email" className="mb-1 block text-sm font-medium text-[#0C447C]">
+            <label htmlFor="email" className="mb-1 block text-sm font-medium text-[var(--color-deep-blue)]">
               Email
             </label>
             <input
@@ -56,13 +56,13 @@ function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-[#0C447C]/20 bg-white px-3 py-2.5 text-sm text-[#2C2C2A] outline-none transition focus:border-[#E8A020] focus:ring-2 focus:ring-[#E8A020]/30"
+              className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[#2C2C2A] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
               placeholder="you@alphaschools.ac.tz"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="mb-1 block text-sm font-medium text-[#0C447C]">
+            <label htmlFor="password" className="mb-1 block text-sm font-medium text-[var(--color-deep-blue)]">
               Password
             </label>
             <input
@@ -72,7 +72,7 @@ function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-[#0C447C]/20 bg-white px-3 py-2.5 text-sm text-[#2C2C2A] outline-none transition focus:border-[#E8A020] focus:ring-2 focus:ring-[#E8A020]/30"
+              className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[#2C2C2A] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
               placeholder="Your password"
             />
           </div>
@@ -89,7 +89,7 @@ function LoginPage() {
           <button
             type="submit"
             disabled={busy || !ready}
-            className="w-full rounded-lg bg-[#E8A020] px-4 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-[#d18f15] disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full rounded-lg bg-[var(--color-gold)] px-4 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-[var(--color-gold-dark)] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {busy ? "Signing in…" : ready ? "Sign in" : "Loading…"}
           </button>

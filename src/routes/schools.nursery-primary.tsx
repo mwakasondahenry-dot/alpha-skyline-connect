@@ -35,6 +35,31 @@ export const Route = createFileRoute("/schools/nursery-primary")({
   component: NurseryPrimaryPage,
 });
 
+/**
+ * Page-local decorative colours for Nursery & Primary: pastel card tints,
+ * section washes, and the saturated blues used by StripePanel and the
+ * early-years blob. Deliberately NOT in styles.css -- these are specific to
+ * this page and not part of the Alpha brand palette.
+ *
+ * The stripe blues sit near the brand blues but match none of them exactly,
+ * so they stay literal rather than becoming tokens.
+ */
+const PAGE_TINTS = {
+  blue: "#e0ecfb",
+  sky: "#dbeafe",
+  violet: "#e7e3f7",
+  mint: "#dff3e4",
+  sand: "#fbeed1",
+  peach: "#fbe1d4",
+  pink: "#f6e4f1",
+  lilac: "#cdb8e6",
+  ice: "#e6f1fb",
+  wash: "#e8f1fb",
+  stripeBlue: "#2f8fcd",
+  stripeBlueDark: "#0e4977",
+  stripeBlueLight: "#6fb4e0",
+} as const;
+
 // ---------- Reusable bits ----------
 
 function StripePanel({
@@ -47,10 +72,10 @@ function StripePanel({
   className?: string;
 }) {
   const palette = {
-    blue: { bg: "#2f8fcd", stripe: "rgba(255,255,255,0.16)" },
-    "blue-dark": { bg: "#0e4977", stripe: "rgba(255,255,255,0.12)" },
-    "blue-light": { bg: "#6fb4e0", stripe: "rgba(255,255,255,0.22)" },
-    gold: { bg: "#e8a020", stripe: "rgba(255,255,255,0.22)" },
+    blue: { bg: PAGE_TINTS.stripeBlue, stripe: "rgba(255,255,255,0.16)" },
+    "blue-dark": { bg: PAGE_TINTS.stripeBlueDark, stripe: "rgba(255,255,255,0.12)" },
+    "blue-light": { bg: PAGE_TINTS.stripeBlueLight, stripe: "rgba(255,255,255,0.22)" },
+    gold: { bg: "var(--color-gold)", stripe: "rgba(255,255,255,0.22)" },
   }[tone];
   return (
     <div
@@ -82,7 +107,7 @@ function NurseryPrimaryPage() {
       <PeekInside />
       <ComeMeetUs />
       <EntryRequirements />
-      <SchoolFacilitiesSection slug="nursery-primary" accent="#1E7FC2" />
+      <SchoolFacilitiesSection slug="nursery-primary" accent="var(--color-bright-blue)" />
       <NurseryFooter />
     </div>
   );
@@ -197,7 +222,8 @@ function Hero() {
 
           {/* Card 1 — top right group (chef-hat kids) */}
           <div
-            className="absolute right-2 top-2 w-[64%] rotate-[2deg] rounded-2xl bg-[#cdb8e6] p-2 shadow-xl"
+            className="absolute right-2 top-2 w-[64%] rotate-[2deg] rounded-2xl p-2 shadow-xl"
+            style={{ backgroundColor: PAGE_TINTS.lilac }}
           >
             <div className="overflow-hidden rounded-xl">
               <img
@@ -263,7 +289,7 @@ function WhatWeOffer() {
       ageColor: "var(--color-gold)",
       titleColor: "var(--color-deep-blue)",
       bodyColor: "var(--color-ink)",
-      arrowBg: "#e6f1fb",
+      arrowBg: PAGE_TINTS.ice,
       arrowColor: "var(--color-bright-blue)",
     },
     {
@@ -275,7 +301,7 @@ function WhatWeOffer() {
         "A structured, ambitious curriculum — strong literacy and numeracy, plus coding from the very start and a head full of questions.",
       bg: "var(--color-brand-blue)",
       ageColor: "rgba(255,255,255,0.85)",
-      titleColor: "#ffffff",
+      titleColor: "var(--color-surface)",
       bodyColor: "rgba(255,255,255,0.9)",
       arrowBg: "var(--color-gold)",
       arrowColor: "var(--color-deep-blue)",
@@ -337,7 +363,7 @@ function WhatWeOffer() {
 
 function AlphaChild() {
   const left = [
-    { icon: "?", color: "#dc2626", title: "Curious & full of questions", body: "Wondering out loud is encouraged." },
+    { icon: "?", color: "var(--color-danger)", title: "Curious & full of questions", body: "Wondering out loud is encouraged." },
     { icon: "💪", color: "", title: "Confident to try", body: "Mistakes are part of learning." },
     { icon: "🤝", color: "", title: "Kind to one another", body: "Caring for friends comes first." },
   ];
@@ -360,7 +386,11 @@ function AlphaChild() {
   );
 
   return (
-    <section id="early-years" className="relative overflow-hidden bg-[#e8f1fb] py-20">
+    <section
+      id="early-years"
+      className="relative overflow-hidden py-20"
+      style={{ backgroundColor: PAGE_TINTS.wash }}
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
           The Alpha child
@@ -391,7 +421,7 @@ function AlphaChild() {
               className="absolute left-1/2 top-1/2 h-[22rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] shadow-[0_25px_60px_-20px_rgba(12,68,124,0.45)]"
               style={{
                 background:
-                  "radial-gradient(ellipse at 30% 25%, #6fb4e0 0%, #2f8fcd 45%, #0e4977 100%)",
+                  `radial-gradient(ellipse at 30% 25%, ${PAGE_TINTS.stripeBlueLight} 0%, ${PAGE_TINTS.stripeBlue} 45%, ${PAGE_TINTS.stripeBlueDark} 100%)`,
               }}
             />
             {/* Subtle highlight */}
@@ -423,15 +453,15 @@ function AlphaChild() {
 
 function WhatTheyExplore() {
   const subjects = [
-    { name: "Reading & Writing", bg: "#e0ecfb", Icon: BookOpen },
-    { name: "Science & Technology", bg: "#e7e3f7", Icon: FlaskConical },
-    { name: "Arithmetic", bg: "#dbeafe", Icon: Calculator },
-    { name: "Environmental Care", bg: "#dff3e4", Icon: Leaf },
-    { name: "Life Skills", bg: "#fbeed1", Icon: Puzzle },
-    { name: "Social Studies", bg: "#fbe1d4", Icon: Globe2 },
-    { name: "Vocational Skills", bg: "#f6e4f1", Icon: Wrench },
-    { name: "Foreign Languages", bg: "#e0ecfb", Icon: Languages },
-    { name: "Introduction to Aviation", bg: "#e7e3f7", Icon: Plane },
+    { name: "Reading & Writing", bg: PAGE_TINTS.blue, Icon: BookOpen },
+    { name: "Science & Technology", bg: PAGE_TINTS.violet, Icon: FlaskConical },
+    { name: "Arithmetic", bg: PAGE_TINTS.sky, Icon: Calculator },
+    { name: "Environmental Care", bg: PAGE_TINTS.mint, Icon: Leaf },
+    { name: "Life Skills", bg: PAGE_TINTS.sand, Icon: Puzzle },
+    { name: "Social Studies", bg: PAGE_TINTS.peach, Icon: Globe2 },
+    { name: "Vocational Skills", bg: PAGE_TINTS.pink, Icon: Wrench },
+    { name: "Foreign Languages", bg: PAGE_TINTS.blue, Icon: Languages },
+    { name: "Introduction to Aviation", bg: PAGE_TINTS.violet, Icon: Plane },
   ];
 
 
@@ -504,14 +534,14 @@ function EntryRequirements() {
 // ---------- Outstanding Extracurriculum ----------
 
 const EXTRACURRICULUM = [
-  { name: "Sports & Games", Icon: Trophy, bg: "#e0ecfb" },
-  { name: "Swimming", Icon: Waves, bg: "#dbeafe" },
-  { name: "Music", Icon: Music, bg: "#fbeed1" },
-  { name: "Coding & Digital Skills", Icon: Laptop, bg: "#e7e3f7" },
-  { name: "Scouts", Icon: Tent, bg: "#dff3e4" },
-  { name: "DJ", Icon: Disc3, bg: "#f6e4f1" },
-  { name: "Cookery", Icon: ChefHat, bg: "#fbe1d4" },
-  { name: "Debate & Public Speaking", Icon: Mic, bg: "#e0ecfb" },
+  { name: "Sports & Games", Icon: Trophy, bg: PAGE_TINTS.blue },
+  { name: "Swimming", Icon: Waves, bg: PAGE_TINTS.sky },
+  { name: "Music", Icon: Music, bg: PAGE_TINTS.sand },
+  { name: "Coding & Digital Skills", Icon: Laptop, bg: PAGE_TINTS.violet },
+  { name: "Scouts", Icon: Tent, bg: PAGE_TINTS.mint },
+  { name: "DJ", Icon: Disc3, bg: PAGE_TINTS.pink },
+  { name: "Cookery", Icon: ChefHat, bg: PAGE_TINTS.peach },
+  { name: "Debate & Public Speaking", Icon: Mic, bg: PAGE_TINTS.blue },
 ];
 
 function OutstandingExtracurriculum() {
