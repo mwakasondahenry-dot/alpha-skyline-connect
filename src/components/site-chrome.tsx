@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { ChevronDown, Menu, X, Instagram, Youtube, Facebook, Linkedin } from "lucide-react";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 import schoolNurseryPhoto from "@/assets/school-nursery-primary.jpg.asset.json";
@@ -146,6 +147,16 @@ function MobileNav() {
   const [open, setOpen] = useState(false);
   const [schoolsOpen, setSchoolsOpen] = useState(false);
 
+  /* The overlay is portalled to <body>. It has to be: the site header sets
+     backdrop-blur, and an element with a backdrop-filter becomes the
+     containing block for its position:fixed descendants. Left inside the
+     header, this panel resolved against the 68px header instead of the
+     viewport — so it was 68px tall with its nav clipped, it never slid into
+     view, and its off-screen right edge pushed the document to 670px wide,
+     giving every page a horizontal scrollbar at 375px. */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
@@ -178,11 +189,15 @@ function MobileNav() {
         {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
-      {/* Backdrop */}
+      {mounted &&
+        createPortal(
+          <>
+      {/* Backdrop. lg:hidden is repeated here because the portal escapes
+          the lg:hidden wrapper this component returns. */}
       <div
         aria-hidden
         onClick={close}
-        className={`fixed inset-0 top-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-200 motion-reduce:transition-none ${
+        className={`fixed inset-0 top-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-200 motion-reduce:transition-none lg:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
@@ -190,7 +205,7 @@ function MobileNav() {
       {/* Panel */}
       <div
         id="mobile-nav-panel"
-        className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col bg-[var(--color-deep-blue)] text-white shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none ${
+        className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col bg-[var(--color-deep-blue)] text-white shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none lg:hidden ${
           open ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -286,6 +301,9 @@ function MobileNav() {
           </div>
         </nav>
       </div>
+          </>,
+          document.body,
+        )}
     </div>
   );
 }
