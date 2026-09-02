@@ -1,4 +1,6 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
+import { SchoolSubNav } from "@/components/school/school-sub-nav";
+import { CombinationList, SubjectPillList, FormOptionsList, type CombinationGroup } from "@/components/school/subject-lists";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -58,15 +60,16 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
   return (
     <div className="min-h-screen bg-white text-[var(--color-ink)]">
       <SiteHeader />
+      <SchoolSubNav items={SUB_NAV} />
       <Hero />
       <TornEdge topColor={ACCENT} bottomColor="var(--color-off-white)" intensity="restrained" />
       <About />
       <Academics />
-      <Distinctive />
-      <BeyondClassroom />
+      <AdmissionProcess />
       <LifeAtMikocheni />
+      <BeyondClassroom />
+      <Distinctive />
       <TornEdge topColor="var(--color-off-white)" bottomColor={GOLD} intensity="restrained" />
-      <EntryRequirements />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
@@ -80,7 +83,7 @@ function EntryRequirements() {
   return (
     <section id="requirements" className="bg-white py-16">
       <div className="mx-auto max-w-4xl px-6 lg:px-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+        <p className="text-[var(--color-bright-blue)]" style={T.label}>
           Admissions
         </p>
         <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-4xl">
@@ -154,7 +157,7 @@ function Hero() {
             The flagship.{" "}
             <span style={{ color: GOLD }}>Built for the long climb.</span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
+          <p className="mt-6 max-w-xl text-white/85" style={T.body}>
             Dual rigour in academics and aviation, taught hard and taught well — with flying and coding that exist nowhere else in Tanzania.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
@@ -201,17 +204,17 @@ function Hero() {
 
 function About() {
   return (
-    <section className="bg-[var(--color-off-white)]">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+    <section id="about" className="bg-[var(--color-off-white)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
-            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
+            <p style={{ ...T.label, color: ACCENT  }}>
               About Alpha High
             </p>
             <h2 className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl" style={{ color: ACCENT }}>
               Excellence through challenge — <span style={{ color: "var(--color-bright-blue)" }}>since 2007.</span>
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/80">
+            <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
               Established <strong>19 March 2007</strong>, Alpha High was founded to enable students to achieve academic excellence through intellectual and physical challenge, and to become responsible citizens of a dynamic society.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
@@ -238,10 +241,10 @@ function About() {
               <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
                 Our Mission
               </p>
-              <h3 className="mt-2 font-display text-xl font-bold">
+              <h3 className="mt-2 font-display" style={T.cardTitle}>
                 Education that grows the whole student.
               </h3>
-              <ul className="mt-5 space-y-3 text-sm leading-relaxed text-white/90">
+              <ul className="mt-5 space-y-3 text-white/90" style={T.body}>
                 {[
                   "A source of intellectual, spiritual and cultural growth.",
                   "Knowledge that meets individual needs.",
@@ -282,136 +285,239 @@ function Stat({ value, label }: { value: string; label: string }) {
 
 // ---------- Academics ----------
 
-const O_LEVEL = [
-  { name: "Science", items: "Physics, Chemistry, Biology, Basic Maths" },
-  { name: "Arts", items: "History, Geography, English, Civics, Kiswahili" },
-  { name: "Business", items: "Book-Keeping, Commerce" },
-  { name: "Optional", items: "Additional Maths, Literature in English, French, ICS" },
+/** Type roles bound to the design system. Same pattern as src/routes/index.tsx. */
+const T: Record<string, React.CSSProperties> = {
+  section: { fontSize: "var(--text-section)", lineHeight: "var(--leading-section)", fontWeight: "var(--weight-section)" },
+  cardTitle: { fontSize: "var(--text-card-title)", lineHeight: "var(--leading-card-title)", fontWeight: "var(--weight-card-title)" },
+  body: { fontSize: "var(--text-body)", lineHeight: "var(--leading-body)", fontWeight: "var(--weight-body)" },
+  label: {
+    fontSize: "var(--text-label)", lineHeight: "var(--leading-label)",
+    fontWeight: "var(--weight-label)", letterSpacing: "var(--tracking-label)",
+    textTransform: "uppercase",
+  },
+  stat: { fontSize: "var(--text-stat)", lineHeight: "var(--leading-stat)", fontWeight: "var(--weight-stat)" },
+};
+
+/** Section anchors for the shared sub-nav. Alpha High's own order. */
+const SUB_NAV = [
+  { label: "About", href: "#about" },
+  { label: "Academics", href: "#academics" },
+  { label: "Admission", href: "#admission" },
+  { label: "Life at Mikocheni", href: "#life" },
+  { label: "Clubs & sport", href: "#clubs" },
+] as const;
+
+/* ------------------------------------------------------------------ *
+ * ACADEMIC DATA — confirmed by the school 2026-09-02.
+ * See design/CONTENT-FROM-SCHOOL.md. Data lives here, not in a shared
+ * module, so Alpha High and Alpha Girls can diverge without a refactor.
+ *
+ * Removed as fabrications at the same time: A-Level codes KLF and ECA
+ * (in no school document), the typo PMC (correct code is PMCs), and the
+ * invented "Science / Arts / Business / Optional" O-Level grouping.
+ * ------------------------------------------------------------------ */
+
+/** All 17 examinable subjects offered at O-Level. */
+const O_LEVEL_SUBJECTS = [
+  "Historia ya Tanzania na Maadili", "Civics", "History", "Geography",
+  "Kiswahili", "English Language", "Business Studies", "Book Keeping",
+  "Computer Science", "Physics", "Chemistry", "Biology", "Chinese",
+  "French", "Literature in English", "ICS", "Additional Mathematics",
+] as const;
+
+/* ⚠ SOURCE FLAG — FOR REVIEW, NOT FOR PARENTS ⚠
+ * The school's document lists Form Three and Form Four option subjects as
+ * IDENTICAL, and its numbering SKIPS (ix) in both, so nine items are
+ * numbered to ten. A genuine duplication and a copy-paste error look the
+ * same in a Word table.
+ * ASK THE SCHOOL before publishing Form Three and Form Four as identical.
+ */
+const FORM_OPTIONS = [
+  {
+    form: "Form One",
+    note: "Seven option subjects",
+    items: ["Chinese", "French", "Computer Science", "History", "Biology", "Physics", "Chemistry"],
+  },
+  {
+    form: "Form Two",
+    note: "The same seven, plus Book Keeping",
+    items: ["Chinese", "French", "Computer Science", "History", "Biology", "Physics", "Chemistry", "Book Keeping"],
+  },
+  {
+    form: "Form Three",
+    note: "Nine option subjects",
+    items: ["Chinese", "French", "ICS", "Literature in English", "Commerce", "Book Keeping", "Physics", "Chemistry", "Additional Mathematics"],
+  },
+  {
+    form: "Form Four",
+    note: "Nine option subjects",
+    items: ["Chinese", "French", "ICS", "Literature in English", "Commerce", "Book Keeping", "Physics", "Chemistry", "Additional Mathematics"],
+  },
+] as const;
+
+/** The 12 A-Level combinations. Confirmed identical at both schools. */
+const A_COMBOS: ReadonlyArray<CombinationGroup> = [
+  {
+    group: "Arts",
+    items: [
+      { code: "HGL", subjects: "History · Geography · English Language" },
+      { code: "HKL", subjects: "History · Kiswahili · English Language" },
+    ],
+  },
+  {
+    group: "Business",
+    items: [
+      { code: "EBuAC", subjects: "Economics · Business Studies · Accountancy" },
+      { code: "BUAcM", subjects: "Business Studies · Accountancy · Advanced Mathematics" },
+      { code: "ECsM", subjects: "Economics · Computer Studies · Advanced Mathematics" },
+      { code: "HGE", subjects: "History · Geography · Economics" },
+      { code: "EGM", subjects: "Economics · Geography · Advanced Mathematics" },
+    ],
+  },
+  {
+    group: "Science",
+    items: [
+      { code: "PCM", subjects: "Physics · Chemistry · Advanced Mathematics" },
+      { code: "PCB", subjects: "Physics · Chemistry · Biology" },
+      { code: "PMCs", subjects: "Physics · Advanced Mathematics · Computer Studies" },
+      { code: "PGM", subjects: "Physics · Geography · Advanced Mathematics" },
+      { code: "CBG", subjects: "Chemistry · Biology · Geography" },
+    ],
+  },
 ];
 
-const A_COMBOS: { code: string; subjects: string }[] = [
-  { code: "PCM", subjects: "Physics · Chemistry · Mathematics" },
-  { code: "PCB", subjects: "Physics · Chemistry · Biology" },
-  { code: "PGM", subjects: "Physics · Geography · Mathematics" },
-  { code: "PMC", subjects: "Physics · Mathematics · Computer Science" },
-  { code: "CBG", subjects: "Chemistry · Biology · Geography" },
-  { code: "HGL", subjects: "History · Geography · Language" },
-  { code: "HKL", subjects: "History · Kiswahili · Language" },
-  { code: "KLF", subjects: "Kiswahili · Language · French" },
-  { code: "EGM", subjects: "Economics · Geography · Mathematics" },
-  { code: "ECA", subjects: "Economics · Commerce · Accountancy" },
-  { code: "HGE", subjects: "History · Geography · Economics" },
-];
+/** The documented admission process. NOT a fee structure — see below. */
+const ADMISSION_STEPS = [
+  "Pay the application fee of TSh 35,000",
+  "Sit the entrance examination",
+  "Pass at the school average of 55%",
+  "Receive joining instructions after paying TSh 500,000 as part of the first tuition instalment",
+] as const;
 
 function Academics() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-        <Reveal direction="up" className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
-            Academics
+    <section id="academics" className="bg-[var(--color-surface)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
+        <p className="text-[var(--color-deep-blue)]" style={T.label}>
+          Academics
+        </p>
+        <h2
+          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
+          style={T.section}
+        >
+          Seventeen subjects at O-Level, twelve combinations at A-Level.
+        </h2>
+        <span
+          aria-hidden
+          className="mt-[var(--heading-rule-gap)] block"
+          style={{
+            width: "var(--heading-rule-w)",
+            height: "var(--heading-rule-h)",
+            background: "var(--heading-rule-color)",
+            borderRadius: "var(--heading-rule-radius)",
+          }}
+        />
+
+        <div className="mt-[var(--space-block-y)]">
+          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
+            Subjects offered
+          </h3>
+          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+            Every subject examinable at O-Level across Forms One to Four.
           </p>
-          <h2 className="mt-2 font-display text-3xl font-black tracking-tight sm:text-4xl" style={{ color: ACCENT }}>
-            The full national curriculum, taught deep.
-          </h2>
-          <p className="mt-5 text-base leading-relaxed text-[var(--color-ink)]/75">
-            Modern science labs, computer literacy for every student, and computer studies as an examined subject. The national curriculum, taken all the way to <strong>CSEE</strong> (O-Level) and <strong>ACSEE</strong> (A-Level).
+          <div className="mt-5">
+            <SubjectPillList items={O_LEVEL_SUBJECTS} />
+          </div>
+        </div>
+
+        <div className="mt-[var(--space-block-y)]">
+          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
+            Option subjects by form
+          </h3>
+          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+            What a pupil in each form may choose between — a different thing
+            from the full subject list above.
           </p>
-        </Reveal>
+          <div className="mt-5">
+            <FormOptionsList forms={FORM_OPTIONS} />
+          </div>
+        </div>
 
-        <div className="mt-10 grid gap-6 lg:grid-cols-[1.2fr_1fr]">
-          <Reveal direction="left">
-            <div className="rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-7">
-              <div className="flex items-baseline gap-3">
-                <h3 className="font-display text-xl font-bold" style={{ color: ACCENT }}>
-                  O-Level subjects
-                </h3>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-[var(--color-ink)]/55">
-                  Form 1–4 · CSEE
-                </span>
-              </div>
-              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                {O_LEVEL.map((g) => (
-                  <li
-                    key={g.name}
-                    className="rounded-xl bg-white p-4 ring-1 ring-black/5 transition hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md"
-                  >
-                    <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ACCENT }}>
-                      {g.name}
-                    </div>
-                    <div className="mt-1.5 text-sm text-[var(--color-ink)]/80">{g.items}</div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-
-          <Reveal direction="right">
-            <div
-              className="group relative h-full overflow-hidden rounded-2xl p-7 text-white shadow-xl transition-shadow duration-500 hover:shadow-2xl"
-              style={{ background: ACCENT }}
-            >
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-25 blur-3xl transition-opacity duration-300 group-hover:opacity-60"
-                style={{ background: GOLD }}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -bottom-20 -left-10 h-56 w-56 rounded-full opacity-15 blur-3xl"
-                style={{ background: "var(--color-bright-blue)" }}
-              />
-
-              <div className="relative flex items-baseline gap-3">
-                <h3 className="font-display text-xl font-bold text-white">A-Level combinations</h3>
-                <span className="text-[11px] font-bold uppercase tracking-wider text-white/80">
-                  Form 5–6 · ACSEE
-                </span>
-              </div>
-              <p className="relative mt-3 text-sm text-white/90">
-                All <span className="font-bold text-white">11</span> combinations on offer — hover a code to see its subjects.
-              </p>
-
-              <div className="relative mt-5 flex flex-wrap gap-2.5">
-                {A_COMBOS.map((c, i) => (
-                  <span
-                    key={c.code}
-                    title={c.subjects}
-                    style={{
-                      animation: `comboIn 480ms ${i * 55}ms cubic-bezier(.2,.8,.2,1) both`,
-                    }}
-                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:scale-110 hover:border-[var(--combo-gold)] hover:bg-white hover:text-[var(--color-deep-blue)] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
-                  >
-                    {c.code}
-                    <span className="pointer-events-none absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-[var(--combo-gold)] transition-all duration-300 group-hover/chip:w-3/4" />
-                  </span>
-                ))}
-              </div>
-
-              <style>{`
-                :root { --combo-gold: ${GOLD}; }
-                @keyframes comboIn {
-                  0%   { opacity: 0; transform: translateY(8px) scale(.9); }
-                  100% { opacity: 1; transform: translateY(0) scale(1); }
-                }
-              `}</style>
-            </div>
-          </Reveal>
+        <div className="mt-[var(--space-block-y)]">
+          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
+            A-Level combinations
+          </h3>
+          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+            All twelve, with their subjects written out. Form 5&ndash;6, ACSEE.
+          </p>
+          <div className="mt-5">
+            <CombinationList groups={A_COMBOS} accent="var(--color-deep-blue)" />
+          </div>
         </div>
       </div>
     </section>
   );
 }
 
-// ---------- Distinctive (signpost cards) ----------
+function AdmissionProcess() {
+  return (
+    <section id="admission" className="bg-[var(--color-off-white)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
+        <p className="text-[var(--color-deep-blue)]" style={T.label}>
+          Admission
+        </p>
+        <h2
+          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
+          style={T.section}
+        >
+          How a place at Alpha High is offered.
+        </h2>
+        <span
+          aria-hidden
+          className="mt-[var(--heading-rule-gap)] block"
+          style={{
+            width: "var(--heading-rule-w)",
+            height: "var(--heading-rule-h)",
+            background: "var(--heading-rule-color)",
+            borderRadius: "var(--heading-rule-radius)",
+          }}
+        />
+
+        <ol className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-4">
+          {ADMISSION_STEPS.map((step, i) => (
+            <li
+              key={step}
+              className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
+            >
+              <span
+                className="font-display text-[var(--color-deep-blue)]"
+                style={T.stat}
+              >
+                {i + 1}
+              </span>
+              <p className="mt-2 text-[var(--color-ink)]" style={T.body}>
+                {step}
+              </p>
+            </li>
+          ))}
+        </ol>
+
+        <p className="mt-6 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+          These two figures are part of the admission process, not the cost of
+          attending. [Fee structure per school &mdash; to be provided]
+        </p>
+      </div>
+    </section>
+  );
+}
 
 function Distinctive() {
   return (
     <section className="bg-[var(--color-off-white)]">
-      <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
 
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
+          <p style={{ ...T.label, color: ACCENT  }}>
             Distinctive at Alpha High
           </p>
           <h2 className="mt-2 font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
@@ -466,7 +572,7 @@ function SignpostCard({
         <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
           {eyebrow}
         </p>
-        <h3 className="mt-2 font-display text-xl font-bold" style={{ color: ACCENT }}>
+        <h3 className="mt-2 font-display" style={{ ...T.cardTitle, color: ACCENT  }}>
           {title}
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink)]/75">{body}</p>
@@ -507,7 +613,7 @@ function ClubsRibbon() {
         <h3 className="font-display text-2xl font-black" style={{ color: ACCENT }}>
           Clubs & societies
         </h3>
-        <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: ACCENT }}>
+        <span style={{ ...T.label, color: ACCENT  }}>
           {CLUBS.length}+ student-led clubs
         </span>
       </div>
@@ -567,13 +673,13 @@ function ClubsRibbon() {
 
 function BeyondClassroom() {
   return (
-    <section className="bg-white">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+    <section id="clubs" className="bg-white">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
+          <p style={{ ...T.label, color: ACCENT  }}>
             Beyond the classroom
           </p>
-          <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
+          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
             The other half of an Alpha education.
           </h2>
         </Reveal>
@@ -607,7 +713,7 @@ function BeyondClassroom() {
               <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
                 Counselling
               </p>
-              <h3 className="mt-2 font-display text-xl font-bold">A confidential ear, always available.</h3>
+              <h3 className="mt-2 font-display" style={T.cardTitle}>A confidential ear, always available.</h3>
               <p className="mt-4 text-sm leading-relaxed text-white/85">
                 Alpha High runs a school counselling department, accessible to every student — confidential, professional, and built into school life.
               </p>
@@ -630,18 +736,18 @@ const FACILITIES = [
 
 function LifeAtMikocheni() {
   return (
-    <section className="bg-[var(--color-off-white)]">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+    <section id="life" className="bg-[var(--color-off-white)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
+            <p style={{ ...T.label, color: ACCENT  }}>
               Campus
             </p>
-            <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
+            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
               Life at Mikocheni.
             </h2>
           </div>
-          <Link to="/facilities" className="text-sm font-bold hover:underline" style={{ color: ACCENT }}>
+          <Link to="/facilities" className="font-bold hover:underline" style={{ ...T.body, color: ACCENT  }}>
             See facilities →
           </Link>
         </Reveal>
@@ -683,12 +789,12 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
 
   return (
     <section className="bg-white">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
+          <p style={{ ...T.label, color: ACCENT  }}>
             Leadership & teaching
           </p>
-          <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
+          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
             The people behind the climb.
           </h2>
         </Reveal>
