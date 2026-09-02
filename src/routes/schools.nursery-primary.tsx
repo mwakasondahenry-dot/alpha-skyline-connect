@@ -1,11 +1,17 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
+import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useState, type FormEvent } from "react";
+import {
+  getTestimonials,
+  submitContactMessage,
+  type TestimonialItem,
+} from "@/lib/alpha-content.functions";
 import {
   BookOpen, FlaskConical, Calculator, Leaf, Puzzle, Globe2, Wrench, Languages, Plane,
   Trophy, Waves, Music, Laptop, Tent, Disc3, ChefHat, Mic,
 } from "lucide-react";
-import alphaLogo from "@/assets/alpha-logo.png.asset.json";
 import girlCutout from "@/assets/alpha-girl-uniform.png.asset.json";
 import photoDance from "@/assets/np-traditional-dance.jpg.asset.json";
 import photoMusicalChairs from "@/assets/np-musical-chairs.jpg.asset.json";
@@ -21,6 +27,12 @@ import photoPlayground from "@/assets/np-playground.jpg.asset.json";
 import photoShapesClass from "@/assets/np-shapes-class.jpg.asset.json";
 import photoToyCar from "@/assets/np-toy-car.jpg.asset.json";
 
+const testimonialsQuery = queryOptions({
+  queryKey: ["testimonials"],
+  queryFn: () => getTestimonials(),
+  staleTime: 5 * 60 * 1000,
+});
+
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
     meta: [
@@ -32,6 +44,7 @@ export const Route = createFileRoute("/schools/nursery-primary")({
       },
     ],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(testimonialsQuery),
   component: NurseryPrimaryPage,
 });
 
@@ -96,7 +109,7 @@ function StripePanel({
 function NurseryPrimaryPage() {
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
-      <NurseryHeader />
+      <SiteHeader />
       <Hero />
       <WhatWeOffer />
       <AlphaChild />
@@ -108,54 +121,8 @@ function NurseryPrimaryPage() {
       <ComeMeetUs />
       <EntryRequirements />
       <SchoolFacilitiesSection slug="nursery-primary" accent="var(--color-bright-blue)" />
-      <NurseryFooter />
+      <SiteFooter />
     </div>
-  );
-}
-
-// ---------- Header (light, school-specific) ----------
-
-function NurseryHeader() {
-  return (
-    <header className="sticky top-0 z-40 border-b border-black/5 bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-3 lg:px-10">
-        <Link to="/" className="flex items-center gap-3 hover:opacity-90">
-          <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5">
-            <img src={alphaLogo.url} alt="Alpha Schools" className="h-10 w-10 object-contain" />
-          </span>
-          <span className="leading-tight">
-            <span className="block font-display text-base font-extrabold tracking-wide text-[var(--color-deep-blue)]">
-              ALPHA <span className="font-medium text-[var(--color-deep-blue)]/55">SCHOOLS</span>
-            </span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
-              Nursery &amp; Primary
-            </span>
-          </span>
-        </Link>
-        <nav className="hidden items-center gap-8 lg:flex">
-          {[
-            { label: "Our days", href: "#our-days" },
-            { label: "Early years", href: "#early-years" },
-            { label: "Primary", href: "#primary" },
-            { label: "Admission", href: "#admission" },
-          ].map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="text-sm font-medium text-[var(--color-deep-blue)]/80 hover:text-[var(--color-deep-blue)]"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-        <Link
-          to="/admission"
-          className="rounded-full bg-[var(--color-bright-blue)] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
-        >
-          Enroll Now
-        </Link>
-      </div>
-    </header>
   );
 }
 
@@ -177,7 +144,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
               to="/admission"
-              className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
+              className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.97]"
             >
               Enroll Now
             </Link>
@@ -322,7 +289,7 @@ function WhatWeOffer() {
           {cards.map((c) => (
             <article
               key={c.title}
-              className="overflow-hidden rounded-3xl p-6 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.18)] transition-transform duration-500 hover:-translate-y-1"
+              className="overflow-hidden rounded-3xl p-6 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.18)] transition-transform duration-150 hover:-translate-y-1 active:translate-y-0"
               style={{ background: c.bg }}
             >
               <div className="px-1 pb-2 pt-2">
@@ -480,7 +447,7 @@ function WhatTheyExplore() {
           {subjects.map((s) => (
             <div
               key={s.name}
-              className="group flex flex-col items-center justify-center rounded-2xl px-6 py-8 transition-transform duration-300 hover:-translate-y-1"
+              className="group flex flex-col items-center justify-center rounded-2xl px-6 py-8 transition-transform duration-300 hover:-translate-y-1 active:translate-y-0"
               style={{ background: s.bg }}
             >
               <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm">
@@ -496,7 +463,7 @@ function WhatTheyExplore() {
         <div className="mt-10 flex justify-center">
           <Link
             to="/about"
-            className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
+            className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.97]"
           >
             View the full curriculum →
           </Link>
@@ -559,7 +526,7 @@ function OutstandingExtracurriculum() {
           {EXTRACURRICULUM.map((a) => (
             <div
               key={a.name}
-              className="group flex flex-col items-center justify-center rounded-2xl px-5 py-8 text-center transition-transform duration-300 hover:-translate-y-1"
+              className="group flex flex-col items-center justify-center rounded-2xl px-5 py-8 text-center transition-transform duration-300 hover:-translate-y-1 active:translate-y-0"
               style={{ background: a.bg }}
             >
               <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm">
@@ -579,7 +546,42 @@ function OutstandingExtracurriculum() {
 // ---------- Let's get started ----------
 
 function LetsGetStarted() {
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", phone: "", childAge: "", note: "" });
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  function update<K extends keyof typeof form>(k: K, v: string) {
+    setForm((f) => ({ ...f, [k]: v }));
+  }
+
+  async function onSubmit(e: FormEvent) {
+    e.preventDefault();
+    setError(null);
+    setBusy(true);
+    try {
+      await submitContactMessage({
+        data: {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          school_slug: "nursery-primary",
+          subject: "Nursery & Primary — visit request",
+          message: [
+            form.childAge ? `Child's age: ${form.childAge}` : "Child's age: not given",
+            form.note || "Requested a campus visit from the Nursery & Primary page.",
+          ].join("\n\n"),
+        },
+      });
+      setDone(true);
+      setForm({ name: "", email: "", phone: "", childAge: "", note: "" });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not send your request. Please call us instead.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
     <section id="admission" className="relative bg-[var(--color-bright-blue)] py-20">
       {/* top wave */}
@@ -601,54 +603,94 @@ function LetsGetStarted() {
         </p>
 
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            setSubmitted(true);
-          }}
+          onSubmit={onSubmit}
+          noValidate
           className="mt-10 rounded-3xl bg-white p-6 text-left shadow-2xl sm:p-8"
         >
-          {submitted ? (
-            <p className="py-10 text-center font-display text-xl font-extrabold text-[var(--color-deep-blue)]">
-              Thank you — we'll be in touch within one working day. ✨
-            </p>
+          {done ? (
+            <div className="py-10 text-center">
+              <p className="font-display text-xl font-extrabold text-[var(--color-deep-blue)]">
+                Thank you — we'll be in touch within one working day.
+              </p>
+              <p className="mt-3 text-sm text-[var(--color-ink)]/70">
+                If it's urgent, call us on{" "}
+                <a href="tel:+255222775046" className="font-semibold text-[var(--color-bright-blue)] underline">
+                  +255 22 277 5046
+                </a>
+                .
+              </p>
+            </div>
           ) : (
             <>
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Parent name" placeholder="Your full name" />
-                <Field label="Email" type="email" placeholder="you@example.com" />
-                <Field label="Phone" placeholder="+255 ..." />
-                <Field label="Child's age" placeholder="e.g. 4" />
+                <Field label="Parent name" required value={form.name} onChange={(v) => update("name", v)} placeholder="Your full name" autoComplete="name" />
+                <Field label="Email" required type="email" value={form.email} onChange={(v) => update("email", v)} placeholder="you@example.com" autoComplete="email" />
+                <Field label="Phone" type="tel" value={form.phone} onChange={(v) => update("phone", v)} placeholder="+255 ..." autoComplete="tel" />
+                <Field label="Child's age" value={form.childAge} onChange={(v) => update("childAge", v)} placeholder="e.g. 4" />
               </div>
               <div className="mt-4">
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--color-deep-blue)]">
+                <label className="text-xs font-bold uppercase tracking-wider text-[var(--color-deep-blue)]" htmlFor="np-note">
                   A note for us (optional)
                 </label>
                 <textarea
+                  id="np-note"
                   rows={3}
+                  value={form.note}
+                  onChange={(e) => update("note", e.target.value)}
                   placeholder="Anything you'd like us to know"
                   className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
                 />
               </div>
+
+              {error && (
+                <p role="alert" className="mt-4 rounded-xl bg-[var(--color-danger)]/10 px-4 py-3 text-sm font-medium text-[var(--color-danger)]">
+                  {error}
+                </p>
+              )}
+
               <button
                 type="submit"
-                className="mt-6 w-full rounded-full bg-[var(--color-bright-blue)] py-4 font-display text-sm font-extrabold uppercase tracking-wider text-white shadow-md transition-transform hover:scale-[1.01]"
+                disabled={busy}
+                className="mt-6 w-full rounded-full bg-[var(--color-bright-blue)] py-4 font-display text-sm font-extrabold uppercase tracking-wider text-white shadow-md transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none"
               >
-                Request a visit →
+                {busy ? "Sending…" : "Request a visit →"}
               </button>
             </>
           )}
         </form>
       </div>
+
+      {/* bottom wave — lives here so the blue section closes itself even when
+          the testimonials section below renders nothing. */}
+      <svg
+        viewBox="0 0 1440 60"
+        className="absolute -bottom-px left-0 right-0 h-10 w-full rotate-180 text-[var(--color-off-white)]"
+        preserveAspectRatio="none"
+        aria-hidden
+      >
+        <path d="M0 0 H1440 V30 Q 1080 60 720 30 T 0 30 Z" fill="currentColor" />
+      </svg>
     </section>
   );
 }
 
-function Field({ label, type = "text", placeholder }: { label: string; type?: string; placeholder?: string }) {
+function Field({
+  label, type = "text", placeholder, value, onChange, required = false, autoComplete,
+}: {
+  label: string; type?: string; placeholder?: string;
+  value: string; onChange: (v: string) => void; required?: boolean; autoComplete?: string;
+}) {
   return (
     <label className="block">
-      <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-deep-blue)]">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-deep-blue)]">
+        {label}{required && <span aria-hidden className="text-[var(--color-danger)]"> *</span>}
+      </span>
       <input
         type={type}
+        required={required}
+        value={value}
+        autoComplete={autoComplete}
+        onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
       />
@@ -659,39 +701,19 @@ function Field({ label, type = "text", placeholder }: { label: string; type?: st
 // ---------- What parents say ----------
 
 function WhatParentsSay() {
-  const quotes = [
-    {
-      q: "She runs to the gate every morning. She's reading already and so proud of herself — we couldn't have asked for a warmer start.",
-      name: "Neema P.",
-      role: "Parent · Year 1",
-      avatarTone: "blue" as const,
-    },
-    {
-      q: "The teachers actually know my son. He's curious, confident and never stops talking about the coding club.",
-      name: "Hamisi M.",
-      role: "Parent · Nursery",
-      avatarTone: "gold" as const,
-    },
-    {
-      q: "One calm, warm campus from nursery up. We never had to worry about the jump to primary — it just happened.",
-      name: "Sarah K.",
-      role: "Parent of two",
-      avatarTone: "blue" as const,
-    },
-  ];
+  const { data: testimonials } = useSuspenseQuery(testimonialsQuery);
+
+  // design/README.md + AGENTS.md: never render invented or placeholder quotes.
+  // Real published rows for this school only, and nothing at all when there
+  // are none. The blue section above closes itself with its own bottom wave,
+  // so this section can disappear without leaving a seam.
+  const quotes: TestimonialItem[] = testimonials.filter(
+    (t) => t.school_slug === "nursery-primary" || t.school_slug === null,
+  );
+  if (quotes.length === 0) return null;
 
   return (
     <section className="relative bg-[var(--color-off-white)] pt-20">
-      {/* top wave coming out of blue section */}
-      <svg
-        viewBox="0 0 1440 60"
-        className="absolute -top-px left-0 right-0 h-10 w-full text-[var(--color-bright-blue)]"
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        <path d="M0 30 Q 360 0 720 30 T 1440 30 V0 H0 Z" fill="currentColor" />
-      </svg>
-
       <div className="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
           From our families
@@ -701,18 +723,30 @@ function WhatParentsSay() {
         </h2>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
-          {quotes.map((q) => (
+          {quotes.map((q, i) => (
             <article
-              key={q.name}
+              key={q.id}
               className="rounded-3xl bg-white p-7 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.15)]"
             >
-              <span className="font-display text-3xl leading-none text-[var(--color-bright-blue)]">“</span>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/85">{q.q}</p>
+              <span className="font-display text-3xl leading-none text-[var(--color-bright-blue)]">&ldquo;</span>
+              <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/85">{q.quote}</p>
               <div className="mt-6 flex items-center gap-3">
-                <StripePanel tone={q.avatarTone === "gold" ? "gold" : "blue"} label="" className="h-11 w-11 rounded-full" />
+                {q.photo_url ? (
+                  <img
+                    src={q.photo_url}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="h-11 w-11 shrink-0 rounded-full object-cover"
+                  />
+                ) : (
+                  <StripePanel tone={i % 2 === 1 ? "gold" : "blue"} label="" className="h-11 w-11 rounded-full" />
+                )}
                 <div>
-                  <p className="font-display text-sm font-extrabold text-[var(--color-deep-blue)]">{q.name}</p>
-                  <p className="text-xs text-[var(--color-ink)]/65">{q.role}</p>
+                  <p className="font-display text-sm font-extrabold text-[var(--color-deep-blue)]">{q.author_name}</p>
+                  {q.relationship && (
+                    <p className="text-xs text-[var(--color-ink)]/65">{q.relationship}</p>
+                  )}
                 </div>
               </div>
             </article>
@@ -772,7 +806,7 @@ function PeekInside() {
           </div>
           <Link
             to="/contact"
-            className="rounded-full bg-[var(--color-deep-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02]"
+            className="rounded-full bg-[var(--color-deep-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.97]"
           >
             Book a tour →
           </Link>
@@ -789,7 +823,7 @@ function ComeMeetUs() {
 function GalleryTile({ src, caption, className = "" }: { src: string; caption: string; className?: string }) {
   return (
     <figure className={`group relative overflow-hidden rounded-2xl shadow-md ring-1 ring-[var(--color-deep-blue)]/10 ${className}`}>
-      <img src={src} alt={caption} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+      <img src={src} alt={caption} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
       <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-3 text-xs font-semibold uppercase tracking-wider text-white">
         {caption}
       </figcaption>
@@ -797,36 +831,3 @@ function GalleryTile({ src, caption, className = "" }: { src: string; caption: s
   );
 }
 
-// ---------- Footer ----------
-
-function NurseryFooter() {
-  return (
-    <footer className="relative bg-[var(--color-deep-blue)] text-white/85">
-      <svg
-        viewBox="0 0 1440 60"
-        className="absolute -top-px left-0 right-0 h-10 w-full text-[var(--color-off-white)]"
-        preserveAspectRatio="none"
-        aria-hidden
-      >
-        <path d="M0 0 H1440 V30 Q 1080 60 720 30 T 0 30 Z" fill="currentColor" />
-      </svg>
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 px-6 py-10 pt-16 sm:flex-row sm:items-center lg:px-10">
-        <Link to="/" className="flex items-center gap-3">
-          <span className="grid h-12 w-12 place-items-center overflow-hidden rounded-2xl bg-white">
-            <img src={alphaLogo.url} alt="Alpha Schools" className="h-10 w-10 object-contain" />
-          </span>
-          <span className="leading-tight">
-            <span className="block font-display text-base font-extrabold tracking-wide text-white">
-              ALPHA <span className="font-medium text-white/70">SCHOOLS</span>
-              <span className="px-2 text-white/40">·</span>
-              <span className="font-extrabold text-[var(--color-gold)]">Nursery &amp; Primary</span>
-            </span>
-          </span>
-        </Link>
-        <p className="text-sm text-white/70">
-          Combined campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
-        </p>
-      </div>
-    </footer>
-  );
-}
