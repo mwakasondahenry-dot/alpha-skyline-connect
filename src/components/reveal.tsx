@@ -1,52 +1,35 @@
-import React, { useEffect, useRef, useState, type CSSProperties, type ReactNode, type ElementType } from "react";
+import React, { type CSSProperties, type ReactNode, type ElementType } from "react";
 
 export type RevealDirection = "up" | "left" | "right" | "none";
 
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mq.matches);
-    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
-  }, []);
-  return reduced;
-}
-
-export function useScrollReveal<T extends Element = HTMLDivElement>() {
-  const ref = useRef<T | null>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            io.unobserve(entry.target);
-          }
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -50px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return { ref, visible };
-}
-
-const HIDDEN: Record<RevealDirection, string> = {
-  up: "translate3d(0, 24px, 0)",
-  left: "translate3d(-32px, 0, 0)",
-  right: "translate3d(32px, 0, 0)",
-  none: "none",
-};
-
+/**
+ * Reveal renders its children immediately.
+ *
+ * It used to hold every wrapped block at opacity: 0 until an
+ * IntersectionObserver fired, then fade it in over 600ms. With 88 call
+ * sites that meant 88 observers, 88 composited layers, and — the actual
+ * problem — copy that had already been downloaded being withheld from the
+ * reader for another 600ms after it scrolled into view. The motion audit
+ * flagged it as critical against this project's stated audience: parents on
+ * mid-range Android phones over mobile data, per design/README.md's
+ * "Performance over polish. Minimal animation."
+ *
+ * It also shipped that opacity: 0 in the server-rendered HTML, so the first
+ * paint of a page was its layout with the content invisible until React
+ * hydrated.
+ *
+ * The props are kept so the existing call sites still compile; `direction`
+ * and `delay` are now inert. Call sites are removed page by page as each one
+ * is retrofitted onto the design system. If a single deliberate entrance is
+ * ever wanted on a hero, write it there explicitly rather than reinstating a
+ * site-wide default — one authored moment, not one identical entrance on
+ * every section.
+ */
 interface RevealProps {
   children: ReactNode;
+  /** Inert. Kept so existing call sites compile. */
   direction?: RevealDirection;
+  /** Inert. Kept so existing call sites compile. */
   delay?: number;
   as?: ElementType;
   className?: string;
@@ -55,29 +38,13 @@ interface RevealProps {
 
 export function Reveal({
   children,
-  direction = "up",
-  delay = 0,
   as: Tag = "div",
   className,
   style,
 }: RevealProps) {
-  const reduced = usePrefersReducedMotion();
-  const { ref, visible } = useScrollReveal<HTMLElement>();
-
-  const shown = reduced || visible;
-  const mergedStyle: CSSProperties = reduced
-    ? { ...style }
-    : {
-        opacity: shown ? 1 : 0,
-        transform: shown ? "none" : HIDDEN[direction],
-        transition: `opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`,
-        willChange: shown ? undefined : "opacity, transform",
-        ...style,
-      };
-
   const Component = Tag as React.ElementType;
   return (
-    <Component ref={ref} className={className} style={mergedStyle}>
+    <Component className={className} style={style}>
       {children}
     </Component>
   );
