@@ -3,7 +3,8 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import { getTestimonials, type TestimonialItem } from "@/lib/alpha-content.functions";
+import { getTestimonials, type TestimonialItem } from "@/lib/alpha-content.functions";
+import { T, SHELL } from "@/components/type-roles";
 
 const testimonialsQuery = queryOptions({
   queryKey: ["testimonials"],
@@ -31,7 +32,7 @@ export const Route = createFileRoute("/testimonials")({
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(testimonialsQuery),
   errorComponent: ({ error }) => (
-    <div className="p-12 text-center text-sm text-muted-foreground">
+    <div className="p-12 text-center text-muted-foreground" style={T.body}>
       Couldn't load testimonials: {error.message}
     </div>
   ),
@@ -83,31 +84,31 @@ function TestimonialsPage() {
       <SiteHeader />
 
       <section className="alpha-band-blue relative overflow-hidden">
-        <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-gold)]">
+        <div className="relative mx-auto max-w-7xl px-6 py-[var(--space-section-y)] lg:px-10">
+          <p className="text-[var(--color-gold)]" style={T.label}>
             In their words
           </p>
-          <h1 className="mt-3 max-w-3xl font-display text-4xl font-black leading-tight sm:text-6xl">
+          <h1 className="mt-3 max-w-3xl font-display leading-tight" style={T.section}>
             Parent Testimonials
           </h1>
-          <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/85">
+          <p className="mt-5 max-w-2xl text-white/85" style={T.body}>
             Your Child's Education is Our Priority — and the families who trust us with it say it best.
           </p>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
+      <section className={`${SHELL} py-[var(--space-section-y)]`}>
         {isPlaceholder && (
-          <p className="mb-8 rounded-lg border border-dashed border-[var(--color-brand-blue)]/40 bg-white px-4 py-3 text-sm text-[var(--color-ink-soft)]">
+          <p className="mb-8 rounded-lg border border-dashed border-[var(--color-brand-blue)]/40 bg-white px-4 py-3 text-[var(--color-ink-soft)]" style={T.body}>
             Placeholder content — real parent testimonials can be added any time from the admin portal.
           </p>
         )}
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-6 [&>*]:min-w-0 md:grid-cols-2 lg:grid-cols-3">
           {items.map((t, i) => (
             <Reveal key={t.id} direction="up" delay={i * 80}>
               <figure className="flex h-full flex-col rounded-2xl bg-white p-7 shadow-md ring-1 ring-[var(--color-deep-blue)]/10 transition-transform duration-500 hover:-translate-y-1">
                 <Quote className="h-8 w-8 text-[var(--color-gold)]" aria-hidden />
-                <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-[var(--color-ink)]/85">
+                <blockquote className="mt-4 flex-1 text-[var(--color-ink)]/85" style={T.body}>
                   {t.quote}
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-3 border-t border-[var(--color-hairline)] pt-5">
@@ -122,13 +123,13 @@ function TestimonialsPage() {
                   ) : (
                     <span
                       aria-hidden
-                      className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-brand-blue)]/10 font-display text-sm font-bold text-[var(--color-deep-blue)]"
+                      className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-brand-blue)]/10 font-display font-bold text-[var(--color-deep-blue)]" style={T.body}
                     >
                       {t.author_name.trim().charAt(0).toUpperCase()}
                     </span>
                   )}
                   <span className="min-w-0">
-                    <span className="block truncate font-display text-sm font-bold text-[var(--color-deep-blue)]">
+                    <span className="block truncate font-display font-bold text-[var(--color-deep-blue)]" style={T.body}>
                       {t.author_name}
                     </span>
                     <span className="block truncate text-xs text-[var(--color-ink-soft)]">
@@ -145,12 +146,12 @@ function TestimonialsPage() {
       <section className="alpha-band-blue">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-14 sm:flex-row sm:items-center lg:px-10">
           <div>
-            <h2 className="font-display text-3xl font-bold sm:text-4xl">Come and see Alpha for yourself.</h2>
-            <p className="mt-2 text-sm text-white/80">Book a campus visit — we'll match you to the right school.</p>
+            <h2 className="font-display" style={T.section}>Come and see Alpha for yourself.</h2>
+            <p className="mt-2 text-white/80" style={T.body}>Book a campus visit — we'll match you to the right school.</p>
           </div>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]" style={T.body}
           >
             Book a Visit →
           </Link>
