@@ -135,7 +135,7 @@ function Hero() {
           <div className="mt-8 flex flex-wrap gap-3">
             <Link
               to="/admission"
-              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03]"
+              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97]"
               style={{ background: GOLD }}
             >
               Enroll Now →
@@ -321,7 +321,7 @@ function Academics() {
                 {O_LEVEL.map((g) => (
                   <li
                     key={g.name}
-                    className="rounded-xl bg-[var(--color-off-white)] p-4 ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:shadow-md"
+                    className="rounded-xl bg-[var(--color-off-white)] p-4 ring-1 ring-black/5 transition hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md"
                   >
                     <div
                       className="text-[11px] font-bold uppercase tracking-wider"
@@ -343,7 +343,7 @@ function Academics() {
             >
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-30 blur-3xl transition-opacity duration-700 group-hover:opacity-60"
+                className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full opacity-30 blur-3xl transition-opacity duration-300 group-hover:opacity-60"
                 style={{ background: GOLD }}
               />
               <div className="relative flex items-baseline gap-3">
@@ -363,7 +363,7 @@ function Academics() {
                     style={{
                       animation: `agComboIn 480ms ${i * 55}ms cubic-bezier(.2,.8,.2,1) both`,
                     }}
-                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:scale-110 hover:border-[var(--ag-gold)] hover:bg-white hover:text-[var(--color-blue-violet)] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
+                    className="group/chip relative cursor-default rounded-lg border border-white/25 bg-white/10 px-3.5 py-1.5 font-mono text-sm font-bold tracking-wider text-white shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 active:translate-y-0 hover:scale-110 hover:border-[var(--ag-gold)] hover:bg-white hover:text-[var(--color-blue-violet)] hover:shadow-[0_8px_20px_-6px_rgba(232,160,32,0.7)]"
                   >
                     {c.code}
                     <span className="pointer-events-none absolute -bottom-1 left-1/2 h-0.5 w-0 -translate-x-1/2 rounded-full bg-[var(--ag-gold)] transition-all duration-300 group-hover/chip:w-3/4" />
@@ -429,10 +429,10 @@ function SignpostCard({
 }) {
   return (
     <Reveal direction="up">
-      <article className="group relative h-full overflow-hidden rounded-2xl bg-[var(--color-off-white)] p-7 ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
+      <article className="group relative h-full overflow-hidden rounded-2xl bg-[var(--color-off-white)] p-7 ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
         <div
           aria-hidden
-          className="absolute right-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
+          className="absolute right-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-150 group-hover:scale-x-100"
           style={{ background: GOLD }}
         />
         <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
@@ -500,7 +500,7 @@ function BeyondClassroom() {
               <span
                 key={c}
                 style={{ animation: `agComboIn 480ms ${i * 40}ms cubic-bezier(.2,.8,.2,1) both` }}
-                className="rounded-full border bg-white px-3.5 py-1.5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+                className="rounded-full border bg-white px-3.5 py-1.5 text-sm font-semibold shadow-sm transition hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md"
               >
                 <span
                   aria-hidden
@@ -591,13 +591,13 @@ function LifeAtKunduchi() {
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {FACILITIES.map((f, i) => (
             <Reveal key={f.label} direction="up" delay={i * 70}>
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-xl">
+              <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
                 <img
                   src={f.img}
                   alt={f.label}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
@@ -634,7 +634,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {staff.map((p) => (
             <Reveal key={p.id} direction="up">
-              <article className="group h-full overflow-hidden rounded-2xl bg-white ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-xl">
+              <article className="group h-full overflow-hidden rounded-2xl bg-white ring-1 ring-black/5 transition hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
                 <div className="relative aspect-[4/5] overflow-hidden">
                   {p.photo_url ? (
                     <img
@@ -642,7 +642,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                       alt={p.name}
                       loading="lazy"
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
                     <div
@@ -693,7 +693,7 @@ function ApplyBanner() {
         <Reveal direction="right" className="flex flex-wrap gap-3">
           <Link
             to="/admission"
-            className="inline-flex items-center rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-transform hover:scale-[1.03]"
+            className="inline-flex items-center rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97]"
             style={{ background: ACCENT }}
           >
             Enroll Now →

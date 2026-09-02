@@ -135,7 +135,7 @@ const BTN_PRIMARY: React.CSSProperties = {
 };
 
 const BTN_BASE =
-  "inline-flex items-center justify-center gap-2 font-display transition-transform duration-200 hover:scale-[1.02] active:scale-100 motion-reduce:transition-none motion-reduce:hover:scale-100";
+  "inline-flex items-center justify-center gap-2 font-display transition-transform duration-200 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none motion-reduce:hover:scale-100";
 
 const SHELL = "mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]";
 

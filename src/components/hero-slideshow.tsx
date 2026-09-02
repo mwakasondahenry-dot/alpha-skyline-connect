@@ -94,7 +94,7 @@ export function HeroSlideshow({
           loading={i === 0 ? "eager" : "lazy"}
           decoding="async"
           fetchPriority={i === 0 ? "high" : "auto"}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ease-out motion-reduce:transition-none ${
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-[600ms] ease-out motion-reduce:transition-none ${
             i === idx ? "opacity-100" : "opacity-0"
           } ${imgClassName}`}
           style={imgStyle}
