@@ -15,6 +15,7 @@ import heroDronePair from "@/assets/av-hero-drone-pair.jpg.asset.json";
 import heroDroneGirls from "@/assets/av-hero-drone-girls.jpg.asset.json";
 import heroCockpit from "@/assets/av-hero-cockpit-girl.jpg.asset.json";
 import avCockpitStudents from "@/assets/av-cockpit-students.jpg.asset.json";
+import { T, SHELL } from "@/components/type-roles";
 
 // Real Alpha aviation student photos — KSOF holiday program.
 // NOTE: names below remain placeholders until written media-release
@@ -163,10 +164,10 @@ function AviationPage() {
           <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
             {/* LEFT — copy */}
             <div className="relative z-10">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              <p className="text-[var(--color-gold)]" style={T.label}>
                 The Alpha difference
               </p>
-              <h1 className="mt-5 max-w-3xl font-display text-5xl font-black leading-[1.02] tracking-tight sm:text-6xl lg:text-7xl">
+              <h1 className="mt-5 max-w-3xl font-display leading-[1.02] tracking-tight lg:text-7xl" style={T.section}>
                 Learning that <span className="text-[var(--color-gold)]">takes off.</span>
               </h1>
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
@@ -177,13 +178,13 @@ function AviationPage() {
               <div className="mt-9 flex flex-wrap gap-3">
                 <Link
                   to="/admission"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl"
+                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 font-semibold text-[var(--color-accent-foreground)] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl" style={T.body}
                 >
                   How to join →
                 </Link>
                 <a
                   href="#pathway"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10"
+                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur transition hover:bg-white/10" style={T.body}
                 >
                   See the pathway
                 </a>
@@ -192,16 +193,16 @@ function AviationPage() {
               {/* mini stat strip */}
               <div className="mt-12 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
                 <div>
-                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">PPL</div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Pathway with KSOF</div>
+                  <div className="font-display text-[var(--color-gold)]" style={T.section}>PPL</div>
+                  <div className="mt-1 text-white/70" style={T.label}>Pathway with KSOF</div>
                 </div>
                 <div>
-                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">40h+</div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Minimum flying hours</div>
+                  <div className="font-display text-[var(--color-gold)]" style={T.section}>40h+</div>
+                  <div className="mt-1 text-white/70" style={T.label}>Minimum flying hours</div>
                 </div>
                 <div>
-                  <div className="font-display text-3xl font-black text-[var(--color-gold)] sm:text-4xl">KSOF</div>
-                  <div className="mt-1 text-xs uppercase tracking-wider text-white/70">Training partner</div>
+                  <div className="font-display text-[var(--color-gold)]" style={T.section}>KSOF</div>
+                  <div className="mt-1 text-white/70" style={T.label}>Training partner</div>
                 </div>
               </div>
             </div>
@@ -285,12 +286,12 @@ function AviationPage() {
 
 
       {/* 2. WHY IT MATTERS */}
-      <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
+      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
         <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+          <p className="text-[var(--color-gold)]" style={T.label}>
             Why it matters
           </p>
-          <p className="mx-auto mt-6 max-w-4xl font-display text-3xl font-bold leading-snug text-[var(--color-deep-blue)] sm:text-4xl lg:text-[2.75rem]">
+          <p className="mx-auto mt-6 max-w-4xl font-display leading-snug text-[var(--color-deep-blue)] lg:text-[2.75rem]" style={T.section}>
             Alpha schools introduce aviation
             and flying through extra-curricular activities — giving students the chance to explore
             aviation technology, build confidence, and open a genuine career pathway.
@@ -299,7 +300,7 @@ function AviationPage() {
       </section>
 
       {/* 3. PATHWAY */}
-      <section id="pathway" className="relative overflow-hidden bg-[var(--color-deep-blue)] py-20 text-white sm:py-28">
+      <section id="pathway" className="relative overflow-hidden bg-[var(--color-deep-blue)] py-[var(--space-section-y)] text-white sm:py-28">
         <div
           className="pointer-events-none absolute -left-32 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full opacity-30"
           style={{ background: "radial-gradient(circle, rgba(232,160,32,0.4), transparent 70%)" }}
@@ -307,10 +308,10 @@ function AviationPage() {
         />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            <p className="text-[var(--color-gold)]" style={T.label}>
               The pathway
             </p>
-            <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
+            <h2 className="mt-4 font-display tracking-tight" style={T.section}>
               From Form One to the cockpit.
             </h2>
             <p className="mt-4 text-white/75">
@@ -325,11 +326,11 @@ function AviationPage() {
                 key={p.step}
                 className="group relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur transition hover:scale-[1.02] hover:border-[var(--color-gold)]/40 hover:bg-white/[0.07]"
               >
-                <div className="font-display text-5xl font-black text-[var(--color-gold)]/80">
+                <div className="font-display text-[var(--color-gold)]/80" style={T.section}>
                   {p.step}
                 </div>
-                <h3 className="mt-3 font-display text-xl font-bold">{p.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/75">{p.body}</p>
+                <h3 className="mt-3 font-display" style={T.cardTitle}>{p.title}</h3>
+                <p className="mt-2 text-white/75" style={T.body}>{p.body}</p>
               </li>
             ))}
           </ol>
@@ -337,24 +338,24 @@ function AviationPage() {
       </section>
 
       {/* 4. MODULES — tarmac */}
-      <section className="alpha-tarmac relative py-20 text-white sm:py-28">
+      <section className="alpha-tarmac relative py-[var(--space-section-y)] text-white sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="alpha-runway-divider mx-auto mb-14 w-40" aria-hidden />
 
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            <p className="text-[var(--color-gold)]" style={T.label}>
               What students learn
             </p>
-            <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
+            <h2 className="mt-4 font-display tracking-tight" style={T.section}>
               Ground school curriculum
             </h2>
           </div>
 
           <div className="mt-10 rounded-2xl border border-dashed border-[var(--color-gold)]/60 bg-white/[0.04] p-8 text-center backdrop-blur-sm">
-            <p className="font-display text-lg font-semibold text-[var(--color-gold)]">
+            <p className="font-display text-[var(--color-gold)]" style={T.cardTitle}>
               [Aviation modules — to be provided by school]
             </p>
-            <p className="mx-auto mt-3 max-w-xl text-sm text-white/70">
+            <p className="mx-auto mt-3 max-w-xl text-white/70" style={T.body}>
               Placeholder — the confirmed module list will be published here once the school
               provides it.
             </p>
@@ -363,7 +364,7 @@ function AviationPage() {
       </section>
 
       {/* 5. TRAINING & TECHNOLOGY — tarmac continued */}
-      <section className="alpha-tarmac relative py-20 text-white sm:py-28">
+      <section className="alpha-tarmac relative py-[var(--space-section-y)] text-white sm:py-28">
         {/* runway divider between the two tarmac sections */}
         <div
           className="alpha-runway-divider absolute left-1/2 top-0 w-64 -translate-x-1/2 -translate-y-1/2"
@@ -372,10 +373,10 @@ function AviationPage() {
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center">
 
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            <p className="text-[var(--color-gold)]" style={T.label}>
               Training & technology
             </p>
-            <h2 className="mt-4 font-display text-4xl font-black tracking-tight sm:text-5xl">
+            <h2 className="mt-4 font-display tracking-tight" style={T.section}>
               Real cockpits. Professional simulators.
             </h2>
             <p className="mt-5 text-lg leading-relaxed text-white/80">
@@ -387,25 +388,25 @@ function AviationPage() {
 
             <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-white/15 pt-8">
               <div>
-                <dt className="text-xs uppercase tracking-wider text-white/60">Simulator</dt>
-                <dd className="mt-1 font-display text-xl font-bold">CAE 7000XR · Level D</dd>
+                <dt className="text-white/60" style={T.label}>Simulator</dt>
+                <dd className="mt-1 font-display" style={T.cardTitle}>CAE 7000XR · Level D</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wider text-white/60">Live flying</dt>
-                <dd className="mt-1 font-display text-xl font-bold">KSOF · Nairobi</dd>
+                <dt className="text-white/60" style={T.label}>Live flying</dt>
+                <dd className="mt-1 font-display" style={T.cardTitle}>KSOF · Nairobi</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wider text-white/60">Ground school</dt>
-                <dd className="mt-1 font-display text-xl font-bold">[To be confirmed]</dd>
+                <dt className="text-white/60" style={T.label}>Ground school</dt>
+                <dd className="mt-1 font-display" style={T.cardTitle}>[To be confirmed]</dd>
               </div>
               <div>
-                <dt className="text-xs uppercase tracking-wider text-white/60">Outcome</dt>
-                <dd className="mt-1 font-display text-xl font-bold">PPL qualification</dd>
+                <dt className="text-white/60" style={T.label}>Outcome</dt>
+                <dd className="mt-1 font-display" style={T.cardTitle}>PPL qualification</dd>
               </div>
             </dl>
           </div>
 
-          <div className="relative">
+          <div className="relative overflow-hidden">
             <div
               className="absolute -inset-6 rounded-[2rem] opacity-60 blur-2xl"
               style={{ background: "radial-gradient(circle, rgba(232,160,32,0.45), transparent 70%)" }}
@@ -421,10 +422,10 @@ function AviationPage() {
                 className="aspect-[4/3] w-full object-cover"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5">
-                <div className="text-xs uppercase tracking-wider text-[var(--color-gold)]">
+                <div className="text-[var(--color-gold)]" style={T.label}>
                   Simulator + live flight
                 </div>
-                <div className="font-display text-lg font-bold">
+                <div className="font-display" style={T.cardTitle}>
                   Hours that count toward the licence.
                 </div>
               </div>
@@ -438,14 +439,14 @@ function AviationPage() {
           NAMES remain withheld until written media-release consent is on
           file for each student. Add names to the FLYING_STUDENTS array
           once consents are confirmed. */}
-      <section className="bg-[var(--color-off-white)] py-20 sm:py-28">
+      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
             <div className="max-w-2xl">
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+              <p className="text-[var(--color-gold)]" style={T.label}>
                 Our flying students
               </p>
-              <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+              <h2 className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
                 From classroom to flightline.
               </h2>
               <p className="mt-4 text-[var(--color-ink)]/75">
@@ -480,7 +481,7 @@ function AviationPage() {
                   <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-gold)]">
                     KSOF · Nairobi
                   </div>
-                  <div className="mt-1 font-display text-sm font-bold leading-tight text-white sm:text-base">
+                  <div className="mt-1 font-display font-bold leading-tight text-white" style={T.body}>
                     {s.caption}
                   </div>
                 </figcaption>
@@ -496,13 +497,13 @@ function AviationPage() {
 
 
       {/* 7. HOW TO JOIN */}
-      <section className="bg-white py-20 sm:py-28">
+      <section className="bg-white py-[var(--space-section-y)] sm:py-28">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="max-w-2xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[var(--color-gold)]">
+            <p className="text-[var(--color-gold)]" style={T.label}>
               How to join
             </p>
-            <h2 className="mt-4 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               Joining the aviation programme.
             </h2>
           </div>
@@ -535,14 +536,14 @@ function AviationPage() {
                   key={i}
                   className="flex gap-5 rounded-2xl border border-[var(--color-deep-blue)]/10 bg-[var(--color-off-white)] p-5"
                 >
-                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-deep-blue)] font-display text-sm font-black text-[var(--color-gold)]">
+                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-deep-blue)] font-display font-black text-[var(--color-gold)]" style={T.body}>
                     {String(i + 1).padStart(2, "0")}
                   </div>
                   <div className="min-w-0">
-                    <div className="font-display text-lg font-bold text-[var(--color-deep-blue)]">
+                    <div className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                       {s.t}
                     </div>
-                    <div className="mt-1 text-sm text-[var(--color-ink)]/75">{s.b}</div>
+                    <div className="mt-1 text-[var(--color-ink)]/75" style={T.body}>{s.b}</div>
                   </div>
                 </li>
               ))}
@@ -567,9 +568,9 @@ function AviationPage() {
           className="pointer-events-none absolute -bottom-16 left-10 h-72 w-72 rounded-full bg-[var(--color-deep-blue)]/15 blur-3xl"
           aria-hidden
         />
-        <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between md:py-16">
+        <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between md:py-[var(--space-section-y)]">
           <div className="max-w-2xl">
-            <h2 className="font-display text-3xl font-black leading-tight text-[var(--color-accent-foreground)] sm:text-4xl">
+            <h2 className="font-display leading-tight text-[var(--color-accent-foreground)]" style={T.section}>
               Ready to give your child a head start in the sky?
             </h2>
             <p className="mt-3 text-[var(--color-accent-foreground)]/80">
@@ -578,7 +579,7 @@ function AviationPage() {
           </div>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/15 transition hover:scale-[1.03] hover:bg-[#08365f]"
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-6 py-3.5 font-semibold text-white shadow-lg shadow-black/15 transition hover:scale-[1.03] hover:bg-[#08365f]" style={T.body}
           >
             Book a Visit →
           </Link>
