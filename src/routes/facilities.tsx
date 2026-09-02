@@ -6,7 +6,8 @@ import {
   type PublicFacilityItem,
   type PublicFacilityPhoto,
 } from "@/lib/alpha-content.functions";
-import type { SchoolSlug } from "@/integrations/alpha-supabase/types";
+import type { SchoolSlug } from "@/integrations/alpha-supabase/types";
+import { T, SHELL } from "@/components/type-roles";
 
 type LoaderData = {
   facilities: PublicFacilityItem[];
@@ -47,11 +48,11 @@ function FacilitiesPage() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-20 text-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">Campus tour</p>
-          <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">Facilities across Alpha Schools</h1>
-          <p className="mt-4 max-w-2xl text-base text-white/80">
+      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-[var(--space-section-y)] text-white">
+        <div className={SHELL}>
+          <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>Campus tour</p>
+          <h1 className="mt-2 font-display" style={T.section}>Facilities across Alpha Schools</h1>
+          <p className="mt-4 max-w-2xl text-white/80" style={T.body}>
             Classrooms, labs, libraries, sports grounds and aviation facilities — all three schools, one tour.
           </p>
         </div>
@@ -66,16 +67,16 @@ function FacilitiesPage() {
           <section key={school.slug} className="mx-auto max-w-7xl px-6 py-14 lg:px-10">
             <div className="mb-6 flex items-end justify-between gap-4">
               <div>
-                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
+                <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
                   {school.label}
                 </p>
-                <h2 className="mt-1 font-display text-3xl font-semibold text-[var(--color-deep-blue)]">
+                <h2 className="mt-1 font-display text-[var(--color-deep-blue)]" style={T.section}>
                   {school.label} campus
                 </h2>
               </div>
               <Link
                 to={school.href}
-                className="hidden text-sm font-bold text-[var(--color-deep-blue)] hover:underline sm:inline"
+                className="hidden font-bold text-[var(--color-deep-blue)] hover:underline sm:inline" style={T.body}
               >
                 Visit page →
               </Link>
@@ -86,7 +87,7 @@ function FacilitiesPage() {
 
             {schoolPhotos.length > 0 ? (
               <div className="mt-10">
-                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
+                <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
                   Latest facility photos
                 </p>
                 <div className="mt-3 flex gap-3 overflow-x-auto pb-2">
@@ -119,8 +120,8 @@ function FacilitiesPage() {
 
 
       {all.length === 0 && (
-        <section className="mx-auto max-w-3xl px-6 py-20 text-center lg:px-10">
-          <p className="rounded-2xl border border-dashed border-[var(--color-deep-blue)]/20 bg-white p-10 text-sm text-[var(--color-ink)]/70">
+        <section className="mx-auto max-w-3xl px-6 py-[var(--space-section-y)] text-center lg:px-10">
+          <p className="rounded-2xl border border-dashed border-[var(--color-deep-blue)]/20 bg-white p-10 text-[var(--color-ink)]/70" style={T.body}>
             Facility photos are being added — please check back soon, or{" "}
             <Link to="/contact" className="font-semibold text-[var(--color-deep-blue)] underline">book a visit</Link>{" "}
             to tour the campuses in person.
@@ -130,8 +131,8 @@ function FacilitiesPage() {
 
       <section className="bg-[var(--color-deep-blue)] py-14 text-white">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 sm:flex-row lg:px-10">
-          <p className="font-display text-2xl font-semibold">See it for yourself — book a visit.</p>
-          <Link to="/contact" className="rounded-md bg-[var(--color-gold)] px-5 py-2.5 text-sm font-semibold text-[var(--color-accent-foreground)]">
+          <p className="font-display" style={T.cardTitle}>See it for yourself — book a visit.</p>
+          <Link to="/contact" className="rounded-md bg-[var(--color-gold)] px-5 py-2.5 font-semibold text-[var(--color-accent-foreground)]" style={T.body}>
             Book a Visit →
           </Link>
         </div>
@@ -161,9 +162,9 @@ function FacilityCard({ item }: { item: PublicFacilityItem }) {
         {item.category ? (
           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--color-gold)]">{item.category}</p>
         ) : null}
-        <h3 className="mt-1 font-display text-lg font-semibold text-[var(--color-deep-blue)]">{item.name}</h3>
+        <h3 className="mt-1 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>{item.name}</h3>
         {item.description ? (
-          <p className="mt-1.5 text-sm leading-relaxed text-[var(--color-ink)]/75">{item.description}</p>
+          <p className="mt-1.5 text-[var(--color-ink)]/75" style={T.body}>{item.description}</p>
         ) : null}
       </div>
     </article>
