@@ -5,7 +5,8 @@ import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import alphaLogo from "@/assets/alpha-logo.png.asset.json";
-import profMayo from "@/assets/prof-mayo.jpeg.asset.json";
+import profMayo from "@/assets/prof-mayo.jpeg.asset.json";
+import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
@@ -95,15 +96,15 @@ function AboutPage() {
           <div className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)] blur-3xl" />
           <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)] blur-3xl" />
         </div>
-        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 py-20 lg:grid-cols-[1.4fr_1fr] lg:px-10 lg:py-28">
+        <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 py-[var(--space-section-y)] lg:grid-cols-[1.4fr_1fr] lg:px-10 lg:py-28">
           <Reveal direction="left">
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
+            <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
               About Alpha Schools
             </p>
-            <h1 className="mt-4 font-display text-5xl font-black leading-[1.04] tracking-tight sm:text-6xl lg:text-7xl">
+            <h1 className="mt-4 font-display leading-[1.04] tracking-tight lg:text-7xl" style={T.section}>
               Your education<br />is our <span className="italic text-[var(--color-gold)]">priority.</span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
+            <p className="mt-6 max-w-xl text-white/85" style={T.body}>
               From a single school in 2007 to three schools across Dar es Salaam — founded on one belief: your education is our priority.
             </p>
           </Reveal>
@@ -124,29 +125,29 @@ function AboutPage() {
 
       {/* WHO WE ARE */}
       <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-[1.3fr_1fr] lg:px-10">
+        <div className="mx-auto grid max-w-7xl gap-12 px-6 py-[var(--space-section-y)] lg:grid-cols-[1.3fr_1fr] lg:px-10">
           <Reveal direction="up">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            <p className="text-[var(--color-brand-blue)]" style={T.label}>
               Who we are
             </p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               One Alpha. Three schools.
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/85">
+            <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
               Alpha Schools comprises <strong>Alpha High</strong> (Mikocheni), <strong>Alpha Girls</strong> (Kunduchi),
               and <strong>Nursery & Primary</strong> (Kunduchi) — operating under ALFA EDUCATION CENTRE,
               P.O. Box 35136, Dar es Salaam.
             </p>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
+            <p className="mt-4 text-[var(--color-ink)]/80" style={T.body}>
               We were founded to enable students to achieve their best — intellectually and physically —
               and to grow into responsible citizens of their society.
             </p>
           </Reveal>
           <Reveal direction="right" className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">
+            <p className="text-[11px] text-[var(--color-brand-blue)]" style={T.label}>
               At a glance
             </p>
-            <dl className="mt-4 space-y-4 text-sm">
+            <dl className="mt-4 space-y-4" style={T.body}>
               {[
                 ["Founded", "19 March 2007"],
                 ["Schools", "Nursery & Primary · Alpha High · Alpha Girls"],
@@ -166,7 +167,7 @@ function AboutPage() {
 
       {/* OUR FOUNDER */}
       <section className="bg-[var(--color-off-white)]">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1fr_1.4fr] lg:px-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-[var(--space-section-y)] lg:grid-cols-[1fr_1.4fr] lg:px-10">
           <Reveal direction="left" className="flex justify-center">
             <div className="relative w-full max-w-sm">
               <div aria-hidden className="absolute -inset-3 rounded-2xl bg-[var(--color-gold)]/20 blur-xl" />
@@ -182,18 +183,18 @@ function AboutPage() {
             </div>
           </Reveal>
           <Reveal direction="right">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            <p className="text-[var(--color-brand-blue)]" style={T.label}>
               Our founder
             </p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               In honour of the late<br />Professor Wenceslaus Aloyce Mayo.
             </h2>
-            <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/85">
+            <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
               Alpha Schools was founded in 2007 by the late Professor Wenceslaus Aloyce Mayo —
               a man whose conviction that education should serve both intellect and character
               still anchors everything we do.
             </p>
-            <div className="mt-6 rounded-xl border border-dashed border-[var(--color-deep-blue)]/30 bg-white/60 p-5 text-sm text-[var(--color-ink)]/70">
+            <div className="mt-6 rounded-xl border border-dashed border-[var(--color-deep-blue)]/30 bg-white/60 p-5 text-[var(--color-ink)]/70" style={T.body}>
               <span className="font-semibold uppercase tracking-[0.18em] text-[10px] text-[var(--color-brand-blue)]">
                 Awaiting copy
               </span>
@@ -205,23 +206,23 @@ function AboutPage() {
 
       {/* DIRECTOR MESSAGE */}
       <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-[1.4fr_1fr] lg:px-10">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-[var(--space-section-y)] lg:grid-cols-[1.4fr_1fr] lg:px-10">
           <Reveal direction="left">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            <p className="text-[var(--color-brand-blue)]" style={T.label}>
               A message from our Director
             </p>
             <div className="relative mt-6 rounded-2xl bg-[var(--color-deep-blue)] p-8 text-white shadow-xl sm:p-10">
               <Quote aria-hidden className="absolute -top-4 left-6 h-10 w-10 text-[var(--color-gold)]" />
-              <p className="font-display text-2xl leading-snug sm:text-3xl">
+              <p className="font-display leading-snug" style={T.section}>
                 “We provide a safe, supportive, and engaging environment that ignites our learners
                 to discover the genius each of them possesses.”
               </p>
-              <p className="mt-6 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--color-gold)]">
+              <p className="mt-6 font-semibold uppercase tracking-[0.18em] text-[var(--color-gold)]" style={T.body}>
                 [Director's name — to be provided]
               </p>
-              <p className="mt-1 text-sm text-white/75">Director, Alpha Schools</p>
+              <p className="mt-1 text-white/75" style={T.body}>Director, Alpha Schools</p>
             </div>
-            <p className="mt-6 max-w-xl text-sm leading-relaxed text-[var(--color-ink)]/75">
+            <p className="mt-6 max-w-xl text-[var(--color-ink)]/75" style={T.body}>
               Following the passing of the late Professor Mayo, Alpha Schools is now led by his widow,
               who continues the founding mission as Director.
             </p>
@@ -234,7 +235,7 @@ function AboutPage() {
                   <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-brand-blue)]">
                     Photo placeholder
                   </span>
-                  <span className="mt-3 text-sm leading-relaxed">[Director's photo — to be provided]</span>
+                  <span className="mt-3" style={T.body}>[Director's photo — to be provided]</span>
                 </div>
               </div>
             </div>
@@ -244,12 +245,12 @@ function AboutPage() {
 
       {/* OUR JOURNEY */}
       <section className="bg-[var(--color-off-white)]">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <Reveal direction="up">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            <p className="text-[var(--color-brand-blue)]" style={T.label}>
               Our journey
             </p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               From one classroom<br />to three schools.
             </h2>
           </Reveal>
@@ -266,11 +267,11 @@ function AboutPage() {
                     aria-hidden
                     className="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-[var(--color-gold)] ring-4 ring-[var(--color-off-white)] md:top-0"
                   />
-                  <p className="font-display text-3xl font-semibold text-[var(--color-deep-blue)]">
+                  <p className="font-display text-[var(--color-deep-blue)]" style={T.section}>
                     {t.year}
                   </p>
-                  <p className="mt-2 font-display text-base font-bold text-[var(--color-ink)]">{t.title}</p>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/75">{t.body}</p>
+                  <p className="mt-2 font-display font-bold text-[var(--color-ink)]" style={T.body}>{t.title}</p>
+                  <p className="mt-2 text-[var(--color-ink)]/75" style={T.body}>{t.body}</p>
                 </li>
               </Reveal>
             ))}
@@ -280,18 +281,18 @@ function AboutPage() {
 
       {/* MISSION VISION VALUES */}
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <div className="grid gap-8 lg:grid-cols-2">
             <Reveal direction="left" className="rounded-2xl bg-[var(--color-deep-blue)] p-10 text-white">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--color-gold)]">Our mission</p>
-              <p className="mt-4 font-display text-2xl leading-snug sm:text-3xl">
+              <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>Our mission</p>
+              <p className="mt-4 font-display leading-snug" style={T.section}>
                 To enable pupils to prosper academically by solving their intellectual and environmental challenges,
                 to become good citizens, responsible to their society.
               </p>
             </Reveal>
             <Reveal direction="right" className="rounded-2xl bg-[var(--color-gold)] p-10 text-[var(--color-deep-blue)]">
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em]">Our vision</p>
-              <p className="mt-4 font-display text-4xl font-semibold leading-tight sm:text-5xl">
+              <p className="text-[11px]" style={T.label}>Our vision</p>
+              <p className="mt-4 font-display leading-tight" style={T.section}>
                 To strive for excellence.
               </p>
             </Reveal>
@@ -299,8 +300,8 @@ function AboutPage() {
 
           <div className="mt-14">
             <Reveal direction="up">
-              <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our values</p>
-              <h3 className="mt-3 font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
+              <p className="text-[var(--color-brand-blue)]" style={T.label}>Our values</p>
+              <h3 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
                 Five things we won't compromise.
               </h3>
             </Reveal>
@@ -309,8 +310,8 @@ function AboutPage() {
                 <Reveal key={v.name} direction="up" delay={i * 80}>
                   <div className="group h-full rounded-xl border border-[var(--color-deep-blue)]/10 bg-[var(--color-off-white)] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-gold)] hover:shadow-lg">
                     <div className="h-1 w-10 rounded-full bg-[var(--color-gold)] transition-all group-hover:w-16" />
-                    <p className="mt-4 font-display text-xl font-semibold text-[var(--color-deep-blue)]">{v.name}</p>
-                    <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/75">{v.blurb}</p>
+                    <p className="mt-4 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>{v.name}</p>
+                    <p className="mt-2 text-[var(--color-ink)]/75" style={T.body}>{v.blurb}</p>
                   </div>
                 </Reveal>
               ))}
@@ -321,15 +322,15 @@ function AboutPage() {
 
       {/* RECORD OF EXCELLENCE */}
       <section className="bg-[var(--color-off-white)]">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <Reveal direction="up">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
+            <p className="text-[var(--color-brand-blue)]" style={T.label}>
               A record of excellence
             </p>
-            <h2 className="mt-3 max-w-3xl font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-3 max-w-3xl font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               Two decades. Real results.
             </h2>
-            <p className="mt-4 max-w-2xl text-sm italic text-[var(--color-ink)]/60">
+            <p className="mt-4 max-w-2xl italic text-[var(--color-ink)]/60" style={T.body}>
               Figures below to be re-confirmed with the school office before publishing.
             </p>
           </Reveal>
@@ -340,14 +341,14 @@ function AboutPage() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-gold)]/15 text-[var(--color-deep-blue)]">
                     <r.icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-5 font-display text-xl font-semibold text-[var(--color-deep-blue)]">
+                  <h3 className="mt-5 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                     {r.title}
                   </h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-[var(--color-ink)]/80">{r.body}</p>
+                  <p className="mt-3 flex-1 text-[var(--color-ink)]/80" style={T.body}>{r.body}</p>
                   {r.href ? (
                     <Link
                       to={r.href}
-                      className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5"
+                      className="mt-5 inline-flex items-center gap-1.5 font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5" style={T.body}
                     >
                       {r.cta} <ArrowRight className="h-4 w-4" />
                     </Link>
@@ -363,17 +364,17 @@ function AboutPage() {
       <section className="bg-[var(--color-gold)]">
         <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-14 sm:flex-row sm:items-center lg:px-10">
           <Reveal direction="left">
-            <h2 className="font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
+            <h2 className="font-display text-[var(--color-deep-blue)]" style={T.section}>
               Come and see Alpha for yourself.
             </h2>
-            <p className="mt-2 text-sm text-[var(--color-deep-blue)]/85">
+            <p className="mt-2 text-[var(--color-deep-blue)]/85" style={T.body}>
               Book a campus visit and meet the people behind the results.
             </p>
           </Reveal>
           <Reveal direction="right">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]" style={T.body}
             >
               Book a Visit <ArrowRight className="h-4 w-4" />
             </Link>
