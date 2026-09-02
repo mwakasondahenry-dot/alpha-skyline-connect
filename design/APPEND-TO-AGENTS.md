@@ -1,13 +1,10 @@
-<!-- LOVABLE:BEGIN -->
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
-<!-- LOVABLE:END --
+# Append this to the end of AGENTS.md
+
+Copy everything below the line into the bottom of your existing `AGENTS.md`.
+Do not replace the file — the Lovable block at the top must stay.
+
+---
+
 ## Design references
 
 Client-approved mockups live in `design/`.
