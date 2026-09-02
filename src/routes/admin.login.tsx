@@ -39,7 +39,7 @@ function LoginPage() {
         <div className="mb-6 flex flex-col items-center text-center">
           <img src={logo.url} alt="Alpha Schools" className="h-14 w-14 rounded-full ring-2 ring-[var(--color-gold)]" />
           <h1 className="mt-4 text-xl font-bold text-[var(--color-deep-blue)]">Alpha Schools Admin</h1>
-          <p className="mt-1 text-sm text-[#2C2C2A]/70">
+          <p className="mt-1 text-sm text-[var(--color-ink)]/70">
             Sign in to manage news, events, gallery and staff.
           </p>
         </div>
@@ -56,7 +56,7 @@ function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[#2C2C2A] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
+              className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[var(--color-ink)] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
               placeholder="you@alphaschools.ac.tz"
             />
           </div>
@@ -72,7 +72,7 @@ function LoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[#2C2C2A] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
+              className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[var(--color-ink)] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
               placeholder="Your password"
             />
           </div>
@@ -94,7 +94,7 @@ function LoginPage() {
             {busy ? "Signing in…" : ready ? "Sign in" : "Loading…"}
           </button>
 
-          <p className="pt-2 text-center text-xs text-[#2C2C2A]/60">
+          <p className="pt-2 text-center text-xs text-[var(--color-ink)]/60">
             Staff accounts are created by the school administrator.
             <br />
             Trouble signing in? Contact the office.

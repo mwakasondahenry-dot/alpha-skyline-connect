@@ -14,7 +14,7 @@ function AdminDashboard() {
     <div className="space-y-6">
       <header>
         <h1 className="text-2xl font-bold text-[var(--color-deep-blue)]">Welcome back</h1>
-        <p className="mt-1 text-sm text-[#2C2C2A]/70">
+        <p className="mt-1 text-sm text-[var(--color-ink)]/70">
           Signed in as <span className="font-medium">{email}</span>
         </p>
       </header>
@@ -27,7 +27,7 @@ function AdminDashboard() {
         <DashCard title="Staff" href="/admin/staff" hint="Manage team profiles" />
       </div>
 
-      <div className="rounded-xl border border-dashed border-[var(--color-deep-blue)]/20 bg-white p-6 text-sm text-[#2C2C2A]/70">
+      <div className="rounded-xl border border-dashed border-[var(--color-deep-blue)]/20 bg-white p-6 text-sm text-[var(--color-ink)]/70">
         Counts and quick-add shortcuts will appear here once the content sections
         are connected in the next step.
       </div>

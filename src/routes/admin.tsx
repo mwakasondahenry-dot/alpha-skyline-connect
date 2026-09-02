@@ -33,7 +33,7 @@ function AdminGate() {
 
   if (!ready) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F7F5EF]">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--color-off-white)]">
         <div className="text-sm text-[var(--color-deep-blue)]">Loading admin…</div>
       </div>
     );
@@ -45,14 +45,14 @@ function AdminGate() {
   // Awaiting redirect to login.
   if (!session) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F7F5EF]">
+      <div className="flex min-h-screen items-center justify-center bg-[var(--color-off-white)]">
         <div className="text-sm text-[var(--color-deep-blue)]">Redirecting to sign in…</div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F7F5EF] text-[#2C2C2A]">
+    <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <header className="border-b border-[var(--color-deep-blue)]/10 bg-white">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <Link to="/admin" className="text-base font-semibold text-[var(--color-deep-blue)]">
@@ -92,7 +92,7 @@ function AdminNavLink({ to, children }: { to: string; children: React.ReactNode 
     <Link
       to={to}
       activeOptions={{ exact: to === "/admin" }}
-      className="rounded-md px-3 py-1.5 text-[#2C2C2A] transition hover:bg-[var(--color-deep-blue)]/5"
+      className="rounded-md px-3 py-1.5 text-[var(--color-ink)] transition hover:bg-[var(--color-deep-blue)]/5"
       activeProps={{ className: "rounded-md px-3 py-1.5 bg-[var(--color-deep-blue)] text-white" }}
     >
       {children}

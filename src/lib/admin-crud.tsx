@@ -84,7 +84,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
         <div>
           <h1 className="text-2xl font-bold text-[var(--color-deep-blue)]">{config.title}</h1>
           {config.description ? (
-            <p className="mt-1 text-sm text-[#2C2C2A]/70">{config.description}</p>
+            <p className="mt-1 text-sm text-[var(--color-ink)]/70">{config.description}</p>
           ) : null}
         </div>
         {!config.readOnlyCreate && (
@@ -106,7 +106,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
         {loading ? (
           <div className="p-6 text-sm text-[var(--color-deep-blue)]">Loading…</div>
         ) : rows.length === 0 ? (
-          <div className="p-6 text-sm text-[#2C2C2A]/70">No items yet.</div>
+          <div className="p-6 text-sm text-[var(--color-ink)]/70">No items yet.</div>
         ) : (
           <table className="w-full text-sm">
             <thead className="bg-[var(--color-deep-blue)]/5 text-left text-[11px] font-semibold uppercase tracking-wide text-[var(--color-deep-blue)]">
@@ -121,7 +121,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
               {rows.map((row) => (
                 <tr key={String(row.id)} className="hover:bg-[var(--color-deep-blue)]/5">
                   {config.listColumns.map((c) => (
-                    <td key={c.key} className="px-4 py-2.5 align-top text-[#2C2C2A]">
+                    <td key={c.key} className="px-4 py-2.5 align-top text-[var(--color-ink)]">
                       {c.render ? c.render(row[c.key], row) : renderCell(row[c.key])}
                     </td>
                   ))}
@@ -163,7 +163,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
 }
 
 function renderCell(v: unknown): ReactNode {
-  if (v == null || v === "") return <span className="text-[#2C2C2A]/40">—</span>;
+  if (v == null || v === "") return <span className="text-[var(--color-ink)]/40">—</span>;
   if (typeof v === "boolean") return v ? "Yes" : "No";
   if (typeof v === "string" && /^https?:\/\//.test(v) && /\.(jpg|jpeg|png|webp|gif)$/i.test(v)) {
     return <img src={v} alt="" className="h-10 w-16 rounded object-cover" loading="lazy" />;
@@ -241,7 +241,7 @@ function CrudForm({
           <h2 className="text-lg font-semibold text-[var(--color-deep-blue)]">
             {initial?.id ? "Edit" : "New"} {config.title.replace(/s$/, "").toLowerCase()}
           </h2>
-          <button onClick={onClose} className="text-xl leading-none text-[#2C2C2A]/60 hover:text-[#2C2C2A]" aria-label="Close">×</button>
+          <button onClick={onClose} className="text-xl leading-none text-[var(--color-ink)]/60 hover:text-[var(--color-ink)]" aria-label="Close">×</button>
         </header>
 
         <form onSubmit={onSubmit} className="space-y-4 px-6 py-5" noValidate>
@@ -251,7 +251,7 @@ function CrudForm({
                 {f.label}{f.required ? <span className="text-red-600"> *</span> : null}
               </label>
               {renderInput(f, form, set, uploadImage, client)}
-              {f.helpText ? <p className="mt-1 text-xs text-[#2C2C2A]/60">{f.helpText}</p> : null}
+              {f.helpText ? <p className="mt-1 text-xs text-[var(--color-ink)]/60">{f.helpText}</p> : null}
             </div>
           ))}
 
@@ -261,7 +261,7 @@ function CrudForm({
           ) : null}
 
           <div className="flex justify-end gap-2 border-t border-[var(--color-deep-blue)]/10 pt-4">
-            <button type="button" onClick={onClose} className="rounded-md px-4 py-2 text-sm text-[#2C2C2A] hover:bg-black/5">
+            <button type="button" onClick={onClose} className="rounded-md px-4 py-2 text-sm text-[var(--color-ink)] hover:bg-black/5">
               Cancel
             </button>
             <button
@@ -298,7 +298,7 @@ function renderInput(
     return (
       <label className="inline-flex items-center gap-2">
         <input type="checkbox" checked={!!v} onChange={(e) => set(f.name, e.target.checked)} className="h-4 w-4" />
-        <span className="text-sm text-[#2C2C2A]">{f.placeholder ?? "Yes"}</span>
+        <span className="text-sm text-[var(--color-ink)]">{f.placeholder ?? "Yes"}</span>
       </label>
     );
   }

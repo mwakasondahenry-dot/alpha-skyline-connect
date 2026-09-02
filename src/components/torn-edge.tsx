@@ -7,7 +7,7 @@
  * boundary that works site-wide.
  *
  *   <SectionA />
- *   <TornEdge topColor="var(--color-deep-blue)" bottomColor="#f7f5ef" seed={17} />
+ *   <TornEdge topColor="var(--color-deep-blue)" bottomColor="var(--color-off-white)" seed={17} />
  *   <SectionB />
  */
 

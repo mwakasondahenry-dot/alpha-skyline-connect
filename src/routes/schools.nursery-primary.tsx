@@ -95,7 +95,7 @@ function StripePanel({
 
 function NurseryPrimaryPage() {
   return (
-    <div className="min-h-screen bg-[#f7f5ef] text-[var(--color-ink)]">
+    <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <NurseryHeader />
       <Hero />
       <WhatWeOffer />
@@ -264,7 +264,7 @@ function Hero() {
       {/* Soft cream wave divider */}
       <svg
         viewBox="0 0 1440 60"
-        className="block h-10 w-full text-[#f7f5ef]"
+        className="block h-10 w-full text-[var(--color-off-white)]"
         preserveAspectRatio="none"
         aria-hidden
       >
@@ -309,7 +309,7 @@ function WhatWeOffer() {
   ];
 
   return (
-    <section id="our-days" className="bg-[#f7f5ef] pb-20 pt-6">
+    <section id="our-days" className="bg-[var(--color-off-white)] pb-20 pt-6">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
           From first steps to big school
@@ -467,7 +467,7 @@ function WhatTheyExplore() {
 
 
   return (
-    <section id="primary" className="bg-[#f7f5ef] py-20">
+    <section id="primary" className="bg-[var(--color-off-white)] py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
           A rich, busy week
@@ -585,7 +585,7 @@ function LetsGetStarted() {
       {/* top wave */}
       <svg
         viewBox="0 0 1440 60"
-        className="absolute -top-px left-0 right-0 h-10 w-full text-[#f7f5ef]"
+        className="absolute -top-px left-0 right-0 h-10 w-full text-[var(--color-off-white)]"
         preserveAspectRatio="none"
         aria-hidden
       >
@@ -626,7 +626,7 @@ function LetsGetStarted() {
                 <textarea
                   rows={3}
                   placeholder="Anything you'd like us to know"
-                  className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[#f7f5ef] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
+                  className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
                 />
               </div>
               <button
@@ -650,7 +650,7 @@ function Field({ label, type = "text", placeholder }: { label: string; type?: st
       <input
         type={type}
         placeholder={placeholder}
-        className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[#f7f5ef] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
+        className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
       />
     </label>
   );
@@ -681,7 +681,7 @@ function WhatParentsSay() {
   ];
 
   return (
-    <section className="relative bg-[#f7f5ef] pt-20">
+    <section className="relative bg-[var(--color-off-white)] pt-20">
       {/* top wave coming out of blue section */}
       <svg
         viewBox="0 0 1440 60"
@@ -727,7 +727,7 @@ function WhatParentsSay() {
 
 function PeekInside() {
   return (
-    <section className="bg-[#f7f5ef] py-20">
+    <section className="bg-[var(--color-off-white)] py-20">
       <div className="mx-auto max-w-7xl px-6 lg:px-10">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
@@ -804,7 +804,7 @@ function NurseryFooter() {
     <footer className="relative bg-[var(--color-deep-blue)] text-white/85">
       <svg
         viewBox="0 0 1440 60"
-        className="absolute -top-px left-0 right-0 h-10 w-full text-[#f7f5ef]"
+        className="absolute -top-px left-0 right-0 h-10 w-full text-[var(--color-off-white)]"
         preserveAspectRatio="none"
         aria-hidden
       >
