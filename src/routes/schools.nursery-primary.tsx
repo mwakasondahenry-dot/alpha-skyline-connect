@@ -1,4 +1,5 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
+import { SchoolSubNav } from "@/components/school/school-sub-nav";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -73,6 +74,28 @@ const PAGE_TINTS = {
   stripeBlueLight: "#6fb4e0",
 } as const;
 
+/** Section anchors for the shared sub-nav. */
+const SUB_NAV = [
+  { label: "Our days", href: "#our-days" },
+  { label: "Early years", href: "#early-years" },
+  { label: "Primary", href: "#primary" },
+  { label: "Extracurriculum", href: "#extracurriculum" },
+  { label: "Admission", href: "#admission" },
+] as const;
+
+/** Type roles bound to the design system. Same pattern as src/routes/index.tsx. */
+const T: Record<string, React.CSSProperties> = {
+  section: { fontSize: "var(--text-section)", lineHeight: "var(--leading-section)", fontWeight: "var(--weight-section)" },
+  cardTitle: { fontSize: "var(--text-card-title)", lineHeight: "var(--leading-card-title)", fontWeight: "var(--weight-card-title)" },
+  body: { fontSize: "var(--text-body)", lineHeight: "var(--leading-body)", fontWeight: "var(--weight-body)" },
+  label: {
+    fontSize: "var(--text-label)", lineHeight: "var(--leading-label)",
+    fontWeight: "var(--weight-label)", letterSpacing: "var(--tracking-label)",
+    textTransform: "uppercase",
+  },
+  stat: { fontSize: "var(--text-stat)", lineHeight: "var(--leading-stat)", fontWeight: "var(--weight-stat)" },
+};
+
 // ---------- Reusable bits ----------
 
 function StripePanel({
@@ -110,6 +133,7 @@ function NurseryPrimaryPage() {
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
+      <SchoolSubNav items={SUB_NAV} />
       <Hero />
       <WhatWeOffer />
       <AlphaChild />
@@ -137,25 +161,25 @@ function Hero() {
           <h1 className="font-display text-5xl font-black leading-[1.02] tracking-tight text-[var(--color-deep-blue)] sm:text-6xl lg:text-[64px]">
             Unlock your<br />Child's<br />Potential
           </h1>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-[var(--color-ink)]/75">
+          <p className="mt-6 max-w-md text-[var(--color-ink)]/75" style={T.body}>
             Play-led early years that grow into a warm, structured primary — the
             joyful first chapter of your child's Alpha journey.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-4">
             <Link
               to="/admission"
-              className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.97]"
+              className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] bg-[var(--color-bright-blue)] px-7 text-white shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
             >
               Enroll Now
             </Link>
             <Link
               to="/contact"
-              className="rounded-full border-2 border-[var(--color-gold)] bg-white px-7 py-3 text-sm font-semibold text-[var(--color-deep-blue)] hover:bg-[var(--color-gold)]/5"
+              className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border-2 border-[var(--color-gold)] bg-[var(--color-surface)] px-7 text-[var(--color-deep-blue)] transition-colors duration-150 hover:bg-[var(--color-gold)]/5 active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
             >
               Book a Visit
             </Link>
           </div>
-          <p className="mt-10 font-display text-2xl font-extrabold text-[var(--color-deep-blue)]">
+          <p className="mt-10 font-display text-[var(--color-deep-blue)]" style={T.stat}>
             From 2 - 12 Years old
           </p>
         </div>
@@ -276,12 +300,12 @@ function WhatWeOffer() {
   ];
 
   return (
-    <section id="our-days" className="bg-[var(--color-off-white)] pb-20 pt-6">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+    <section id="our-days" className="bg-[var(--color-off-white)] pb-[var(--space-section-y)] pt-6">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
+        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From first steps to big school
         </p>
-        <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What we <span className="text-[var(--color-bright-blue)]">offer</span>
         </h2>
 
@@ -347,7 +371,7 @@ function AlphaChild() {
       </div>
       <div>
         <h4 className="font-display text-base font-extrabold text-[var(--color-deep-blue)]">{title}</h4>
-        <p className="mt-1 text-sm text-[var(--color-ink)]/70">{body}</p>
+        <p className="mt-1 text-[var(--color-ink)]/70" style={T.body}>{body}</p>
       </div>
     </div>
   );
@@ -355,14 +379,14 @@ function AlphaChild() {
   return (
     <section
       id="early-years"
-      className="relative overflow-hidden py-20"
+      className="relative overflow-hidden py-[var(--space-section-y)]"
       style={{ backgroundColor: PAGE_TINTS.wash }}
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
+        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           The Alpha child
         </p>
-        <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What makes a young Alpha{" "}
           <span className="text-[var(--color-bright-blue)]">learner?</span>
         </h2>
@@ -434,12 +458,12 @@ function WhatTheyExplore() {
 
 
   return (
-    <section id="primary" className="bg-[var(--color-off-white)] py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+    <section id="primary" className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
+        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           A rich, busy week
         </p>
-        <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What they'll <span className="text-[var(--color-bright-blue)]">explore</span>
         </h2>
 
@@ -453,7 +477,7 @@ function WhatTheyExplore() {
               <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm">
                 <s.Icon className="h-7 w-7 text-[var(--color-bright-blue)]" aria-hidden />
               </div>
-              <p className="mt-5 font-display text-base font-extrabold text-[var(--color-deep-blue)]">
+              <p className="mt-5 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                 {s.name}
               </p>
             </div>
@@ -463,7 +487,7 @@ function WhatTheyExplore() {
         <div className="mt-10 flex justify-center">
           <Link
             to="/about"
-            className="rounded-full bg-[var(--color-bright-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.97]"
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] bg-[var(--color-bright-blue)] px-7 text-white shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
           >
             View the full curriculum →
           </Link>
@@ -479,17 +503,17 @@ function EntryRequirements() {
   return (
     <section id="requirements" className="bg-white py-16">
       <div className="mx-auto max-w-4xl px-6 lg:px-10">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+        <p className="text-[var(--color-bright-blue)]" style={T.label}>
           Admissions
         </p>
-        <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-4xl">
+        <h2 className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           Requirements
         </h2>
         <div className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
           <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
             [Entry requirements — to be confirmed with academic offices]
           </p>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/70">
+          <p className="mt-2 text-[var(--color-ink)]/70" style={T.body}>
             Placeholder — the confirmed entry requirements for this school will be published here.
           </p>
         </div>
@@ -513,12 +537,12 @@ const EXTRACURRICULUM = [
 
 function OutstandingExtracurriculum() {
   return (
-    <section id="extracurriculum" className="bg-white py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+    <section id="extracurriculum" className="bg-white py-[var(--space-section-y)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
+        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           Beyond the classroom
         </p>
-        <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           Outstanding <span className="text-[var(--color-bright-blue)]">Extracurriculum</span>
         </h2>
 
@@ -532,7 +556,7 @@ function OutstandingExtracurriculum() {
               <div className="grid h-14 w-14 place-items-center rounded-2xl bg-white shadow-sm">
                 <a.Icon className="h-7 w-7 text-[var(--color-bright-blue)]" aria-hidden />
               </div>
-              <p className="mt-5 font-display text-base font-extrabold text-[var(--color-deep-blue)]">
+              <p className="mt-5 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                 {a.name}
               </p>
             </div>
@@ -583,7 +607,7 @@ function LetsGetStarted() {
   }
 
   return (
-    <section id="admission" className="relative bg-[var(--color-bright-blue)] py-20">
+    <section id="admission" className="relative bg-[var(--color-bright-blue)] py-[var(--space-section-y)]">
       {/* top wave */}
       <svg
         viewBox="0 0 1440 60"
@@ -594,7 +618,7 @@ function LetsGetStarted() {
         <path d="M0 0 H1440 V30 Q 1080 60 720 30 T 0 30 Z" fill="currentColor" />
       </svg>
 
-      <div className="mx-auto max-w-3xl px-6 text-center lg:px-10">
+      <div className="mx-auto w-full max-w-3xl px-[var(--container-gutter)] text-center">
         <h2 className="font-display text-4xl font-black tracking-tight text-white sm:text-5xl">
           Let's <span className="text-[var(--color-bright-blue)]">get</span> started
         </h2>
@@ -609,10 +633,10 @@ function LetsGetStarted() {
         >
           {done ? (
             <div className="py-10 text-center">
-              <p className="font-display text-xl font-extrabold text-[var(--color-deep-blue)]">
+              <p className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                 Thank you — we'll be in touch within one working day.
               </p>
-              <p className="mt-3 text-sm text-[var(--color-ink)]/70">
+              <p className="mt-3 text-[var(--color-ink)]/70" style={T.body}>
                 If it's urgent, call us on{" "}
                 <a href="tel:+255222775046" className="font-semibold text-[var(--color-bright-blue)] underline">
                   +255 22 277 5046
@@ -629,7 +653,7 @@ function LetsGetStarted() {
                 <Field label="Child's age" value={form.childAge} onChange={(v) => update("childAge", v)} placeholder="e.g. 4" />
               </div>
               <div className="mt-4">
-                <label className="text-xs font-bold uppercase tracking-wider text-[var(--color-deep-blue)]" htmlFor="np-note">
+                <label className="text-[var(--color-deep-blue)]" style={T.label} htmlFor="np-note">
                   A note for us (optional)
                 </label>
                 <textarea
@@ -638,12 +662,12 @@ function LetsGetStarted() {
                   value={form.note}
                   onChange={(e) => update("note", e.target.value)}
                   placeholder="Anything you'd like us to know"
-                  className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
+                  className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none" style={T.body}
                 />
               </div>
 
               {error && (
-                <p role="alert" className="mt-4 rounded-xl bg-[var(--color-danger)]/10 px-4 py-3 text-sm font-medium text-[var(--color-danger)]">
+                <p role="alert" className="mt-4 rounded-[var(--radius-btn)] bg-[var(--color-danger)]/10 px-4 py-3 font-medium text-[var(--color-danger)]" style={T.body}>
                   {error}
                 </p>
               )}
@@ -682,7 +706,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-xs font-bold uppercase tracking-wider text-[var(--color-deep-blue)]">
+      <span className="text-[var(--color-deep-blue)]" style={T.label}>
         {label}{required && <span aria-hidden className="text-[var(--color-danger)]"> *</span>}
       </span>
       <input
@@ -692,7 +716,7 @@ function Field({
         autoComplete={autoComplete}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-sm text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none"
+        className="mt-2 w-full rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 py-3 text-[var(--color-ink)] focus:border-[var(--color-bright-blue)] focus:outline-none" style={T.body}
       />
     </label>
   );
@@ -715,10 +739,10 @@ function WhatParentsSay() {
   return (
     <section className="relative bg-[var(--color-off-white)] pt-20">
       <div className="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
-        <p className="text-center text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From our families
         </p>
-        <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What <span className="text-[var(--color-bright-blue)]">parents</span> say
         </h2>
 
@@ -729,7 +753,7 @@ function WhatParentsSay() {
               className="rounded-3xl bg-white p-7 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.15)]"
             >
               <span className="font-display text-3xl leading-none text-[var(--color-bright-blue)]">&ldquo;</span>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--color-ink)]/85">{q.quote}</p>
+              <p className="mt-4 text-[var(--color-ink)]/85" style={T.body}>{q.quote}</p>
               <div className="mt-6 flex items-center gap-3">
                 {q.photo_url ? (
                   <img
@@ -743,9 +767,9 @@ function WhatParentsSay() {
                   <StripePanel tone={i % 2 === 1 ? "gold" : "blue"} label="" className="h-11 w-11 rounded-full" />
                 )}
                 <div>
-                  <p className="font-display text-sm font-extrabold text-[var(--color-deep-blue)]">{q.author_name}</p>
+                  <p className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>{q.author_name}</p>
                   {q.relationship && (
-                    <p className="text-xs text-[var(--color-ink)]/65">{q.relationship}</p>
+                    <p className="text-[var(--color-ink)]/65" style={T.label}>{q.relationship}</p>
                   )}
                 </div>
               </div>
@@ -761,20 +785,20 @@ function WhatParentsSay() {
 
 function PeekInside() {
   return (
-    <section className="bg-[var(--color-off-white)] py-20">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
+    <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+            <p className="text-[var(--color-bright-blue)]" style={T.label}>
               Around the campus
             </p>
-            <h2 className="mt-2 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
+            <h2 className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               A peek <span className="text-[var(--color-bright-blue)]">inside</span>
             </h2>
           </div>
           <Link
             to="/gallery"
-            className="rounded-full border border-[var(--color-deep-blue)]/15 bg-white px-5 py-2.5 text-sm font-semibold text-[var(--color-bright-blue)] shadow-sm hover:bg-[var(--color-bright-blue)]/5"
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border border-[var(--color-deep-blue)]/15 bg-[var(--color-surface)] px-5 text-[var(--color-bright-blue)] shadow-sm transition-colors duration-150 hover:bg-[var(--color-bright-blue)]/5 active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
           >
             See the full gallery →
           </Link>
@@ -800,13 +824,13 @@ function PeekInside() {
             <h3 className="font-display text-3xl font-extrabold text-[var(--color-deep-blue)]">
               Come and meet us.
             </h3>
-            <p className="mt-2 text-sm text-[var(--color-deep-blue)]/85">
+            <p className="mt-2 text-[var(--color-deep-blue)]/85" style={T.body}>
               Tours run most mornings — bring your little one along.
             </p>
           </div>
           <Link
             to="/contact"
-            className="rounded-full bg-[var(--color-deep-blue)] px-7 py-3 text-sm font-semibold text-white shadow-md transition-transform hover:scale-[1.02] active:scale-[0.97]"
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] bg-[var(--color-deep-blue)] px-7 text-white shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
           >
             Book a tour →
           </Link>
