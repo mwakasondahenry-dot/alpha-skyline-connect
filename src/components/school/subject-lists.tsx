@@ -1,3 +1,5 @@
+import { T } from "@/components/type-roles";
+
 /**
  * Shared presentation for the academic blocks on the secondary school pages.
  *
@@ -9,25 +11,6 @@
  * Tokens only — no new colours, type sizes or component shapes.
  */
 
-const T: Record<string, React.CSSProperties> = {
-  cardTitle: {
-    fontSize: "var(--text-card-title)",
-    lineHeight: "var(--leading-card-title)",
-    fontWeight: "var(--weight-card-title)",
-  },
-  body: {
-    fontSize: "var(--text-body)",
-    lineHeight: "var(--leading-body)",
-    fontWeight: "var(--weight-body)",
-  },
-  label: {
-    fontSize: "var(--text-label)",
-    lineHeight: "var(--leading-label)",
-    fontWeight: "var(--weight-label)",
-    letterSpacing: "var(--tracking-label)",
-    textTransform: "uppercase",
-  },
-};
 
 export type Combination = { code: string; subjects: string };
 export type CombinationGroup = { group: string; items: ReadonlyArray<Combination> };

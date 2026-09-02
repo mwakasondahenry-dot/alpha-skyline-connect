@@ -25,6 +25,7 @@ import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
 import campusNurseryImage from "@/assets/campus-nursery.jpg.asset.json";
 import campusHighImage from "@/assets/campus-high.jpg.asset.json";
 import campusGirlsImage from "@/assets/campus-girls.jpg.asset.json";
+import { T } from "@/components/type-roles";
 
 const FOUNDED_YEAR = 2007;
 const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
@@ -80,49 +81,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-/* ------------------------------------------------------------------ *
- * Type roles. Every size, weight and leading comes from src/styles.css;
- * these objects only bind a token to a role so the JSX stays readable.
- * ------------------------------------------------------------------ */
-const T: Record<string, React.CSSProperties> = {
-  hero: {
-    fontSize: "var(--text-hero)",
-    lineHeight: "var(--leading-hero)",
-    fontWeight: "var(--weight-hero)",
-  },
-  section: {
-    fontSize: "var(--text-section)",
-    lineHeight: "var(--leading-section)",
-    fontWeight: "var(--weight-section)",
-  },
-  cardTitle: {
-    fontSize: "var(--text-card-title)",
-    lineHeight: "var(--leading-card-title)",
-    fontWeight: "var(--weight-card-title)",
-  },
-  body: {
-    fontSize: "var(--text-body)",
-    lineHeight: "var(--leading-body)",
-    fontWeight: "var(--weight-body)",
-  },
-  label: {
-    fontSize: "var(--text-label)",
-    lineHeight: "var(--leading-label)",
-    fontWeight: "var(--weight-label)",
-    letterSpacing: "var(--tracking-label)",
-    textTransform: "uppercase",
-  },
-  stat: {
-    fontSize: "var(--text-stat)",
-    lineHeight: "var(--leading-stat)",
-    fontWeight: "var(--weight-stat)",
-  },
-  statLabel: {
-    fontSize: "var(--text-stat-label)",
-    lineHeight: "var(--leading-stat-label)",
-    fontWeight: "var(--weight-stat-label)",
-  },
-};
 
 const BTN_PRIMARY: React.CSSProperties = {
   background: "var(--btn-primary-bg)",

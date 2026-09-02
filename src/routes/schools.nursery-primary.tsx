@@ -26,7 +26,8 @@ import photoSpeakersGroup from "@/assets/np-junior-speakers-group.jpg.asset.json
 import photoSpeakersTeam from "@/assets/np-junior-speakers-team.jpg.asset.json";
 import photoPlayground from "@/assets/np-playground.jpg.asset.json";
 import photoShapesClass from "@/assets/np-shapes-class.jpg.asset.json";
-import photoToyCar from "@/assets/np-toy-car.jpg.asset.json";
+import photoToyCar from "@/assets/np-toy-car.jpg.asset.json";
+import { T } from "@/components/type-roles";
 
 const testimonialsQuery = queryOptions({
   queryKey: ["testimonials"],
@@ -74,6 +75,7 @@ const PAGE_TINTS = {
   stripeBlueLight: "#6fb4e0",
 } as const;
 
+
 /** Section anchors for the shared sub-nav. */
 const SUB_NAV = [
   { label: "Our days", href: "#our-days" },
@@ -82,19 +84,6 @@ const SUB_NAV = [
   { label: "Extracurriculum", href: "#extracurriculum" },
   { label: "Admission", href: "#admission" },
 ] as const;
-
-/** Type roles bound to the design system. Same pattern as src/routes/index.tsx. */
-const T: Record<string, React.CSSProperties> = {
-  section: { fontSize: "var(--text-section)", lineHeight: "var(--leading-section)", fontWeight: "var(--weight-section)" },
-  cardTitle: { fontSize: "var(--text-card-title)", lineHeight: "var(--leading-card-title)", fontWeight: "var(--weight-card-title)" },
-  body: { fontSize: "var(--text-body)", lineHeight: "var(--leading-body)", fontWeight: "var(--weight-body)" },
-  label: {
-    fontSize: "var(--text-label)", lineHeight: "var(--leading-label)",
-    fontWeight: "var(--weight-label)", letterSpacing: "var(--tracking-label)",
-    textTransform: "uppercase",
-  },
-  stat: { fontSize: "var(--text-stat)", lineHeight: "var(--leading-stat)", fontWeight: "var(--weight-stat)" },
-};
 
 // ---------- Reusable bits ----------
 

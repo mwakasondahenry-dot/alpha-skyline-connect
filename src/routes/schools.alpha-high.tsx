@@ -23,7 +23,8 @@ import clubCookery from "@/assets/club-cookery.jpg.asset.json";
 import clubScout from "@/assets/club-scout.jpg.asset.json";
 import clubSpeaking from "@/assets/club-public-speaking.jpg.asset.json";
 import clubUn from "@/assets/club-un.jpg.asset.json";
-import clubEnvironment from "@/assets/club-environment.jpg.asset.json";
+import clubEnvironment from "@/assets/club-environment.jpg.asset.json";
+import { T } from "@/components/type-roles";
 
 const slug = "alpha-high" as const;
 const ACCENT = "var(--color-deep-blue)";
@@ -285,18 +286,6 @@ function Stat({ value, label }: { value: string; label: string }) {
 
 // ---------- Academics ----------
 
-/** Type roles bound to the design system. Same pattern as src/routes/index.tsx. */
-const T: Record<string, React.CSSProperties> = {
-  section: { fontSize: "var(--text-section)", lineHeight: "var(--leading-section)", fontWeight: "var(--weight-section)" },
-  cardTitle: { fontSize: "var(--text-card-title)", lineHeight: "var(--leading-card-title)", fontWeight: "var(--weight-card-title)" },
-  body: { fontSize: "var(--text-body)", lineHeight: "var(--leading-body)", fontWeight: "var(--weight-body)" },
-  label: {
-    fontSize: "var(--text-label)", lineHeight: "var(--leading-label)",
-    fontWeight: "var(--weight-label)", letterSpacing: "var(--tracking-label)",
-    textTransform: "uppercase",
-  },
-  stat: { fontSize: "var(--text-stat)", lineHeight: "var(--leading-stat)", fontWeight: "var(--weight-stat)" },
-};
 
 /** Section anchors for the shared sub-nav. Alpha High's own order. */
 const SUB_NAV = [

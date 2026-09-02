@@ -13,6 +13,7 @@ import campusGirls from "@/assets/campus-girls.jpg.asset.json";
 import campusHigh from "@/assets/campus-high.jpg.asset.json";
 import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
 import aviation from "@/assets/aviation-uniform.jpg.asset.json";
+import { T } from "@/components/type-roles";
 
 const slug = "alpha-girls" as const;
 const ACCENT = "var(--color-blue-violet)";
@@ -243,20 +244,6 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-/* ----------------- Academics ----------------- */
-
-/** Type roles bound to the design system. Same pattern as src/routes/index.tsx. */
-const T: Record<string, React.CSSProperties> = {
-  section: { fontSize: "var(--text-section)", lineHeight: "var(--leading-section)", fontWeight: "var(--weight-section)" },
-  cardTitle: { fontSize: "var(--text-card-title)", lineHeight: "var(--leading-card-title)", fontWeight: "var(--weight-card-title)" },
-  body: { fontSize: "var(--text-body)", lineHeight: "var(--leading-body)", fontWeight: "var(--weight-body)" },
-  label: {
-    fontSize: "var(--text-label)", lineHeight: "var(--leading-label)",
-    fontWeight: "var(--weight-label)", letterSpacing: "var(--tracking-label)",
-    textTransform: "uppercase",
-  },
-  stat: { fontSize: "var(--text-stat)", lineHeight: "var(--leading-stat)", fontWeight: "var(--weight-stat)" },
-};
 
 /** Section anchors. Alpha Girls leads with what is distinctly hers, not with
  *  the academics both schools share. Deliberately a different order from
