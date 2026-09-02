@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { submitContactMessage } from "@/lib/alpha-content.functions";
+import { submitContactMessage } from "@/lib/alpha-content.functions";
+import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
@@ -49,11 +50,11 @@ function ContactPage() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-20 text-white">
-        <div className="mx-auto max-w-7xl px-6 lg:px-10">
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">Get in touch</p>
-          <h1 className="mt-2 font-display text-4xl font-bold sm:text-5xl">We'd love to hear from you</h1>
-          <p className="mt-4 max-w-2xl text-base text-white/80">
+      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-[var(--space-section-y)] text-white">
+        <div className={SHELL}>
+          <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>Get in touch</p>
+          <h1 className="mt-2 font-display" style={T.section}>We'd love to hear from you</h1>
+          <p className="mt-4 max-w-2xl text-white/80" style={T.body}>
             Call, WhatsApp, email or send a message below — and we'll be in touch within one working day.
           </p>
         </div>
@@ -61,19 +62,19 @@ function ContactPage() {
 
       <section className="mx-auto grid max-w-7xl gap-10 px-6 py-14 lg:grid-cols-[1.1fr_1fr] lg:px-10">
         <div>
-          <h2 className="font-display text-2xl font-semibold text-[var(--color-deep-blue)]">Send us a message</h2>
-          <p className="mt-1 text-sm text-[var(--color-ink)]/70">
+          <h2 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>Send us a message</h2>
+          <p className="mt-1 text-[var(--color-ink)]/70" style={T.body}>
             Tell us a little about your enquiry. We'll reply by email or phone.
           </p>
 
           {done ? (
             <div role="status" className="mt-6 rounded-2xl border border-green-200 bg-green-50 p-6">
-              <p className="font-display text-lg font-semibold text-green-900">Thank you — your message is on its way.</p>
-              <p className="mt-1 text-sm text-green-800">A member of staff will reply within one working day.</p>
+              <p className="font-display text-green-900" style={T.cardTitle}>Thank you — your message is on its way.</p>
+              <p className="mt-1 text-green-800" style={T.body}>A member of staff will reply within one working day.</p>
               <button
                 type="button"
                 onClick={() => setDone(false)}
-                className="mt-4 text-sm font-semibold text-[var(--color-deep-blue)] underline"
+                className="mt-4 font-semibold text-[var(--color-deep-blue)] underline" style={T.body}
               >
                 Send another message
               </button>
@@ -106,13 +107,13 @@ function ContactPage() {
               </Field>
 
               {error ? (
-                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">{error}</div>
+                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-red-700" style={T.body}>{error}</div>
               ) : null}
 
               <button
                 type="submit"
                 disabled={busy}
-                className="w-full rounded-lg bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
+                className="w-full rounded-lg bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto" style={T.body}
               >
                 {busy ? "Sending…" : "Send message"}
               </button>
@@ -122,19 +123,19 @@ function ContactPage() {
 
         <aside className="space-y-4">
           <InfoCard title="Call or WhatsApp">
-            <p className="text-base font-semibold text-[var(--color-deep-blue)]">+255 (0)22 277 5046</p>
-            <p className="text-sm text-[var(--color-ink)]/70">Mon – Fri · 7:30 – 16:30</p>
+            <p className="font-semibold text-[var(--color-deep-blue)]" style={T.body}>+255 (0)22 277 5046</p>
+            <p className="text-[var(--color-ink)]/70" style={T.body}>Mon – Fri · 7:30 – 16:30</p>
           </InfoCard>
           <InfoCard title="Email">
-            <a href="mailto:info@alphaschools.ac.tz" className="text-base font-semibold text-[var(--color-deep-blue)] hover:underline">
+            <a href="mailto:info@alphaschools.ac.tz" className="font-semibold text-[var(--color-deep-blue)] hover:underline" style={T.body}>
               info@alphaschools.ac.tz
             </a>
           </InfoCard>
           <InfoCard title="Postal address">
-            <p className="text-sm text-[var(--color-ink)]/80">ALFA EDUCATION CENTRE<br />P.O. Box 35136<br />Dar es Salaam, Tanzania</p>
+            <p className="text-[var(--color-ink)]/80" style={T.body}>ALFA EDUCATION CENTRE<br />P.O. Box 35136<br />Dar es Salaam, Tanzania</p>
           </InfoCard>
           <InfoCard title="Campuses">
-            <ul className="space-y-1 text-sm text-[var(--color-ink)]/80">
+            <ul className="space-y-1 text-[var(--color-ink)]/80" style={T.body}>
               <li><span className="font-semibold">Mikocheni</span> — Alpha High</li>
               <li><span className="font-semibold">Kunduchi</span> — Alpha Girls · Nursery & Primary</li>
             </ul>
