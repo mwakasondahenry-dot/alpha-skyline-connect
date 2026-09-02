@@ -1,18 +1,30 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { Plane, ArrowRight } from "lucide-react";
+import {
+  ArrowRight,
+  Award,
+  Building2,
+  GraduationCap,
+  MapPin,
+  Plane,
+  Quote,
+} from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
-import { getHomeWhatsNew, getHomeUpcomingEvents, type HomeWhatsNew, type HomeEventItem } from "@/lib/alpha-content.functions";
+import {
+  getHomeWhatsNew,
+  getHomeUpcomingEvents,
+  getTestimonials,
+  type HomeWhatsNew,
+  type HomeEventItem,
+  type TestimonialItem,
+} from "@/lib/alpha-content.functions";
 import heroCollage from "@/assets/hero-collage.png.asset.json";
 import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
 import campusNurseryImage from "@/assets/campus-nursery.jpg.asset.json";
 import campusHighImage from "@/assets/campus-high.jpg.asset.json";
 import campusGirlsImage from "@/assets/campus-girls.jpg.asset.json";
-
 
 const FOUNDED_YEAR = 2007;
 const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
@@ -26,6 +38,12 @@ const whatsNewQuery = queryOptions({
 const upcomingEventsQuery = queryOptions({
   queryKey: ["home", "upcoming-events"],
   queryFn: () => getHomeUpcomingEvents(),
+  staleTime: 5 * 60 * 1000,
+});
+
+const testimonialsQuery = queryOptions({
+  queryKey: ["testimonials"],
+  queryFn: () => getTestimonials(),
   staleTime: 5 * 60 * 1000,
 });
 
@@ -51,6 +69,7 @@ export const Route = createFileRoute("/")({
     Promise.all([
       context.queryClient.ensureQueryData(whatsNewQuery),
       context.queryClient.ensureQueryData(upcomingEventsQuery),
+      context.queryClient.ensureQueryData(testimonialsQuery),
     ]),
   errorComponent: ({ error }) => (
     <div className="p-12 text-center text-sm text-muted-foreground">
@@ -60,6 +79,65 @@ export const Route = createFileRoute("/")({
   notFoundComponent: () => <div className="p-12 text-center">Not found.</div>,
   component: Home,
 });
+
+/* ------------------------------------------------------------------ *
+ * Type roles. Every size, weight and leading comes from src/styles.css;
+ * these objects only bind a token to a role so the JSX stays readable.
+ * ------------------------------------------------------------------ */
+const T: Record<string, React.CSSProperties> = {
+  hero: {
+    fontSize: "var(--text-hero)",
+    lineHeight: "var(--leading-hero)",
+    fontWeight: "var(--weight-hero)",
+  },
+  section: {
+    fontSize: "var(--text-section)",
+    lineHeight: "var(--leading-section)",
+    fontWeight: "var(--weight-section)",
+  },
+  cardTitle: {
+    fontSize: "var(--text-card-title)",
+    lineHeight: "var(--leading-card-title)",
+    fontWeight: "var(--weight-card-title)",
+  },
+  body: {
+    fontSize: "var(--text-body)",
+    lineHeight: "var(--leading-body)",
+    fontWeight: "var(--weight-body)",
+  },
+  label: {
+    fontSize: "var(--text-label)",
+    lineHeight: "var(--leading-label)",
+    fontWeight: "var(--weight-label)",
+    letterSpacing: "var(--tracking-label)",
+    textTransform: "uppercase",
+  },
+  stat: {
+    fontSize: "var(--text-stat)",
+    lineHeight: "var(--leading-stat)",
+    fontWeight: "var(--weight-stat)",
+  },
+  statLabel: {
+    fontSize: "var(--text-stat-label)",
+    lineHeight: "var(--leading-stat-label)",
+    fontWeight: "var(--weight-stat-label)",
+  },
+};
+
+const BTN_PRIMARY: React.CSSProperties = {
+  background: "var(--btn-primary-bg)",
+  color: "var(--btn-primary-fg)",
+  borderRadius: "var(--btn-primary-radius)",
+  padding: "var(--btn-primary-pad-y) var(--btn-primary-pad-x)",
+  fontWeight: "var(--btn-primary-weight)",
+  minHeight: "var(--btn-primary-min-h)",
+  fontSize: "var(--text-body)",
+};
+
+const BTN_BASE =
+  "inline-flex items-center justify-center gap-2 font-display transition-transform duration-200 hover:scale-[1.02] active:scale-100 motion-reduce:transition-none motion-reduce:hover:scale-100";
+
+const SHELL = "mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]";
 
 const SCHOOLS = [
   {
@@ -72,6 +150,8 @@ const SCHOOLS = [
     to: "/schools/nursery-primary",
     image: campusNurseryImage.url,
     alt: "Young Alpha primary students in green sports kit",
+    band: "var(--color-bright-blue)",
+    Icon: Building2,
   },
   {
     slug: "alpha-high",
@@ -83,6 +163,8 @@ const SCHOOLS = [
     to: "/schools/alpha-high",
     image: campusHighImage.url,
     alt: "Alpha High aviation students in safety vests at JNIA",
+    band: "var(--color-deep-blue)",
+    Icon: GraduationCap,
   },
   {
     slug: "alpha-girls",
@@ -94,15 +176,24 @@ const SCHOOLS = [
     to: "/schools/alpha-girls",
     image: campusGirlsImage.url,
     alt: "Alpha Girls debate team celebrating with medals and certificates",
+    band: "var(--color-blue-violet)",
+    Icon: Award,
   },
 ] as const;
 
-
-const STATS: ReadonlyArray<{ value: number; suffix?: string; prefix?: string; display?: string; label: [string, string] }> = [
-  { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"] },
-  { value: 3, label: ["schools across", "Dar es Salaam"] },
-  { value: 1, label: ["aviation programme", "across our schools"] },
-  { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"] },
+/* Values and labels are unchanged — only `Icon` was added, for the rail
+   layout. design/README.md: the year figure is calculated from the 2007
+   founding date and must never be hardcoded. */
+const STATS: ReadonlyArray<{
+  value: number;
+  suffix?: string;
+  label: [string, string];
+  Icon: typeof Award;
+}> = [
+  { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"], Icon: Award },
+  { value: 3, label: ["schools across", "Dar es Salaam"], Icon: Building2 },
+  { value: 1, label: ["aviation programme", "across our schools"], Icon: Plane },
+  { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"], Icon: MapPin },
 ] as const;
 
 const SCHOOL_LABELS: Record<string, string> = {
@@ -112,52 +203,66 @@ const SCHOOL_LABELS: Record<string, string> = {
   "alpha-girls": "Alpha Girls",
 };
 
-const SCHOOL_BADGE: Record<string, string> = {
-  "group-wide": "bg-[var(--color-deep-blue)] text-white",
-  "nursery-primary": "bg-[var(--color-bright-blue)] text-white",
-  "alpha-high": "bg-[var(--color-deep-blue)] text-white",
-  "alpha-girls": "bg-[var(--color-blue-violet)] text-white",
-};
-
-function CountUp({ to, duration = 1400 }: { to: number; duration?: number }) {
-  const [n, setN] = useState(0);
-  const ref = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver((entries) => {
-      if (started.current) return;
-      if (entries.some((e) => e.isIntersecting)) {
-        started.current = true;
-        const start = performance.now();
-        const step = (t: number) => {
-          const p = Math.min(1, (t - start) / duration);
-          const eased = 1 - Math.pow(1 - p, 3);
-          setN(to * eased);
-          if (p < 1) requestAnimationFrame(step);
-          else setN(to);
-        };
-        requestAnimationFrame(step);
-      }
-    }, { threshold: 0.3 });
-    io.observe(el);
-    return () => io.disconnect();
-  }, [to, duration]);
-  const display = to % 1 === 0 ? Math.round(n).toString() : n.toFixed(1);
-  return <span ref={ref}>{display}</span>;
+/* Section heading with the gold rule beneath it. */
+function SectionHeading({
+  children,
+  action,
+}: {
+  children: React.ReactNode;
+  action?: React.ReactNode;
+}) {
+  return (
+    <div className="flex flex-wrap items-end justify-between gap-4">
+      <div>
+        <h2
+          className="font-display tracking-tight text-[var(--color-ink)]"
+          style={T.section}
+        >
+          {children}
+        </h2>
+        <span
+          aria-hidden
+          className="mt-[var(--heading-rule-gap)] block"
+          style={{
+            width: "var(--heading-rule-w)",
+            height: "var(--heading-rule-h)",
+            background: "var(--heading-rule-color)",
+            borderRadius: "var(--heading-rule-radius)",
+          }}
+        />
+      </div>
+      {action}
+    </div>
+  );
 }
 
 function Home() {
   const { data } = useSuspenseQuery(whatsNewQuery);
   const { data: upcomingEvents } = useSuspenseQuery(upcomingEventsQuery);
+  const { data: testimonials } = useSuspenseQuery(testimonialsQuery);
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
+      <Hero />
+      <FindTheRightSchool />
+      <AviationBanner />
+      <Testimonials items={testimonials} />
+      <NewsAndEvents news={data.news} events={upcomingEvents} />
+      <SiteFooter />
+    </div>
+  );
+}
 
-      {/* HERO — full screen B&W collage */}
-      <section className="relative isolate flex min-h-screen w-full items-center overflow-hidden bg-black">
+/* ------------------------------------------------------------------ *
+ * 1. HERO + STAT RAIL
+ * Desktop: photo left, navy stat rail as a right-hand column.
+ * 375px:   photo, then the rail as a 2-column grid directly beneath.
+ * ------------------------------------------------------------------ */
+function Hero() {
+  return (
+    <section className="lg:flex">
+      <div className="relative isolate min-h-[26rem] flex-1 overflow-hidden sm:min-h-[30rem] lg:min-h-[34rem]">
         <HeroSlideshow
           pageKey="home"
           fallback={[
@@ -166,485 +271,503 @@ function Home() {
               alt: "Alpha Schools students across nursery, primary, secondary and aviation",
             },
           ]}
-          imgStyle={{ filter: "grayscale(100%) contrast(1.1) brightness(0.95)" }}
         />
-        {/* Light overlays — keep images visible, only darken behind text */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/30 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-        {/* Smooth fade into the white section below */}
+
+        {/* Guaranteed scrim. design/README.md requires the headline to stay
+            legible over ANY slide, so this never depends on how dark the
+            photo happens to be. Vertical on mobile, horizontal on desktop. */}
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-72"
-          style={{
-            background:
-              "linear-gradient(to bottom, rgba(246,247,249,0) 0%, rgba(246,247,249,0.08) 25%, rgba(246,247,249,0.25) 45%, rgba(246,247,249,0.5) 65%, rgba(246,247,249,0.78) 82%, rgba(246,247,249,0.95) 93%, rgba(246,247,249,1) 100%)",
-          }}
+          aria-hidden
+          className="absolute inset-0 lg:hidden"
+          style={{ backgroundImage: "var(--hero-scrim-mobile)" }}
         />
-        <div className="pointer-events-none absolute -left-40 top-1/3 h-[28rem] w-[28rem] rounded-full bg-[var(--color-gold)]/20 blur-3xl" />
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden lg:block"
+          style={{ backgroundImage: "var(--hero-scrim)" }}
+        />
 
-        <div className="relative mx-auto w-full max-w-7xl px-6 py-24 lg:px-10">
-          <div className="max-w-2xl">
-            <span className="inline-flex max-w-full items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur sm:text-[11px]">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
-              <span className="truncate">Nursery · Primary · Secondary · Aviation</span>
-            </span>
-            <h1 className="mt-6 font-display text-5xl font-black leading-[1.02] tracking-tight text-white sm:text-6xl lg:text-8xl">
-              Your potential,<br /><span className="italic text-[var(--color-gold)]">unlocked.</span>
+        <div
+          className={`${SHELL} relative flex min-h-[26rem] flex-col justify-end py-[var(--space-block-y)] sm:min-h-[30rem] lg:min-h-[34rem] lg:justify-center`}
+        >
+          <div className="max-w-xl">
+            <h1 className="font-display tracking-tight" style={T.hero}>
+              <span className="block text-[var(--hero-line-1-color)]">
+                Your potential,
+              </span>
+              <span className="block text-[var(--hero-line-2-color)]">
+                unlocked.
+              </span>
             </h1>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg">
-              Three schools across Dar es Salaam — nursery, primary and secondary — founded in 2007 on one belief: your education is our priority. Strong national academics, coding, and an aviation programme.
+            <p
+              className="mt-4 max-w-md text-[var(--color-surface)]/90"
+              style={T.body}
+            >
+              Three schools. One family. Limitless futures.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/admission"
-                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3.5 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]"
+            <a
+              href="#find-the-right-school"
+              className={`${BTN_BASE} mt-6 w-full sm:w-auto`}
+              style={BTN_PRIMARY}
+            >
+              Find the Right School
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <StatRail />
+    </section>
+  );
+}
+
+function StatRail() {
+  return (
+    <aside
+      aria-label="Alpha Schools at a glance"
+      className="bg-[var(--stat-row-bg)] lg:w-[15rem] lg:shrink-0"
+    >
+      <ul className="grid grid-cols-2 lg:h-full lg:grid-cols-1 lg:content-center">
+        {STATS.map((s, i) => (
+          <li
+            key={i}
+            className="flex items-center gap-3 p-[var(--stat-pad)]"
+            style={{ borderTop: i === 0 ? undefined : "var(--stat-divider)" }}
+          >
+            <s.Icon
+              className="h-5 w-5 shrink-0 text-[var(--stat-icon-color)]"
+              aria-hidden
+            />
+            <div className="min-w-0">
+              <div
+                className="font-display text-[var(--stat-figure-color)]"
+                style={T.stat}
               >
-                Enroll Now
-              </Link>
-              <Link
-                to="/aviation"
-                className="inline-flex items-center gap-2 rounded-md border border-white/30 bg-white/10 px-6 py-3.5 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+                {s.value}
+                {s.suffix ?? ""}
+              </div>
+              <div
+                className="text-[var(--stat-label-color)]"
+                style={T.statLabel}
               >
-                Inside the aviation programme →
-              </Link>
+                {s.label[0]} {s.label[1]}
+              </div>
             </div>
-          </div>
-        </div>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  );
+}
 
-        {/* Scroll cue */}
-        <div className="pointer-events-none absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70">
-          <div className="flex flex-col items-center gap-1.5">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">Scroll</span>
-            <span className="block h-8 w-px animate-pulse bg-white/60" />
-          </div>
-        </div>
-      </section>
+/* ------------------------------------------------------------------ *
+ * 2. FIND THE RIGHT SCHOOL
+ * Desktop: three photo cards with a coloured band.
+ * 375px:   horizontal list rows inside one white card.
+ * One <li> per school — the photo and the icon tile swap by breakpoint
+ * so the school name is never duplicated in the DOM.
+ * ------------------------------------------------------------------ */
+function FindTheRightSchool() {
+  return (
+    <section
+      id="find-the-right-school"
+      className={`${SHELL} scroll-mt-24 py-[var(--space-section-y)]`}
+    >
+      <Reveal direction="up">
+        <SectionHeading>
+          Find the{" "}
+          <span className="text-[var(--heading-accent-color)]">Right School</span>{" "}
+          for Your Child
+        </SectionHeading>
+      </Reveal>
 
-      
-
-
-      {/* FIND THE RIGHT CAMPUS */}
-      <section className="mx-auto max-w-7xl px-6 pb-12 pt-8 lg:px-10">
-
-        <Reveal direction="up">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
-            Three schools · One Alpha
-          </p>
-          <h2 className="mt-3 max-w-2xl font-display text-4xl font-semibold tracking-tight text-[var(--color-ink)] sm:text-5xl">
-            Find the right campus<br />for your child.
-          </h2>
-        </Reveal>
-
-        <div className="mt-10 grid gap-6 md:grid-cols-3">
-          {SCHOOLS.map((s, i) => (
-            <Reveal key={s.slug} direction="up" delay={i * 100}>
-              <Link
-                to={s.to}
-                className="group relative flex h-[460px] flex-col justify-end overflow-hidden rounded-2xl shadow-lg ring-1 ring-black/5 transition-all duration-500 hover:shadow-2xl hover:-translate-y-1"
+      <ul
+        className="mt-[var(--space-block-y)] grid gap-0 overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] md:grid-cols-3 md:gap-[var(--space-card-gap)] md:overflow-visible md:bg-transparent md:shadow-none"
+      >
+        {SCHOOLS.map((s, i) => (
+          <li
+            key={s.slug}
+            style={{ ["--band" as string]: s.band }}
+            className={
+              i === 0 ? undefined : "border-t border-[var(--color-hairline)] md:border-t-0"
+            }
+          >
+            <Link
+              to={s.to}
+              className="group flex h-full items-center gap-4 p-[var(--space-card-pad-sm)] md:block md:overflow-hidden md:rounded-[var(--radius-card)] md:bg-[var(--card-bg)] md:p-0 md:shadow-[var(--card-shadow)] md:transition-shadow md:hover:shadow-[var(--card-shadow-hover)]"
+            >
+              {/* 375px: icon tile. Hidden from md up. */}
+              <span
+                aria-hidden
+                className="grid h-12 w-12 shrink-0 place-items-center rounded-[var(--radius-btn)] bg-[var(--band)] text-[var(--color-surface)] md:hidden"
               >
-                {/* Background image */}
+                <s.Icon className="h-6 w-6" />
+              </span>
+
+              {/* Desktop: photo. Hidden below md. */}
+              <div className="hidden md:block">
                 <img
                   src={s.image}
                   alt={s.alt}
                   loading="lazy"
                   decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  className="aspect-[4/3] w-full object-cover"
                 />
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10 transition-opacity duration-500 group-hover:from-black/95 group-hover:via-black/60" />
-                {/* Top badge */}
-                <span className="absolute left-5 top-5 z-10 rounded-md bg-[var(--color-gold)] px-2.5 py-1 text-[11px] font-bold tracking-wide text-[var(--color-accent-foreground)] shadow-md">
-                  {s.badge}
-                </span>
-                {/* Bottom content */}
-                <div className="relative z-10 p-6 text-white">
-                  <p className="text-[10px] font-bold tracking-[0.18em] text-[var(--color-gold)]">
-                    {s.campus}
-                  </p>
-                  <h3 className="mt-2 font-display text-3xl font-semibold leading-tight">
+              </div>
+
+              <div className="flex min-w-0 flex-1 items-center justify-between gap-3 md:block md:bg-[var(--band)] md:p-[var(--space-card-pad-sm)]">
+                <div className="min-w-0">
+                  <h3
+                    className="font-display text-[var(--color-ink)] md:text-[var(--color-surface)]"
+                    style={T.cardTitle}
+                  >
                     {s.name}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-white/85">
-                    {s.blurb}
+                  <p
+                    className="mt-1 text-[var(--color-ink-soft)] md:text-[var(--color-surface)]/85"
+                    style={T.label}
+                  >
+                    {s.campus}
                   </p>
-                  <span className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-white transition-transform group-hover:translate-x-1">
-                    Explore the School
-                    <ArrowRight className="h-4 w-4" />
-                  </span>
+                  <p
+                    className="mt-0.5 text-[var(--color-ink-soft)] md:text-[var(--color-surface)]/85"
+                    style={T.label}
+                  >
+                    {s.badge}
+                  </p>
                 </div>
-              </Link>
-            </Reveal>
-          ))}
-        </div>
-      </section>
 
-      {/* AVIATION + CODING split */}
-      <section className="mx-auto max-w-7xl px-6 py-12 lg:px-10">
-        <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-          <Reveal direction="left" className="relative min-h-[280px] overflow-hidden rounded-2xl">
-            <img
-              src={aviationUniformAsset.url}
-              alt="Alpha Schools aviation cadet in uniform at the airport"
-              className="absolute inset-0 h-full w-full object-cover"
-              loading="lazy"
-              decoding="async"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/20" />
-            <div className="relative flex h-full flex-col justify-end p-8 text-white">
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/85">The Alpha Difference</p>
-              <h3 className="mt-2 font-display text-3xl font-semibold leading-tight drop-shadow-md sm:text-4xl">
-                Aviation Program in Alpha Schools
-              </h3>
-              <p className="mt-3 max-w-md text-sm text-white/90 drop-shadow">
-                Ground school, simulator hours and first principles of flight. [Aviation positioning statement — wording to be confirmed]
-              </p>
-              <Link
-                to="/aviation"
-                className="mt-5 inline-flex w-fit items-center gap-2 rounded-md bg-[var(--color-gold)] px-4 py-2.5 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-lg transition-transform hover:scale-[1.02]"
-              >
-                Inside the programme →
-              </Link>
-            </div>
-          </Reveal>
-
-          <Reveal direction="right" className="rounded-2xl bg-white p-8 ring-1 ring-[var(--color-deep-blue)]/10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Right behind it</p>
-            <h3 className="mt-2 font-display text-3xl font-semibold text-[var(--color-deep-blue)]">
-              Coding &amp; digital skills
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink)]/80">
-              Real programming from primary up — logic, robotics and building things that work.
-            </p>
-            <Link to="/coding" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5">
-              See the curriculum →
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      <TornEdge topColor="var(--color-surface)" bottomColor="#f6f7f9" intensity="playful" seed={23} />
-
-      {/* STAT BAR */}
-      <section className="relative overflow-hidden bg-[var(--color-surface-muted)] text-[var(--color-ink)]">
-
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-30">
-          <div className="absolute -left-10 top-6 h-40 w-40 rounded-full bg-[var(--color-gold)]/40 blur-3xl" />
-          <div className="absolute -right-10 bottom-0 h-48 w-48 rounded-full bg-[var(--color-bright-blue)]/30 blur-3xl" />
-        </div>
-        <div className="relative mx-auto max-w-3xl px-6 py-16 lg:px-10">
-          <ul className="divide-y divide-[var(--color-gold)]/40">
-            {STATS.map((s, i) => (
-              <li key={i}>
-                <Reveal direction="up" delay={i * 100} className="flex items-center gap-6 py-6">
-                  <div className="min-w-[5.5rem] font-display text-5xl font-semibold leading-none text-[var(--color-deep-blue)] sm:text-6xl">
-                    <CountUp to={s.value} /><span className="text-[var(--color-gold)]">{s.suffix ?? ""}</span>
-                  </div>
-                  <div className="text-base leading-snug text-[var(--color-ink-soft)]">
-                    {s.label[0]} {s.label[1]}
-                  </div>
-                </Reveal>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <TornEdge topColor="#f6f7f9" bottomColor="var(--color-surface)" intensity="playful" seed={41} />
-
-      {/* OUR STORY */}
-      <section className="bg-white">
-
-        <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-20 lg:grid-cols-[1fr_1.2fr] lg:px-10">
-          <Reveal direction="left">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">Our story</p>
-            <h2 className="mt-3 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-              Since 19 March 2007.
-            </h2>
-            <p className="mt-5 text-base leading-relaxed text-[var(--color-ink)]/80">
-              Alpha High School was founded on a solid vision: enabling students to achieve academic excellence through intellectual and physical challenges, and to function as responsible citizens of a dynamic society.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
-              With that vision embraced by every staff member and carried swiftly to our students, Alpha has become the nurturing ground of professionals and leaders — locally and globally.
-            </p>
-          </Reveal>
-          <Reveal direction="right" className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--color-brand-blue)]">Our mission</p>
-            <ul className="mt-4 space-y-4">
-              {[
-                "Provide education that is the source of intellectual, spiritual and cultural growth.",
-                "Enable students to acquire knowledge that supports and meets individual needs.",
-                "Develop students' critical and divergent thinking.",
-                "Encourage students to be all-rounded.",
-                "Inculcate the attitude to be social, mobile, interactive, ambitious and self-directed.",
-              ].map((m) => (
-                <li key={m} className="flex gap-3 text-sm leading-relaxed text-[var(--color-ink)]/85">
-                  <span aria-hidden className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]" />
-                  <span>{m}</span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-      </section>
-
-      <TornEdge topColor="var(--color-surface)" bottomColor="#f6f7f9" intensity="playful" seed={58} />
-
-      {/* UPDATES + EVENTS */}
-      <WhatsNew news={data.news} events={upcomingEvents} />
-
-
-      <TornEdge topColor="var(--color-surface)" bottomColor="var(--color-surface)" intensity="playful" seed={72} />
-
-      {/* CTA BAND */}
-      <section className="border-y border-[var(--color-hairline)] bg-white">
-
-        <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-14 sm:flex-row sm:items-center lg:px-10">
-          <Reveal direction="left">
-            <h2 className="font-display text-3xl font-semibold text-[var(--color-deep-blue)] sm:text-4xl">
-              Come and see Alpha for yourself.
-            </h2>
-            <p className="mt-2 text-sm text-[var(--color-ink-soft)]">
-              Book a campus visit — we'll match you to the right school.
-            </p>
-          </Reveal>
-          <Reveal direction="right">
-            <Link
-              to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-6 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]"
-            >
-              Book a Visit →
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      <SiteFooter />
-    </div>
-  );
-}
-
-function relativeDate(iso: string) {
-  const d = new Date(iso);
-  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
-  if (days < 1) return "today";
-  if (days < 7) return `${days} day${days > 1 ? "s" : ""} ago`;
-  const weeks = Math.floor(days / 7);
-  if (weeks < 5) return `${weeks} week${weeks > 1 ? "s" : ""} ago`;
-  return d.toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
-}
-
-function eventDay(iso: string) {
-  return new Date(iso).getDate().toString().padStart(2, "0");
-}
-function eventMonth(iso: string) {
-  return new Date(iso).toLocaleString(undefined, { month: "short" }).toUpperCase();
-}
-
-function WhatsNew({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEventItem[] }) {
-  return (
-    <>
-      <UpdatesSlideshow news={news} />
-      <TornEdge topColor="#f6f7f9" bottomColor="var(--color-surface)" intensity="playful" seed={91} />
-      <EventsRail events={events} />
-    </>
-  );
-}
-
-
-
-function UpdatesSlideshow({ news }: { news: HomeWhatsNew["news"] }) {
-  const [idx, setIdx] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const count = news.length;
-
-  useEffect(() => {
-    if (paused || count <= 1) return;
-    const t = setInterval(() => setIdx((i) => (i + 1) % count), 5500);
-    return () => clearInterval(t);
-  }, [paused, count]);
-
-  return (
-    <section className="bg-[var(--color-off-white)]">
-      <div className="mx-auto max-w-7xl px-6 pb-16 pt-8 lg:px-10">
-        <Reveal direction="up" className="flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
-              Updates
-            </p>
-            <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-              The latest from Alpha.
-            </h2>
-          </div>
-          <Link to="/news" className="hidden text-sm font-semibold text-[var(--color-brand-blue)] hover:underline sm:inline">
-            View all →
-          </Link>
-        </Reveal>
-
-        {count === 0 ? (
-          <div className="mt-8 grid place-items-center rounded-3xl border border-dashed border-[var(--color-deep-blue)]/15 bg-white px-6 py-16 text-center">
-            <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--color-brand-blue)]/10 text-2xl">📰</div>
-            <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-deep-blue)]">No updates yet</h3>
-            <p className="mt-2 max-w-md text-sm text-[var(--color-ink)]/65">
-              Fresh news from across Alpha will appear here as soon as it's published. Check back soon.
-            </p>
-          </div>
-        ) : (
-
-
-        <div
-          className="relative mt-8 overflow-hidden rounded-3xl bg-white shadow-xl ring-1 ring-[var(--color-deep-blue)]/10"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-        >
-          <div
-            className="flex transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)]"
-            style={{ transform: `translateX(-${idx * 100}%)` }}
-          >
-            {news.map((n) => (
-              <article key={n.id} className="grid w-full shrink-0 grid-cols-1 md:grid-cols-2">
-                <div className="relative aspect-[16/11] md:aspect-auto md:min-h-[420px]">
-                  {n.cover_url ? (
-                    <img src={n.cover_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover" />
-                  ) : (
-                    <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-bright-blue)] to-[var(--color-gold)]" />
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent md:bg-gradient-to-r md:from-transparent md:to-black/10" />
-                </div>
-                <div className="flex flex-col justify-center gap-4 p-8 sm:p-10 lg:p-14">
-                  <div className="flex items-center gap-2 text-[11px]">
-                    <span className={`rounded px-2 py-0.5 font-bold uppercase tracking-wider ${SCHOOL_BADGE[n.school_slug] ?? "bg-[var(--color-deep-blue)] text-white"}`}>
-                      {SCHOOL_LABELS[n.school_slug] ?? n.school_slug}
-                    </span>
-                    {n.published_at && (
-                      <span className="text-[var(--color-ink)]/60">Posted {relativeDate(n.published_at)}</span>
-                    )}
-                  </div>
-                  <h3 className="font-display text-2xl font-semibold leading-tight text-[var(--color-deep-blue)] sm:text-3xl lg:text-4xl">
-                    {n.title}
-                  </h3>
-                  {n.body && (
-                    <p className="line-clamp-4 text-sm leading-relaxed text-[var(--color-ink)]/75 sm:text-base">
-                      {n.body}
-                    </p>
-                  )}
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {count > 1 && (
-            <>
-              <button
-                aria-label="Previous update"
-                onClick={() => setIdx((i) => (i - 1 + count) % count)}
-                className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--color-deep-blue)] shadow-md ring-1 ring-black/5 backdrop-blur transition hover:scale-105 hover:bg-white"
-              >
-                ‹
-              </button>
-              <button
-                aria-label="Next update"
-                onClick={() => setIdx((i) => (i + 1) % count)}
-                className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[var(--color-deep-blue)] shadow-md ring-1 ring-black/5 backdrop-blur transition hover:scale-105 hover:bg-white"
-              >
-                ›
-              </button>
-              <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 gap-2">
-                {news.map((_, i) => (
-                  <button
-                    key={i}
-                    aria-label={`Go to slide ${i + 1}`}
-                    onClick={() => setIdx(i)}
-                    className={`h-1.5 rounded-full transition-all duration-500 ${i === idx ? "w-8 bg-[var(--color-gold)]" : "w-1.5 bg-white/70 hover:bg-white"}`}
-                  />
-                ))}
+                {/* 375px: coloured pill on a white row. From md up it sits
+                    inside the coloured band, so it inverts to a white pill —
+                    these must be Tailwind classes, not inline style, or the
+                    breakpoint cannot override them. */}
+                <span
+                  className={`${BTN_BASE} shrink-0 bg-[var(--band)] text-[var(--color-surface)] md:mt-4 md:bg-[var(--color-surface)] md:text-[var(--color-ink)]`}
+                  style={{
+                    borderRadius: "var(--btn-primary-radius)",
+                    padding: "0.5rem 0.875rem",
+                    fontWeight: "var(--btn-primary-weight)",
+                    fontSize: "var(--text-label)",
+                  }}
+                >
+                  Explore
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </span>
               </div>
-            </>
-          )}
-        </div>
-        )}
-      </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
 
     </section>
   );
 }
 
-function EventsRail({ events }: { events: HomeEventItem[] }) {
+/* ------------------------------------------------------------------ *
+ * 3. AVIATION BANNER
+ * ------------------------------------------------------------------ */
+function AviationBanner() {
   return (
-    <section className="relative overflow-hidden bg-white text-[var(--color-ink)]">
-      <div aria-hidden className="pointer-events-none absolute inset-0 opacity-40">
-        <div className="absolute -left-20 top-10 h-64 w-64 rounded-full bg-[var(--color-gold)]/15 blur-3xl" />
-        <div className="absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-[var(--color-bright-blue)]/15 blur-3xl" />
-      </div>
-      <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10">
-        <Reveal direction="up" className="flex items-end justify-between gap-6">
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--color-brand-blue)]">
-              Upcoming
+    <section className={`${SHELL} pb-[var(--space-section-y)]`}>
+      <Reveal direction="up">
+        <div className="relative isolate overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-banner)]">
+          <img
+            src={aviationUniformAsset.url}
+            alt="Alpha Schools aviation cadet in uniform at the airport"
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{ backgroundImage: "var(--hero-scrim)" }}
+          />
+          <div className="relative max-w-lg p-[var(--space-card-pad)]">
+            <p className="text-[var(--color-gold)]" style={T.label}>
+              The Alpha difference
             </p>
-            <h2 className="mt-2 font-display text-4xl font-semibold tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-              What's coming up next.
+            <h2
+              className="mt-2 font-display text-[var(--color-surface)]"
+              style={T.section}
+            >
+              Soar Higher with Alpha Aviation
             </h2>
-          </div>
-          <Link to="/events" className="hidden text-sm font-semibold text-[var(--color-brand-blue)] hover:underline sm:inline">
-            Full calendar →
-          </Link>
-        </Reveal>
-
-        {events.length === 0 ? (
-          <div className="mt-10 grid place-items-center rounded-2xl border border-dashed border-[var(--color-hairline)] bg-[var(--color-surface-muted)] px-6 py-16 text-center">
-            <div className="grid h-14 w-14 place-items-center rounded-full bg-[var(--color-gold)]/20 text-2xl">📅</div>
-            <h3 className="mt-4 font-display text-xl font-semibold text-[var(--color-deep-blue)]">No upcoming events scheduled</h3>
-            <p className="mt-2 max-w-md text-sm text-[var(--color-ink-soft)]">
-              We're between events right now. The next one will appear here as soon as it's announced.
+            <p
+              className="mt-3 text-[var(--color-surface)]/90"
+              style={T.body}
+            >
+              Ground school, simulator hours and first principles of flight.
+              [Aviation positioning statement — wording to be confirmed]
             </p>
+            <Link
+              to="/aviation"
+              className={`${BTN_BASE} mt-5 w-full sm:w-auto`}
+              style={BTN_PRIMARY}
+            >
+              Discover Aviation Programme
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
           </div>
-        ) : (
-        <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-          {events.map((e, i) => (
-            <Reveal key={e.id} direction="up" delay={i * 90}>
-              <article
-                className="group relative h-full overflow-hidden rounded-2xl bg-[var(--color-surface-muted)] p-6 ring-1 ring-[var(--color-hairline)] transition-all duration-500 hover:-translate-y-1 hover:bg-white hover:ring-[var(--color-gold)]/60 hover:shadow-lg"
-              >
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full bg-[var(--color-gold)]/15 blur-2xl transition-all duration-700 group-hover:scale-150 group-hover:bg-[var(--color-gold)]/25"
-                />
-                <div className="relative flex items-start gap-5">
-                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[var(--color-gold)] to-[var(--color-gold-dark)] text-[var(--color-accent-foreground)] shadow-md ring-1 ring-white/40 transition-transform duration-500 group-hover:rotate-[-4deg] group-hover:scale-105">
-                    <span className="font-display text-3xl font-black leading-none">
-                      {eventDay(e.event_date)}
-                    </span>
-                    <span className="absolute bottom-2 text-[9px] font-bold tracking-[0.18em]">
-                      {eventMonth(e.event_date)}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className={`inline-block rounded px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${SCHOOL_BADGE[e.school_slug] ?? "bg-[var(--color-surface-soft)] text-[var(--color-ink)]"}`}>
-                      {SCHOOL_LABELS[e.school_slug] ?? e.school_slug}
-                    </span>
-                    <h3 className="mt-3 font-display text-lg font-semibold leading-snug text-[var(--color-deep-blue)]">
-                      {e.title}
-                    </h3>
-                    {e.location && (
-                      <p className="mt-2 text-xs text-[var(--color-ink-soft)]">📍 {e.location}</p>
-                    )}
-                  </div>
-                </div>
-                <div className="relative mt-5 flex items-center justify-between border-t border-[var(--color-hairline)] pt-4">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-ink-soft)]">
-                    {new Date(e.event_date).toLocaleDateString(undefined, { weekday: "long" })}
-                  </span>
-                  <span className="text-sm font-semibold text-[var(--color-brand-blue)] opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 translate-x-2">
-                    Details →
-                  </span>
-                </div>
-              </article>
-            </Reveal>
-          ))}
         </div>
-        )}
+      </Reveal>
+    </section>
+  );
+}
 
+/* ------------------------------------------------------------------ *
+ * 4. TESTIMONIALS (two-up)
+ * design/README.md: the mockup's quotes are invented. This renders only
+ * published rows and disappears completely when there are none — no
+ * placeholder names, ever.
+ * ------------------------------------------------------------------ */
+function isAlumni(t: TestimonialItem) {
+  return /alumn/i.test(t.relationship ?? "");
+}
+
+function Testimonials({ items }: { items: TestimonialItem[] }) {
+  const parent = items.find((t) => !isAlumni(t));
+  const alumni = items.find(isAlumni);
+
+  if (!parent && !alumni) return null;
+
+  return (
+    <section className={`${SHELL} pb-[var(--space-section-y)]`}>
+      <div className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
+        {parent && (
+          <TestimonialCard
+            title="Parent Testimonials"
+            tint="var(--color-tint-parent)"
+            item={parent}
+          />
+        )}
+        {alumni && (
+          <TestimonialCard
+            title="Alumni Testimonials"
+            tint="var(--color-tint-alumni)"
+            item={alumni}
+          />
+        )}
       </div>
     </section>
   );
 }
 
+function TestimonialCard({
+  title,
+  tint,
+  item,
+}: {
+  title: string;
+  tint: string;
+  item: TestimonialItem;
+}) {
+  return (
+    <article
+      className="flex gap-4 rounded-[var(--radius-card)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
+      style={{ background: tint }}
+    >
+      <Quote
+        className="h-6 w-6 shrink-0 text-[var(--color-brand-blue)]"
+        aria-hidden
+      />
+      <div className="min-w-0 flex-1">
+        <h2
+          className="font-display text-[var(--color-brand-blue)]"
+          style={T.cardTitle}
+        >
+          {title}
+        </h2>
+        <blockquote
+          className="mt-3 text-[var(--color-ink)]"
+          style={T.body}
+        >
+          “{item.quote}”
+        </blockquote>
+        <p className="mt-3 text-[var(--color-ink-soft)]" style={T.label}>
+          — {item.author_name}
+          {item.relationship ? `, ${item.relationship}` : ""}
+        </p>
+      </div>
+      {item.photo_url && (
+        <img
+          src={item.photo_url}
+          alt=""
+          loading="lazy"
+          decoding="async"
+          className="hidden h-20 w-20 shrink-0 rounded-[var(--radius-btn)] object-cover sm:block"
+        />
+      )}
+    </article>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * 5. NEWS & EVENTS
+ * ------------------------------------------------------------------ */
+type FeedCard = {
+  key: string;
+  date: string;
+  title: string;
+  blurb: string | null;
+  image: string | null;
+  school: string;
+  to: "/news" | "/events";
+};
+
+function toFeed(news: HomeWhatsNew["news"], events: HomeEventItem[]): FeedCard[] {
+  const e: FeedCard[] = events.map((x) => ({
+    key: `e-${x.id}`,
+    date: x.event_date,
+    title: x.title,
+    blurb: x.description,
+    image: null,
+    school: x.school_slug,
+    to: "/events",
+  }));
+  const n: FeedCard[] = news
+    .filter((x) => x.published_at)
+    .map((x) => ({
+      key: `n-${x.id}`,
+      date: x.published_at as string,
+      title: x.title,
+      blurb: x.body,
+      image: x.cover_url,
+      school: x.school_slug,
+      to: "/news",
+    }));
+  return [...e, ...n].slice(0, 3);
+}
+
+function NewsAndEvents({
+  news,
+  events,
+}: {
+  news: HomeWhatsNew["news"];
+  events: HomeEventItem[];
+}) {
+  const cards = toFeed(news, events);
+
+  return (
+    <section className={`${SHELL} pb-[var(--space-section-y)]`}>
+      <Reveal direction="up">
+        <SectionHeading
+          action={
+            <Link
+              to="/news"
+              className="font-display text-[var(--color-brand-blue)] hover:underline"
+              style={T.label}
+            >
+              View all news →
+            </Link>
+          }
+        >
+          News &amp; Events
+        </SectionHeading>
+      </Reveal>
+
+      {cards.length === 0 ? (
+        <p
+          className="mt-[var(--space-block-y)] rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] text-[var(--color-ink-soft)] shadow-[var(--card-shadow)]"
+          style={T.body}
+        >
+          Nothing published yet. News and upcoming events will appear here as
+          soon as the school posts them.
+        </p>
+      ) : (
+        <ul className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3">
+          {cards.map((c) => (
+            <li key={c.key}>
+              <Link
+                to={c.to}
+                className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] transition-shadow hover:shadow-[var(--card-shadow-hover)] motion-reduce:transition-none"
+              >
+                {c.image && (
+                  <img
+                    src={c.image}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-[16/10] w-full object-cover"
+                  />
+                )}
+                <div className="flex flex-1 gap-4 p-[var(--space-card-pad-sm)]">
+                  <DateChip iso={c.date} />
+                  <div className="min-w-0 flex-1">
+                    <h3
+                      className="font-display text-[var(--color-ink)]"
+                      style={T.cardTitle}
+                    >
+                      {c.title}
+                    </h3>
+                    <p
+                      className="mt-1 text-[var(--color-ink-soft)]"
+                      style={T.label}
+                    >
+                      {SCHOOL_LABELS[c.school] ?? c.school}
+                    </p>
+                    {c.blurb && (
+                      <p
+                        className="mt-2 line-clamp-2 text-[var(--color-ink-soft)]"
+                        style={T.body}
+                      >
+                        {c.blurb}
+                      </p>
+                    )}
+                    <span
+                      className="mt-3 inline-flex items-center gap-1.5 font-display text-[var(--color-brand-blue)]"
+                      style={T.label}
+                    >
+                      Read more
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+/* The "18 MAY" block: a white box with a pale border and blue text —
+   measured from the mockup, not a filled blue block. */
+function DateChip({ iso }: { iso: string }) {
+  const d = new Date(iso);
+  const day = d.getDate().toString().padStart(2, "0");
+  const month = d.toLocaleString(undefined, { month: "short" }).toUpperCase();
+  return (
+    <time
+      dateTime={iso}
+      className="flex h-fit shrink-0 flex-col items-center bg-[var(--chip-bg)] text-[var(--chip-fg)]"
+      style={{
+        border: "var(--chip-border)",
+        borderRadius: "var(--chip-radius)",
+        padding: "var(--chip-pad)",
+      }}
+    >
+      <span
+        className="font-display leading-none"
+        style={{
+          fontSize: "var(--chip-day-size)",
+          fontWeight: "var(--chip-day-weight)",
+        }}
+      >
+        {day}
+      </span>
+      <span
+        className="mt-0.5 leading-none"
+        style={{
+          fontSize: "var(--chip-month-size)",
+          fontWeight: "var(--chip-month-weight)",
+          letterSpacing: "var(--tracking-label)",
+        }}
+      >
+        {month}
+      </span>
+    </time>
+  );
+}
