@@ -3,7 +3,8 @@ import admissionHeroFallback from "@/assets/campus-nursery.jpg.asset.json";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { Reveal } from "@/components/reveal";
+import { Reveal } from "@/components/reveal";
+import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/admission")({
   head: () => ({
@@ -74,7 +75,7 @@ const SCHOOL_CARDS = [
 
 function AdmissionPage() {
   return (
-    <div className="min-h-screen bg-[var(--color-cream)] text-[var(--color-ink)]">
+    <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
       {/* 1. Hero */}
@@ -93,15 +94,15 @@ function AdmissionPage() {
               "radial-gradient(60% 60% at 20% 20%, rgba(232,160,32,0.35) 0%, transparent 60%), radial-gradient(50% 50% at 80% 80%, rgba(30,127,194,0.45) 0%, transparent 60%)",
           }}
         />
-        <div className="relative mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
+        <div className="relative mx-auto max-w-7xl px-6 py-[var(--space-section-y)] lg:px-10 lg:py-28">
           <Reveal>
-            <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
+            <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
               Admissions
             </p>
-            <h1 className="mt-4 max-w-3xl font-display text-4xl font-bold leading-[1.05] sm:text-5xl lg:text-6xl">
+            <h1 className="mt-4 max-w-3xl font-display leading-[1.05] lg:text-6xl" style={T.section}>
               Join the Alpha family.
             </h1>
-            <p className="mt-5 max-w-2xl text-base text-white/85 sm:text-lg">
+            <p className="mt-5 max-w-2xl text-white/85" style={T.body}>
               Applications are open throughout the year, across all three schools — from
               nursery to A-Level. Here's how to begin.
             </p>
@@ -110,14 +111,14 @@ function AdmissionPage() {
                 href={APPLICATION_FORM_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md"
+                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md" style={T.body}
               >
                 <Download className="h-4 w-4" />
                 Download Application Form
               </a>
               <Link
                 to="/contact"
-                className="inline-flex items-center gap-2 rounded-md border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/20"
+                className="inline-flex items-center gap-2 rounded-md border border-white/40 bg-white/10 px-5 py-3 font-semibold text-white backdrop-blur transition-colors hover:bg-white/20" style={T.body}
               >
                 Book a Visit
               </Link>
@@ -130,12 +131,12 @@ function AdmissionPage() {
       </section>
 
       {/* 2. Admission process — 6 steps */}
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+      <section className={`${SHELL} py-[var(--space-section-y)]`}>
         <Reveal>
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          <p className="text-[11px] text-[var(--color-bright-blue)]" style={T.label}>
             The admission process
           </p>
-          <h2 className="mt-3 font-display text-3xl font-bold text-[var(--color-deep-blue)] sm:text-4xl">
+          <h2 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
             Six simple steps.
           </h2>
         </Reveal>
@@ -151,13 +152,13 @@ function AdmissionPage() {
                   {step.n}
                 </div>
                 <div className="relative">
-                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-deep-blue)] font-display text-sm font-bold text-white">
+                  <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-deep-blue)] font-display font-bold text-white" style={T.body}>
                     {i + 1}
                   </span>
-                  <h3 className="mt-4 font-display text-lg font-bold text-[var(--color-deep-blue)]">
+                  <h3 className="mt-4 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                     {step.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/80">
+                  <p className="mt-2 text-[var(--color-ink)]/80" style={T.body}>
                     {step.body}
                   </p>
                 </div>
@@ -166,7 +167,7 @@ function AdmissionPage() {
           ))}
         </ol>
 
-        <p className="mt-8 max-w-3xl text-sm text-[var(--color-ink)]/70">
+        <p className="mt-8 max-w-3xl text-[var(--color-ink)]/70" style={T.body}>
           Application forms are available throughout the year; interviews and assessments
           are conducted according to each school's schedule.
         </p>
@@ -174,13 +175,13 @@ function AdmissionPage() {
 
       {/* 3. What you'll need */}
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
+          <div className="grid gap-12 [&>*]:min-w-0 lg:grid-cols-2 lg:items-center">
             <Reveal>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+              <p className="text-[11px] text-[var(--color-bright-blue)]" style={T.label}>
                 What you'll need
               </p>
-              <h2 className="mt-3 font-display text-3xl font-bold text-[var(--color-deep-blue)] sm:text-4xl">
+              <h2 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
                 Required documents.
               </h2>
               <p className="mt-4 max-w-lg text-[var(--color-ink)]/80">
@@ -190,7 +191,7 @@ function AdmissionPage() {
             </Reveal>
 
             <Reveal direction="left">
-              <ul className="space-y-3 rounded-2xl border border-black/5 bg-[var(--color-cream)] p-6 shadow-sm">
+              <ul className="space-y-3 rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-6 shadow-sm">
                 {REQUIRED_DOCS.map((d) => (
                   <li key={d} className="flex items-start gap-3">
                     <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
@@ -199,7 +200,7 @@ function AdmissionPage() {
                     <span className="font-medium text-[var(--color-ink)]">{d}</span>
                   </li>
                 ))}
-                <li className="flex items-start gap-3 border-t border-black/10 pt-4 text-sm text-[var(--color-ink)]/70">
+                <li className="flex items-start gap-3 border-t border-black/10 pt-4 text-[var(--color-ink)]/70" style={T.body}>
                   <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border border-dashed border-[var(--color-ink)]/40 text-[10px] font-bold">
                     +
                   </span>
@@ -212,12 +213,12 @@ function AdmissionPage() {
       </section>
 
       {/* 4. Entry requirements by school */}
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+      <section className={`${SHELL} py-[var(--space-section-y)]`}>
         <Reveal>
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          <p className="text-[11px] text-[var(--color-bright-blue)]" style={T.label}>
             Entry requirements
           </p>
-          <h2 className="mt-3 font-display text-3xl font-bold text-[var(--color-deep-blue)] sm:text-4xl">
+          <h2 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
             By school.
           </h2>
         </Reveal>
@@ -237,12 +238,11 @@ function AdmissionPage() {
                     {s.campus}
                   </span>
                   <h3
-                    className="mt-4 font-display text-xl font-bold"
-                    style={{ color: s.accent }}
+                    className="mt-4 font-display" style={{ ...T.cardTitle, color: s.accent  }}
                   >
                     {s.name}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink)]/85">
+                  <p className="mt-3 text-[var(--color-ink)]/85" style={T.body}>
                     {s.entry}
                   </p>
                   {s.note && (
@@ -250,8 +250,7 @@ function AdmissionPage() {
                   )}
                   <Link
                     to={s.to}
-                    className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold transition-colors hover:underline"
-                    style={{ color: s.accent }}
+                    className="mt-5 inline-flex items-center gap-1.5 font-semibold transition-colors hover:underline" style={{ ...T.body, color: s.accent  }}
                   >
                     Learn more <ArrowRight className="h-3.5 w-3.5" />
                   </Link>
@@ -264,23 +263,23 @@ function AdmissionPage() {
 
       {/* 5. Intake & timing */}
       <section className="bg-white">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
             <Reveal as="div" className="lg:col-span-5">
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+              <p className="text-[11px] text-[var(--color-bright-blue)]" style={T.label}>
                 Intake & timing
               </p>
-              <h2 className="mt-3 font-display text-3xl font-bold text-[var(--color-deep-blue)] sm:text-4xl">
+              <h2 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
                 Rolling admissions.
               </h2>
             </Reveal>
             <Reveal as="div" className="lg:col-span-7" direction="left">
-              <div className="rounded-2xl border border-black/5 bg-[var(--color-cream)] p-7 shadow-sm">
-                <p className="text-base leading-relaxed text-[var(--color-ink)]">
+              <div className="rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-7 shadow-sm">
+                <p className="text-[var(--color-ink)]" style={T.body}>
                   We accept applications throughout the year — January through December —
                   so you can begin the process whenever you're ready.
                 </p>
-                <p className="mt-4 text-sm italic text-[var(--color-ink)]/60">
+                <p className="mt-4 italic text-[var(--color-ink)]/60" style={T.body}>
                   [Specific term start dates / application deadlines — to be confirmed]
                 </p>
               </div>
@@ -290,19 +289,19 @@ function AdmissionPage() {
       </section>
 
       {/* 6. Fees */}
-      <section className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
+      <section className={`${SHELL} py-[var(--space-section-y)]`}>
         <Reveal>
-          <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-bright-blue)]">
+          <p className="text-[11px] text-[var(--color-bright-blue)]" style={T.label}>
             Fees
           </p>
-          <h2 className="mt-3 font-display text-3xl font-bold text-[var(--color-deep-blue)] sm:text-4xl">
+          <h2 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
             School fees.
           </h2>
         </Reveal>
 
         <Reveal delay={80}>
           <div className="mt-8 rounded-2xl border border-dashed border-[var(--color-ink)]/25 bg-white p-8 shadow-sm">
-            <p className="font-display text-lg font-semibold text-[var(--color-deep-blue)]">
+            <p className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
               [Fee structure per school — to be provided]
             </p>
             <p className="mt-3 max-w-2xl text-[var(--color-ink)]/80">
@@ -312,13 +311,13 @@ function AdmissionPage() {
             <div className="mt-5 flex flex-wrap gap-3">
               <a
                 href="tel:+255734036010"
-                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-4 py-2.5 text-sm font-semibold text-white transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-4 py-2.5 font-semibold text-white transition-transform hover:scale-[1.02]" style={T.body}
               >
                 <Phone className="h-4 w-4" /> Call admissions
               </a>
               <a
                 href="mailto:alphaschoolsdsm@gmail.com"
-                className="inline-flex items-center gap-2 rounded-md border border-[var(--color-deep-blue)]/20 bg-white px-4 py-2.5 text-sm font-semibold text-[var(--color-deep-blue)] transition-colors hover:bg-[var(--color-deep-blue)]/5"
+                className="inline-flex items-center gap-2 rounded-md border border-[var(--color-deep-blue)]/20 bg-white px-4 py-2.5 font-semibold text-[var(--color-deep-blue)] transition-colors hover:bg-[var(--color-deep-blue)]/5" style={T.body}
               >
                 <Mail className="h-4 w-4" /> Email admissions
               </a>
@@ -329,13 +328,13 @@ function AdmissionPage() {
 
       {/* 7. Get in touch / apply */}
       <section className="bg-[var(--color-deep-blue)] text-white">
-        <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
+          <div className="grid gap-12 [&>*]:min-w-0 lg:grid-cols-2 lg:items-center">
             <Reveal>
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--color-gold)]">
+              <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
                 Get in touch
               </p>
-              <h2 className="mt-3 font-display text-3xl font-bold leading-tight sm:text-4xl">
+              <h2 className="mt-3 font-display leading-tight" style={T.section}>
                 Ready to apply? Start here.
               </h2>
               <p className="mt-5 max-w-md text-white/85">
@@ -355,7 +354,7 @@ function AdmissionPage() {
                   href={APPLICATION_FORM_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]"
+                  className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]" style={T.body}
                 >
                   <Download className="h-4 w-4" /> Download Application Form
                 </a>
@@ -369,15 +368,15 @@ function AdmissionPage() {
                     <Phone className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/60">
+                    <p className="text-[11px] text-white/60" style={T.label}>
                       Phone / WhatsApp
                     </p>
-                    <p className="mt-1 font-display text-lg font-semibold">
+                    <p className="mt-1 font-display" style={T.cardTitle}>
                       <a href="tel:+255734036010" className="hover:text-[var(--color-gold)]">
                         0734 036 010
                       </a>
                     </p>
-                    <p className="text-sm text-white/75">
+                    <p className="text-white/75" style={T.body}>
                       Admissions also:{" "}
                       <a href="tel:+255756299302" className="hover:text-[var(--color-gold)]">
                         0756 299 302
@@ -390,10 +389,10 @@ function AdmissionPage() {
                     <Mail className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/60">
+                    <p className="text-[11px] text-white/60" style={T.label}>
                       Email
                     </p>
-                    <p className="mt-1 font-display text-lg font-semibold">
+                    <p className="mt-1 font-display" style={T.cardTitle}>
                       <a
                         href="mailto:alphaschoolsdsm@gmail.com"
                         className="hover:text-[var(--color-gold)]"
@@ -408,10 +407,10 @@ function AdmissionPage() {
                     <MapPin className="h-4 w-4" />
                   </span>
                   <div>
-                    <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-white/60">
+                    <p className="text-[11px] text-white/60" style={T.label}>
                       Address
                     </p>
-                    <p className="mt-1 font-display text-lg font-semibold">
+                    <p className="mt-1 font-display" style={T.cardTitle}>
                       Kunduchi, Dar es Salaam
                     </p>
                   </div>
@@ -426,7 +425,7 @@ function AdmissionPage() {
       <section className="bg-[var(--color-gold)] text-[var(--color-accent-foreground)]">
         <div className="mx-auto flex max-w-7xl flex-col items-start gap-6 px-6 py-14 lg:flex-row lg:items-center lg:justify-between lg:px-10">
           <div>
-            <h2 className="font-display text-2xl font-bold sm:text-3xl">
+            <h2 className="font-display" style={T.section}>
               Ready to take the first step?
             </h2>
             <p className="mt-2 max-w-2xl text-[var(--color-accent-foreground)]/85">
@@ -435,7 +434,7 @@ function AdmissionPage() {
           </div>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+            className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]" style={T.body}
           >
             Book a Visit <ArrowRight className="h-4 w-4" />
           </Link>
