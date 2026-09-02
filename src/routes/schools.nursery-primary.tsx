@@ -150,7 +150,7 @@ function Hero() {
             </Link>
             <Link
               to="/contact"
-              className="rounded-full border-2 border-[var(--color-gold)] bg-white px-7 py-3 text-sm font-semibold text-[var(--color-gold)] hover:bg-[var(--color-gold)]/5"
+              className="rounded-full border-2 border-[var(--color-gold)] bg-white px-7 py-3 text-sm font-semibold text-[var(--color-deep-blue)] hover:bg-[var(--color-gold)]/5"
             >
               Book a Visit
             </Link>
@@ -253,7 +253,7 @@ function WhatWeOffer() {
       body:
         "Day Care, Baby Class, Middle Class and Pre-Unit — learning through play, songs and stories, building confidence, language and friendships in a calm, joyful space.",
       bg: "white",
-      ageColor: "var(--color-gold)",
+      ageColor: "var(--color-deep-blue)",
       titleColor: "var(--color-deep-blue)",
       bodyColor: "var(--color-ink)",
       arrowBg: PAGE_TINTS.ice,
@@ -282,7 +282,7 @@ function WhatWeOffer() {
           From first steps to big school
         </p>
         <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-          What we <span className="text-[var(--color-gold)]">offer</span>
+          What we <span className="text-[var(--color-bright-blue)]">offer</span>
         </h2>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
@@ -364,7 +364,7 @@ function AlphaChild() {
         </p>
         <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
           What makes a young Alpha{" "}
-          <span className="text-[var(--color-gold)]">learner?</span>
+          <span className="text-[var(--color-bright-blue)]">learner?</span>
         </h2>
 
         <div className="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
@@ -440,7 +440,7 @@ function WhatTheyExplore() {
           A rich, busy week
         </p>
         <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-          What they'll <span className="text-[var(--color-gold)]">explore</span>
+          What they'll <span className="text-[var(--color-bright-blue)]">explore</span>
         </h2>
 
         <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3">
@@ -519,7 +519,7 @@ function OutstandingExtracurriculum() {
           Beyond the classroom
         </p>
         <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-          Outstanding <span className="text-[var(--color-gold)]">Extracurriculum</span>
+          Outstanding <span className="text-[var(--color-bright-blue)]">Extracurriculum</span>
         </h2>
 
         <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
@@ -596,7 +596,7 @@ function LetsGetStarted() {
 
       <div className="mx-auto max-w-3xl px-6 text-center lg:px-10">
         <h2 className="font-display text-4xl font-black tracking-tight text-white sm:text-5xl">
-          Let's <span className="text-[var(--color-gold)]">get</span> started
+          Let's <span className="text-[var(--color-bright-blue)]">get</span> started
         </h2>
         <p className="mt-3 text-white/85">
           Tell us a little about your child and we'll arrange a visit to the campus.
@@ -719,7 +719,7 @@ function WhatParentsSay() {
           From our families
         </p>
         <h2 className="mt-2 text-center font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-          What <span className="text-[var(--color-gold)]">parents</span> say
+          What <span className="text-[var(--color-bright-blue)]">parents</span> say
         </h2>
 
         <div className="mt-12 grid gap-6 md:grid-cols-3">
@@ -769,7 +769,7 @@ function PeekInside() {
               Around the campus
             </p>
             <h2 className="mt-2 font-display text-4xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-5xl">
-              A peek <span className="text-[var(--color-gold)]">inside</span>
+              A peek <span className="text-[var(--color-bright-blue)]">inside</span>
             </h2>
           </div>
           <Link

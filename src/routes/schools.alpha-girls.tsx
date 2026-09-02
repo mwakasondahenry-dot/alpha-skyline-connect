@@ -127,7 +127,7 @@ function Hero() {
             className="mt-6 font-display text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
             style={{ color: ACCENT }}
           >
-            Built for girls who <span style={{ color: GOLD }}>mean to lead.</span>
+            Built for girls who <span style={{ color: "var(--color-bright-blue)" }}>mean to lead.</span>
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--color-ink)]/80 sm:text-lg">
             The same rigour, the same aviation and coding, the same path to top results — on a campus designed for girls to take up every inch of space.
@@ -184,14 +184,14 @@ function About() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
-            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
               About Alpha Girls
             </p>
             <h2
               className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl"
               style={{ color: ACCENT }}
             >
-              Excellence, <span style={{ color: GOLD }}>no exceptions.</span>
+              Excellence, <span style={{ color: "var(--color-bright-blue)" }}>no exceptions.</span>
             </h2>
             <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/80">
               Alpha Girls High School (Kunduchi) gives girls the same ambitious education as the flagship — academic rigour, aviation, coding, and leadership — in an environment built for them to thrive and lead.
@@ -292,7 +292,7 @@ function Academics() {
     <section style={{ background: VIOLET.soft }}>
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Academics
           </p>
           <h2
@@ -325,7 +325,7 @@ function Academics() {
                   >
                     <div
                       className="text-[11px] font-bold uppercase tracking-wider"
-                      style={{ color: GOLD }}
+                      style={{ color: ACCENT }}
                     >
                       {g.name}
                     </div>
@@ -385,7 +385,7 @@ function Distinctive() {
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Distinctive at Alpha Girls
           </p>
           <h2 className="mt-2 font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
@@ -435,7 +435,7 @@ function SignpostCard({
           className="absolute right-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-150 group-hover:scale-x-100"
           style={{ background: GOLD }}
         />
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
           {eyebrow}
         </p>
         <h3 className="mt-2 font-display text-xl font-bold" style={{ color: ACCENT }}>
@@ -478,7 +478,7 @@ function BeyondClassroom() {
     <section style={{ background: VIOLET.soft }}>
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Beyond the classroom
           </p>
           <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
@@ -491,7 +491,7 @@ function BeyondClassroom() {
             <h3 className="font-display text-xl font-black" style={{ color: ACCENT }}>
               Clubs & societies
             </h3>
-            <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: GOLD }}>
+            <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: ACCENT }}>
               {CLUBS.length} student-led clubs
             </span>
           </div>
@@ -576,7 +576,7 @@ function LifeAtKunduchi() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
               Campus
             </p>
             <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
@@ -623,7 +623,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
     <section style={{ background: VIOLET.soft }}>
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Leadership & teaching
           </p>
           <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>

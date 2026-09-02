@@ -205,11 +205,11 @@ function About() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
-            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
               About Alpha High
             </p>
             <h2 className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl" style={{ color: ACCENT }}>
-              Excellence through challenge — <span style={{ color: GOLD }}>since 2007.</span>
+              Excellence through challenge — <span style={{ color: "var(--color-bright-blue)" }}>since 2007.</span>
             </h2>
             <p className="mt-6 text-base leading-relaxed text-[var(--color-ink)]/80">
               Established <strong>19 March 2007</strong>, Alpha High was founded to enable students to achieve academic excellence through intellectual and physical challenge, and to become responsible citizens of a dynamic society.
@@ -308,7 +308,7 @@ function Academics() {
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Academics
           </p>
           <h2 className="mt-2 font-display text-3xl font-black tracking-tight sm:text-4xl" style={{ color: ACCENT }}>
@@ -336,7 +336,7 @@ function Academics() {
                     key={g.name}
                     className="rounded-xl bg-white p-4 ring-1 ring-black/5 transition hover:-translate-y-0.5 active:translate-y-0 hover:shadow-md"
                   >
-                    <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: GOLD }}>
+                    <div className="text-[11px] font-bold uppercase tracking-wider" style={{ color: ACCENT }}>
                       {g.name}
                     </div>
                     <div className="mt-1.5 text-sm text-[var(--color-ink)]/80">{g.items}</div>
@@ -411,7 +411,7 @@ function Distinctive() {
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-10">
 
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Distinctive at Alpha High
           </p>
           <h2 className="mt-2 font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
@@ -463,7 +463,7 @@ function SignpostCard({
           className="absolute right-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-150 group-hover:scale-x-100"
           style={{ background: GOLD }}
         />
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+        <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
           {eyebrow}
         </p>
         <h3 className="mt-2 font-display text-xl font-bold" style={{ color: ACCENT }}>
@@ -507,7 +507,7 @@ function ClubsRibbon() {
         <h3 className="font-display text-2xl font-black" style={{ color: ACCENT }}>
           Clubs & societies
         </h3>
-        <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: GOLD }}>
+        <span className="text-xs font-semibold uppercase tracking-[0.18em]" style={{ color: ACCENT }}>
           {CLUBS.length}+ student-led clubs
         </span>
       </div>
@@ -570,7 +570,7 @@ function BeyondClassroom() {
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Beyond the classroom
           </p>
           <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
@@ -634,7 +634,7 @@ function LifeAtMikocheni() {
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+            <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
               Campus
             </p>
             <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
@@ -685,7 +685,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
     <section className="bg-white">
       <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
         <Reveal direction="up" className="max-w-2xl">
-          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+          <p className="text-xs font-bold uppercase tracking-[0.22em]" style={{ color: ACCENT }}>
             Leadership & teaching
           </p>
           <h2 className="mt-2 font-display text-3xl font-black sm:text-4xl" style={{ color: ACCENT }}>
