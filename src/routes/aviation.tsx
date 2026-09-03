@@ -1,34 +1,34 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import heroFloatplane from "@/assets/hero-floatplane.jpg.asset.json";
-import avPreFlight from "@/assets/av-pre-flight-check.jpg.asset.json";
-import avCessnaBriefing from "@/assets/av-cessna-briefing.jpg.asset.json";
-import avTailInspection from "@/assets/av-tail-inspection.jpg.asset.json";
-import avGroundSchool1 from "@/assets/av-ground-school-1.jpg.asset.json";
-import avFlightline from "@/assets/av-flightline-group.jpg.asset.json";
-import avGroundSchool2 from "@/assets/av-ground-school-2.jpg.asset.json";
-import avInstrumentDemo from "@/assets/av-instrument-demo.jpg.asset.json";
-import avEngineering from "@/assets/av-engineering-hands-on.jpg.asset.json";
-import heroSolo from "@/assets/av-hero-solo.jpg.asset.json";
-import heroDronePair from "@/assets/av-hero-drone-pair.jpg.asset.json";
-import heroDroneGirls from "@/assets/av-hero-drone-girls.jpg.asset.json";
-import heroCockpit from "@/assets/av-hero-cockpit-girl.jpg.asset.json";
-import avCockpitStudents from "@/assets/av-cockpit-students.jpg.asset.json";
+import heroFloatplane from "@/assets/hero-floatplane.webp";
+import avPreFlight from "@/assets/av-pre-flight-check.webp";
+import avCessnaBriefing from "@/assets/av-cessna-briefing.webp";
+import avTailInspection from "@/assets/av-tail-inspection.webp";
+import avGroundSchool1 from "@/assets/av-ground-school-1.webp";
+import avFlightline from "@/assets/av-flightline-group.webp";
+import avGroundSchool2 from "@/assets/av-ground-school-2.webp";
+import avInstrumentDemo from "@/assets/av-instrument-demo.webp";
+import avEngineering from "@/assets/av-engineering-hands-on.webp";
+import heroSolo from "@/assets/av-hero-solo.webp";
+import heroDronePair from "@/assets/av-hero-drone-pair.webp";
+import heroDroneGirls from "@/assets/av-hero-drone-girls.webp";
+import heroCockpit from "@/assets/av-hero-cockpit-girl.webp";
+import avCockpitStudents from "@/assets/av-cockpit-students.webp";
 import { T, SHELL } from "@/components/type-roles";
 
 // Real Alpha aviation student photos — KSOF holiday program.
 // NOTE: names below remain placeholders until written media-release
 // consent is on file for each named student.
 const FLYING_STUDENTS = [
-  { src: avFlightline.url, caption: "Pre-flight briefing on the flightline · KSOF, Nairobi" },
-  { src: avCessnaBriefing.url, caption: "Walk-around checks before take-off" },
-  { src: avPreFlight.url, caption: "Equipment review with KSOF instructors" },
-  { src: avTailInspection.url, caption: "Control-surface inspection — empennage" },
-  { src: avEngineering.url, caption: "Hands-on aircraft engineering practical" },
-  { src: avInstrumentDemo.url, caption: "Instrument demonstration during ground school" },
-  { src: avGroundSchool1.url, caption: "Ground school — Kenya School of Flying" },
-  { src: avGroundSchool2.url, caption: "Theory class — Aviation Technology module" },
+  { src: avFlightline, caption: "Pre-flight briefing on the flightline · KSOF, Nairobi" },
+  { src: avCessnaBriefing, caption: "Walk-around checks before take-off" },
+  { src: avPreFlight, caption: "Equipment review with KSOF instructors" },
+  { src: avTailInspection, caption: "Control-surface inspection — empennage" },
+  { src: avEngineering, caption: "Hands-on aircraft engineering practical" },
+  { src: avInstrumentDemo, caption: "Instrument demonstration during ground school" },
+  { src: avGroundSchool1, caption: "Ground school — Kenya School of Flying" },
+  { src: avGroundSchool2, caption: "Theory class — Aviation Technology module" },
 ];
 
 
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/aviation")({
         content:
           "Ground school, simulator hours and time in the air — the Alpha aviation pathway from Form One to the cockpit.",
       },
-      { property: "og:image", content: heroFloatplane.url },
+      { property: "og:image", content: heroFloatplane },
     ],
   }),
   component: AviationPage,
@@ -145,7 +145,7 @@ function AviationPage() {
         {/* Subtle aircraft silhouette via photo, kept very low so text stays readable */}
         <HeroSlideshow
           pageKey="aviation"
-          fallback={[{ src: heroFloatplane.url, alt: "" }]}
+          fallback={[{ src: heroFloatplane, alt: "" }]}
           className="pointer-events-none opacity-[0.18] mix-blend-luminosity"
           showDots={false}
         />
@@ -226,7 +226,7 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "0s" }}
               >
                 <img
-                  src={heroSolo.url}
+                  src={heroSolo}
                   alt="Alpha student pilot after his first solo flight"
                   className="h-full w-full object-cover"
                   loading="eager"
@@ -242,7 +242,7 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "-2.5s" }}
               >
                 <img
-                  src={heroCockpit.url}
+                  src={heroCockpit}
                   alt="Alpha aviation student at the controls of a training aircraft"
                   className="h-full w-full object-cover"
                   loading="eager"
@@ -255,7 +255,7 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "-5s" }}
               >
                 <img
-                  src={heroDronePair.url}
+                  src={heroDronePair}
                   alt="Alpha aviation students during practical drone training"
                   className="h-full w-full object-cover"
                   loading="eager"
@@ -268,7 +268,7 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "-1.2s" }}
               >
                 <img
-                  src={heroDroneGirls.url}
+                  src={heroDroneGirls}
                   alt="Alpha girls operating drones during aviation practical"
                   className="h-full w-full object-cover"
                   loading="eager"
@@ -414,7 +414,7 @@ function AviationPage() {
             />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
               <img
-                src={avCockpitStudents.url}
+                src={avCockpitStudents}
                 alt="Alpha student pilots training inside a Cessna cockpit"
 
                 loading="lazy"

@@ -7,12 +7,12 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import girlsHero from "@/assets/school-alpha-girls.jpg.asset.json";
-import girlUniform from "@/assets/alpha-girl-uniform.png.asset.json";
-import campusGirls from "@/assets/campus-girls.jpg.asset.json";
-import campusHigh from "@/assets/campus-high.jpg.asset.json";
-import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
-import aviation from "@/assets/aviation-uniform.jpg.asset.json";
+import girlsHero from "@/assets/school-alpha-girls.webp";
+import girlUniform from "@/assets/alpha-girl-uniform.webp";
+import campusGirls from "@/assets/campus-girls.webp";
+import campusHigh from "@/assets/campus-high.webp";
+import campusNursery from "@/assets/campus-nursery.webp";
+import aviation from "@/assets/aviation-uniform.webp";
 import { T } from "@/components/type-roles";
 
 const slug = "alpha-girls" as const;
@@ -143,7 +143,7 @@ function Hero() {
             }}
           />
           <img
-            src={girlsHero.url}
+            src={girlsHero}
             alt="Alpha Girls students on campus"
             className="relative z-10 h-auto w-full max-w-[28rem] rounded-t-[3rem] object-cover shadow-2xl"
             style={{ aspectRatio: "4/5", objectFit: "cover" }}
@@ -562,10 +562,10 @@ function Academics() {
 
 
 const FACILITIES = [
-  { label: "Science labs", img: campusHigh.url },
-  { label: "Library", img: campusNursery.url },
-  { label: "Sports field", img: campusGirls.url },
-  { label: "Boarding", img: aviation.url },
+  { label: "Science labs", img: campusHigh },
+  { label: "Library", img: campusNursery },
+  { label: "Sports field", img: campusGirls },
+  { label: "Boarding", img: aviation },
 ];
 
 function LifeAtKunduchi() {

@@ -20,11 +20,11 @@ import {
   type HomeEventItem,
   type TestimonialItem,
 } from "@/lib/alpha-content.functions";
-import heroCollage from "@/assets/hero-collage.png.asset.json";
-import aviationUniformAsset from "@/assets/aviation-uniform.jpg.asset.json";
-import campusNurseryImage from "@/assets/campus-nursery.jpg.asset.json";
-import campusHighImage from "@/assets/campus-high.jpg.asset.json";
-import campusGirlsImage from "@/assets/campus-girls.jpg.asset.json";
+import heroCollage from "@/assets/hero-collage-v2.webp";
+import aviationUniformAsset from "@/assets/aviation-uniform.webp";
+import campusNurseryImage from "@/assets/campus-nursery.webp";
+import campusHighImage from "@/assets/campus-high.webp";
+import campusGirlsImage from "@/assets/campus-girls.webp";
 import { T } from "@/components/type-roles";
 
 const FOUNDED_YEAR = 2007;
@@ -106,7 +106,7 @@ const SCHOOLS = [
     blurb:
       "Where curiosity starts. Play-led early years into a strong, structured primary foundation.",
     to: "/schools/nursery-primary",
-    image: campusNurseryImage.url,
+    image: campusNurseryImage,
     alt: "Young Alpha primary students in green sports kit",
     band: "var(--color-bright-blue)",
     Icon: Building2,
@@ -119,7 +119,7 @@ const SCHOOLS = [
     blurb:
       "Our flagship secondary. NECTA pathways, aviation and coding at the core.",
     to: "/schools/alpha-high",
-    image: campusHighImage.url,
+    image: campusHighImage,
     alt: "Alpha High aviation students in safety vests at JNIA",
     band: "var(--color-deep-blue)",
     Icon: GraduationCap,
@@ -132,7 +132,7 @@ const SCHOOLS = [
     blurb:
       "A secondary built for girls to lead — same rigour, same aviation and coding, room to thrive.",
     to: "/schools/alpha-girls",
-    image: campusGirlsImage.url,
+    image: campusGirlsImage,
     alt: "Alpha Girls debate team celebrating with medals and certificates",
     band: "var(--color-blue-violet)",
     Icon: Award,
@@ -225,7 +225,7 @@ function Hero() {
           pageKey="home"
           fallback={[
             {
-              src: heroCollage.url,
+              src: heroCollage,
               alt: "Alpha Schools students across nursery, primary, secondary and aviation",
             },
           ]}
@@ -431,7 +431,7 @@ function AviationBanner() {
       <Reveal direction="up">
         <div className="relative isolate overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-banner)]">
           <img
-            src={aviationUniformAsset.url}
+            src={aviationUniformAsset}
             alt="Alpha Schools aviation cadet in uniform at the airport"
             loading="lazy"
             decoding="async"

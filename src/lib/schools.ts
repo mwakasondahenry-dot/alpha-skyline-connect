@@ -2,9 +2,9 @@
 // Marked TODO copy: are clearly-placeholder strings to be replaced.
 
 import type { SchoolSlug } from "@/integrations/alpha-supabase/types";
-import campusNurseryImage from "@/assets/campus-nursery.jpg.asset.json";
-import campusHighImage from "@/assets/campus-high.jpg.asset.json";
-import campusGirlsImage from "@/assets/campus-girls.jpg.asset.json";
+import campusNurseryImage from "@/assets/campus-nursery.webp";
+import campusHighImage from "@/assets/campus-high.webp";
+import campusGirlsImage from "@/assets/campus-girls.webp";
 
 export type SchoolFact = { label: string; value: string };
 export type SchoolProgram = { title: string; description: string };
@@ -33,7 +33,7 @@ export const SCHOOL_CONFIGS: Record<Exclude<SchoolSlug, "group-wide">, SchoolCon
     campus: "Combined campus · Ages 2–12",
     accent: "var(--color-bright-blue)",
     accentSoft: "rgba(34, 142, 215, 0.08)",
-    heroImage: campusNurseryImage.url,
+    heroImage: campusNurseryImage,
     heroAlt: "Alpha Nursery & Primary pupils in green sports kit",
     tagline: "TODO copy: one-line tagline for Nursery & Primary.",
     intro:
@@ -68,7 +68,7 @@ export const SCHOOL_CONFIGS: Record<Exclude<SchoolSlug, "group-wide">, SchoolCon
     campus: "Co-education · Mikocheni · Form 1–6",
     accent: "var(--color-deep-blue)",
     accentSoft: "rgba(15, 35, 88, 0.08)",
-    heroImage: campusHighImage.url,
+    heroImage: campusHighImage,
     heroAlt: "Alpha High aviation students in safety vests at JNIA",
     tagline: "TODO copy: one-line tagline for Alpha High.",
     intro:
@@ -104,7 +104,7 @@ export const SCHOOL_CONFIGS: Record<Exclude<SchoolSlug, "group-wide">, SchoolCon
     campus: "Girls' secondary · Kunduchi · Form 1–6",
     accent: "var(--color-blue-violet)",
     accentSoft: "rgba(101, 73, 200, 0.08)",
-    heroImage: campusGirlsImage.url,
+    heroImage: campusGirlsImage,
     heroAlt: "Alpha Girls students celebrating with medals",
     tagline: "TODO copy: one-line tagline for Alpha Girls.",
     intro:

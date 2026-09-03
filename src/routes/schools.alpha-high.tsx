@@ -8,22 +8,22 @@ import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.function
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
-import graduate from "@/assets/alpha-high-graduate.png.asset.json";
-import campusAerial from "@/assets/alpha-high-campus-aerial.jpg.asset.json";
-import campusHigh from "@/assets/campus-high.jpg.asset.json";
-import campusGirls from "@/assets/campus-girls.jpg.asset.json";
-import campusNursery from "@/assets/campus-nursery.jpg.asset.json";
-import aviation from "@/assets/aviation-uniform.jpg.asset.json";
-import clubAviation from "@/assets/club-aviation.jpg.asset.json";
-import clubDrama from "@/assets/club-drama.jpg.asset.json";
-import clubMusic from "@/assets/club-music-dance.jpg.asset.json";
-import clubDebate from "@/assets/club-debate.jpg.asset.json";
-import clubArt from "@/assets/club-art.jpg.asset.json";
-import clubCookery from "@/assets/club-cookery.jpg.asset.json";
-import clubScout from "@/assets/club-scout.jpg.asset.json";
-import clubSpeaking from "@/assets/club-public-speaking.jpg.asset.json";
-import clubUn from "@/assets/club-un.jpg.asset.json";
-import clubEnvironment from "@/assets/club-environment.jpg.asset.json";
+import graduate from "@/assets/alpha-high-graduate.webp";
+import campusAerial from "@/assets/alpha-high-campus-aerial.webp";
+import campusHigh from "@/assets/campus-high.webp";
+import campusGirls from "@/assets/campus-girls.webp";
+import campusNursery from "@/assets/campus-nursery.webp";
+import aviation from "@/assets/aviation-uniform.webp";
+import clubAviation from "@/assets/club-aviation.webp";
+import clubDrama from "@/assets/club-drama.webp";
+import clubMusic from "@/assets/club-music-dance.webp";
+import clubDebate from "@/assets/club-debate.webp";
+import clubArt from "@/assets/club-art.webp";
+import clubCookery from "@/assets/club-cookery.webp";
+import clubScout from "@/assets/club-scout.webp";
+import clubSpeaking from "@/assets/club-public-speaking.webp";
+import clubUn from "@/assets/club-un.webp";
+import clubEnvironment from "@/assets/club-environment.webp";
 import { T } from "@/components/type-roles";
 
 const slug = "alpha-high" as const;
@@ -114,7 +114,7 @@ function Hero() {
       {/* Aerial campus background */}
       <HeroSlideshow
         pageKey="alpha-high"
-        fallback={[{ src: campusAerial.url, alt: "" }]}
+        fallback={[{ src: campusAerial, alt: "" }]}
         imgClassName="opacity-55"
       />
       {/* Blue fade overlays */}
@@ -187,7 +187,7 @@ function Hero() {
             }}
           />
           <img
-            src={graduate.url}
+            src={graduate}
             alt="Alpha High School Form Four graduate in cap and gown"
             className="relative z-10 mx-auto block h-auto w-full max-w-[28rem] drop-shadow-[0_25px_45px_rgba(232,160,32,0.55)]"
             style={{ filter: "drop-shadow(0 0 60px rgba(232,160,32,0.55)) drop-shadow(0 30px 40px rgba(0,0,0,0.45))" }}
@@ -580,16 +580,16 @@ function SignpostCard({
 // ---------- Beyond the classroom ----------
 
 const CLUBS = [
-  { name: "Aviation", photo: clubAviation.url },
-  { name: "Drama", photo: clubDrama.url },
-  { name: "Music & Dance", photo: clubMusic.url },
-  { name: "Debate", photo: clubDebate.url },
-  { name: "Art & Drawing", photo: clubArt.url },
-  { name: "Cookery", photo: clubCookery.url },
-  { name: "Scout", photo: clubScout.url },
-  { name: "Public Speaking", photo: clubSpeaking.url },
-  { name: "Model UN", photo: clubUn.url },
-  { name: "Environment", photo: clubEnvironment.url },
+  { name: "Aviation", photo: clubAviation },
+  { name: "Drama", photo: clubDrama },
+  { name: "Music & Dance", photo: clubMusic },
+  { name: "Debate", photo: clubDebate },
+  { name: "Art & Drawing", photo: clubArt },
+  { name: "Cookery", photo: clubCookery },
+  { name: "Scout", photo: clubScout },
+  { name: "Public Speaking", photo: clubSpeaking },
+  { name: "Model UN", photo: clubUn },
+  { name: "Environment", photo: clubEnvironment },
 ];
 const SPORTS = ["Football", "Basketball", "Volleyball", "Netball", "Athletics"];
 
@@ -717,10 +717,10 @@ function BeyondClassroom() {
 // ---------- Life at Mikocheni ----------
 
 const FACILITIES = [
-  { label: "Science labs", img: campusHigh.url },
-  { label: "Library", img: campusNursery.url },
-  { label: "Sports field", img: campusGirls.url },
-  { label: "Boarding", img: aviation.url },
+  { label: "Science labs", img: campusHigh },
+  { label: "Library", img: campusNursery },
+  { label: "Sports field", img: campusGirls },
+  { label: "Boarding", img: aviation },
 ];
 
 function LifeAtMikocheni() {

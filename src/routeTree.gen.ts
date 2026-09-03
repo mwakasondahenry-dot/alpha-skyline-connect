@@ -9,87 +9,37 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as TestimonialsRouteImport } from './routes/testimonials'
-import { Route as ScholarshipsRouteImport } from './routes/scholarships'
-import { Route as NewsRouteImport } from './routes/news'
-import { Route as GalleryRouteImport } from './routes/gallery'
-import { Route as FacilitiesRouteImport } from './routes/facilities'
-import { Route as EventsRouteImport } from './routes/events'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as CodingRouteImport } from './routes/coding'
-import { Route as AviationRouteImport } from './routes/aviation'
-import { Route as AdmissionRouteImport } from './routes/admission'
-import { Route as AdminRouteImport } from './routes/admin'
-import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as AdmissionRouteImport } from './routes/admission'
+import { Route as AviationRouteImport } from './routes/aviation'
+import { Route as CodingRouteImport } from './routes/coding'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as EventsRouteImport } from './routes/events'
+import { Route as FacilitiesRouteImport } from './routes/facilities'
+import { Route as GalleryRouteImport } from './routes/gallery'
+import { Route as NewsRouteImport } from './routes/news'
+import { Route as ScholarshipsRouteImport } from './routes/scholarships'
+import { Route as TestimonialsRouteImport } from './routes/testimonials'
 import { Route as AdminIndexRouteImport } from './routes/admin.index'
-import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
-import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
-import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
-import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
-import { Route as AdminStaffRouteImport } from './routes/admin.staff'
-import { Route as AdminNewsRouteImport } from './routes/admin.news'
-import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
-import { Route as AdminLoginRouteImport } from './routes/admin.login'
-import { Route as AdminHeroSlidesRouteImport } from './routes/admin.hero-slides'
-import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
-import { Route as AdminFacilityPhotosRouteImport } from './routes/admin.facility-photos'
-import { Route as AdminFacilitiesRouteImport } from './routes/admin.facilities'
 import { Route as AdminEventsRouteImport } from './routes/admin.events'
+import { Route as AdminFacilitiesRouteImport } from './routes/admin.facilities'
+import { Route as AdminFacilityPhotosRouteImport } from './routes/admin.facility-photos'
+import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
+import { Route as AdminHeroSlidesRouteImport } from './routes/admin.hero-slides'
+import { Route as AdminLoginRouteImport } from './routes/admin.login'
+import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
+import { Route as AdminNewsRouteImport } from './routes/admin.news'
+import { Route as AdminStaffRouteImport } from './routes/admin.staff'
+import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
+import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
+import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
+import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
 
-const TestimonialsRoute = TestimonialsRouteImport.update({
-  id: '/testimonials',
-  path: '/testimonials',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ScholarshipsRoute = ScholarshipsRouteImport.update({
-  id: '/scholarships',
-  path: '/scholarships',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NewsRoute = NewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GalleryRoute = GalleryRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FacilitiesRoute = FacilitiesRouteImport.update({
-  id: '/facilities',
-  path: '/facilities',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EventsRoute = EventsRouteImport.update({
-  id: '/events',
-  path: '/events',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CodingRoute = CodingRouteImport.update({
-  id: '/coding',
-  path: '/coding',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AviationRoute = AviationRouteImport.update({
-  id: '/aviation',
-  path: '/aviation',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdmissionRoute = AdmissionRouteImport.update({
-  id: '/admission',
-  path: '/admission',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminRoute = AdminRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -97,9 +47,59 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdmissionRoute = AdmissionRouteImport.update({
+  id: '/admission',
+  path: '/admission',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AviationRoute = AviationRouteImport.update({
+  id: '/aviation',
+  path: '/aviation',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CodingRoute = CodingRouteImport.update({
+  id: '/coding',
+  path: '/coding',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EventsRoute = EventsRouteImport.update({
+  id: '/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FacilitiesRoute = FacilitiesRouteImport.update({
+  id: '/facilities',
+  path: '/facilities',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GalleryRoute = GalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NewsRoute = NewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ScholarshipsRoute = ScholarshipsRouteImport.update({
+  id: '/scholarships',
+  path: '/scholarships',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TestimonialsRoute = TestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -107,59 +107,9 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AdminRoute,
 } as any)
-const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
-  id: '/schools/nursery-primary',
-  path: '/schools/nursery-primary',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SchoolsAlphaHighRoute = SchoolsAlphaHighRouteImport.update({
-  id: '/schools/alpha-high',
-  path: '/schools/alpha-high',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
-  id: '/schools/alpha-girls',
-  path: '/schools/alpha-girls',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
-  id: '/testimonials',
-  path: '/testimonials',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminStaffRoute = AdminStaffRouteImport.update({
-  id: '/staff',
-  path: '/staff',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminNewsRoute = AdminNewsRouteImport.update({
-  id: '/news',
-  path: '/news',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminMessagesRoute = AdminMessagesRouteImport.update({
-  id: '/messages',
-  path: '/messages',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminLoginRoute = AdminLoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminHeroSlidesRoute = AdminHeroSlidesRouteImport.update({
-  id: '/hero-slides',
-  path: '/hero-slides',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminGalleryRoute = AdminGalleryRouteImport.update({
-  id: '/gallery',
-  path: '/gallery',
-  getParentRoute: () => AdminRoute,
-} as any)
-const AdminFacilityPhotosRoute = AdminFacilityPhotosRouteImport.update({
-  id: '/facility-photos',
-  path: '/facility-photos',
+const AdminEventsRoute = AdminEventsRouteImport.update({
+  id: '/events',
+  path: '/events',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminFacilitiesRoute = AdminFacilitiesRouteImport.update({
@@ -167,10 +117,60 @@ const AdminFacilitiesRoute = AdminFacilitiesRouteImport.update({
   path: '/facilities',
   getParentRoute: () => AdminRoute,
 } as any)
-const AdminEventsRoute = AdminEventsRouteImport.update({
-  id: '/events',
-  path: '/events',
+const AdminFacilityPhotosRoute = AdminFacilityPhotosRouteImport.update({
+  id: '/facility-photos',
+  path: '/facility-photos',
   getParentRoute: () => AdminRoute,
+} as any)
+const AdminGalleryRoute = AdminGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminHeroSlidesRoute = AdminHeroSlidesRouteImport.update({
+  id: '/hero-slides',
+  path: '/hero-slides',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminNewsRoute = AdminNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminStaffRoute = AdminStaffRouteImport.update({
+  id: '/staff',
+  path: '/staff',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
+  id: '/testimonials',
+  path: '/testimonials',
+  getParentRoute: () => AdminRoute,
+} as any)
+const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
+  id: '/schools/alpha-girls',
+  path: '/schools/alpha-girls',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchoolsAlphaHighRoute = SchoolsAlphaHighRouteImport.update({
+  id: '/schools/alpha-high',
+  path: '/schools/alpha-high',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
+  id: '/schools/nursery-primary',
+  path: '/schools/nursery-primary',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -370,81 +370,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/testimonials': {
-      id: '/testimonials'
-      path: '/testimonials'
-      fullPath: '/testimonials'
-      preLoaderRoute: typeof TestimonialsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/scholarships': {
-      id: '/scholarships'
-      path: '/scholarships'
-      fullPath: '/scholarships'
-      preLoaderRoute: typeof ScholarshipsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/news': {
-      id: '/news'
-      path: '/news'
-      fullPath: '/news'
-      preLoaderRoute: typeof NewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/gallery': {
-      id: '/gallery'
-      path: '/gallery'
-      fullPath: '/gallery'
-      preLoaderRoute: typeof GalleryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/facilities': {
-      id: '/facilities'
-      path: '/facilities'
-      fullPath: '/facilities'
-      preLoaderRoute: typeof FacilitiesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/events': {
-      id: '/events'
-      path: '/events'
-      fullPath: '/events'
-      preLoaderRoute: typeof EventsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/contact': {
-      id: '/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/coding': {
-      id: '/coding'
-      path: '/coding'
-      fullPath: '/coding'
-      preLoaderRoute: typeof CodingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/aviation': {
-      id: '/aviation'
-      path: '/aviation'
-      fullPath: '/aviation'
-      preLoaderRoute: typeof AviationRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admission': {
-      id: '/admission'
-      path: '/admission'
-      fullPath: '/admission'
-      preLoaderRoute: typeof AdmissionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -454,11 +384,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admission': {
+      id: '/admission'
+      path: '/admission'
+      fullPath: '/admission'
+      preLoaderRoute: typeof AdmissionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/aviation': {
+      id: '/aviation'
+      path: '/aviation'
+      fullPath: '/aviation'
+      preLoaderRoute: typeof AviationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/coding': {
+      id: '/coding'
+      path: '/coding'
+      fullPath: '/coding'
+      preLoaderRoute: typeof CodingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/events': {
+      id: '/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof EventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/facilities': {
+      id: '/facilities'
+      path: '/facilities'
+      fullPath: '/facilities'
+      preLoaderRoute: typeof FacilitiesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gallery': {
+      id: '/gallery'
+      path: '/gallery'
+      fullPath: '/gallery'
+      preLoaderRoute: typeof GalleryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/news': {
+      id: '/news'
+      path: '/news'
+      fullPath: '/news'
+      preLoaderRoute: typeof NewsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/scholarships': {
+      id: '/scholarships'
+      path: '/scholarships'
+      fullPath: '/scholarships'
+      preLoaderRoute: typeof ScholarshipsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/testimonials': {
+      id: '/testimonials'
+      path: '/testimonials'
+      fullPath: '/testimonials'
+      preLoaderRoute: typeof TestimonialsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -468,81 +468,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/schools/nursery-primary': {
-      id: '/schools/nursery-primary'
-      path: '/schools/nursery-primary'
-      fullPath: '/schools/nursery-primary'
-      preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/schools/alpha-high': {
-      id: '/schools/alpha-high'
-      path: '/schools/alpha-high'
-      fullPath: '/schools/alpha-high'
-      preLoaderRoute: typeof SchoolsAlphaHighRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/schools/alpha-girls': {
-      id: '/schools/alpha-girls'
-      path: '/schools/alpha-girls'
-      fullPath: '/schools/alpha-girls'
-      preLoaderRoute: typeof SchoolsAlphaGirlsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/testimonials': {
-      id: '/admin/testimonials'
-      path: '/testimonials'
-      fullPath: '/admin/testimonials'
-      preLoaderRoute: typeof AdminTestimonialsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/staff': {
-      id: '/admin/staff'
-      path: '/staff'
-      fullPath: '/admin/staff'
-      preLoaderRoute: typeof AdminStaffRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/news': {
-      id: '/admin/news'
-      path: '/news'
-      fullPath: '/admin/news'
-      preLoaderRoute: typeof AdminNewsRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/messages': {
-      id: '/admin/messages'
-      path: '/messages'
-      fullPath: '/admin/messages'
-      preLoaderRoute: typeof AdminMessagesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/login': {
-      id: '/admin/login'
-      path: '/login'
-      fullPath: '/admin/login'
-      preLoaderRoute: typeof AdminLoginRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/hero-slides': {
-      id: '/admin/hero-slides'
-      path: '/hero-slides'
-      fullPath: '/admin/hero-slides'
-      preLoaderRoute: typeof AdminHeroSlidesRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/gallery': {
-      id: '/admin/gallery'
-      path: '/gallery'
-      fullPath: '/admin/gallery'
-      preLoaderRoute: typeof AdminGalleryRouteImport
-      parentRoute: typeof AdminRoute
-    }
-    '/admin/facility-photos': {
-      id: '/admin/facility-photos'
-      path: '/facility-photos'
-      fullPath: '/admin/facility-photos'
-      preLoaderRoute: typeof AdminFacilityPhotosRouteImport
+    '/admin/events': {
+      id: '/admin/events'
+      path: '/events'
+      fullPath: '/admin/events'
+      preLoaderRoute: typeof AdminEventsRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/facilities': {
@@ -552,12 +482,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminFacilitiesRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/admin/events': {
-      id: '/admin/events'
-      path: '/events'
-      fullPath: '/admin/events'
-      preLoaderRoute: typeof AdminEventsRouteImport
+    '/admin/facility-photos': {
+      id: '/admin/facility-photos'
+      path: '/facility-photos'
+      fullPath: '/admin/facility-photos'
+      preLoaderRoute: typeof AdminFacilityPhotosRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/admin/gallery': {
+      id: '/admin/gallery'
+      path: '/gallery'
+      fullPath: '/admin/gallery'
+      preLoaderRoute: typeof AdminGalleryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/hero-slides': {
+      id: '/admin/hero-slides'
+      path: '/hero-slides'
+      fullPath: '/admin/hero-slides'
+      preLoaderRoute: typeof AdminHeroSlidesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/login': {
+      id: '/admin/login'
+      path: '/login'
+      fullPath: '/admin/login'
+      preLoaderRoute: typeof AdminLoginRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/news': {
+      id: '/admin/news'
+      path: '/news'
+      fullPath: '/admin/news'
+      preLoaderRoute: typeof AdminNewsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/staff': {
+      id: '/admin/staff'
+      path: '/staff'
+      fullPath: '/admin/staff'
+      preLoaderRoute: typeof AdminStaffRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/testimonials': {
+      id: '/admin/testimonials'
+      path: '/testimonials'
+      fullPath: '/admin/testimonials'
+      preLoaderRoute: typeof AdminTestimonialsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/schools/alpha-girls': {
+      id: '/schools/alpha-girls'
+      path: '/schools/alpha-girls'
+      fullPath: '/schools/alpha-girls'
+      preLoaderRoute: typeof SchoolsAlphaGirlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schools/alpha-high': {
+      id: '/schools/alpha-high'
+      path: '/schools/alpha-high'
+      fullPath: '/schools/alpha-high'
+      preLoaderRoute: typeof SchoolsAlphaHighRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/schools/nursery-primary': {
+      id: '/schools/nursery-primary'
+      path: '/schools/nursery-primary'
+      fullPath: '/schools/nursery-primary'
+      preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -613,3 +613,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

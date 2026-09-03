@@ -13,20 +13,20 @@ import {
   BookOpen, FlaskConical, Calculator, Leaf, Puzzle, Globe2, Wrench, Languages, Plane,
   Trophy, Waves, Music, Laptop, Tent, Disc3, ChefHat, Mic,
 } from "lucide-react";
-import girlCutout from "@/assets/alpha-girl-uniform.png.asset.json";
-import photoDance from "@/assets/np-traditional-dance.jpg.asset.json";
-import photoMusicalChairs from "@/assets/np-musical-chairs.jpg.asset.json";
-import photoBallPit from "@/assets/np-ball-pit.jpg.asset.json";
-import photoTelescope from "@/assets/np-telescope.jpg.asset.json";
-import photoTeacher from "@/assets/np-teacher-pupils.jpg.asset.json";
-import photoTeam from "@/assets/np-team-thumbs.jpg.asset.json";
-import photoGirlPortrait from "@/assets/np-girl-portrait.jpg.asset.json";
-import photoHippoRide from "@/assets/np-hippo-ride.jpg.asset.json";
-import photoSpeakersGroup from "@/assets/np-junior-speakers-group.jpg.asset.json";
-import photoSpeakersTeam from "@/assets/np-junior-speakers-team.jpg.asset.json";
-import photoPlayground from "@/assets/np-playground.jpg.asset.json";
-import photoShapesClass from "@/assets/np-shapes-class.jpg.asset.json";
-import photoToyCar from "@/assets/np-toy-car.jpg.asset.json";
+import girlCutout from "@/assets/alpha-girl-uniform.webp";
+import photoDance from "@/assets/np-traditional-dance.webp";
+import photoMusicalChairs from "@/assets/np-musical-chairs.webp";
+import photoBallPit from "@/assets/np-ball-pit.webp";
+import photoTelescope from "@/assets/np-telescope.webp";
+import photoTeacher from "@/assets/np-teacher-pupils.webp";
+import photoTeam from "@/assets/np-team-thumbs.webp";
+import photoGirlPortrait from "@/assets/np-girl-portrait.webp";
+import photoHippoRide from "@/assets/np-hippo-ride.webp";
+import photoSpeakersGroup from "@/assets/np-junior-speakers-group.webp";
+import photoSpeakersTeam from "@/assets/np-junior-speakers-team.webp";
+import photoPlayground from "@/assets/np-playground.webp";
+import photoShapesClass from "@/assets/np-shapes-class.webp";
+import photoToyCar from "@/assets/np-toy-car.webp";
 import { T } from "@/components/type-roles";
 
 const testimonialsQuery = queryOptions({
@@ -207,7 +207,7 @@ function Hero() {
           >
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoHippoRide.url}
+                src={photoHippoRide}
                 alt="Pupil on a play hippo in the courtyard"
                 className="h-56 w-full object-cover"
                 loading="eager"
@@ -219,7 +219,7 @@ function Hero() {
           <div className="absolute -left-2 top-36 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoGirlPortrait.url}
+                src={photoGirlPortrait}
                 alt="Smiling Alpha primary pupil in uniform"
                 className="h-72 w-full object-cover"
                 loading="eager"
@@ -231,7 +231,7 @@ function Hero() {
           <div className="absolute bottom-0 right-0 w-[58%] rotate-[3deg] rounded-2xl bg-[var(--color-deep-blue)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
-                src={photoTeacher.url}
+                src={photoTeacher}
                 alt="Teacher working with two pupils"
                 className="h-52 w-full object-cover"
                 loading="eager"
@@ -411,7 +411,7 @@ function AlphaChild() {
               style={{ background: "rgba(255,255,255,0.55)" }}
             />
             <img
-              src={girlCutout.url}
+              src={girlCutout}
               alt="Alpha pupil"
               className="absolute left-1/2 top-1/2 h-[22rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] object-cover object-top drop-shadow-[0_18px_18px_rgba(12,68,124,0.35)]"
             />
@@ -794,17 +794,17 @@ function PeekInside() {
         </div>
 
         <div className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
-          <GalleryTile src={photoBallPit.url} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
-          <GalleryTile src={photoShapesClass.url} caption="Learning shapes" className="h-44" />
-          <GalleryTile src={photoToyCar.url} caption="Little drivers" className="h-44" />
-          <GalleryTile src={photoPlayground.url} caption="Outdoor adventures" className="md:col-span-2 h-44" />
-          <GalleryTile src={photoSpeakersTeam.url} caption="Junior Speakers team" className="h-40" />
-          <GalleryTile src={photoSpeakersGroup.url} caption="Speakers Challenge 2025" className="h-40" />
-          <GalleryTile src={photoTeacher.url} caption="One-on-one learning" className="h-44" />
-          <GalleryTile src={photoTelescope.url} caption="Curious minds" className="h-44" />
-          <GalleryTile src={photoTeam.url} caption="Sports & teamwork" className="md:col-span-2 h-44" />
-          <GalleryTile src={photoMusicalChairs.url} caption="Active play" className="h-40" />
-          <GalleryTile src={photoDance.url} caption="Culture & dance" className="h-40" />
+          <GalleryTile src={photoBallPit} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
+          <GalleryTile src={photoShapesClass} caption="Learning shapes" className="h-44" />
+          <GalleryTile src={photoToyCar} caption="Little drivers" className="h-44" />
+          <GalleryTile src={photoPlayground} caption="Outdoor adventures" className="md:col-span-2 h-44" />
+          <GalleryTile src={photoSpeakersTeam} caption="Junior Speakers team" className="h-40" />
+          <GalleryTile src={photoSpeakersGroup} caption="Speakers Challenge 2025" className="h-40" />
+          <GalleryTile src={photoTeacher} caption="One-on-one learning" className="h-44" />
+          <GalleryTile src={photoTelescope} caption="Curious minds" className="h-44" />
+          <GalleryTile src={photoTeam} caption="Sports & teamwork" className="md:col-span-2 h-44" />
+          <GalleryTile src={photoMusicalChairs} caption="Active play" className="h-40" />
+          <GalleryTile src={photoDance} caption="Culture & dance" className="h-40" />
         </div>
 
         {/* Come and meet us ribbon */}

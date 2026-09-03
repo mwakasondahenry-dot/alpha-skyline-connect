@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import admissionHeroFallback from "@/assets/campus-nursery.jpg.asset.json";
+import admissionHeroFallback from "@/assets/campus-nursery.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -82,7 +82,7 @@ function AdmissionPage() {
       <section className="relative overflow-hidden bg-[var(--color-deep-blue)] text-white">
         <HeroSlideshow
           pageKey="admission"
-          fallback={[{ src: admissionHeroFallback.url, alt: "" }]}
+          fallback={[{ src: admissionHeroFallback, alt: "" }]}
           className="opacity-25"
           showDots={false}
         />

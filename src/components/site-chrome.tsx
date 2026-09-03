@@ -2,29 +2,29 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Menu, X, Instagram, Youtube, Facebook, Linkedin } from "lucide-react";
-import alphaLogo from "@/assets/alpha-logo.png.asset.json";
-import schoolNurseryPhoto from "@/assets/school-nursery-primary.jpg.asset.json";
-import schoolHighPhoto from "@/assets/school-alpha-high.jpg.asset.json";
-import schoolGirlsPhoto from "@/assets/school-alpha-girls.jpg.asset.json";
+import alphaLogo from "@/assets/alpha-logo.webp";
+import schoolNurseryPhoto from "@/assets/school-nursery-primary.webp";
+import schoolHighPhoto from "@/assets/school-alpha-high.webp";
+import schoolGirlsPhoto from "@/assets/school-alpha-girls.webp";
 
 const SCHOOLS = [
   {
     to: "/schools/nursery-primary" as const,
     label: "Nursery & Primary",
     blurb: "Ages 2–12 · Foundations for life",
-    photo: schoolNurseryPhoto.url,
+    photo: schoolNurseryPhoto,
   },
   {
     to: "/schools/alpha-high" as const,
     label: "Alpha High",
     blurb: "Form 1–6 · Co-education, Mikocheni",
-    photo: schoolHighPhoto.url,
+    photo: schoolHighPhoto,
   },
   {
     to: "/schools/alpha-girls" as const,
     label: "Alpha Girls",
     blurb: "Form 1–6 · Girls' secondary, Kunduchi",
-    photo: schoolGirlsPhoto.url,
+    photo: schoolGirlsPhoto,
   },
 ];
 
@@ -212,7 +212,7 @@ function MobileNav() {
         <div className="flex items-center justify-between border-b border-white/15 px-5 py-4">
           <span className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-white">
-              <img src={alphaLogo.url} alt="" className="h-8 w-8 object-contain" />
+              <img src={alphaLogo} alt="" className="h-8 w-8 object-contain" />
             </span>
             <span className="font-display text-sm font-bold tracking-wider">
               ALPHA <span className="font-normal text-white/70">SCHOOLS</span>
@@ -357,7 +357,7 @@ export function SiteHeader() {
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 lg:flex lg:justify-between lg:gap-4 lg:px-10">
         <Link to="/" className="flex min-w-0 items-center gap-3 hover:opacity-90">
           <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-white/30">
-            <img src={alphaLogo.url} alt="Alpha Schools" className="h-10 w-10 object-contain" />
+            <img src={alphaLogo} alt="Alpha Schools" className="h-10 w-10 object-contain" />
           </span>
           <span className="min-w-0 leading-tight">
             <span className="block truncate font-display text-sm font-bold tracking-wider text-white">
@@ -415,7 +415,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-white">
-              <img src={alphaLogo.url} alt="Alpha Schools" className="h-9 w-9 object-contain" />
+              <img src={alphaLogo} alt="Alpha Schools" className="h-9 w-9 object-contain" />
             </span>
             <span className="font-display text-sm font-bold tracking-wider text-white">
               ALPHA <span className="font-normal text-white/70">SCHOOLS</span>

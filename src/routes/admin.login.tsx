@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, type FormEvent } from "react";
 import { useAdminAuth } from "@/lib/admin-auth";
-import logo from "@/assets/alpha-logo.png.asset.json";
+import logo from "@/assets/alpha-logo.webp";
 
 export const Route = createFileRoute("/admin/login")({
   head: () => ({ meta: [{ title: "Sign in · Alpha Schools Admin" }] }),
@@ -37,7 +37,7 @@ function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-deep-blue)] to-[#08305a] px-4 py-12">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         <div className="mb-6 flex flex-col items-center text-center">
-          <img src={logo.url} alt="Alpha Schools" className="h-14 w-14 rounded-full ring-2 ring-[var(--color-gold)]" />
+          <img src={logo} alt="Alpha Schools" className="h-14 w-14 rounded-full ring-2 ring-[var(--color-gold)]" />
           <h1 className="mt-4 text-xl font-bold text-[var(--color-deep-blue)]">Alpha Schools Admin</h1>
           <p className="mt-1 text-sm text-[var(--color-ink)]/70">
             Sign in to manage news, events, gallery and staff.

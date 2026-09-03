@@ -1,11 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import aboutHeroFallback from "@/assets/campus-high.jpg.asset.json";
+import aboutHeroFallback from "@/assets/campus-high.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import alphaLogo from "@/assets/alpha-logo.png.asset.json";
-import profMayo from "@/assets/prof-mayo.jpeg.asset.json";
+import alphaLogo from "@/assets/alpha-logo.webp";
+import profMayo from "@/assets/prof-mayo.webp";
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/about")({
@@ -88,7 +88,7 @@ function AboutPage() {
       <section className="relative isolate overflow-hidden bg-[var(--color-deep-blue)] text-white">
         <HeroSlideshow
           pageKey="about"
-          fallback={[{ src: aboutHeroFallback.url, alt: "" }]}
+          fallback={[{ src: aboutHeroFallback, alt: "" }]}
           className="opacity-25"
           showDots={false}
         />
@@ -112,7 +112,7 @@ function AboutPage() {
             <div className="relative">
               <div aria-hidden className="absolute inset-0 -m-8 rounded-full bg-[var(--color-gold)]/15 blur-2xl" />
               <img
-                src={alphaLogo.url}
+                src={alphaLogo}
                 alt="Alpha Schools crest"
                 className="relative h-auto w-[260px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:w-[320px] lg:w-[380px]"
                 loading="eager"
@@ -173,7 +173,7 @@ function AboutPage() {
               <div aria-hidden className="absolute -inset-3 rounded-2xl bg-[var(--color-gold)]/20 blur-xl" />
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/90 ring-1 ring-[var(--color-deep-blue)]/20">
                 <img
-                  src={profMayo.url}
+                  src={profMayo}
                   alt="Professor Wenceslaus Aloyce Mayo, founder of Alpha Schools"
                   className="h-full w-full object-cover"
                   loading="lazy"

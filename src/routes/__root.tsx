@@ -10,6 +10,7 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import alphaLogo from "@/assets/alpha-logo.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { UrgentAnnouncements } from "../components/urgent-announcements";
 
@@ -96,7 +97,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", type: "image/png", href: "/__l5e/assets-v1/cce5b59c-6e0b-4fa4-895d-43e8c3430802/alpha-logo.png" },
+      { rel: "icon", type: "image/webp", href: alphaLogo },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
