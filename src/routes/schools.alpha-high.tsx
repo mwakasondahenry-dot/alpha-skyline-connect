@@ -109,12 +109,19 @@ function EntryRequirements() {
 function Hero() {
   return (
     <ShapedHero
-      eyebrow="Alpha High · Co-education"
       lineOne="Excellence through challenge."
       lineTwo="Built for the long climb."
       blurb="Our flagship secondary in Mikocheni. NECTA rigour, with aviation and coding at the core."
-      image={graduate}
-      imageAlt="An Alpha High graduate in cap and gown"
+      photos={[
+        { src: graduate, alt: "An Alpha High graduate in cap and gown", tilt: -2 },
+        { src: clubAviation, alt: "Alpha High aviation club students", tilt: 3 },
+        { src: campusAerial, alt: "The Mikocheni campus from the air", tilt: -1, span: true },
+      ]}
+      stickers={[
+        { text: "Form 1–6", tone: "sky", tilt: -4 },
+        { text: "Mikocheni", tone: "gold", tilt: 3 },
+        { text: "Since 2007", tone: "navy", tilt: -2 },
+      ]}
       actions={
         <>
           <GoldButton href="#academics">

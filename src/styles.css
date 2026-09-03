@@ -429,3 +429,60 @@
   .alpha-hero-card { opacity: 1; transform: none; animation: none; }
 }
 
+/* ===================================================================
+   YOUTH LAYER — doodles, stickers and photo cards.
+
+   Motion weighting for an educational surface is Jakub primary, Jhey
+   secondary, Emil selective — not the restraint-led weighting the audit
+   ran under, because the goal here is delight rather than efficiency.
+
+   Every rule below is one-shot on first paint or driven by a real
+   interaction. Nothing loops, nothing pulses, nothing seeks attention:
+   looped scale/opacity on decoration is the exact AI-slop pattern the
+   audit was commissioned to remove, and adding it back would undo that.
+
+   Animated properties are transform, opacity and stroke-dashoffset only.
+   =================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Sticker pop — Jhey's register, but from 0.9 not 0, per Emil's rule
+     that scale(0) reads unnatural. Slight overshoot; this is a rare,
+     decorative moment, not a utility action. */
+  @keyframes alpha-pop {
+    0%   { opacity: 0; transform: scale(0.9) rotate(var(--tilt, 0deg)); }
+    70%  { opacity: 1; transform: scale(1.03) rotate(var(--tilt, 0deg)); }
+    100% { opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
+  }
+  .alpha-pop {
+    animation: alpha-pop 320ms cubic-bezier(0.34, 1.2, 0.64, 1) both;
+    animation-delay: var(--pop-delay, 0ms);
+  }
+
+  /* Doodle draw-on. One shot, on first paint, per section. */
+  @keyframes alpha-draw {
+    from { stroke-dashoffset: var(--dash, 120); }
+    to   { stroke-dashoffset: 0; }
+  }
+  .alpha-draw {
+    stroke-dasharray: var(--dash, 120);
+    animation: alpha-draw 620ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: var(--draw-delay, 120ms);
+  }
+
+  /* Photo card lift. Jakub's 150-200ms hover band; press keeps Emil's
+     0.97 so touch gets the feedback the audit found missing. */
+  .alpha-photo {
+    transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 180ms ease;
+  }
+  .alpha-photo:hover { transform: translateY(-4px) rotate(var(--tilt, 0deg)) scale(1.01); }
+  .alpha-photo:active { transform: scale(0.985) rotate(var(--tilt, 0deg)); transition-duration: 120ms; }
+}
+
+/* The whole layer collapses to its final state. Reduced motion sees the
+   finished composition, tilts included, with nothing in flight. */
+@media (prefers-reduced-motion: reduce) {
+  .alpha-pop { animation: none; opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
+  .alpha-draw { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
+  .alpha-photo { transition: none; }
+}

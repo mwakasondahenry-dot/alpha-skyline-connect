@@ -87,40 +87,162 @@ export function GhostButton({
  * ------------------------------------------------------------------ */
 
 export function SectionHead({
-  eyebrow,
   children,
-  accent = "var(--color-brand-blue)",
+  mark = "underline",
   action,
 }: {
-  eyebrow?: string;
   children: ReactNode;
-  accent?: string;
+  mark?: DoodleKind;
   action?: ReactNode;
 }) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div>
-        {eyebrow && (
-          <p style={{ ...T.label, color: accent }}>{eyebrow}</p>
-        )}
+      <div className="relative">
         <h2
-          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-deep-blue)]"
+          className="max-w-3xl font-display tracking-tight text-[var(--color-deep-blue)]"
           style={T.section}
         >
           {children}
         </h2>
-        <span
-          aria-hidden
-          className="mt-3 block"
-          style={{
-            width: "var(--rule-w)",
-            height: "var(--rule-h)",
-            background: "var(--color-gold)",
-            borderRadius: "var(--radius-pill)",
-          }}
-        />
+        <Doodle kind={mark} className="mt-1" />
       </div>
       {action}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Doodles — hand-drawn marks, inline SVG, no image weight.
+ * They draw on once per section on first paint and never loop.
+ * ------------------------------------------------------------------ */
+
+export type DoodleKind = "underline" | "circle" | "arrow" | "star" | "orbit";
+
+const DOODLE: Record<DoodleKind, { d: string; box: string; dash: number; w?: number }> = {
+  // a quick double-stroke underline, the way you'd underline a word twice
+  underline: { d: "M3 11c22-7 52-8 74-3M8 16c26-6 56-6 78-2", box: "0 0 92 20", dash: 180 },
+  // a lasso circled around a word
+  circle: { d: "M96 12C74 2 30 1 12 12 2 19 6 31 24 35c26 6 66 3 74-8 5-6-1-12-14-16", box: "0 0 110 40", dash: 260 },
+  // a scribbled arrow
+  arrow: { d: "M2 14c18-9 44-11 62-3M52 2l14 9-13 10", box: "0 0 70 26", dash: 140 },
+  // a four-point sparkle
+  star: { d: "M14 2v24M2 14h24M6 6l16 16M22 6L6 22", box: "0 0 28 28", dash: 120, w: 2.5 },
+  // an orbit ring, for the aviation moments
+  orbit: { d: "M2 20c0-9 20-16 44-16s44 7 44 16-20 16-44 16S2 29 2 20", box: "0 0 92 40", dash: 230 },
+};
+
+export function Doodle({
+  kind = "underline",
+  className = "",
+  color = "var(--color-gold)",
+  delay = 120,
+}: {
+  kind?: DoodleKind;
+  className?: string;
+  color?: string;
+  delay?: number;
+}) {
+  const it = DOODLE[kind];
+  return (
+    <svg
+      aria-hidden
+      viewBox={it.box}
+      className={`block h-auto ${className}`}
+      style={{ width: kind === "star" ? "1.5rem" : "5.75rem", overflow: "visible" }}
+      fill="none"
+      stroke={color}
+      strokeWidth={it.w ?? 3}
+      strokeLinecap="round"
+    >
+      <path
+        d={it.d}
+        className="alpha-draw"
+        style={{ ["--dash" as string]: String(it.dash), ["--draw-delay" as string]: `${delay}ms` }}
+      />
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Sticker — a small tilted badge that pops in once.
+ * ------------------------------------------------------------------ */
+
+export function Sticker({
+  tone = "gold",
+  tilt = -4,
+  delay = 0,
+  className = "",
+  children,
+}: {
+  tone?: "gold" | "navy" | "sky" | "violet";
+  tilt?: number;
+  delay?: number;
+  className?: string;
+  children: ReactNode;
+}) {
+  const bg = {
+    gold: "var(--color-gold)",
+    navy: "var(--color-deep-blue)",
+    sky: "var(--color-bright-blue)",
+    violet: "var(--color-blue-violet)",
+  }[tone];
+  const fg = tone === "gold" ? "var(--color-accent-foreground)" : "var(--color-surface)";
+  // a navy sticker on the navy panel would vanish, so the dark tone carries a
+  // hairline that reads on either ground
+  const ring = tone === "navy" ? "1px solid var(--color-surface)" : "none";
+  return (
+    <span
+      className={`alpha-pop inline-block rounded-[var(--radius-pill)] px-3 py-1.5 shadow-[var(--shadow-card)] ${className}`}
+      style={{
+        ["--tilt" as string]: `${tilt}deg`,
+        ["--pop-delay" as string]: `${delay}ms`,
+        background: bg,
+        color: fg,
+        border: ring,
+        ...T.label,
+      }}
+    >
+      {children}
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Photo mosaic — overlapping tilted cards. More pictures, arranged as a
+ * pinboard rather than a single hero plate.
+ * ------------------------------------------------------------------ */
+
+export function PhotoMosaic({
+  photos,
+  eager = false,
+}: {
+  photos: ReadonlyArray<{ src: string; alt: string; tilt?: number; span?: boolean }>;
+  /** The hero pinboard is the LCP element — it must not be lazy. */
+  eager?: boolean;
+}) {
+  return (
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {photos.map((ph, i) => (
+        <figure
+          key={ph.src + i}
+          className={`alpha-photo overflow-hidden rounded-[var(--radius-card)] bg-[var(--color-surface)] shadow-[var(--shadow-card)] ${ph.span ? "col-span-2" : ""}`}
+          style={{
+            ["--tilt" as string]: `${ph.tilt ?? 0}deg`,
+            transform: `rotate(${ph.tilt ?? 0}deg)`,
+            border: "4px solid var(--color-surface)",
+          }}
+        >
+          <img
+            src={ph.src}
+            alt={ph.alt}
+            loading={eager ? "eager" : "lazy"}
+            fetchPriority={eager && i === 0 ? "high" : undefined}
+            decoding="async"
+            className="block w-full object-cover"
+            style={{ aspectRatio: ph.span ? "16 / 9" : "4 / 5" }}
+          />
+        </figure>
+      ))}
     </div>
   );
 }
@@ -235,23 +357,21 @@ export function StatBar({
  * ------------------------------------------------------------------ */
 
 export function ShapedHero({
-  eyebrow,
   lineOne,
   lineTwo,
   blurb,
   actions,
   chips,
-  image,
-  imageAlt,
+  photos,
+  stickers = [],
 }: {
-  eyebrow: string;
   lineOne: string;
   lineTwo: string;
   blurb: string;
   actions: ReactNode;
   chips: ReadonlyArray<{ label: string; sub: string; icon?: ReactNode }>;
-  image: string;
-  imageAlt: string;
+  photos: ReadonlyArray<{ src: string; alt: string; tilt?: number; span?: boolean }>;
+  stickers?: ReadonlyArray<{ text: string; tone?: "gold" | "navy" | "sky" | "violet"; tilt?: number }>;
 }) {
   return (
     <section className="bg-[var(--color-surface)]">
@@ -260,30 +380,34 @@ export function ShapedHero({
           <div className="grid lg:grid-cols-[1.05fr_1fr]">
             {/* Navy panel */}
             <div className="relative z-10 bg-[var(--color-deep-blue)] p-[var(--space-card-pad)] lg:p-10">
-              <p style={{ ...T.label, color: "var(--color-surface)" }}>{eyebrow}</p>
-              <h1 className="mt-4 font-display tracking-tight" style={T.hero}>
+              <h1 className="font-display tracking-tight" style={T.hero}>
                 <span className="block text-[var(--hero-line-1-color)]">{lineOne}</span>
-                <span className="block text-[var(--hero-line-2-color)]">{lineTwo}</span>
+                <span className="relative inline-block text-[var(--hero-line-2-color)]">
+                  {lineTwo}
+                  <Doodle kind="underline" className="mt-1" delay={520} />
+                </span>
               </h1>
-              <p className="mt-4 max-w-md text-[var(--color-surface)]/85" style={T.body}>
+              <p className="mt-5 max-w-md text-[var(--color-surface)]/85" style={T.body}>
                 {blurb}
               </p>
               <div className="mt-7 flex flex-wrap gap-3">{actions}</div>
+
+              {stickers.length > 0 && (
+                <div className="mt-7 flex flex-wrap items-center gap-2">
+                  {stickers.map((st, i) => (
+                    <Sticker key={st.text} tone={st.tone} tilt={st.tilt} delay={220 + i * 90}>
+                      {st.text}
+                    </Sticker>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Photograph, masked by the arc on desktop */}
-            <div className="relative min-h-[15rem] lg:min-h-[26rem]">
-              <img
-                src={image}
-                alt={imageAlt}
-                className="absolute inset-0 h-full w-full object-cover"
-                loading="eager"
-                decoding="async"
-              />
-              {/* the single gold arc */}
+            {/* Pinboard of photographs, not one hero plate */}
+            <div className="relative bg-[var(--color-surface-muted)] p-4 lg:p-6">
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 -left-px hidden w-[var(--panel-arc)] lg:block"
+                className="pointer-events-none absolute inset-y-0 -left-px z-10 hidden w-[var(--panel-arc)] lg:block"
                 style={{
                   background: "var(--color-deep-blue)",
                   borderTopRightRadius: "100%",
@@ -291,6 +415,7 @@ export function ShapedHero({
                   boxShadow: "var(--panel-arc-w) 0 0 0 var(--color-gold)",
                 }}
               />
+              <PhotoMosaic photos={photos} eager />
             </div>
           </div>
 
