@@ -119,6 +119,43 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        {/* eslint-disable-next-line react/no-danger */}
+        <div
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: `<!--
+ALPHA SCHOOLS - DIRECTION CONTRACT (seed 8ce3a0b9, superseded by a brief pin)
+
+THESIS: A school that proves itself with structure, not adjectives. It refuses
+the full-bleed-photo-plus-three-cards arrangement by making every claim land in
+a shaped panel a parent can read at a glance on a phone.
+
+OWN-WORLD: Deep navy fields cut by a single gold arc; white page, rounded cards
+with hairline borders; icon discs alternating gold and navy; short gold rules
+under section heads; two-tone display headline, white line then gold line.
+Photography sits inside curved masks, never behind type.
+
+STORY: A parent arrives comparing three schools, sees which one this is within
+one screen, understands the aviation programme is real and operational, and
+can enquire in one tap.
+
+FIRST VIEWPORT: Navy panel left, photo right behind a gold arc. Eyebrow, the
+two-tone headline, one sentence, two buttons, and a three-chip credential strip
+pinned to the panel foot. Primary action gold with dark ink, top-left of the
+button pair.
+
+FORM: Brief-pinned (design/approach reference), which beats the roll; the
+dealt assignment was Stadium Scoreboard, candidate 4 of 7.
+
+MOTION: buttons only, per motion-audits/2026-09-02 - press active:scale(.97)
+at 120ms, hover lift 150ms, transform and opacity only, full
+prefers-reduced-motion collapse.
+
+FINISH: unreviewed and undocumented is unfinished; this build ends with the
+finish review, the verdict, and DESIGN.md
+-->`,
+          }}
+        />
         {children}
         <Scripts />
       </body>

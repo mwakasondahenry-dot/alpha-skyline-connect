@@ -222,6 +222,33 @@
   --heading-rule-radius: var(--radius-pill);
   --heading-rule-gap: 0.5rem;
 
+  /* --- Pinned world: shaped panels ------------------------------------
+     From the approved design approach. A navy field cut by one gold arc,
+     rounded cards with hairline borders, icon discs, and short gold rules
+     under section heads. No new colours: every value below resolves to a
+     token already in the palette. */
+  --panel-radius: 1.75rem;        /* 28px - the large shaped panel */
+  --panel-arc: 3.5rem;            /* the gold arc's sweep */
+  --panel-arc-w: 6px;             /* the arc's stroke */
+  --card-border: 1px solid var(--color-hairline);
+  --disc-size: 3.25rem;           /* 52px icon disc */
+  --disc-size-sm: 2.5rem;         /* 40px inline disc */
+  --rule-w: 2.25rem;              /* 36px gold rule under a section head */
+  --rule-h: 3px;
+
+  /* Credential chip strip pinned to the hero panel foot */
+  --chip-gap: 1px;                /* hairline divider between chips */
+
+  /* --- Button motion -------------------------------------------------
+     Pinned by the motion audit (motion-audits/2026-09-02). Buttons are the
+     one place this site animates. Transform and opacity only, so it stays
+     on the compositor on a mid-range Android. */
+  --press-scale: 0.97;
+  --press-ms: 120ms;
+  --hover-lift: -2px;
+  --hover-ms: 150ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
   /* --- Hero scrim ---------------------------------------------------
      design/README.md requires a GUARANTEED scrim: the hero rotates
      through real photos of varying exposure and the headline plus the
