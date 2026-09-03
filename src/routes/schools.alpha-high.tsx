@@ -1,5 +1,6 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
+import { ShapedHero, GoldButton, GhostButton, SectionHead, FeatureCard, StatBar, SHELL } from "@/components/alpha-ui";
 import { CombinationList, SubjectPillList, FormOptionsList, type CombinationGroup } from "@/components/school/subject-lists";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -8,6 +9,7 @@ import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.function
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
+import { ArrowRight, Users, GraduationCap, Plane, Compass, Trophy, MapPin, Award } from "lucide-react";
 import graduate from "@/assets/alpha-high-graduate.webp";
 import campusAerial from "@/assets/alpha-high-campus-aerial.webp";
 import campusHigh from "@/assets/campus-high.webp";
@@ -42,7 +44,7 @@ export const Route = createFileRoute("/schools/alpha-high")({
       {
         name: "description",
         content:
-          "Alpha High School, Mikocheni — mixed secondary, Form 1–6. The flagship: NECTA rigour with aviation and coding that exist nowhere else in Tanzania.",
+          "Alpha High School, Mikocheni — co-education secondary, Form 1–6. The flagship: NECTA rigour with aviation and coding that exist nowhere else in Tanzania.",
       },
     ],
   }),
@@ -63,14 +65,13 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
       <SiteHeader />
       <SchoolSubNav items={SUB_NAV} />
       <Hero />
-      <TornEdge topColor={ACCENT} bottomColor="var(--color-off-white)" intensity="restrained" />
+      <AtAGlance />
       <About />
       <Academics />
       <AdmissionProcess />
       <LifeAtMikocheni />
       <BeyondClassroom />
       <Distinctive />
-      <TornEdge topColor="var(--color-off-white)" bottomColor={GOLD} intensity="restrained" />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
@@ -107,101 +108,32 @@ function EntryRequirements() {
 
 function Hero() {
   return (
-    <section
-      className="relative isolate overflow-hidden"
-      style={{ background: ACCENT }}
-    >
-      {/* Aerial campus background */}
-      <HeroSlideshow
-        pageKey="alpha-high"
-        fallback={[{ src: campusAerial, alt: "" }]}
-        imgClassName="opacity-55"
-      />
-      {/* Blue fade overlays */}
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(135deg, rgba(12,68,124,0.92) 0%, rgba(12,68,124,0.78) 40%, rgba(12,68,124,0.55) 100%)",
-        }}
-      />
-      <div
-        aria-hidden
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(to top, rgba(8,40,80,0.85) 0%, rgba(8,40,80,0) 60%)",
-        }}
-      />
-      {/* decorative blurs */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 -top-32 h-[28rem] w-[28rem] rounded-full opacity-30 blur-3xl"
-        style={{ background: "var(--color-bright-blue)" }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 bottom-0 h-[24rem] w-[24rem] rounded-full opacity-25 blur-3xl"
-        style={{ background: GOLD }}
-      />
-
-      <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-6 pt-14 pb-0 sm:pt-20 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10 lg:pt-24 lg:pb-0">
-        <Reveal direction="up" className="max-w-2xl pb-12 text-white lg:pb-20">
-          <span
-            className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
-            Co-education · Form 1–6 · Mikocheni Campus
-          </span>
-          <h1 className="mt-6 font-display text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl">
-            The flagship.{" "}
-            <span style={{ color: GOLD }}>Built for the long climb.</span>
-          </h1>
-          <p className="mt-6 max-w-xl text-white/85" style={T.body}>
-            Dual rigour in academics and aviation, taught hard and taught well — with flying and coding that exist nowhere else in Tanzania.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/admission"
-              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97]"
-              style={{ background: GOLD }}
-            >
-              Enroll Now →
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center rounded-md border border-white/40 bg-white/10 px-5 py-3 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/20"
-            >
-              Book a Visit
-            </Link>
-          </div>
-        </Reveal>
-
-        <Reveal direction="right" className="relative mx-auto flex w-full max-w-md items-end justify-center self-end lg:max-w-none">
-          <div
-            aria-hidden
-            className="absolute bottom-0 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full blur-3xl"
-            style={{
-              background: "radial-gradient(circle at center, rgba(232,160,32,0.65), rgba(232,160,32,0.15) 55%, transparent 75%)",
-            }}
-          />
-          <img
-            src={graduate}
-            alt="Alpha High School Form Four graduate in cap and gown"
-            className="relative z-10 mx-auto block h-auto w-full max-w-[28rem] drop-shadow-[0_25px_45px_rgba(232,160,32,0.55)]"
-            style={{ filter: "drop-shadow(0 0 60px rgba(232,160,32,0.55)) drop-shadow(0 30px 40px rgba(0,0,0,0.45))" }}
-            loading="eager"
-            decoding="async"
-          />
-        </Reveal>
-
-      </div>
-    </section>
+    <ShapedHero
+      eyebrow="Alpha High · Co-education"
+      lineOne="Excellence through challenge."
+      lineTwo="Built for the long climb."
+      blurb="Our flagship secondary in Mikocheni. NECTA rigour, with aviation and coding at the core."
+      image={graduate}
+      imageAlt="An Alpha High graduate in cap and gown"
+      actions={
+        <>
+          <GoldButton href="#academics">
+            Explore our school
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </GoldButton>
+          <GhostButton to="/contact" onNavy>
+            Book a school tour
+          </GhostButton>
+        </>
+      }
+      chips={[
+        { label: "Co-education", sub: "Boys and girls, Form 1–6", icon: <Users className="h-5 w-5" /> },
+        { label: "NECTA curriculum", sub: "CSEE and ACSEE", icon: <GraduationCap className="h-5 w-5" /> },
+        { label: "Aviation programme", sub: "Ground school to PPL", icon: <Plane className="h-5 w-5" /> },
+      ]}
+    />
   );
 }
-
-// ---------- About ----------
 
 function About() {
   return (
@@ -382,6 +314,28 @@ const ADMISSION_STEPS = [
   "Pass at the school average of 55%",
   "Receive joining instructions after paying TSh 500,000 as part of the first tuition instalment",
 ] as const;
+
+/* design/README.md: the years figure is calculated from the 2007 founding
+   date and must never be hardcoded. Every figure below is derivable from
+   confirmed data — the subject and combination counts come from the lists
+   on this page. No invented statistics. */
+const FOUNDED = 2007;
+
+function AtAGlance() {
+  const years = new Date().getFullYear() - FOUNDED;
+  return (
+    <section className={`${SHELL} pb-[var(--space-section-y)]`}>
+      <StatBar
+        items={[
+          { figure: `${years}+`, label: "Years since 2007", icon: <Award className="h-5 w-5" /> },
+          { figure: String(O_LEVEL_SUBJECTS.length), label: "O-Level subjects", icon: <GraduationCap className="h-5 w-5" /> },
+          { figure: String(A_COMBOS.reduce((n, g) => n + g.items.length, 0)), label: "A-Level combinations", icon: <Compass className="h-5 w-5" /> },
+          { figure: "1", label: "Aviation programme", icon: <Plane className="h-5 w-5" /> },
+        ]}
+      />
+    </section>
+  );
+}
 
 function Academics() {
   return (
