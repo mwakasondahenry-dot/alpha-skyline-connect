@@ -151,6 +151,13 @@
   --container-max: 75rem;          /* 1200px — measured content column */
   --container-gutter: clamp(1.25rem, 0.5rem + 2vw, 2.5rem);
 
+  /* Height of SiteHeader: 44px of content plus py-3 and its border.
+     school-sub-nav.tsx carried this as a hard-coded 4.25rem and noted it was
+     "worth promoting to a token the moment a second consumer needs it". The
+     full-viewport heroes are that second consumer — they inset their copy by
+     the header's height so an overlaid nav never sits on the headline. */
+  --header-h: 4.25rem;
+
   /* --- Radius ------------------------------------------------------ */
   --radius-card: 1rem;             /* 16px — measured card + banner corner */
   --radius-chip: 0.625rem;         /* 10px — date chip */
@@ -485,4 +492,141 @@
   .alpha-pop { animation: none; opacity: 1; transform: scale(1) rotate(var(--tilt, 0deg)); }
   .alpha-draw { animation: none; stroke-dasharray: none; stroke-dashoffset: 0; }
   .alpha-photo { transition: none; }
+}
+
+/* ===================================================================
+   SCROLL REVEAL — sections arrive as the reader reaches them.
+
+   This reinstates the behaviour the motion audit removed, without the
+   three faults that got it removed:
+
+   1. ONE observer, not one per call site. RevealWatcher in
+      src/components/reveal.tsx shares a single IntersectionObserver
+      across every marked block on every page.
+   2. The hidden state is opt-IN, gated on `html.rv-on`. That class is
+      set by an inline script in the document head and removed again if
+      hydration never confirms, so server-rendered HTML, a failed bundle
+      and a no-JS reader all get fully visible content. The audit's worst
+      finding was opacity:0 shipping in the SSR payload; it cannot recur.
+      Keying off [data-reveal] rather than a JS-applied class is part of
+      that: a block is hidden from first paint or not at all, so nothing
+      ever flashes visible and then disappears.
+   3. Copy is not withheld from someone already looking at it. The
+      observer's rootMargin fires a block slightly before its top edge
+      clears the fold, the transition is 420ms not 600ms, and staggered
+      delays are capped in the component at 350ms.
+
+   Transform and opacity only, one-shot (the observer unobserves on
+   first intersection), and a full collapse under reduced motion.
+   =================================================================== */
+
+[data-reveal] {
+  transition:
+    opacity 420ms var(--ease-out),
+    transform 420ms var(--ease-out);
+  transition-delay: var(--rv-delay, 0ms);
+}
+html.rv-on [data-reveal] {
+  opacity: 0;
+  transform: translate3d(var(--rv-x, 0), var(--rv-y, 14px), 0);
+}
+html.rv-on [data-reveal][data-rv-in] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+/* Stagger scale. Delays are a fixed set of values expressed in CSS rather
+   than written onto elements by JS: the route content streams inside a
+   Suspense boundary, so anything the watcher wrote to `style` landed before
+   React hydrated that boundary and was reported as a mismatch it could not
+   patch. It is also a better constraint — a stagger picks a step off a scale
+   instead of inventing a number. The top of the scale stays under the 350ms
+   cap the motion audit set. */
+[data-reveal-delay="80"]  { --rv-delay: 80ms; }
+[data-reveal-delay="160"] { --rv-delay: 160ms; }
+[data-reveal-delay="240"] { --rv-delay: 240ms; }
+[data-reveal-delay="320"] { --rv-delay: 320ms; }
+
+/* Direction variants. "up" is the default and needs no value. */
+[data-reveal="left"]  { --rv-x: -18px; --rv-y: 0; }
+[data-reveal="right"] { --rv-x: 18px;  --rv-y: 0; }
+[data-reveal="none"]  { --rv-x: 0;     --rv-y: 0; }  /* fade, no travel */
+
+@media (prefers-reduced-motion: reduce) {
+  html.rv-on [data-reveal],
+  html.rv-on [data-reveal][data-rv-in] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ===================================================================
+   HERO ENTRANCE — the opening screen assembles itself once, on load.
+
+   Pure CSS animation with `both` fill, so it plays off the server-
+   rendered HTML on first paint: no observer, no hydration dependency,
+   no splash screen, and identical behaviour on a cold cache.
+
+   The sequence runs image -> scrim -> eyebrow -> headline line 1 ->
+   headline line 2 (gold) -> paragraph -> buttons -> tail, finishing at
+   840 + 320 = 1160ms. Transform and opacity only.
+   =================================================================== */
+:root {
+  --hero-t-eyebrow: 180ms;
+  --hero-t-line-1:  300ms;
+  --hero-t-line-2:  420ms;
+  --hero-t-blurb:   560ms;
+  --hero-t-cta:     700ms;
+  --hero-t-tail:    840ms;
+}
+
+@keyframes alpha-hero-settle {
+  from { transform: scale(1.06); }
+  to   { transform: scale(1); }
+}
+@keyframes alpha-hero-scrim {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes alpha-hero-rise {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+/* The photograph starts fractionally oversized and settles. Scaling DOWN
+   to exactly 1 means the frame is never underfilled mid-animation. */
+.hero-media {
+  animation: alpha-hero-settle 1200ms var(--ease-out) both;
+}
+.hero-scrim {
+  animation: alpha-hero-scrim 600ms linear both;
+}
+.hero-rise {
+  animation: alpha-hero-rise var(--hero-rise-dur, 380ms) var(--ease-out) both;
+  animation-delay: var(--hero-delay, 0ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-media,
+  .hero-scrim,
+  .hero-rise {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The opening screen's height. Two declarations, not one: svh is what makes
+   the hero survive a mobile browser's collapsing address bar, and vh is the
+   fallback for anything that does not know svh. A Tailwind arbitrary value
+   can only express one of them. */
+.hero-viewport {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+/* For a hero under a header that is in flow rather than overlaid. */
+.hero-viewport-inset {
+  min-height: calc(100vh - var(--header-h));
+  min-height: calc(100svh - var(--header-h));
 }

@@ -6,10 +6,14 @@
  * shipped no mobile navigation at all, and the anchors went with it. This is
  * the replacement, shared by all three pages rather than rebuilt per page.
  *
- * Sticky beneath the site header. The 4.25rem offset is the measured height of
- * SiteHeader (68px: 44px of content plus py-3 and its border). It is the one
- * magic number here — if the header's height ever changes this needs to follow,
- * so it is worth promoting to a token the moment a second consumer needs it.
+ * Sticky beneath the site header, offset by --header-h. That measurement
+ * (68px: 44px of content plus py-3 and its border) was a hard-coded 4.25rem
+ * here, with a note that it was worth promoting to a token the moment a second
+ * consumer needed it. The full-viewport heroes are that second consumer.
+ *
+ * On the school pages this now sits BELOW the hero rather than above it. It is
+ * in-page wayfinding, and an opening screen has no room for a table of
+ * contents to the page underneath it.
  *
  * Horizontally scrollable at 375px so any number of anchors fits on one line
  * without wrapping or shrinking below the 44px touch target.
@@ -23,7 +27,7 @@ export function SchoolSubNav({
   return (
     <nav
       aria-label="On this page"
-      className="sticky top-[4.25rem] z-30 border-b border-[var(--color-hairline)] bg-[var(--color-surface)]/95 backdrop-blur"
+      className="sticky top-[var(--header-h)] z-30 border-b border-[var(--color-hairline)] bg-[var(--color-surface)]/95 backdrop-blur"
     >
       <ul className="mx-auto flex max-w-[var(--container-max)] gap-1 overflow-x-auto px-[var(--container-gutter)] py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {items.map((i) => (

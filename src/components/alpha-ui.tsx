@@ -17,8 +17,9 @@
  *    while giving touch no feedback at all; press is the fix.
  */
 import { Link } from "@tanstack/react-router";
+import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
-import { T, SHELL } from "@/components/type-roles";
+import { T, SHELL, heroStep } from "@/components/type-roles";
 
 export { SHELL };
 
@@ -353,93 +354,215 @@ export function StatBar({
 }
 
 /* ------------------------------------------------------------------ *
- * Shaped hero — navy panel cut by one gold arc, photograph beside it
+ * Cinematic hero — the opening screen.
+ *
+ * Supersedes ShapedHero, which put the first viewport inside a rounded
+ * card and left the next section visible beneath it. This fills the
+ * screen instead: edge-to-edge photography, a guaranteed scrim, and the
+ * copy staged over it.
+ *
+ * The entrance is CSS, defined in styles.css and driven by the
+ * --hero-t-* tokens: image settles, scrim fades up, then eyebrow,
+ * headline line 1, headline line 2 in gold, paragraph, buttons, tail.
+ * It finishes at ~1160ms and runs off the server-rendered HTML on first
+ * paint, so there is no splash, no loader, and nothing waiting on
+ * hydration.
+ *
+ * Motion stays inside the audit's budget: transform and opacity only,
+ * one-shot, nothing looping, full collapse under reduced motion.
  * ------------------------------------------------------------------ */
 
-export function ShapedHero({
+export function CinematicHero({
+  eyebrow,
   lineOne,
   lineTwo,
   blurb,
   actions,
-  chips,
-  photos,
-  stickers = [],
+  media,
+  overlays,
+  rail,
+  foot,
+  cueHref,
+  cueLabel = "Scroll to the next section",
 }: {
+  eyebrow?: string;
   lineOne: string;
   lineTwo: string;
   blurb: string;
-  actions: ReactNode;
-  chips: ReadonlyArray<{ label: string; sub: string; icon?: ReactNode }>;
-  photos: ReadonlyArray<{ src: string; alt: string; tilt?: number; span?: boolean }>;
-  stickers?: ReadonlyArray<{ text: string; tone?: "gold" | "navy" | "sky" | "violet"; tilt?: number }>;
+  actions?: ReactNode;
+  /** The background layer — a HeroSlideshow or a single <img>. */
+  media: ReactNode;
+  /** Decoration that sits above the scrim but behind the copy. */
+  overlays?: ReactNode;
+  /** Desktop-only right column. The homepage puts its stat rail here. */
+  rail?: ReactNode;
+  /** Pinned to the hero's foot, inside the viewport. */
+  foot?: ReactNode;
+  /** Renders a scroll affordance pointing at this anchor. */
+  cueHref?: string;
+  cueLabel?: string;
 }) {
   return (
-    <section className="bg-[var(--color-surface)]">
-      <div className={SHELL}>
-        <div className="relative overflow-hidden rounded-[var(--panel-radius)]">
-          <div className="grid lg:grid-cols-[1.05fr_1fr]">
-            {/* Navy panel */}
-            <div className="relative z-10 bg-[var(--color-deep-blue)] p-[var(--space-card-pad)] lg:p-10">
-              <h1 className="font-display tracking-tight" style={T.hero}>
-                <span className="block text-[var(--hero-line-1-color)]">{lineOne}</span>
-                <span className="relative inline-block text-[var(--hero-line-2-color)]">
+    <section className="hero-viewport relative isolate flex flex-col overflow-hidden">
+      {/* Photography. The settle animation lives on this wrapper rather than
+          on each slide, so it is one composited layer and it does not replay
+          when the slideshow cross-fades. */}
+      <div aria-hidden className="hero-media absolute inset-0 -z-20">
+        {media}
+      </div>
+
+      {/* Guaranteed scrim. design/README.md: the headline must stay legible
+          over ANY slide, so this never depends on how dark the photograph
+          happens to be. Vertical on mobile, horizontal on desktop. */}
+      <div
+        aria-hidden
+        className="hero-scrim absolute inset-0 -z-10 lg:hidden"
+        style={{ backgroundImage: "var(--hero-scrim-mobile)" }}
+      />
+      <div
+        aria-hidden
+        className="hero-scrim absolute inset-0 -z-10 hidden lg:block"
+        style={{ backgroundImage: "var(--hero-scrim)" }}
+      />
+
+      {overlays}
+
+      <div className="flex flex-1 flex-col lg:flex-row">
+        <div className="flex flex-1 items-center">
+          <div
+            className={`${SHELL} pb-[var(--space-block-y)] pt-[calc(var(--header-h)+var(--space-block-y))]`}
+          >
+            <div className="max-w-xl">
+              {eyebrow && (
+                <p
+                  className="hero-rise text-[var(--color-gold)]"
+                  style={{ ...T.label, ...heroStep("var(--hero-t-eyebrow)") }}
+                >
+                  {eyebrow}
+                </p>
+              )}
+
+              <h1 className="mt-3 font-display tracking-tight" style={T.hero}>
+                <span
+                  className="hero-rise block text-[var(--hero-line-1-color)]"
+                  style={heroStep("var(--hero-t-line-1)", "420ms")}
+                >
+                  {lineOne}
+                </span>
+                <span
+                  className="hero-rise block text-[var(--hero-line-2-color)]"
+                  style={heroStep("var(--hero-t-line-2)", "420ms")}
+                >
                   {lineTwo}
-                  <Doodle kind="underline" className="mt-1" delay={520} />
                 </span>
               </h1>
-              <p className="mt-5 max-w-md text-[var(--color-surface)]/85" style={T.body}>
+
+              <p
+                className="hero-rise mt-4 max-w-md text-[var(--color-surface)]/90"
+                style={{ ...T.body, ...heroStep("var(--hero-t-blurb)") }}
+              >
                 {blurb}
               </p>
-              <div className="mt-7 flex flex-wrap gap-3">{actions}</div>
 
-              {stickers.length > 0 && (
-                <div className="mt-7 flex flex-wrap items-center gap-2">
-                  {stickers.map((st, i) => (
-                    <Sticker key={st.text} tone={st.tone} tilt={st.tilt} delay={220 + i * 90}>
-                      {st.text}
-                    </Sticker>
-                  ))}
+              {actions && (
+                <div
+                  className="hero-rise mt-7 flex flex-wrap gap-3"
+                  style={heroStep("var(--hero-t-cta)")}
+                >
+                  {actions}
                 </div>
               )}
             </div>
+          </div>
+        </div>
 
-            {/* Pinboard of photographs, not one hero plate */}
-            <div className="relative bg-[var(--color-surface-muted)] p-4 lg:p-6">
+        {rail && (
+          <div
+            className="hero-rise hidden lg:flex lg:w-[15rem] lg:shrink-0 lg:items-center"
+            style={heroStep("var(--hero-t-tail)", "320ms")}
+          >
+            {rail}
+          </div>
+        )}
+      </div>
+
+      {foot && (
+        <div
+          className="hero-rise relative z-10"
+          style={heroStep("var(--hero-t-tail)", "320ms")}
+        >
+          {foot}
+        </div>
+      )}
+
+      {cueHref && !foot && <ScrollCue href={cueHref} label={cueLabel} />}
+    </section>
+  );
+}
+
+/**
+ * A single static chevron. It does not bob — a looping, attention-seeking
+ * decoration is the exact pattern the motion audit was commissioned to
+ * remove, and it would be the only looping thing left on the site.
+ */
+function ScrollCue({ href, label }: { href: string; label: string }) {
+  return (
+    <a
+      href={href}
+      aria-label={label}
+      className="hero-rise absolute inset-x-0 bottom-6 z-10 mx-auto grid h-11 w-11 place-items-center rounded-[var(--radius-pill)] border border-[var(--color-surface)]/40 bg-[rgba(0,26,60,0.35)] text-[var(--color-surface)] backdrop-blur-sm transition-transform duration-[var(--hover-ms)] ease-[var(--ease-out)] hover:-translate-y-[2px] active:scale-[var(--press-scale)] active:duration-[var(--press-ms)] motion-reduce:transition-none motion-reduce:hover:translate-y-0"
+      style={heroStep("var(--hero-t-tail)", "320ms")}
+    >
+      <ChevronDown className="h-5 w-5" aria-hidden />
+    </a>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Credential strip — the three claims, pinned to the hero's foot.
+ *
+ * Carried over from ShapedHero's chip strip, restyled to sit on the
+ * photograph rather than on white. At 375px it collapses to a single
+ * scrollable row of labels: three stacked two-line chips would push the
+ * headline and buttons off an opening screen that has to fit in 100svh.
+ * ------------------------------------------------------------------ */
+export function HeroCredentials({
+  items,
+}: {
+  items: ReadonlyArray<{ label: string; sub: string; icon?: ReactNode }>;
+}) {
+  return (
+    <div className="border-t border-[var(--color-surface)]/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm">
+      <ul
+        className={`${SHELL} flex gap-5 overflow-x-auto py-3 [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:py-4 [&::-webkit-scrollbar]:hidden`}
+      >
+        {items.map((c) => (
+          <li key={c.label} className="flex shrink-0 items-center gap-3 sm:shrink">
+            {c.icon && (
               <span
                 aria-hidden
-                className="pointer-events-none absolute inset-y-0 -left-px z-10 hidden w-[var(--panel-arc)] lg:block"
-                style={{
-                  background: "var(--color-deep-blue)",
-                  borderTopRightRadius: "100%",
-                  borderBottomRightRadius: "100%",
-                  boxShadow: "var(--panel-arc-w) 0 0 0 var(--color-gold)",
-                }}
-              />
-              <PhotoMosaic photos={photos} eager />
-            </div>
-          </div>
-
-          {/* Credential chips, pinned to the panel foot */}
-          <ul className="relative z-10 grid gap-px bg-[var(--color-hairline)] sm:grid-cols-3">
-            {chips.map((c) => (
-              <li
-                key={c.label}
-                className="flex items-center gap-3 bg-[var(--color-surface)] p-[var(--space-card-pad-sm)]"
+                className="grid h-9 w-9 shrink-0 place-items-center rounded-[var(--radius-pill)] bg-[var(--color-surface)]/15 text-[var(--color-gold)] sm:h-11 sm:w-11"
               >
-                {c.icon && <IconDisc tone="sky">{c.icon}</IconDisc>}
-                <div className="min-w-0">
-                  <div className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-                    {c.label}
-                  </div>
-                  <div className="text-[var(--color-ink-soft)]" style={T.label}>
-                    {c.sub}
-                  </div>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
+                {c.icon}
+              </span>
+            )}
+            <div className="min-w-0">
+              <div
+                className="whitespace-nowrap font-display text-[var(--color-surface)] sm:whitespace-normal"
+                style={T.cardTitle}
+              >
+                {c.label}
+              </div>
+              <div
+                className="hidden text-[var(--color-surface)]/70 sm:block"
+                style={T.label}
+              >
+                {c.sub}
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

@@ -12,6 +12,7 @@ import {
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
+import { CinematicHero } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
@@ -115,7 +116,9 @@ const SCHOOLS = [
     slug: "alpha-high",
     badge: "FORM 1 – 6",
     name: "Alpha High",
-    campus: "MIXED · MIKOCHENI",
+    /* PRODUCT.md and AGENTS.md: say "Co-education", never "Mixed". This card
+       was the last place on the site still saying Mixed. */
+    campus: "CO-EDUCATION · MIKOCHENI",
     blurb:
       "Our flagship secondary. NECTA pathways, aviation and coding at the core.",
     to: "/schools/alpha-high",
@@ -201,7 +204,7 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
-      <SiteHeader />
+      <SiteHeader overlay />
       <Hero />
       <FindTheRightSchool />
       <AviationBanner />
@@ -213,80 +216,81 @@ function Home() {
 }
 
 /* ------------------------------------------------------------------ *
- * 1. HERO + STAT RAIL
- * Desktop: photo left, navy stat rail as a right-hand column.
- * 375px:   photo, then the rail as a 2-column grid directly beneath.
+ * 1. HERO + STAT RAIL — the opening screen.
+ *
+ * The hero fills the viewport (100svh) with the navigation overlaid on
+ * it, so nothing from "Find the Right School" shows beneath the fold.
+ *
+ * The stat rail keeps the layout design/README.md asks for — a vertical
+ * rail on desktop, a grid on mobile — but the two now sit in different
+ * places. On desktop it is the hero's right-hand column, translucent
+ * rather than solid so the photograph still reads through it: the
+ * desktop scrim is deliberately lightest at the right edge, and a solid
+ * navy block there would cover the only part of the picture that is not
+ * already dimmed. On mobile it moves out of the hero entirely and
+ * becomes the first thing the reader discovers on scrolling, because a
+ * 100svh opening screen on a phone has room for the headline and the
+ * call to action or for four statistics, but not for both.
+ *
+ * Only one of the two is ever in the accessibility tree: each is
+ * display:none at the other's breakpoint.
  * ------------------------------------------------------------------ */
 function Hero() {
   return (
-    <section className="lg:flex">
-      <div className="relative isolate min-h-[26rem] flex-1 overflow-hidden sm:min-h-[30rem] lg:min-h-[34rem]">
-        <HeroSlideshow
-          pageKey="home"
-          fallback={[
-            {
-              src: heroCollage,
-              alt: "Alpha Schools students across nursery, primary, secondary and aviation",
-            },
-          ]}
-        />
-
-        {/* Guaranteed scrim. design/README.md requires the headline to stay
-            legible over ANY slide, so this never depends on how dark the
-            photo happens to be. Vertical on mobile, horizontal on desktop. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 lg:hidden"
-          style={{ backgroundImage: "var(--hero-scrim-mobile)" }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 hidden lg:block"
-          style={{ backgroundImage: "var(--hero-scrim)" }}
-        />
-
-        <div
-          className={`${SHELL} relative flex min-h-[26rem] flex-col justify-end py-[var(--space-block-y)] sm:min-h-[30rem] lg:min-h-[34rem] lg:justify-center`}
-        >
-          <div className="max-w-xl">
-            <h1 className="font-display tracking-tight" style={T.hero}>
-              <span className="block text-[var(--hero-line-1-color)]">
-                Your potential,
-              </span>
-              <span className="block text-[var(--hero-line-2-color)]">
-                unlocked.
-              </span>
-            </h1>
-            <p
-              className="mt-4 max-w-md text-[var(--color-surface)]/90"
-              style={T.body}
-            >
-              Three schools. One family. Limitless futures.
-            </p>
-            <a
-              href="#find-the-right-school"
-              className={`${BTN_BASE} mt-6 w-full sm:w-auto`}
-              style={BTN_PRIMARY}
-            >
-              Find the Right School
-              <ArrowRight className="h-4 w-4" aria-hidden />
-            </a>
-          </div>
-        </div>
-      </div>
-
-      <StatRail />
-    </section>
+    <>
+      <CinematicHero
+        eyebrow="Dar es Salaam, Tanzania · Since 2007"
+        lineOne="Your potential,"
+        lineTwo="unlocked."
+        blurb="Three schools. One family. Limitless futures."
+        media={
+          <HeroSlideshow
+            pageKey="home"
+            fallback={[
+              {
+                src: heroCollage,
+                alt: "Alpha Schools students across nursery, primary, secondary and aviation",
+              },
+            ]}
+          />
+        }
+        actions={
+          <a
+            href="#find-the-right-school"
+            className={`${BTN_BASE} w-full sm:w-auto`}
+            style={BTN_PRIMARY}
+          >
+            Find the Right School
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </a>
+        }
+        rail={<StatRail variant="rail" />}
+        cueHref="#find-the-right-school"
+        cueLabel="Skip to Find the Right School"
+      />
+      <StatRail variant="band" />
+    </>
   );
 }
 
-function StatRail() {
+function StatRail({ variant }: { variant: "rail" | "band" }) {
+  const isRail = variant === "rail";
   return (
     <aside
       aria-label="Alpha Schools at a glance"
-      className="bg-[var(--stat-row-bg)] lg:w-[15rem] lg:shrink-0"
+      className={
+        isRail
+          ? "h-full w-full border-l border-[var(--color-surface)]/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm"
+          : "bg-[var(--stat-row-bg)] lg:hidden"
+      }
     >
-      <ul className="grid grid-cols-2 lg:h-full lg:grid-cols-1 lg:content-center">
+      <ul
+        className={
+          isRail
+            ? "flex h-full flex-col justify-center"
+            : "grid grid-cols-2"
+        }
+      >
         {STATS.map((s, i) => (
           <li
             key={i}
@@ -341,6 +345,8 @@ function FindTheRightSchool() {
       </Reveal>
 
       <ul
+        data-reveal
+        data-reveal-delay="120"
         className="mt-[var(--space-block-y)] grid gap-0 overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] md:grid-cols-3 md:gap-[var(--space-card-gap)] md:overflow-visible md:bg-transparent md:shadow-none"
       >
         {SCHOOLS.map((s, i) => (
@@ -492,7 +498,7 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
 
   return (
     <section className={`${SHELL} pb-[var(--space-section-y)]`}>
-      <div className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
+      <div data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
         {parent && (
           <TestimonialCard
             title="Parent Testimonials"
@@ -634,7 +640,11 @@ function NewsAndEvents({
           soon as the school posts them.
         </p>
       ) : (
-        <ul className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3">
+        <ul
+          data-reveal
+          data-reveal-delay="120"
+          className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3"
+        >
           {cards.map((c) => (
             <li key={c.key}>
               <Link

@@ -351,9 +351,46 @@ function SocialLinks({ compact = false }: { compact?: boolean }) {
   );
 }
 
-export function SiteHeader() {
+/**
+ * `overlay` lifts the header off the page and sits it on top of a
+ * full-viewport hero: transparent while the hero is in frame, settling to the
+ * usual navy bar once the reader scrolls past it. Pages whose first section is
+ * NOT a full-bleed hero leave it off and keep the sticky navy bar.
+ *
+ * The transparent state carries its own top-down scrim. It cannot rely on the
+ * hero's, which runs left-to-right on desktop and is nearly clear by the right
+ * edge — exactly where the nav links and the gold CTA sit.
+ */
+export function SiteHeader({ overlay = false }: { overlay?: boolean } = {}) {
+  const [solid, setSolid] = useState(!overlay);
+
+  useEffect(() => {
+    if (!overlay) {
+      setSolid(true);
+      return;
+    }
+    const onScroll = () => setSolid(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [overlay]);
+
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-[var(--color-deep-blue)]/95 text-white backdrop-blur-md">
+    <header
+      className={`${overlay ? "fixed inset-x-0" : "sticky"} top-0 z-40 text-white transition-colors duration-300 motion-reduce:transition-none ${
+        solid
+          ? "border-b border-white/10 bg-[var(--color-deep-blue)]/95 backdrop-blur-md"
+          : "border-b border-transparent bg-transparent"
+      }`}
+      style={
+        solid
+          ? undefined
+          : {
+              backgroundImage:
+                "linear-gradient(180deg, rgba(0,26,60,0.55) 0%, rgba(0,26,60,0) 100%)",
+            }
+      }
+    >
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 lg:flex lg:justify-between lg:gap-4 lg:px-10">
         <Link to="/" className="flex min-w-0 items-center gap-3 hover:opacity-90">
           <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-white/30">

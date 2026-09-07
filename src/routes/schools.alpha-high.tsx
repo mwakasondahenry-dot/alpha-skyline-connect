@@ -1,6 +1,6 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
-import { ShapedHero, GoldButton, GhostButton, SectionHead, FeatureCard, StatBar, SHELL } from "@/components/alpha-ui";
+import { CinematicHero, HeroCredentials, GoldButton, GhostButton, SectionHead, FeatureCard, StatBar, SHELL } from "@/components/alpha-ui";
 import { CombinationList, SubjectPillList, FormOptionsList, type CombinationGroup } from "@/components/school/subject-lists";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -25,7 +25,8 @@ import clubCookery from "@/assets/club-cookery.webp";
 import clubScout from "@/assets/club-scout.webp";
 import clubSpeaking from "@/assets/club-public-speaking.webp";
 import clubUn from "@/assets/club-un.webp";
-import clubEnvironment from "@/assets/club-environment.webp";
+import clubEnvironment from "@/assets/club-environment.webp";
+
 import { T } from "@/components/type-roles";
 
 const slug = "alpha-high" as const;
@@ -62,9 +63,9 @@ function AlphaHighRoute() {
 function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
   return (
     <div className="min-h-screen bg-white text-[var(--color-ink)]">
-      <SiteHeader />
-      <SchoolSubNav items={SUB_NAV} />
+      <SiteHeader overlay />
       <Hero />
+      <SchoolSubNav items={SUB_NAV} />
       <AtAGlance />
       <About />
       <Academics />
@@ -106,22 +107,33 @@ function EntryRequirements() {
 
 // ---------- Hero ----------
 
+/**
+ * The opening screen. Where ShapedHero put the first viewport inside a
+ * rounded card on a white page, this fills the screen with the campus
+ * itself and stages the copy over it.
+ *
+ * The photographs that were pinned to the old mosaic become the slides,
+ * on the `alpha-high` hero_slides key the schema already reserves — so
+ * the school can change this hero from the admin tool exactly as it can
+ * change the homepage's.
+ */
 function Hero() {
   return (
-    <ShapedHero
+    <CinematicHero
+      eyebrow="Mikocheni · Form 1–6 · Co-education"
       lineOne="Excellence through challenge."
       lineTwo="Built for the long climb."
       blurb="Our flagship secondary in Mikocheni. NECTA rigour, with aviation and coding at the core."
-      photos={[
-        { src: graduate, alt: "An Alpha High graduate in cap and gown", tilt: -2 },
-        { src: clubAviation, alt: "Alpha High aviation club students", tilt: 3 },
-        { src: campusAerial, alt: "The Mikocheni campus from the air", tilt: -1, span: true },
-      ]}
-      stickers={[
-        { text: "Form 1–6", tone: "sky", tilt: -4 },
-        { text: "Mikocheni", tone: "gold", tilt: 3 },
-        { text: "Since 2007", tone: "navy", tilt: -2 },
-      ]}
+      media={
+        <HeroSlideshow
+          pageKey="alpha-high"
+          fallback={[
+            { src: campusAerial, alt: "The Mikocheni campus from the air" },
+            { src: graduate, alt: "An Alpha High graduate in cap and gown" },
+            { src: clubAviation, alt: "Alpha High aviation club students" },
+          ]}
+        />
+      }
       actions={
         <>
           <GoldButton href="#academics">
@@ -133,11 +145,15 @@ function Hero() {
           </GhostButton>
         </>
       }
-      chips={[
-        { label: "Co-education", sub: "Boys and girls, Form 1–6", icon: <Users className="h-5 w-5" /> },
-        { label: "NECTA curriculum", sub: "CSEE and ACSEE", icon: <GraduationCap className="h-5 w-5" /> },
-        { label: "Aviation programme", sub: "Ground school to PPL", icon: <Plane className="h-5 w-5" /> },
-      ]}
+      foot={
+        <HeroCredentials
+          items={[
+            { label: "Co-education", sub: "Boys and girls, Form 1–6", icon: <Users className="h-5 w-5" /> },
+            { label: "NECTA curriculum", sub: "CSEE and ACSEE", icon: <GraduationCap className="h-5 w-5" /> },
+            { label: "Aviation programme", sub: "Ground school to PPL", icon: <Plane className="h-5 w-5" /> },
+          ]}
+        />
+      }
     />
   );
 }

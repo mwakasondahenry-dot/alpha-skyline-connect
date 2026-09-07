@@ -26,8 +26,9 @@ import photoSpeakersGroup from "@/assets/np-junior-speakers-group.webp";
 import photoSpeakersTeam from "@/assets/np-junior-speakers-team.webp";
 import photoPlayground from "@/assets/np-playground.webp";
 import photoShapesClass from "@/assets/np-shapes-class.webp";
-import photoToyCar from "@/assets/np-toy-car.webp";
-import { T } from "@/components/type-roles";
+import photoToyCar from "@/assets/np-toy-car.webp";
+
+import { T, heroStep } from "@/components/type-roles";
 
 const testimonialsQuery = queryOptions({
   queryKey: ["testimonials"],
@@ -122,8 +123,8 @@ function NurseryPrimaryPage() {
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
-      <SchoolSubNav items={SUB_NAV} />
       <Hero />
+      <SchoolSubNav items={SUB_NAV} />
       <WhatWeOffer />
       <AlphaChild />
       <WhatTheyExplore />
@@ -141,40 +142,95 @@ function NurseryPrimaryPage() {
 
 // ---------- Hero ----------
 
+/**
+ * The opening screen.
+ *
+ * Nursery & Primary keeps its light, playful composition — white ground,
+ * the scattered photo cards, the doodled star and squiggle. It is the
+ * youngest school on the site and the one page that should not open on a
+ * dark navy plate, so the cinematic treatment here is staging rather than
+ * restyling: it fills the viewport under the header, and it assembles
+ * itself on load to the same timings as every other hero.
+ *
+ * The header stays in flow rather than overlaying, because white nav links
+ * on a white hero would be unreadable.
+ *
+ * The photo cards carry two sets of sizes. At 375px the cluster is roughly
+ * half its desktop height, so the headline and both buttons sit comfortably
+ * inside the first screen instead of being pushed off it by three
+ * fixed-height cards.
+ */
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-white">
-      <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-2 lg:gap-8 lg:px-10 lg:py-24">
+    <section className="hero-viewport-inset relative flex flex-col overflow-hidden bg-white">
+      <div className="mx-auto grid w-full max-w-7xl flex-1 items-center gap-5 px-6 py-6 sm:gap-8 sm:py-10 lg:grid-cols-2 lg:px-10 lg:py-16">
         {/* Left: copy */}
         <div className="relative">
-          <h1 className="font-display text-5xl font-black leading-[1.02] tracking-tight text-[var(--color-deep-blue)] sm:text-6xl lg:text-[64px]">
-            Unlock your<br />Child's<br />Potential
+          <p
+            className="hero-rise text-[var(--color-bright-blue)]"
+            style={{ ...T.label, ...heroStep("var(--hero-t-eyebrow)") }}
+          >
+            Combined campus · Ages 2–12
+          </p>
+
+          <h1 className="mt-3 font-display text-[2.375rem] font-black leading-[1.02] tracking-tight text-[var(--color-deep-blue)] sm:text-6xl lg:text-[64px]">
+            <span
+              className="hero-rise block"
+              style={heroStep("var(--hero-t-line-1)", "420ms")}
+            >
+              Unlock your
+              <br />
+              Child's
+            </span>
+            <span
+              className="hero-rise block text-[var(--color-bright-blue)]"
+              style={heroStep("var(--hero-t-line-2)", "420ms")}
+            >
+              Potential
+            </span>
           </h1>
-          <p className="mt-6 max-w-md text-[var(--color-ink)]/75" style={T.body}>
+
+          <p
+            className="hero-rise mt-6 max-w-md text-[var(--color-ink)]/75"
+            style={{ ...T.body, ...heroStep("var(--hero-t-blurb)") }}
+          >
             Play-led early years that grow into a warm, structured primary — the
             joyful first chapter of your child's Alpha journey.
           </p>
-          <div className="mt-8 flex flex-wrap items-center gap-4">
+
+          <div
+            className="hero-rise mt-8 flex flex-wrap items-center gap-4"
+            style={heroStep("var(--hero-t-cta)")}
+          >
             <Link
               to="/admission"
-              className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] bg-[var(--color-bright-blue)] px-7 text-white shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
+              className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] bg-[var(--color-bright-blue)] px-7 text-white shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none"
+              style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
             >
               Enroll Now
             </Link>
             <Link
               to="/contact"
-              className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border-2 border-[var(--color-gold)] bg-[var(--color-surface)] px-7 text-[var(--color-deep-blue)] transition-colors duration-150 hover:bg-[var(--color-gold)]/5 active:scale-[0.97] motion-reduce:transition-none" style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
+              className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border-2 border-[var(--color-gold)] bg-[var(--color-surface)] px-7 text-[var(--color-deep-blue)] transition-colors duration-150 hover:bg-[var(--color-gold)]/5 active:scale-[0.97] motion-reduce:transition-none"
+              style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
             >
               Book a Visit
             </Link>
           </div>
-          <p className="mt-10 font-display text-[var(--color-deep-blue)]" style={T.stat}>
+
+          <p
+            className="hero-rise mt-8 hidden font-display text-[var(--color-deep-blue)] lg:mt-10 lg:block"
+            style={{ ...T.stat, ...heroStep("var(--hero-t-tail)", "320ms") }}
+          >
             From 2 - 12 Years old
           </p>
         </div>
 
         {/* Right: scattered photo cards */}
-        <div className="relative h-[460px] sm:h-[520px]">
+        <div
+          className="hero-rise relative h-[248px] sm:h-[460px] lg:h-[520px]"
+          style={heroStep("var(--hero-t-tail)", "420ms")}
+        >
           {/* Decorative bits */}
           <svg
             aria-hidden
@@ -209,19 +265,19 @@ function Hero() {
               <img
                 src={photoHippoRide}
                 alt="Pupil on a play hippo in the courtyard"
-                className="h-56 w-full object-cover"
+                className="h-28 w-full object-cover sm:h-48 lg:h-56"
                 loading="eager"
               />
             </div>
           </div>
 
           {/* Card 2 — left, big tilted gold-frame portrait */}
-          <div className="absolute -left-2 top-36 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl">
+          <div className="absolute -left-2 top-24 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl sm:top-32 lg:top-36">
             <div className="overflow-hidden rounded-xl">
               <img
                 src={photoGirlPortrait}
                 alt="Smiling Alpha primary pupil in uniform"
-                className="h-72 w-full object-cover"
+                className="h-32 w-full object-cover sm:h-60 lg:h-72"
                 loading="eager"
               />
             </div>
@@ -233,7 +289,7 @@ function Hero() {
               <img
                 src={photoTeacher}
                 alt="Teacher working with two pupils"
-                className="h-52 w-full object-cover"
+                className="h-24 w-full object-cover sm:h-44 lg:h-52"
                 loading="eager"
               />
             </div>
@@ -244,7 +300,7 @@ function Hero() {
       {/* Soft cream wave divider */}
       <svg
         viewBox="0 0 1440 60"
-        className="block h-10 w-full text-[var(--color-off-white)]"
+        className="block h-10 w-full shrink-0 text-[var(--color-off-white)]"
         preserveAspectRatio="none"
         aria-hidden
       >
@@ -291,14 +347,14 @@ function WhatWeOffer() {
   return (
     <section id="our-days" className="bg-[var(--color-off-white)] pb-[var(--space-section-y)] pt-6">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From first steps to big school
         </p>
-        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What we <span className="text-[var(--color-bright-blue)]">offer</span>
         </h2>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
+        <div data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-2">
           {cards.map((c) => (
             <article
               key={c.title}
@@ -372,15 +428,15 @@ function AlphaChild() {
       style={{ backgroundColor: PAGE_TINTS.wash }}
     >
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           The Alpha child
         </p>
-        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What makes a young Alpha{" "}
           <span className="text-[var(--color-bright-blue)]">learner?</span>
         </h2>
 
-        <div className="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
+        <div data-reveal data-reveal-delay="160" className="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
           <div className="space-y-8">
             {left.map((i) => (
               <Item key={i.title} {...i} align="right" />
@@ -449,14 +505,14 @@ function WhatTheyExplore() {
   return (
     <section id="primary" className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           A rich, busy week
         </p>
-        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What they'll <span className="text-[var(--color-bright-blue)]">explore</span>
         </h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3">
+        <div data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3">
           {subjects.map((s) => (
             <div
               key={s.name}
@@ -492,13 +548,13 @@ function EntryRequirements() {
   return (
     <section id="requirements" className="bg-white py-16">
       <div className="mx-auto max-w-4xl px-6 lg:px-10">
-        <p className="text-[var(--color-bright-blue)]" style={T.label}>
+        <p data-reveal className="text-[var(--color-bright-blue)]" style={T.label}>
           Admissions
         </p>
-        <h2 className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 data-reveal data-reveal-delay="80" className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           Requirements
         </h2>
-        <div className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
+        <div data-reveal data-reveal-delay="160" className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
           <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
             [Entry requirements — to be confirmed with academic offices]
           </p>
@@ -528,14 +584,14 @@ function OutstandingExtracurriculum() {
   return (
     <section id="extracurriculum" className="bg-white py-[var(--space-section-y)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           Beyond the classroom
         </p>
-        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           Outstanding <span className="text-[var(--color-bright-blue)]">Extracurriculum</span>
         </h2>
 
-        <div className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
+        <div data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
           {EXTRACURRICULUM.map((a) => (
             <div
               key={a.name}
@@ -607,7 +663,7 @@ function LetsGetStarted() {
         <path d="M0 0 H1440 V30 Q 1080 60 720 30 T 0 30 Z" fill="currentColor" />
       </svg>
 
-      <div className="mx-auto w-full max-w-3xl px-[var(--container-gutter)] text-center">
+      <div data-reveal className="mx-auto w-full max-w-3xl px-[var(--container-gutter)] text-center">
         <h2 className="font-display text-4xl font-black tracking-tight text-white sm:text-5xl">
           Let's <span className="text-[var(--color-bright-blue)]">get</span> started
         </h2>
@@ -728,14 +784,14 @@ function WhatParentsSay() {
   return (
     <section className="relative bg-[var(--color-off-white)] pt-20">
       <div className="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
-        <p className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From our families
         </p>
-        <h2 className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What <span className="text-[var(--color-bright-blue)]">parents</span> say
         </h2>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <div data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-3">
           {quotes.map((q, i) => (
             <article
               key={q.id}
@@ -776,7 +832,7 @@ function PeekInside() {
   return (
     <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div data-reveal className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[var(--color-bright-blue)]" style={T.label}>
               Around the campus
@@ -793,7 +849,7 @@ function PeekInside() {
           </Link>
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
+        <div data-reveal data-reveal-delay="160" className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
           <GalleryTile src={photoBallPit} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
           <GalleryTile src={photoShapesClass} caption="Learning shapes" className="h-44" />
           <GalleryTile src={photoToyCar} caption="Little drivers" className="h-44" />

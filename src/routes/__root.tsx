@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import alphaLogo from "@/assets/alpha-logo.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { UrgentAnnouncements } from "../components/urgent-announcements";
+import { RevealWatcher } from "../components/reveal";
 
 function NotFoundComponent() {
   return (
@@ -114,9 +115,32 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    /* The head script below adds class="rv-on" and data-rv-ready here
+       before hydration, so React would otherwise report an attribute
+       mismatch it cannot patch. Scoped to this element only. */
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
+        {/* Scroll-reveal opt-in. src/styles.css only hides a [data-reveal]
+            block while this class is on <html>, so the server-rendered HTML
+            is fully visible on its own — a reader with no JS, or one whose
+            bundle fails, never sees a blank page. The timer is the second
+            half of that guarantee: RevealWatcher stamps data-rv-ready when it
+            mounts, and if that never happens the class is dropped and every
+            block falls back to visible.
+
+            It has to run here, in the head, rather than on hydration: hiding
+            has to be in effect before first paint or a revealed block would
+            flash visible and then vanish. */}
+        <script
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html:
+              'var e=document.documentElement;e.classList.add("rv-on");' +
+              'setTimeout(function(){if(!e.hasAttribute("data-rv-ready"))' +
+              'e.classList.remove("rv-on")},4000);',
+          }}
+        />
       </head>
       <body>
         {/* eslint-disable-next-line react/no-danger */}
@@ -169,6 +193,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <RevealWatcher />
       <Outlet />
       <UrgentAnnouncements />
     </QueryClientProvider>

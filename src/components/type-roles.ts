@@ -55,3 +55,21 @@ export const T: Record<string, React.CSSProperties> = {
 /** The page shell every section uses: centred, max-width, gutter. */
 export const SHELL =
   "mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]";
+
+/**
+ * Binds one element to a step of the hero entrance sequence defined in
+ * styles.css. The --hero-t-* tokens hold the timings; this only wires an
+ * element to one of them.
+ *
+ * It lives here rather than in alpha-ui.tsx because the two light school
+ * heroes (Alpha Girls, Nursery & Primary) keep their own compositions but run
+ * the same choreography, and alpha-ui.tsx is a components module.
+ */
+export const heroStep = (
+  delay: string,
+  duration?: string,
+): React.CSSProperties =>
+  ({
+    "--hero-delay": delay,
+    ...(duration ? { "--hero-rise-dur": duration } : null),
+  }) as React.CSSProperties;

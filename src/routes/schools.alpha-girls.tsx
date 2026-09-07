@@ -13,7 +13,7 @@ import campusGirls from "@/assets/campus-girls.webp";
 import campusHigh from "@/assets/campus-high.webp";
 import campusNursery from "@/assets/campus-nursery.webp";
 import aviation from "@/assets/aviation-uniform.webp";
-import { T } from "@/components/type-roles";
+import { T, heroStep } from "@/components/type-roles";
 
 const slug = "alpha-girls" as const;
 const ACCENT = "var(--color-blue-violet)";
@@ -56,8 +56,8 @@ function AlphaGirlsRoute() {
   return (
     <div className="min-h-screen bg-white text-[var(--color-ink)]">
       <SiteHeader />
-      <SchoolSubNav items={SUB_NAV} />
       <Hero />
+      <SchoolSubNav items={SUB_NAV} />
       <WhatMakesAlphaGirls />
       <WhereTheyCompete />
       <TheSchoolYear />
@@ -73,11 +73,25 @@ function AlphaGirlsRoute() {
 }
 
 // ---------- Entry requirements ----------
-
+/**
+ * The opening screen.
+ *
+ * Alpha Girls does NOT take the dark full-bleed photographic hero the
+ * homepage and Alpha High use. Its violet world is an approved, deliberate
+ * identity, and inverting it to navy-and-photograph to match the others
+ * would cost the school the one page that looks like itself. So the
+ * composition is unchanged — violet ramp, drifting blooms, the portrait
+ * bleeding off the bottom edge — and what changes is the staging: it now
+ * fills the viewport under the header, and it assembles itself on load in
+ * the same order and to the same timings as every other hero on the site.
+ *
+ * The header stays in flow here rather than overlaying, because white nav
+ * links on a pale violet ground would be unreadable.
+ */
 function Hero() {
   return (
     <section
-      className="relative isolate overflow-hidden ag-hero"
+      className="ag-hero hero-viewport-inset relative isolate flex flex-col overflow-hidden"
       style={{
         background: `linear-gradient(135deg, ${VIOLET.soft} 0%, ${VIOLET.mid} 45%, ${VIOLET.deep} 100%)`,
       }}
@@ -94,45 +108,74 @@ function Hero() {
         style={{ background: GOLD }}
       />
 
-      <div className="relative mx-auto grid max-w-7xl items-end gap-10 px-6 pt-14 pb-0 sm:pt-20 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10 lg:pt-24">
-        <Reveal direction="up" className="max-w-2xl pb-12 lg:pb-20">
+      <div className="relative mx-auto grid w-full max-w-7xl flex-1 items-end gap-4 px-6 pb-0 pt-6 sm:gap-8 sm:pt-14 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10">
+        <div className="max-w-2xl self-center pb-4 sm:pb-8 lg:pb-20">
           <span
-            className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
-            style={{ borderColor: `color-mix(in srgb, ${ACCENT} 20%, transparent)`, background: "#ffffffaa", color: ACCENT }}
+            className="hero-rise inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
+            style={{
+              borderColor: `color-mix(in srgb, ${ACCENT} 20%, transparent)`,
+              background: "#ffffffaa",
+              color: ACCENT,
+              ...heroStep("var(--hero-t-eyebrow)"),
+            }}
           >
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
             Girls Only · Form 1–6 · Kunduchi Campus
           </span>
+
           <h1
             className="mt-6 font-display text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
             style={{ color: ACCENT }}
           >
-            Built for girls who <span style={{ color: "var(--color-bright-blue)" }}>mean to lead.</span>
+            <span
+              className="hero-rise block"
+              style={heroStep("var(--hero-t-line-1)", "420ms")}
+            >
+              Built for girls who
+            </span>
+            <span
+              className="hero-rise block"
+              style={{
+                color: "var(--color-bright-blue)",
+                ...heroStep("var(--hero-t-line-2)", "420ms"),
+              }}
+            >
+              mean to lead.
+            </span>
           </h1>
-          <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--color-ink)]/80 sm:text-lg">
-            The same rigour, the same aviation and coding, the same path to top results — on a campus designed for girls to take up every inch of space.
+
+          <p
+            className="hero-rise mt-6 max-w-xl text-base leading-relaxed text-[var(--color-ink)]/80 sm:text-lg"
+            style={heroStep("var(--hero-t-blurb)")}
+          >
+            The same rigour, the same aviation and coding, the same path to top
+            results — on a campus designed for girls to take up every inch of space.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+
+          <div
+            className="hero-rise mt-8 flex flex-wrap gap-3"
+            style={heroStep("var(--hero-t-cta)")}
+          >
             <Link
               to="/admission"
-              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97]"
+              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97] motion-reduce:transition-none"
               style={{ background: GOLD }}
             >
               Enroll Now →
             </Link>
             <Link
               to="/contact"
-              className="inline-flex items-center rounded-md border-2 px-5 py-3 text-sm font-semibold transition hover:bg-white"
+              className="inline-flex items-center rounded-md border-2 px-5 py-3 text-sm font-semibold transition hover:bg-white motion-reduce:transition-none"
               style={{ borderColor: ACCENT, color: ACCENT, background: "#ffffffaa" }}
             >
               Book a Visit
             </Link>
           </div>
-        </Reveal>
+        </div>
 
-        <Reveal
-          direction="right"
-          className="relative mx-auto flex w-full max-w-md items-end justify-center self-end lg:max-w-none"
+        <div
+          className="hero-rise relative mx-auto flex w-full max-w-md items-end justify-center self-end lg:max-w-none"
+          style={heroStep("var(--hero-t-tail)", "420ms")}
         >
           <div
             aria-hidden
@@ -142,15 +185,17 @@ function Hero() {
                 "radial-gradient(circle at center, rgba(60,52,137,0.55), rgba(60,52,137,0.12) 55%, transparent 75%)",
             }}
           />
+          {/* Capped in svh below lg so the copy and the portrait both fit one
+              phone screen. Cropped from the top, which keeps the faces. */}
           <img
             src={girlsHero}
             alt="Alpha Girls students on campus"
-            className="relative z-10 h-auto w-full max-w-[28rem] rounded-t-[3rem] object-cover shadow-2xl"
-            style={{ aspectRatio: "4/5", objectFit: "cover" }}
+            className="relative z-10 max-h-[32svh] w-full max-w-[28rem] rounded-t-[3rem] object-cover object-top shadow-2xl sm:max-h-[40svh] lg:max-h-none"
+            style={{ aspectRatio: "4/5" }}
             loading="eager"
             decoding="async"
           />
-        </Reveal>
+        </div>
       </div>
     </section>
   );
