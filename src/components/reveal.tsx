@@ -106,12 +106,12 @@ function sharedObserver(): IntersectionObserver | null {
  * subtree observer would cost the target device something on every DOM change
  * for no benefit.
  *
- * It marks a revealed block with the `data-rv-in` ATTRIBUTE rather than a
- * class, and never writes to `style`. Route content streams inside a Suspense
- * boundary, so this effect can run before React has hydrated that boundary;
- * className and style are props React reconciles, and writing either one early
- * was reported as a hydration mismatch it could not patch. An attribute React
- * never rendered is not compared.
+ * It marks a revealed block with the `data-rv-in` attribute rather than a
+ * class, and never writes to `style`, so the mutation is a single attribute
+ * on an element whose own props are untouched.
+ *
+ * React still reconciles data-* attributes, so every revealed element sets
+ * suppressHydrationWarning — see the note on Reveal below.
  */
 export function RevealWatcher() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -149,6 +149,17 @@ interface RevealProps {
   style?: CSSProperties;
 }
 
+/**
+ * suppressHydrationWarning is deliberate and load-bearing.
+ *
+ * The shared observer can mark an element before React has hydrated the
+ * Suspense boundary its content streams inside — it does, on any page whose
+ * first section is already in the viewport. React compares data-* attributes
+ * like any other prop and reports a mismatch it says it will not patch. The
+ * attribute does survive and the reveal works correctly; the warning is the
+ * only symptom, and this is the documented escape hatch for an element
+ * mutated outside React before hydration.
+ */
 export function Reveal({
   children,
   direction = "up",
@@ -161,6 +172,7 @@ export function Reveal({
 
   return (
     <Component
+      suppressHydrationWarning
       data-reveal={direction}
       data-reveal-delay={snapDelay(delay) || undefined}
       className={className}

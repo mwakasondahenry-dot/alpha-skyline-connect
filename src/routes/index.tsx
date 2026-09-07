@@ -345,7 +345,7 @@ function FindTheRightSchool() {
       </Reveal>
 
       <ul
-        data-reveal
+        suppressHydrationWarning data-reveal
         data-reveal-delay="120"
         className="mt-[var(--space-block-y)] grid gap-0 overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] md:grid-cols-3 md:gap-[var(--space-card-gap)] md:overflow-visible md:bg-transparent md:shadow-none"
       >
@@ -498,7 +498,7 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
 
   return (
     <section className={`${SHELL} pb-[var(--space-section-y)]`}>
-      <div data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
+      <div suppressHydrationWarning data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
         {parent && (
           <TestimonialCard
             title="Parent Testimonials"
@@ -641,7 +641,7 @@ function NewsAndEvents({
         </p>
       ) : (
         <ul
-          data-reveal
+          suppressHydrationWarning data-reveal
           data-reveal-delay="120"
           className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3"
         >

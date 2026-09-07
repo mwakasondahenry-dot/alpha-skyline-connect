@@ -347,14 +347,14 @@ function WhatWeOffer() {
   return (
     <section id="our-days" className="bg-[var(--color-off-white)] pb-[var(--space-section-y)] pt-6">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p suppressHydrationWarning data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From first steps to big school
         </p>
-        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What we <span className="text-[var(--color-bright-blue)]">offer</span>
         </h2>
 
-        <div data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-2">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-2">
           {cards.map((c) => (
             <article
               key={c.title}
@@ -428,15 +428,15 @@ function AlphaChild() {
       style={{ backgroundColor: PAGE_TINTS.wash }}
     >
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p suppressHydrationWarning data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           The Alpha child
         </p>
-        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What makes a young Alpha{" "}
           <span className="text-[var(--color-bright-blue)]">learner?</span>
         </h2>
 
-        <div data-reveal data-reveal-delay="160" className="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-14 grid items-center gap-10 lg:grid-cols-[1fr_auto_1fr]">
           <div className="space-y-8">
             {left.map((i) => (
               <Item key={i.title} {...i} align="right" />
@@ -505,14 +505,14 @@ function WhatTheyExplore() {
   return (
     <section id="primary" className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p suppressHydrationWarning data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           A rich, busy week
         </p>
-        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What they'll <span className="text-[var(--color-bright-blue)]">explore</span>
         </h2>
 
-        <div data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-3">
           {subjects.map((s) => (
             <div
               key={s.name}
@@ -548,13 +548,13 @@ function EntryRequirements() {
   return (
     <section id="requirements" className="bg-white py-16">
       <div className="mx-auto max-w-4xl px-6 lg:px-10">
-        <p data-reveal className="text-[var(--color-bright-blue)]" style={T.label}>
+        <p suppressHydrationWarning data-reveal className="text-[var(--color-bright-blue)]" style={T.label}>
           Admissions
         </p>
-        <h2 data-reveal data-reveal-delay="80" className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           Requirements
         </h2>
-        <div data-reveal data-reveal-delay="160" className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
           <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
             [Entry requirements — to be confirmed with academic offices]
           </p>
@@ -584,14 +584,14 @@ function OutstandingExtracurriculum() {
   return (
     <section id="extracurriculum" className="bg-white py-[var(--space-section-y)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p suppressHydrationWarning data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           Beyond the classroom
         </p>
-        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           Outstanding <span className="text-[var(--color-bright-blue)]">Extracurriculum</span>
         </h2>
 
-        <div data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">
           {EXTRACURRICULUM.map((a) => (
             <div
               key={a.name}
@@ -663,7 +663,7 @@ function LetsGetStarted() {
         <path d="M0 0 H1440 V30 Q 1080 60 720 30 T 0 30 Z" fill="currentColor" />
       </svg>
 
-      <div data-reveal className="mx-auto w-full max-w-3xl px-[var(--container-gutter)] text-center">
+      <div suppressHydrationWarning data-reveal className="mx-auto w-full max-w-3xl px-[var(--container-gutter)] text-center">
         <h2 className="font-display text-4xl font-black tracking-tight text-white sm:text-5xl">
           Let's <span className="text-[var(--color-bright-blue)]">get</span> started
         </h2>
@@ -784,14 +784,14 @@ function WhatParentsSay() {
   return (
     <section className="relative bg-[var(--color-off-white)] pt-20">
       <div className="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
-        <p data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
+        <p suppressHydrationWarning data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From our families
         </p>
-        <h2 data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+        <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
           What <span className="text-[var(--color-bright-blue)]">parents</span> say
         </h2>
 
-        <div data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-3">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-3">
           {quotes.map((q, i) => (
             <article
               key={q.id}
@@ -832,7 +832,7 @@ function PeekInside() {
   return (
     <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
-        <div data-reveal className="flex flex-wrap items-end justify-between gap-4">
+        <div suppressHydrationWarning data-reveal className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="text-[var(--color-bright-blue)]" style={T.label}>
               Around the campus
@@ -849,7 +849,7 @@ function PeekInside() {
           </Link>
         </div>
 
-        <div data-reveal data-reveal-delay="160" className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
+        <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-10 grid gap-5 md:grid-cols-3 md:grid-rows-2">
           <GalleryTile src={photoBallPit} caption="Play & discovery" className="md:col-span-1 md:row-span-2 h-72 md:h-full" />
           <GalleryTile src={photoShapesClass} caption="Learning shapes" className="h-44" />
           <GalleryTile src={photoToyCar} caption="Little drivers" className="h-44" />
