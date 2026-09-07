@@ -48,16 +48,28 @@ const SIGNATURES: ReadonlyArray<{
     ext: "png",
     mime: "image/png",
     match: (b) =>
-      b[0] === 0x89 && b[1] === 0x50 && b[2] === 0x4e && b[3] === 0x47 &&
-      b[4] === 0x0d && b[5] === 0x0a && b[6] === 0x1a && b[7] === 0x0a,
+      b[0] === 0x89 &&
+      b[1] === 0x50 &&
+      b[2] === 0x4e &&
+      b[3] === 0x47 &&
+      b[4] === 0x0d &&
+      b[5] === 0x0a &&
+      b[6] === 0x1a &&
+      b[7] === 0x0a,
   },
   {
     ext: "webp",
     mime: "image/webp",
     // "RIFF" .... "WEBP"
     match: (b) =>
-      b[0] === 0x52 && b[1] === 0x49 && b[2] === 0x46 && b[3] === 0x46 &&
-      b[8] === 0x57 && b[9] === 0x45 && b[10] === 0x42 && b[11] === 0x50,
+      b[0] === 0x52 &&
+      b[1] === 0x49 &&
+      b[2] === 0x46 &&
+      b[3] === 0x46 &&
+      b[8] === 0x57 &&
+      b[9] === 0x45 &&
+      b[10] === 0x42 &&
+      b[11] === 0x50,
   },
 ];
 
@@ -72,13 +84,10 @@ function sniffImage(bytes: Uint8Array) {
  * runs through the validation below.
  */
 function serviceClient() {
-  const rawUrl =
-    process.env.ALPHA_SUPABASE_URL_SERVER ?? process.env.ALPHA_SUPABASE_URL;
+  const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER ?? process.env.ALPHA_SUPABASE_URL;
   const key = process.env.ALPHA_SUPABASE_SERVICE_ROLE_KEY;
   if (!rawUrl || !key) {
-    throw new Error(
-      "ALPHA_SUPABASE_SERVICE_ROLE_KEY / ALPHA_SUPABASE_URL_SERVER not configured",
-    );
+    throw new Error("ALPHA_SUPABASE_SERVICE_ROLE_KEY / ALPHA_SUPABASE_URL_SERVER not configured");
   }
   const url = rawUrl.replace(/\/+$/, "").replace(/\/rest\/v1$/, "");
   return createClient<Database>(url, key, {
@@ -95,11 +104,7 @@ function serviceClient() {
  * for the limit, never for anything security-bearing.
  */
 function callerIp(): string {
-  return (
-    getRequestHeader("cf-connecting-ip") ??
-    getRequestIP({ xForwardedFor: true }) ??
-    "unknown"
-  );
+  return getRequestHeader("cf-connecting-ip") ?? getRequestIP({ xForwardedFor: true }) ?? "unknown";
 }
 
 function str(form: FormData, key: string): string {
@@ -109,131 +114,154 @@ function str(form: FormData, key: string): string {
 
 export type AlumniSubmissionResult = { ok: true };
 
+/**
+ * A message intended for the person filling in the form.
+ *
+ * Everything thrown from a server function reaches the browser, so the
+ * distinction matters: only these are shown. Anything else — a missing
+ * environment variable, a Postgres error, a storage failure — is logged here
+ * and replaced with a generic line, because the alternative is a public form
+ * telling a stranger which environment variables the server is missing.
+ */
+class SubmissionError extends Error {}
+
+function fail(message: string): never {
+  throw new SubmissionError(message);
+}
+
 export const submitAlumniStory = createServerFn({ method: "POST" })
   .inputValidator((data: FormData) => {
     if (!(data instanceof FormData)) throw new Error("Invalid submission.");
     return data;
   })
   .handler(async ({ data }): Promise<AlumniSubmissionResult> => {
-    const fullName = str(data, "full_name");
-    const gradYearRaw = str(data, "grad_year");
-    const role = str(data, "role");
-    const company = str(data, "company");
-    const message = str(data, "message");
-    const consent = str(data, "consent");
+    try {
+      const fullName = str(data, "full_name");
+      const gradYearRaw = str(data, "grad_year");
+      const role = str(data, "role");
+      const company = str(data, "company");
+      const message = str(data, "message");
+      const consent = str(data, "consent");
 
-    /* ---- Field validation ------------------------------------------- */
-    if (!fullName) throw new Error("Please enter your full name.");
-    if (fullName.length > 120) throw new Error("That name is too long.");
+      /* ---- Field validation ------------------------------------------- */
+      if (!fullName) fail("Please enter your full name.");
+      if (fullName.length > 120) fail("That name is too long.");
 
-    const gradYear = Number.parseInt(gradYearRaw, 10);
-    const thisYear = new Date().getFullYear();
-    if (!Number.isInteger(gradYear) || gradYear < 1960 || gradYear > thisYear + 1) {
-      throw new Error("Please enter the year you finished, e.g. 2018.");
-    }
+      const gradYear = Number.parseInt(gradYearRaw, 10);
+      const thisYear = new Date().getFullYear();
+      if (!Number.isInteger(gradYear) || gradYear < 1960 || gradYear > thisYear + 1) {
+        fail("Please enter the year you finished, e.g. 2018.");
+      }
 
-    if (!message) throw new Error("Please write a short message.");
-    if (message.length > MESSAGE_MAX) {
-      throw new Error(`Please keep your message under ${MESSAGE_MAX} characters.`);
-    }
-    if (role.length > 120) throw new Error("That role is too long.");
-    if (company.length > 120) throw new Error("That company name is too long.");
+      if (!message) fail("Please write a short message.");
+      if (message.length > MESSAGE_MAX) {
+        fail(`Please keep your message under ${MESSAGE_MAX} characters.`);
+      }
+      if (role.length > 120) fail("That role is too long.");
+      if (company.length > 120) fail("That company name is too long.");
 
-    /* Consent is the reason the rest of this is publishable at all. */
-    if (consent !== "yes") {
-      throw new Error("Please agree to the consent statement to submit.");
-    }
+      /* Consent is the reason the rest of this is publishable at all. */
+      if (consent !== "yes") {
+        fail("Please agree to the consent statement to submit.");
+      }
 
-    /* ---- Rate limit --------------------------------------------------
+      /* ---- Rate limit --------------------------------------------------
        Before any storage write, so a flood costs the bucket nothing. */
-    const sb = serviceClient();
-    const ip = callerIp();
+      const sb = serviceClient();
+      const ip = callerIp();
 
-    const { data: allowed, error: rateError } = await sb.rpc(
-      "claim_submission_slot" as never,
-      { p_key: `alumni:${ip}`, p_limit: RATE_LIMIT } as never,
-    );
-    if (rateError) {
-      console.error("[submitAlumniStory] rate limit", rateError);
-      throw new Error("Could not accept your story right now. Please try again shortly.");
-    }
-    if (allowed === false) {
-      throw new Error(
-        "That is a few submissions in a short time. Please try again in an hour.",
+      const { data: allowed, error: rateError } = await sb.rpc(
+        "claim_submission_slot" as never,
+        { p_key: `alumni:${ip}`, p_limit: RATE_LIMIT } as never,
       );
-    }
+      if (rateError) {
+        console.error("[submitAlumniStory] rate limit", rateError);
+        fail("Could not accept your story right now. Please try again shortly.");
+      }
+      if (allowed === false) {
+        fail("That is a few submissions in a short time. Please try again in an hour.");
+      }
 
-    /* ---- Photo -------------------------------------------------------
+      /* ---- Photo -------------------------------------------------------
        Optional. Sniffed, size-checked, and stored under a name of our
        choosing in the private bucket. The submitted filename is discarded
        entirely rather than sanitised. */
-    let pendingPath: string | null = null;
-    const photo = data.get("photo");
+      let pendingPath: string | null = null;
+      const photo = data.get("photo");
 
-    if (photo instanceof File && photo.size > 0) {
-      if (photo.size > PHOTO_MAX_BYTES) {
-        throw new Error("That photo is larger than 5 MB. Please choose a smaller one.");
+      if (photo instanceof File && photo.size > 0) {
+        if (photo.size > PHOTO_MAX_BYTES) {
+          fail("That photo is larger than 5 MB. Please choose a smaller one.");
+        }
+
+        const buffer = new Uint8Array(await photo.arrayBuffer());
+        /* Re-check after reading: size is a claim until the bytes are counted. */
+        if (buffer.byteLength > PHOTO_MAX_BYTES) {
+          fail("That photo is larger than 5 MB. Please choose a smaller one.");
+        }
+
+        const kind = sniffImage(buffer);
+        if (!kind) {
+          fail("That file is not a JPEG, PNG or WebP image.");
+        }
+
+        pendingPath = `${new Date().getFullYear()}/${crypto.randomUUID()}.${kind.ext}`;
+
+        const { error: uploadError } = await sb.storage
+          .from(PENDING_BUCKET)
+          .upload(pendingPath, buffer, {
+            contentType: kind.mime,
+            upsert: false,
+          });
+
+        if (uploadError) {
+          console.error("[submitAlumniStory] upload", uploadError);
+          fail("Could not save your photo. Please try again without it.");
+        }
       }
 
-      const buffer = new Uint8Array(await photo.arrayBuffer());
-      /* Re-check after reading: size is a claim until the bytes are counted. */
-      if (buffer.byteLength > PHOTO_MAX_BYTES) {
-        throw new Error("That photo is larger than 5 MB. Please choose a smaller one.");
-      }
-
-      const kind = sniffImage(buffer);
-      if (!kind) {
-        throw new Error("That file is not a JPEG, PNG or WebP image.");
-      }
-
-      pendingPath = `${new Date().getFullYear()}/${crypto.randomUUID()}.${kind.ext}`;
-
-      const { error: uploadError } = await sb.storage
-        .from(PENDING_BUCKET)
-        .upload(pendingPath, buffer, {
-          contentType: kind.mime,
-          upsert: false,
-        });
-
-      if (uploadError) {
-        console.error("[submitAlumniStory] upload", uploadError);
-        throw new Error("Could not save your photo. Please try again without it.");
-      }
-    }
-
-    /* ---- Insert ------------------------------------------------------
+      /* ---- Insert ------------------------------------------------------
        published is a literal false. There is no code path, and no request
        shape, that can make it anything else. photo_url stays null until a
        member of staff approves and the file is copied into the public
        bucket. */
-    const row = {
-      school_slug: "group-wide",
-      author_name: fullName,
-      relationship: role || null,
-      company: company || null,
-      grad_year: gradYear,
-      quote: message,
-      photo_url: null,
-      pending_photo_path: pendingPath,
-      published: false,
-      consent_at: new Date().toISOString(),
-      consent_text: CONSENT_TEXT,
-      submitted_ip: ip === "unknown" ? null : ip,
-      sort_order: 0,
-    };
+      const row = {
+        school_slug: "group-wide",
+        author_name: fullName,
+        relationship: role || null,
+        company: company || null,
+        grad_year: gradYear,
+        quote: message,
+        photo_url: null,
+        pending_photo_path: pendingPath,
+        published: false,
+        consent_at: new Date().toISOString(),
+        consent_text: CONSENT_TEXT,
+        submitted_ip: ip === "unknown" ? null : ip,
+        sort_order: 0,
+      };
 
-    const { error } = await (sb.from("testimonials") as unknown as {
-      insert: (v: typeof row) => Promise<{ error: { message: string } | null }>;
-    }).insert(row);
+      const { error } = await (
+        sb.from("testimonials") as unknown as {
+          insert: (v: typeof row) => Promise<{ error: { message: string } | null }>;
+        }
+      ).insert(row);
 
-    if (error) {
-      console.error("[submitAlumniStory] insert", error);
-      /* Do not orphan the photo if the row failed to land. */
-      if (pendingPath) {
-        await sb.storage.from(PENDING_BUCKET).remove([pendingPath]);
+      if (error) {
+        console.error("[submitAlumniStory] insert", error);
+        /* Do not orphan the photo if the row failed to land. */
+        if (pendingPath) {
+          await sb.storage.from(PENDING_BUCKET).remove([pendingPath]);
+        }
+        fail("Could not save your story. Please try again.");
       }
-      throw new Error("Could not save your story. Please try again.");
-    }
 
-    return { ok: true };
+      return { ok: true };
+    } catch (err) {
+      if (err instanceof SubmissionError) throw err;
+      /* Misconfiguration, a database error, a storage outage. The submitter can
+       do nothing with any of it, and some of it should not leave the server. */
+      console.error("[submitAlumniStory]", err);
+      throw new Error("Could not save your story. Please try again, or contact the school.");
+    }
   });
