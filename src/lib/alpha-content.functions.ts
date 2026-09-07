@@ -309,8 +309,19 @@ export const getHeroSlides = createServerFn({ method: "GET" })
   });
 
 // ---- Testimonials --------------------------------------------------------
+/**
+ * grad_year is carried so consumers can tell a parent quote from an alumni
+ * story. It is required by the alumni submission form and never set on a
+ * parent quote — see alpha_migration_alumni_submissions.sql.
+ */
 export type TestimonialItem = Pick<TestimonialRow,
-  "id" | "author_name" | "relationship" | "quote" | "photo_url" | "school_slug">;
+  "id" | "author_name" | "relationship" | "quote" | "photo_url" | "school_slug"
+  | "grad_year" | "company">;
+
+/** True for an approved alumni story, false for a parent quote. */
+export function isAlumniStory(t: Pick<TestimonialItem, "grad_year">) {
+  return t.grad_year != null;
+}
 
 export const getTestimonials = createServerFn({ method: "GET" }).handler(
   async (): Promise<TestimonialItem[]> => {
@@ -318,13 +329,42 @@ export const getTestimonials = createServerFn({ method: "GET" }).handler(
       const sb = serverClient();
       const { data, error } = await sb
         .from("testimonials")
-        .select("id,author_name,relationship,quote,photo_url,school_slug")
+        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company")
         .eq("published", true)
         .order("sort_order", { ascending: true });
       if (error) throw error;
       return data ?? [];
     } catch (err) {
       console.error("[getTestimonials]", err);
+      return [];
+    }
+  },
+);
+
+/**
+ * Approved alumni stories for the public /alumni page.
+ *
+ * published = true is the approval gate, exactly as for parent quotes. A
+ * pending submission is invisible here because it is invisible to the anon
+ * key this reads through — the RLS policy restricts anon SELECT to published
+ * rows, so this is not the only thing standing between an unmoderated
+ * submission and the public site.
+ */
+export const getAlumniStories = createServerFn({ method: "GET" }).handler(
+  async (): Promise<TestimonialItem[]> => {
+    try {
+      const sb = serverClient();
+      const { data, error } = await sb
+        .from("testimonials")
+        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company")
+        .eq("published", true)
+        .not("grad_year", "is", null)
+        .order("grad_year", { ascending: false })
+        .order("sort_order", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    } catch (err) {
+      console.error("[getAlumniStories]", err);
       return [];
     }
   },

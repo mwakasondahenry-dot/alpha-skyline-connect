@@ -3,7 +3,8 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import { getTestimonials, type TestimonialItem } from "@/lib/alpha-content.functions";
+import { getTestimonials, type TestimonialItem } from "@/lib/alpha-content.functions";
+
 import { T, SHELL } from "@/components/type-roles";
 
 const testimonialsQuery = queryOptions({
@@ -48,6 +49,8 @@ const PLACEHOLDERS: TestimonialItem[] = [
     quote: "[Parent testimonial — to be provided by the school]",
     photo_url: null,
     school_slug: "alpha-high",
+    grad_year: null,
+    company: null,
   },
   {
     id: "placeholder-2",
@@ -56,6 +59,8 @@ const PLACEHOLDERS: TestimonialItem[] = [
     quote: "[Parent testimonial — to be provided by the school]",
     photo_url: null,
     school_slug: "nursery-primary",
+    grad_year: null,
+    company: null,
   },
   {
     id: "placeholder-3",
@@ -64,6 +69,8 @@ const PLACEHOLDERS: TestimonialItem[] = [
     quote: "[Parent testimonial — to be provided by the school]",
     photo_url: null,
     school_slug: "alpha-girls",
+    grad_year: null,
+    company: null,
   },
 ];
 
@@ -76,8 +83,12 @@ const SCHOOL_LABELS: Record<string, string> = {
 
 function TestimonialsPage() {
   const { data } = useSuspenseQuery(testimonialsQuery);
-  const items = data.length > 0 ? data : PLACEHOLDERS;
-  const isPlaceholder = data.length === 0;
+  /* This page is Parent Testimonials. Alumni stories live in the same table
+     and are shown on /alumni, so they are filtered out here rather than
+     appearing under a heading that misdescribes them. */
+  const parentQuotes = data.filter((t) => t.grad_year == null);
+  const items = parentQuotes.length > 0 ? parentQuotes : PLACEHOLDERS;
+  const isPlaceholder = parentQuotes.length === 0;
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">

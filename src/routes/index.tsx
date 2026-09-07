@@ -486,8 +486,12 @@ function AviationBanner() {
  * published rows and disappears completely when there are none — no
  * placeholder names, ever.
  * ------------------------------------------------------------------ */
+/* Was a regex over `relationship`. That field now holds an alumni's job
+   title, so the regex would have filed every submission under Parent
+   Testimonials. grad_year is the reliable signal: required on the alumni
+   form, never set on a parent quote. */
 function isAlumni(t: TestimonialItem) {
-  return /alumn/i.test(t.relationship ?? "");
+  return t.grad_year != null;
 }
 
 function Testimonials({ items }: { items: TestimonialItem[] }) {
