@@ -111,12 +111,24 @@ export interface TestimonialRow {
   id: string;
   school_slug: SchoolSlug | null;
   author_name: string;
+  /** Free text. 'Parent, Form 3' for a parent quote; a job title for alumni. */
   relationship: string | null;
   quote: string;
   photo_url: string | null;
   sort_order: number;
   published: boolean;
   created_at: string;
+
+  /* Alumni submissions — see alpha_migration_alumni_submissions.sql.
+     grad_year doubles as the alumni discriminator: it is required by the
+     submission form and never set on a parent quote. */
+  grad_year: number | null;
+  company: string | null;
+  consent_at: string | null;
+  consent_text: string | null;
+  /** Object path in the PRIVATE alumni-pending bucket, while awaiting review. */
+  pending_photo_path: string | null;
+  submitted_ip: string | null;
 }
 
 export interface Database {
