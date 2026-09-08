@@ -16,6 +16,15 @@ import heroDroneGirls from "@/assets/av-hero-drone-girls.webp";
 import heroCockpit from "@/assets/av-hero-cockpit-girl.webp";
 import avCockpitStudents from "@/assets/av-cockpit-students.webp";
 import { T, SHELL } from "@/components/type-roles";
+import {
+  Marked,
+  Backdrop,
+  FlightPath,
+  CompassRose,
+  AltitudeTicks,
+  IconDisc,
+} from "@/components/alpha-ui";
+import { Plane, Wrench } from "lucide-react";
 
 // Real Alpha aviation student photos — KSOF holiday program.
 // NOTE: names below remain placeholders until written media-release
@@ -67,17 +76,25 @@ function ModuleCard({
   eyebrow,
   title,
   items,
+  icon,
 }: {
   eyebrow: string;
   title: string;
   items: ReadonlyArray<string>;
+  icon: React.ReactNode;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm">
-      <p className="text-[var(--color-gold)]" style={T.label}>
+    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm">
+      {/* Altimeter ticks down the card's edge. The instrument a student is
+          taught to read, used as the card's own rule. */}
+      <AltitudeTicks
+        className="alpha-backdrop alpha-backdrop--onDark -right-2 top-6 h-40 w-10"
+      />
+      <IconDisc tone="gold">{icon}</IconDisc>
+      <p className="mt-5 text-[var(--color-gold)]" style={T.label}>
         {eyebrow}
       </p>
-      <h3 className="mt-3 font-display text-white" style={T.cardTitle}>
+      <h3 className="mt-2 font-display text-white" style={T.cardTitle}>
         {title}
       </h3>
       <ul className="mt-6 space-y-3">
@@ -401,16 +418,29 @@ function AviationPage() {
       </section>
 
       {/* 4. MODULES — tarmac */}
-      <section className="alpha-tarmac relative py-[var(--space-section-y)] text-white sm:py-28">
+      <section className="alpha-tarmac relative overflow-hidden py-[var(--space-section-y)] text-white sm:py-28">
+        {/* The instrument, used as the section's watermark. Faint enough that
+            it changes no contrast reading; present enough that the tarmac
+            stops being a flat black band. */}
+        <CompassRose className="alpha-backdrop alpha-backdrop--onDark -right-16 top-16 hidden h-72 w-72 lg:block" />
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="alpha-runway-divider mx-auto mb-14 w-40" aria-hidden />
 
+          {/* Prose beside the two things it describes: the theory class and
+              the hangar. The photographs earn their place by being the
+              evidence for the paragraph next to them — PRODUCT.md's second
+              success condition is a parent believing the aviation programme
+              is real rather than a marketing line. */}
+          <div className="grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-start">
           <div className="max-w-3xl">
             <p className="text-[var(--color-gold)]" style={T.label}>
               What students learn
             </p>
             <h2 className="mt-4 font-display tracking-tight" style={T.section}>
-              Aviation Technology at Alpha Schools
+              Aviation Technology at{" "}
+              <Marked kind="sweep" color="var(--color-gold)">
+                Alpha Schools
+              </Marked>
             </h2>
             {/* School-supplied, September 2026. Describes the programme; makes
                 no claim about being first or only, so it is not covered by the
@@ -433,6 +463,32 @@ function AviationPage() {
             </p>
           </div>
 
+            <figure className="relative">
+              <FlightPath className="absolute -top-10 left-0 hidden h-16 w-full lg:block" />
+              <div className="alpha-photo overflow-hidden rounded-2xl border-4 border-white/90 shadow-2xl" style={{ ["--tilt" as string]: "-2deg", transform: "rotate(-2deg)" }}>
+                <img
+                  src={avGroundSchool2}
+                  alt="Alpha students in an Aviation Technology theory class"
+                  loading="lazy"
+                  decoding="async"
+                  className="block aspect-[4/3] w-full object-cover"
+                />
+              </div>
+              <div className="alpha-photo -mt-6 ml-10 overflow-hidden rounded-2xl border-4 border-white/90 shadow-2xl" style={{ ["--tilt" as string]: "3deg", transform: "rotate(3deg)" }}>
+                <img
+                  src={avEngineering}
+                  alt="Alpha students working on an aircraft during a hangar practical"
+                  loading="lazy"
+                  decoding="async"
+                  className="block aspect-[4/3] w-full object-cover"
+                />
+              </div>
+              <figcaption className="mt-8 text-white/60" style={T.label}>
+                Ground school and hangar practicals · Kenya School of Flying
+              </figcaption>
+            </figure>
+          </div>
+
           {/* The confirmed module lists. These replace
               "[Aviation modules — to be provided by school]" — the school
               supplied them in September 2026. */}
@@ -441,11 +497,13 @@ function AviationPage() {
               eyebrow="Ground school"
               title="Areas of specialisation"
               items={GROUND_SCHOOL_MODULES}
+              icon={<Plane className="h-6 w-6" />}
             />
             <ModuleCard
               eyebrow="Aircraft engineering"
               title="Fundamentals of aviation technology"
               items={ENGINEERING_MODULES}
+              icon={<Wrench className="h-6 w-6" />}
             />
           </div>
         </div>
@@ -455,7 +513,13 @@ function AviationPage() {
           The students here are unnamed and this is the school's own prose
           about its club, not a quoted testimonial: AGENTS.md forbids invented
           named quotes, and there are none. The Hunt line is attributed. */}
-      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
+      <section className="relative overflow-hidden bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
+        {/* Three paper planes climbing across the section, the same gesture
+            the club is about. Sparse and faint — a wash behind the copy, not
+            a pattern competing with it. */}
+        <Backdrop kind="plane" className="left-[4%] top-16" width="3.5rem" rotate={-12} />
+        <Backdrop kind="plane" className="right-[8%] top-40 hidden sm:block" width="5rem" rotate={8} />
+        <Backdrop kind="plane" className="bottom-16 left-[38%] hidden lg:block" width="4rem" rotate={-4} />
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
             <div>
@@ -466,7 +530,10 @@ function AviationPage() {
                 className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]"
                 style={T.section}
               >
-                A passion to fly.
+                A passion to{" "}
+                <Marked kind="ring" color="var(--color-bright-blue)">
+                  fly.
+                </Marked>
               </h2>
               <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
                 Speaking to members of the Alpha Aviation Club, students express

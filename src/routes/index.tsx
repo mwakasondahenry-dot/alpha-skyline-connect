@@ -12,7 +12,7 @@ import {
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
-import { CinematicHero } from "@/components/alpha-ui";
+import { CinematicHero, Marked, Backdrop } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
@@ -334,12 +334,15 @@ function FindTheRightSchool() {
   return (
     <section
       id="find-the-right-school"
-      className={`${SHELL} scroll-mt-24 py-[var(--space-section-y)]`}
+      className={`${SHELL} relative scroll-mt-24 overflow-hidden py-[var(--space-section-y)]`}
     >
+      <Backdrop kind="star" className="right-2 top-8" width="2.75rem" rotate={12} />
       <Reveal direction="up">
         <SectionHeading>
           Find the{" "}
-          <span className="text-[var(--heading-accent-color)]">Right School</span>{" "}
+          <Marked kind="ring" color="var(--color-gold)">
+            <span className="text-[var(--heading-accent-color)]">Right School</span>
+          </Marked>{" "}
           for Your Child
         </SectionHeading>
       </Reveal>

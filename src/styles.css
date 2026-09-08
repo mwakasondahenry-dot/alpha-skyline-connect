@@ -630,3 +630,85 @@ html.rv-on [data-reveal][data-rv-in] {
   min-height: calc(100vh - var(--header-h));
   min-height: calc(100svh - var(--header-h));
 }
+
+/* ===================================================================
+   MARKS — the hand-drawn layer, tied to the reveal.
+
+   .alpha-draw already existed and drew itself once on first paint. That
+   is right for something in the opening screen and wasted on anything
+   below it: the mark finished drawing long before the reader scrolled
+   to it, so every section past the first showed a mark that had already
+   happened.
+
+   Inside a revealed block the animation is held at its first frame and
+   released when the block arrives, so the stroke draws as the section
+   does. Outside one it behaves exactly as before.
+
+   animation-play-state is not a compositor property, but it is set once
+   per block on a handful of short paths, not per frame.
+   =================================================================== */
+@media (prefers-reduced-motion: no-preference) {
+  html.rv-on [data-reveal] .alpha-draw {
+    animation-play-state: paused;
+  }
+  html.rv-on [data-reveal][data-rv-in] .alpha-draw {
+    animation-play-state: running;
+  }
+  /* Stickers pop with the section rather than before it. */
+  html.rv-on [data-reveal] .alpha-pop {
+    animation-play-state: paused;
+  }
+  html.rv-on [data-reveal][data-rv-in] .alpha-pop {
+    animation-play-state: running;
+  }
+}
+
+/* A mark drawn behind a word rather than under a line of type. It
+   stretches to whatever it wraps, so the stroke belongs to the word at
+   every breakpoint instead of being a fixed-width decoration parked
+   near it. */
+/* Explicit width and height, never `auto` against a pair of offsets.
+   <svg> is a replaced element: given an auto dimension it takes its
+   intrinsic size rather than stretching between left/right or top/bottom
+   the way a div would. Sized off the parent instead, so the stroke is
+   the width of the word it wraps at every breakpoint. */
+.alpha-mark {
+  position: absolute;
+  left: -0.15em;
+  width: calc(100% + 0.3em);
+  bottom: -0.18em;
+  height: 0.42em;
+  overflow: visible;
+  pointer-events: none;
+}
+/* An explicit height, not `height: auto` with top and bottom.
+   <svg> is a replaced element: given auto height it takes its intrinsic
+   aspect ratio instead of stretching between its offsets the way a div
+   would, so the lasso rendered as a flat arc floating above the word
+   rather than around it. */
+.alpha-mark--ring {
+  top: -0.26em;
+  bottom: auto;
+  height: 1.55em;
+}
+
+/* Background marks. Deliberately faint: they sit behind live copy and
+   must never compete with it, so they are set as a wash rather than as
+   a figure. */
+.alpha-backdrop {
+  position: absolute;
+  pointer-events: none;
+  color: var(--color-brand-blue);
+  opacity: 0.07;
+}
+.alpha-backdrop--onDark {
+  color: var(--color-surface);
+  opacity: 0.09;
+}
+
+/* A dotted flight path. The dash pattern draws on like the doodles do,
+   which is why it shares .alpha-draw rather than defining its own. */
+.alpha-flightpath {
+  color: var(--color-gold);
+  opacity: 0.75;
+}

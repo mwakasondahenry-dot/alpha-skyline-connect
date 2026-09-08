@@ -1,6 +1,6 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
-import { CinematicHero, HeroCredentials, GoldButton, GhostButton, SectionHead, FeatureCard, StatBar, SHELL } from "@/components/alpha-ui";
+import { CinematicHero, HeroCredentials, GoldButton, GhostButton, SectionHead, FeatureCard, StatBar, Marked, Backdrop, SHELL } from "@/components/alpha-ui";
 import { CombinationList, SubjectPillList, FormOptionsList, type CombinationGroup } from "@/components/school/subject-lists";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -160,7 +160,8 @@ function Hero() {
 
 function About() {
   return (
-    <section id="about" className="bg-[var(--color-off-white)]">
+    <section id="about" className="relative overflow-hidden bg-[var(--color-off-white)]">
+      <Backdrop kind="arrow" className="right-[4%] top-12 hidden md:block" width="4.5rem" rotate={-8} />
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
@@ -168,7 +169,10 @@ function About() {
               About Alpha High
             </p>
             <h2 className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl" style={{ color: ACCENT }}>
-              Excellence through challenge — <span style={{ color: "var(--color-bright-blue)" }}>since 2007.</span>
+              Excellence through challenge —{" "}
+              <Marked kind="underline" color="var(--color-gold)">
+                <span style={{ color: "var(--color-bright-blue)" }}>since 2007.</span>
+              </Marked>
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
               Established <strong>19 March 2007</strong>, Alpha High was founded to enable students to achieve academic excellence through intellectual and physical challenge, and to become responsible citizens of a dynamic society.

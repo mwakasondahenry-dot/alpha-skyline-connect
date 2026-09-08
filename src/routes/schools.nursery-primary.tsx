@@ -29,6 +29,7 @@ import photoShapesClass from "@/assets/np-shapes-class.webp";
 import photoToyCar from "@/assets/np-toy-car.webp";
 
 import { T, heroStep } from "@/components/type-roles";
+import { Marked, Backdrop } from "@/components/alpha-ui";
 
 const testimonialsQuery = queryOptions({
   queryKey: ["testimonials"],
@@ -345,13 +346,21 @@ function WhatWeOffer() {
   ];
 
   return (
-    <section id="our-days" className="bg-[var(--color-off-white)] pb-[var(--space-section-y)] pt-6">
+    <section
+      id="our-days"
+      className="relative overflow-hidden bg-[var(--color-off-white)] pb-[var(--space-section-y)] pt-6"
+    >
+      <Backdrop kind="star" className="left-[6%] top-10" width="2.5rem" rotate={-10} />
+      <Backdrop kind="scribble" className="right-[5%] top-24 hidden sm:block" width="5.5rem" rotate={6} />
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
         <p suppressHydrationWarning data-reveal className="text-center text-[var(--color-bright-blue)]" style={T.label}>
           From first steps to big school
         </p>
         <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-          What we <span className="text-[var(--color-bright-blue)]">offer</span>
+          What we{" "}
+          <Marked kind="underline" color="var(--color-gold)">
+            <span className="text-[var(--color-bright-blue)]">offer</span>
+          </Marked>
         </h2>
 
         <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-12 grid gap-6 md:grid-cols-2">
@@ -588,7 +597,10 @@ function OutstandingExtracurriculum() {
           Beyond the classroom
         </p>
         <h2 suppressHydrationWarning data-reveal data-reveal-delay="80" className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-          Outstanding <span className="text-[var(--color-bright-blue)]">Extracurriculum</span>
+          Outstanding{" "}
+          <Marked kind="underline" color="var(--color-gold)">
+            <span className="text-[var(--color-bright-blue)]">Extracurriculum</span>
+          </Marked>
         </h2>
 
         <div suppressHydrationWarning data-reveal data-reveal-delay="160" className="mt-12 grid grid-cols-2 gap-5 md:grid-cols-4">

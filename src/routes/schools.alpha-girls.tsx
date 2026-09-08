@@ -14,6 +14,7 @@ import campusHigh from "@/assets/campus-high.webp";
 import campusNursery from "@/assets/campus-nursery.webp";
 import aviation from "@/assets/aviation-uniform.webp";
 import { T, heroStep } from "@/components/type-roles";
+import { Marked, Backdrop } from "@/components/alpha-ui";
 
 const slug = "alpha-girls" as const;
 const ACCENT = "var(--color-blue-violet)";
@@ -205,7 +206,8 @@ function Hero() {
 
 function About() {
   return (
-    <section className="bg-white">
+    <section className="relative overflow-hidden bg-white">
+      <Backdrop kind="orbit" className="-left-8 top-16 hidden lg:block" width="7rem" rotate={-8} />
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
@@ -216,7 +218,10 @@ function About() {
               className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl"
               style={{ color: ACCENT }}
             >
-              Excellence, <span style={{ color: "var(--color-bright-blue)" }}>no exceptions.</span>
+              Excellence,{" "}
+              <Marked kind="underline" color="var(--color-gold)">
+                <span style={{ color: "var(--color-bright-blue)" }}>no exceptions.</span>
+              </Marked>
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
               Alpha Girls High School (Kunduchi) gives girls the same ambitious education as the flagship — academic rigour, aviation, coding, and leadership — in an environment built for them to thrive and lead.
