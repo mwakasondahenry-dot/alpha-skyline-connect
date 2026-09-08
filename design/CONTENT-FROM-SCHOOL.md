@@ -31,6 +31,25 @@ school confirms the exact approved wording.** Until then the existing
 `[Aviation positioning statement — wording to be confirmed]` placeholder stays
 on all five pages that use it.
 
+### The founder's name
+
+The Managing Director's message, supplied September 2026, names the founder
+**Professor Aloysius Mayo**. The site says **Professor Wenceslaus Aloyce Mayo**
+in four places in `src/routes/about.tsx` — the timeline entry, the portrait's
+alt text, the founder heading and the founder paragraph — which is the form the
+school gave earlier.
+
+*Aloyce* and *Aloysius* are forms of the same name, so this is very likely one
+man and one spelling decision. *Wenceslaus* being absent from her version is
+the part that is not just spelling.
+
+Both forms are currently live on `/about`, within a screen of each other. The
+message is reproduced verbatim because it is a signed letter from a named
+person, and the existing four references were left alone because nothing
+confirms which form is right. **One named person at the school needs to
+confirm the correct full name.** It is then a one-line change either in her
+quoted message or in those four references — not both.
+
 ### Alpha Girls founding date
 
 The site timeline says Alpha Girls was founded in **2020**. The school's own
@@ -275,13 +294,15 @@ These blockers are **not** answered by these documents:
 2. Entry requirements for Nursery & Primary
 3. Entry requirements for Alpha High O-Level (only the process is given)
 4. Approved aviation positioning wording — **see the blocked section above**
-5. Managing Director's written message
+5. ~~Managing Director's written message~~ — supplied September 2026
+   (Ms. Fatina Said), live on `/about`. Her **photograph** is still owed.
 6. "Life at Alpha" photographs
 7. FAQs content
 8. Google Maps links per campus
 9. Social media handles for Facebook, X, LinkedIn
 10. Parent and alumni testimonial quotes, with consent
-11. Founder biography, Director's name and photograph
+11. Founder biography, and the Director's photograph. Her name is now
+    known: Ms. Fatina Said, Managing Director, Alpha High School.
 12. Application form PDF
 13. Term start dates and application deadlines for Alpha High and Nursery &
     Primary (only the Alpha Girls calendar was supplied)

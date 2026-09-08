@@ -32,6 +32,69 @@ const FLYING_STUDENTS = [
 ];
 
 
+/* Ground school and aircraft engineering modules, supplied by the school in
+   September 2026. These replaced the "[Aviation modules — to be provided by
+   school]" placeholder.
+
+   Transcribed exactly as given. Nothing is added, reordered or expanded: the
+   invented A-Level codes KLF and ECA reached two live pages once already, and
+   a subject list is precisely the shape of content that goes wrong that way. */
+const GROUND_SCHOOL_MODULES = [
+  "Aircraft General Knowledge",
+  "Flight Performance and Planning",
+  "Human Performance and Limitations",
+  "Meteorology",
+  "Navigation",
+  "Operational Procedures",
+  "Principles of Flight",
+] as const;
+
+const ENGINEERING_MODULES = [
+  "Technical Drawing",
+  "Engineering Mathematics",
+  "Principles of Aerodynamics",
+  "Airframe Design",
+  "Aircraft Interiors, Equipment, and Furnishings",
+  "Aircraft Hydraulic Systems",
+  "Landing Gear Systems",
+  "Air Conditioning and Pressurization",
+  "Fuel Systems",
+  "Aircraft Pneumatic Systems and Maintenance",
+] as const;
+
+/** One module list on the tarmac ground. */
+function ModuleCard({
+  eyebrow,
+  title,
+  items,
+}: {
+  eyebrow: string;
+  title: string;
+  items: ReadonlyArray<string>;
+}) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm">
+      <p className="text-[var(--color-gold)]" style={T.label}>
+        {eyebrow}
+      </p>
+      <h3 className="mt-3 font-display text-white" style={T.cardTitle}>
+        {title}
+      </h3>
+      <ul className="mt-6 space-y-3">
+        {items.map((m) => (
+          <li key={m} className="flex items-start gap-3 text-white/85" style={T.body}>
+            <span
+              aria-hidden
+              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]"
+            />
+            <span>{m}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/aviation")({
   head: () => ({
     meta: [
@@ -342,23 +405,101 @@ function AviationPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="alpha-runway-divider mx-auto mb-14 w-40" aria-hidden />
 
-          <div className="max-w-2xl">
+          <div className="max-w-3xl">
             <p className="text-[var(--color-gold)]" style={T.label}>
               What students learn
             </p>
             <h2 className="mt-4 font-display tracking-tight" style={T.section}>
-              Ground school curriculum
+              Aviation Technology at Alpha Schools
             </h2>
+            {/* School-supplied, September 2026. Describes the programme; makes
+                no claim about being first or only, so it is not covered by the
+                positioning ruling in design/CONTENT-FROM-SCHOOL.md. */}
+            <p className="mt-6 text-lg leading-relaxed text-white/80">
+              Our secondary school students are provided with a foundational
+              understanding of aeronautics, covering essential topics such as
+              regulations, safety, meteorology, and flight operations. Through
+              our aviation programme, students learn how weather and various
+              factors influence flying and flight operations. The curriculum
+              guides students in understanding aircraft engines, electrical
+              systems, and structural components.
+            </p>
+            <p className="mt-5 text-lg leading-relaxed text-white/80">
+              Additionally, students gain practical experience through hands-on
+              activities in hangars, where they learn to operate aircraft under
+              the guidance of qualified instructors. As students progress, they
+              ultimately achieve solo flights and can acquire Private Pilot
+              Licence (PPL) certifications.
+            </p>
           </div>
 
-          <div className="mt-10 rounded-2xl border border-dashed border-[var(--color-gold)]/60 bg-white/[0.04] p-8 text-center backdrop-blur-sm">
-            <p className="font-display text-[var(--color-gold)]" style={T.cardTitle}>
-              [Aviation modules — to be provided by school]
-            </p>
-            <p className="mx-auto mt-3 max-w-xl text-white/70" style={T.body}>
-              Placeholder — the confirmed module list will be published here once the school
-              provides it.
-            </p>
+          {/* The confirmed module lists. These replace
+              "[Aviation modules — to be provided by school]" — the school
+              supplied them in September 2026. */}
+          <div className="mt-14 grid gap-6 lg:grid-cols-2">
+            <ModuleCard
+              eyebrow="Ground school"
+              title="Areas of specialisation"
+              items={GROUND_SCHOOL_MODULES}
+            />
+            <ModuleCard
+              eyebrow="Aircraft engineering"
+              title="Fundamentals of aviation technology"
+              items={ENGINEERING_MODULES}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* PASSION TO FLY — school-supplied, September 2026.
+          The students here are unnamed and this is the school's own prose
+          about its club, not a quoted testimonial: AGENTS.md forbids invented
+          named quotes, and there are none. The Hunt line is attributed. */}
+      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
+            <div>
+              <p className="text-[var(--color-brand-blue)]" style={T.label}>
+                The Alpha Aviation Club
+              </p>
+              <h2
+                className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]"
+                style={T.section}
+              >
+                A passion to fly.
+              </h2>
+              <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
+                Speaking to members of the Alpha Aviation Club, students express
+                how fulfilling it is to pursue their dreams through flying. They
+                find joy and fulfilment in taking flight, all while advancing
+                their careers from an early age.
+              </p>
+              <p className="mt-5 text-[var(--color-ink)]/80" style={T.body}>
+                The aviation programme at Alpha nurtures students' aspirations,
+                allowing them to reach their dreams of defying gravity. We offer
+                opportunities for students who are passionate about aviation
+                technology and aspire to fly.
+              </p>
+            </div>
+
+            <figure className="relative rounded-2xl bg-[var(--color-deep-blue)] p-8 text-white shadow-xl sm:p-10">
+              <span
+                aria-hidden
+                className="absolute -top-3 left-8 font-display text-6xl leading-none text-[var(--color-gold)]"
+              >
+                &ldquo;
+              </span>
+              <blockquote className="font-display leading-snug" style={T.section}>
+                For most people, the sky is the limit. For those who love
+                aviation, the sky is home.
+              </blockquote>
+              <figcaption
+                className="mt-6 text-[var(--color-gold)]"
+                style={T.label}
+              >
+                Jack R. Hunt, naval aviator
+              </figcaption>
+            </figure>
           </div>
         </div>
       </section>
