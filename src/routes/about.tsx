@@ -5,7 +5,8 @@ import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import alphaLogo from "@/assets/alpha-logo.webp";
-import profMayo from "@/assets/prof-mayo.webp";
+import profMayo from "@/assets/prof-mayo.webp";
+
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/about")({
@@ -204,38 +205,119 @@ function AboutPage() {
         </div>
       </section>
 
-      {/* DIRECTOR MESSAGE */}
-      <section className="bg-white">
-        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-[var(--space-section-y)] lg:grid-cols-[1.4fr_1fr] lg:px-10">
+      {/* DIRECTOR MESSAGE
+          School-supplied, September 2026. Reproduced verbatim — this is a
+          signed letter from a named person, so it is not edited for house
+          style. Two consequences worth knowing about:
+
+          1. It names the founder "Professor Aloysius Mayo". The rest of this
+             page says "Professor Wenceslaus Aloyce Mayo", which is the form
+             the school gave for the timeline and the founder section. The two
+             are almost certainly the same man, but nobody has confirmed which
+             form is correct, so neither has been changed to match the other.
+             design/CONTENT-FROM-SCHOOL.md is where that gets resolved.
+
+          2. It uses "Alpha Girls High School" and "Alpha Nursery and Primary
+             School" where the brand names in AGENTS.md are "Alpha Girls" and
+             "Nursery & Primary". The naming rule governs the site's own
+             marketing copy, not a quotation of someone's words.
+
+          Her photograph is still owed. The placeholder stays visible.
+
+          overflow-x-clip: the decorative -inset-3 glow behind the portrait
+          extends 12px past its column and pushed the document to 381px at a
+          375px viewport. Pre-existing, and the same defect commit 54f000f
+          clipped on the aviation page. Clip rather than hidden, so the
+          sticky portrait still sticks. */}
+      <section className="overflow-x-clip bg-white">
+        <div className="mx-auto grid max-w-7xl items-start gap-12 px-6 py-[var(--space-section-y)] lg:grid-cols-[1.4fr_1fr] lg:px-10">
           <Reveal direction="left">
             <p className="text-[var(--color-brand-blue)]" style={T.label}>
-              A message from our Director
+              A word from our Director
             </p>
-            <div className="relative mt-6 rounded-2xl bg-[var(--color-deep-blue)] p-8 text-white shadow-xl sm:p-10">
-              <Quote aria-hidden className="absolute -top-4 left-6 h-10 w-10 text-[var(--color-gold)]" />
+            <h2
+              className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]"
+              style={T.section}
+            >
+              A Word from the Director<br />of Alpha High School.
+            </h2>
+
+            <div className="relative mt-8 rounded-2xl bg-[var(--color-deep-blue)] p-8 text-white shadow-xl sm:p-10">
+              <Quote
+                aria-hidden
+                className="absolute -top-4 left-6 h-10 w-10 text-[var(--color-gold)]"
+              />
+              {/* Her own words. The sentence that stood here before was
+                  unattributed, and with a named Director on the page it would
+                  have read as hers. */}
               <p className="font-display leading-snug" style={T.section}>
-                “We provide a safe, supportive, and engaging environment that ignites our learners
-                to discover the genius each of them possesses.”
+                “Together, we can empower the next generation to thrive and make
+                a meaningful impact in their communities and beyond.”
               </p>
-              <p className="mt-6 font-semibold uppercase tracking-[0.18em] text-[var(--color-gold)]" style={T.body}>
-                [Director's name — to be provided]
+              <p
+                className="mt-6 font-semibold uppercase tracking-[0.18em] text-[var(--color-gold)]"
+                style={T.body}
+              >
+                Ms. Fatina Said
               </p>
-              <p className="mt-1 text-white/75" style={T.body}>Director, Alpha Schools</p>
+              <p className="mt-1 text-white/75" style={T.body}>
+                Managing Director, Alpha High School
+              </p>
             </div>
-            <p className="mt-6 max-w-xl text-[var(--color-ink)]/75" style={T.body}>
-              Following the passing of the late Professor Mayo, Alpha Schools is now led by his widow,
-              who continues the founding mission as Director.
-            </p>
+
+            <div className="mt-8 space-y-5 text-[var(--color-ink)]/85" style={T.body}>
+              <p>
+                As the Managing Director of Alpha High School, I am honoured to
+                pay tribute to our esteemed founder, Professor Aloysius Mayo.
+                His visionary leadership laid the foundation for Alpha Schools,
+                which include Alpha Nursery and Primary School, Alpha Girls High
+                School, and Alpha High School. Professor Mayo's commitment to
+                preparing young Tanzanians for success in the competitive realms
+                of technology, entrepreneurship, and the evolving challenges of
+                our global landscape continues to inspire us all.
+              </p>
+              <p>
+                At Alpha, we take pride in the remarkable achievements of our
+                alumni, who represent a diverse range of professions both locally
+                and internationally. Our graduates have excelled as accountants,
+                medical doctors, lawyers, engineers, pilots, and in many other
+                fields, demonstrating the effectiveness of our comprehensive
+                educational approach. I warmly invite all parents and guardians
+                to consider registering their sons and daughters at Alpha
+                Schools. Here, we offer a well-rounded curriculum that fosters
+                not only academic excellence but also personal growth and
+                character development. Together, we can empower the next
+                generation to thrive and make a meaningful impact in their
+                communities and beyond.
+              </p>
+              <p>
+                Thank you for your continued support in shaping the future of our
+                youth.
+              </p>
+              <p className="text-[var(--color-ink)]/70">
+                Warm regards,
+                <br />
+                <span className="font-display font-semibold text-[var(--color-deep-blue)]">
+                  Ms. Fatina Said
+                </span>
+              </p>
+            </div>
           </Reveal>
-          <Reveal direction="right" className="flex justify-center">
+
+          <Reveal direction="right" className="flex justify-center lg:sticky lg:top-24">
             <div className="relative w-full max-w-sm">
-              <div aria-hidden className="absolute -inset-3 rounded-2xl bg-[var(--color-bright-blue)]/15 blur-xl" />
+              <div
+                aria-hidden
+                className="absolute -inset-3 rounded-2xl bg-[var(--color-bright-blue)]/15 blur-xl"
+              />
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-bright-blue)]/10 ring-1 ring-[var(--color-deep-blue)]/15">
                 <div className="flex h-full w-full flex-col items-center justify-center p-8 text-center text-[var(--color-deep-blue)]/70">
                   <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--color-brand-blue)]">
                     Photo placeholder
                   </span>
-                  <span className="mt-3" style={T.body}>[Director's photo — to be provided]</span>
+                  <span className="mt-3" style={T.body}>
+                    [Photograph of Ms. Fatina Said — to be provided]
+                  </span>
                 </div>
               </div>
             </div>
