@@ -137,7 +137,7 @@ const SCHOOLS = [
     to: "/schools/alpha-girls",
     image: campusGirlsImage,
     alt: "Alpha Girls debate team celebrating with medals and certificates",
-    band: "var(--color-blue-violet)",
+    band: "var(--color-girls-teal)",
     Icon: Award,
   },
 ] as const;

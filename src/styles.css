@@ -29,7 +29,19 @@
   --color-deep-blue: #002e6a;     /* footer, stat rail, Alpha High card band */
   --color-brand-blue: #004a98;    /* mobile header + stat block, link blue */
   --color-bright-blue: #0470cc;   /* Nursery & Primary accent */
-  --color-blue-violet: #5e3494;   /* Alpha Girls accent */
+  /* Retired as the Alpha Girls accent — see --color-girls-teal below.
+     The token stays defined so nothing that still references it breaks. */
+  --color-blue-violet: #5e3494;
+  /* Alpha Girls accent. Kunduchi sits on the ocean, so a sea-green carries
+     local meaning rather than being an arbitrary swap, and it stands clear
+     of all three site blues. 4.9:1 on white, so it can carry body text as
+     well as fills — unlike gold, which is fill-and-rule only.
+
+     This replaces the blue-violet PRODUCT.md recorded as client-confirmed.
+     Changed on the user's instruction; the school still needs to sign it. */
+  --color-girls-teal: #0e6e70;
+  --color-girls-teal-deep: #0a5254;
+  --color-girls-teal-tint: #e6f2f2;
   --color-gold: #f2b012;          /* CTA fill, hero line 2, stat figures */
   --color-gold-dark: #d68f1c;     /* gold hover + gradient foot */
   --color-gold-light: #f0b240;    /* gold gradient head */

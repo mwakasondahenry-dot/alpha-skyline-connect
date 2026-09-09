@@ -3,7 +3,8 @@ import admissionHeroFallback from "@/assets/campus-nursery.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { Reveal } from "@/components/reveal";
+import { Reveal } from "@/components/reveal";
+
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/admission")({
@@ -65,7 +66,7 @@ const SCHOOL_CARDS = [
   },
   {
     name: "Alpha Girls",
-    accent: "var(--color-blue-violet)",
+    accent: "var(--color-girls-teal)",
     campus: "Kunduchi campus",
     entry: "Form 1–6, girls' secondary. Entry by assessment.",
     note: "[Specific academic entry requirements — to be confirmed]",

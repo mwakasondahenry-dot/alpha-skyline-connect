@@ -102,7 +102,7 @@ export const SCHOOL_CONFIGS: Record<Exclude<SchoolSlug, "group-wide">, SchoolCon
     slug: "alpha-girls",
     name: "Alpha Girls",
     campus: "Girls' secondary · Kunduchi · Form 1–6",
-    accent: "var(--color-blue-violet)",
+    accent: "var(--color-girls-teal)",
     accentSoft: "rgba(101, 73, 200, 0.08)",
     heroImage: campusGirlsImage,
     heroAlt: "Alpha Girls students celebrating with medals",

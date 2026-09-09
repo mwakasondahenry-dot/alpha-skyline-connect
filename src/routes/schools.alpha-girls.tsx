@@ -14,22 +14,32 @@ import campusHigh from "@/assets/campus-high.webp";
 import campusNursery from "@/assets/campus-nursery.webp";
 import aviation from "@/assets/aviation-uniform.webp";
 import { T, heroStep } from "@/components/type-roles";
-import { Marked, Backdrop } from "@/components/alpha-ui";
+import {
+  Marked,
+  Backdrop,
+  CinematicHero,
+  HeroCredentials,
+} from "@/components/alpha-ui";
+import { HeroSlideshow } from "@/components/hero-slideshow";
+import { Users, GraduationCap, MapPin } from "lucide-react";
 
 const slug = "alpha-girls" as const;
-const ACCENT = "var(--color-blue-violet)";
+const ACCENT = "var(--color-girls-teal)";
 const GOLD = "var(--color-gold)";
 
 /**
- * Page-local violet ramp for Alpha Girls -- decorative tints and shades built
- * around --color-blue-violet. Deliberately NOT in styles.css: used only on
- * this page, not part of the Alpha brand palette.
+ * Page-local ramp for Alpha Girls, built around --color-girls-teal.
+ * Deliberately NOT in styles.css: used only on this page.
+ *
+ * Replaces the lilac ramp this page ran on. The washes were the "purple
+ * shade" doing most of the work, so they are gone rather than recoloured —
+ * the page now sits on the site's own white and off-white, with teal used as
+ * a figure rather than as a bath.
  */
-const VIOLET = {
-  soft: "#F4F2FB",
-  mid: "#E8E3F7",
-  deep: "#D7CEF0",
-  bright: "#6549C8",
+const SEA = {
+  tint: "var(--color-girls-teal-tint)",
+  accent: "var(--color-girls-teal)",
+  deep: "var(--color-girls-teal-deep)",
 } as const;
 
 const bundleQuery = queryOptions({
@@ -44,7 +54,7 @@ export const Route = createFileRoute("/schools/alpha-girls")({
       {
         name: "description",
         content:
-          "Alpha Girls High School, Kunduchi — Form 1–6 for girls. The same rigour, aviation and coding as the flagship, on a campus built for girls to lead.",
+          "Alpha Girls High School, Kunduchi — Form 1–6 for girls. NECTA O-Level and A-Level, aviation, coding, competitive debate and a cookery enterprise.",
       },
     ],
   }),
@@ -56,7 +66,7 @@ function AlphaGirlsRoute() {
   const { data } = useSuspenseQuery(bundleQuery);
   return (
     <div className="min-h-screen bg-white text-[var(--color-ink)]">
-      <SiteHeader />
+      <SiteHeader overlay />
       <Hero />
       <SchoolSubNav items={SUB_NAV} />
       <WhatMakesAlphaGirls />
@@ -68,7 +78,6 @@ function AlphaGirlsRoute() {
       <Staff staff={data.staff} />
       <ApplyBanner />
       <GirlsFooter />
-      <MotionStyles />
     </div>
   );
 }
@@ -77,130 +86,95 @@ function AlphaGirlsRoute() {
 /**
  * The opening screen.
  *
- * Alpha Girls does NOT take the dark full-bleed photographic hero the
- * homepage and Alpha High use. Its violet world is an approved, deliberate
- * identity, and inverting it to navy-and-photograph to match the others
- * would cost the school the one page that looks like itself. So the
- * composition is unchanged — violet ramp, drifting blooms, the portrait
- * bleeding off the bottom edge — and what changes is the staging: it now
- * fills the viewport under the header, and it assembles itself on load in
- * the same order and to the same timings as every other hero on the site.
+ * A full-viewport photographic hero, with the navigation over it.
  *
- * The header stays in flow here rather than overlaying, because white nav
- * links on a pale violet ground would be unreadable.
+ * This page used to open on a lilac gradient with drifting blooms. That
+ * ramp was the "purple shade" doing most of the work, and it is gone
+ * rather than recoloured.
+ *
+ * The scrim underneath is the shared navy one, because design/README.md
+ * requires the headline to stay legible over ANY photograph and that
+ * guarantee is not something to re-derive per page. The teal wash sits on
+ * top of it: identity without touching legibility.
  */
 function Hero() {
   return (
-    <section
-      className="ag-hero hero-viewport-inset relative isolate flex flex-col overflow-hidden"
-      style={{
-        background: `linear-gradient(135deg, ${VIOLET.soft} 0%, ${VIOLET.mid} 45%, ${VIOLET.deep} 100%)`,
-      }}
-    >
-      {/* drifting violet/gold blooms */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -left-32 -top-24 h-[28rem] w-[28rem] rounded-full opacity-40 blur-3xl ag-bloom-a"
-        style={{ background: ACCENT }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 bottom-0 h-[22rem] w-[22rem] rounded-full opacity-30 blur-3xl ag-bloom-b"
-        style={{ background: GOLD }}
-      />
+    <CinematicHero
+      eyebrow="Girls only · Form 1–6 · Kunduchi"
+      lineOne="Built for girls who"
+      lineTwo="mean to lead."
+      blurb="Form 1 to Form 6 on the Kunduchi campus. NECTA sciences and arts, aviation and coding on the timetable, and a debating team that competes across the continent."
+      media={
+        <HeroSlideshow
+          pageKey="alpha-girls"
+          fallback={[
+            { src: girlsHero, alt: "Alpha Girls students on the Kunduchi campus" },
+            { src: girlUniform, alt: "An Alpha Girls student in school uniform" },
+            { src: campusGirls, alt: "Alpha Girls debate team with their medals and certificates" },
+          ]}
+        />
+      }
+      overlays={
+        /* The page's own temperature, laid over the shared navy scrim rather
+           than replacing it — the scrim is what guarantees the headline reads
+           over any slide, and that is not a guarantee to re-derive per page.
 
-      <div className="relative mx-auto grid w-full max-w-7xl flex-1 items-end gap-4 px-6 pb-0 pt-6 sm:gap-8 sm:pt-14 lg:grid-cols-[1.15fr_1fr] lg:gap-14 lg:px-10">
-        <div className="max-w-2xl self-center pb-4 sm:pb-8 lg:pb-20">
-          <span
-            className="hero-rise inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] backdrop-blur"
-            style={{
-              borderColor: `color-mix(in srgb, ${ACCENT} 20%, transparent)`,
-              background: "#ffffffaa",
-              color: ACCENT,
-              ...heroStep("var(--hero-t-eyebrow)"),
-            }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
-            Girls Only · Form 1–6 · Kunduchi Campus
-          </span>
-
-          <h1
-            className="mt-6 font-display text-4xl font-black leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
-            style={{ color: ACCENT }}
-          >
-            <span
-              className="hero-rise block"
-              style={heroStep("var(--hero-t-line-1)", "420ms")}
-            >
-              Built for girls who
-            </span>
-            <span
-              className="hero-rise block"
-              style={{
-                color: "var(--color-bright-blue)",
-                ...heroStep("var(--hero-t-line-2)", "420ms"),
-              }}
-            >
-              mean to lead.
-            </span>
-          </h1>
-
-          <p
-            className="hero-rise mt-6 max-w-xl text-base leading-relaxed text-[var(--color-ink)]/80 sm:text-lg"
-            style={heroStep("var(--hero-t-blurb)")}
-          >
-            The same rigour, the same aviation and coding, the same path to top
-            results — on a campus designed for girls to take up every inch of space.
-          </p>
-
-          <div
-            className="hero-rise mt-8 flex flex-wrap gap-3"
-            style={heroStep("var(--hero-t-cta)")}
-          >
-            <Link
-              to="/admission"
-              className="inline-flex items-center rounded-md px-5 py-3 text-sm font-semibold text-[var(--color-accent-foreground)] shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97] motion-reduce:transition-none"
-              style={{ background: GOLD }}
-            >
-              Enroll Now →
-            </Link>
-            <Link
-              to="/contact"
-              className="inline-flex items-center rounded-md border-2 px-5 py-3 text-sm font-semibold transition hover:bg-white motion-reduce:transition-none"
-              style={{ borderColor: ACCENT, color: ACCENT, background: "#ffffffaa" }}
-            >
-              Book a Visit
-            </Link>
-          </div>
-        </div>
-
+           Held to the left, behind the copy, and fully clear by 62%. Carried
+           further across it mixed with the warm light of the classroom slide
+           and cast the right-hand side of the photograph green. A tint that
+           discolours the photograph is not identity, it is a fault. */
         <div
-          className="hero-rise relative mx-auto flex w-full max-w-md items-end justify-center self-end lg:max-w-none"
-          style={heroStep("var(--hero-t-tail)", "420ms")}
-        >
-          <div
-            aria-hidden
-            className="absolute bottom-0 left-1/2 h-[26rem] w-[26rem] -translate-x-1/2 rounded-full blur-3xl"
-            style={{
-              background:
-                "radial-gradient(circle at center, rgba(60,52,137,0.55), rgba(60,52,137,0.12) 55%, transparent 75%)",
-            }}
-          />
-          {/* Capped in svh below lg so the copy and the portrait both fit one
-              phone screen. Cropped from the top, which keeps the faces. */}
-          <img
-            src={girlsHero}
-            alt="Alpha Girls students on campus"
-            className="relative z-10 max-h-[32svh] w-full max-w-[28rem] rounded-t-[3rem] object-cover object-top shadow-2xl sm:max-h-[40svh] lg:max-h-none"
-            style={{ aspectRatio: "4/5" }}
-            loading="eager"
-            decoding="async"
-          />
-        </div>
-      </div>
-    </section>
+          aria-hidden
+          className="hero-scrim absolute inset-0 -z-10"
+          style={{
+            background:
+              "linear-gradient(118deg, color-mix(in srgb, var(--color-girls-teal-deep) 68%, transparent) 0%, color-mix(in srgb, var(--color-girls-teal-deep) 26%, transparent) 38%, transparent 62%)",
+          }}
+        />
+      }
+      actions={
+        <>
+          <Link
+            to="/admission"
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] px-7 text-[var(--color-accent-foreground)] shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none"
+            style={{ ...T.body, fontWeight: "var(--btn-primary-weight)", background: GOLD }}
+          >
+            Enroll Now
+          </Link>
+          <Link
+            to="/contact"
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border border-[var(--color-surface)]/45 px-7 text-[var(--color-surface)] transition-colors duration-150 hover:bg-[var(--color-surface)]/10 active:scale-[0.97] motion-reduce:transition-none"
+            style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
+          >
+            Book a Visit
+          </Link>
+        </>
+      }
+      foot={
+        <HeroCredentials
+          items={[
+            {
+              label: "Girls only",
+              sub: "Form 1 to Form 6",
+              icon: <Users className="h-5 w-5" />,
+            },
+            {
+              label: "NECTA curriculum",
+              sub: "CSEE and ACSEE",
+              icon: <GraduationCap className="h-5 w-5" />,
+            },
+            {
+              label: "Kunduchi campus",
+              sub: "Dar es Salaam",
+              icon: <MapPin className="h-5 w-5" />,
+            },
+          ]}
+        />
+      }
+    />
   );
 }
+
 
 /* ----------------- About ----------------- */
 
@@ -224,10 +198,10 @@ function About() {
               </Marked>
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
-              Alpha Girls High School (Kunduchi) gives girls the same ambitious education as the flagship — academic rigour, aviation, coding, and leadership — in an environment built for them to thrive and lead.
+              Alpha Girls High School sits at Kunduchi and teaches the Tanzanian national curriculum from Form 1 to Form 6 — NECTA sciences and arts, with aviation, coding and enterprise on the timetable rather than beside it.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
-              Founded on the same Alpha vision: enabling students to achieve their best intellectually and physically, and become responsible, self-directed citizens of a dynamic society.
+              The school exists to enable its students to achieve their best intellectually and physically, and to become responsible, self-directed citizens of a dynamic society.
             </p>
 
             <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-5">
@@ -255,7 +229,7 @@ function About() {
               </h3>
               <ul className="mt-5 space-y-3 text-sm leading-relaxed text-white/90">
                 {[
-                  "Same syllabus, same labs, same expectations as Alpha High.",
+                  "A full NECTA syllabus, its own laboratories, and no ceiling on what is expected.",
                   "Aviation and coding built into the timetable — not optional extras.",
                   "Leadership practised daily — house, prefect and club roles led by girls.",
                   "A campus where every voice is the loudest one in the room.",
@@ -411,8 +385,8 @@ const ENTERPRISE_PATHWAY = [
  * "Scientific inquiry", which is a copy-paste error in their document.
  * It is deliberately not reproduced. No focus line is invented for it. */
 const GIRLS_CLUBS: ReadonlyArray<{ name: string; note?: string }> = [
-  { name: "Driving", note: "Not offered at Alpha High." },
-  { name: "Entrepreneurship", note: "Not offered at Alpha High." },
+  { name: "Driving" },
+  { name: "Entrepreneurship" },
   { name: "Aviation" },
   { name: "Debate" },
   { name: "ICT / Computer" },
@@ -438,9 +412,9 @@ function WhatMakesAlphaGirls() {
   return (
     <section id="distinctive" className="bg-[var(--color-surface)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>What only Alpha Girls has</p>
+        <p style={{ ...T.label, color: ACCENT }}>What Alpha Girls is for</p>
         <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
-          Cookery that runs as a business, and two clubs Alpha High does not offer.
+          Cookery that runs as a business, debate that travels, and girls who learn to drive.
         </h2>
         <span aria-hidden className="mt-[var(--heading-rule-gap)] block" style={{ width: "var(--heading-rule-w)", height: "var(--heading-rule-h)", background: "var(--heading-rule-color)", borderRadius: "var(--heading-rule-radius)" }} />
 
@@ -599,8 +573,7 @@ function Academics() {
           </ul>
           <UnconfirmedNote>
             Entry criteria come from the Alpha Girls document and are not yet
-            confirmed in writing. They have not been applied to Alpha High,
-            where no equivalent source exists.
+            confirmed in writing.
           </UnconfirmedNote>
         </div>
       </div>
@@ -620,7 +593,13 @@ const FACILITIES = [
 
 function LifeAtKunduchi() {
   return (
-    <section id="life" className="bg-white">
+    <section id="life" className="relative overflow-hidden bg-white">
+      {/* Marks around the campus plate rather than on it: the photograph is
+          the subject here, and a doodle over a face is graffiti. */}
+      <Backdrop kind="scribble" className="left-[3%] top-24 hidden md:block" width="6rem" rotate={-8} />
+      <Backdrop kind="star" className="right-[6%] top-40" width="2.75rem" rotate={14} />
+      <Backdrop kind="orbit" className="bottom-24 right-[2%] hidden lg:block" width="8rem" rotate={6} />
+
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
@@ -628,12 +607,55 @@ function LifeAtKunduchi() {
               Campus
             </p>
             <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
-              Life at Kunduchi.
+              Life at{" "}
+              <Marked kind="underline" color="var(--color-gold)">
+                Kunduchi.
+              </Marked>
             </h2>
           </div>
           <Link to="/facilities" className="font-bold hover:underline" style={{ ...T.body, color: ACCENT  }}>
             See facilities →
           </Link>
+        </Reveal>
+
+        {/* The campus at full width, ahead of the facility tiles. It was a
+            quarter-width thumbnail in a row of four; a parent deciding
+            whether their daughter will spend five years somewhere wants to
+            see the place, not a contact sheet. */}
+        <Reveal direction="up" className="relative mt-[var(--space-block-y)]">
+          <figure className="relative overflow-hidden rounded-[var(--panel-radius)] shadow-[var(--shadow-banner)]">
+            {/* campus-girls.webp is the debate team with their certificates,
+                not a view of the campus — the filename is misleading. Described
+                for what it actually shows: alt text that names the wrong
+                subject is a lie told to a screen reader. */}
+            <img
+              src={campusGirls}
+              alt="Alpha Girls students celebrating with medals and certificates"
+              loading="lazy"
+              decoding="async"
+              className="block aspect-[16/10] w-full object-cover sm:aspect-[2/1]"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-0"
+              style={{
+                background:
+                  "linear-gradient(to top, color-mix(in srgb, var(--color-girls-teal-deep) 82%, transparent) 0%, transparent 55%)",
+              }}
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
+              <p className="max-w-xl text-[var(--color-surface)]" style={T.body}>
+                Medals and certificates, brought back to Kunduchi.
+              </p>
+            </figcaption>
+          </figure>
+          {/* A drawn arrow pointing into the plate, sitting half off it. */}
+          <Backdrop
+            kind="arrow"
+            className="-top-6 right-10 hidden sm:block"
+            width="4.5rem"
+            rotate={18}
+          />
         </Reveal>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -668,7 +690,7 @@ function LifeAtKunduchi() {
 function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
   if (staff.length === 0) return null;
   return (
-    <section style={{ background: VIOLET.soft }}>
+    <section style={{ background: SEA.tint }}>
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
           <p style={{ ...T.label, color: ACCENT  }}>
@@ -696,7 +718,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                     <div
                       aria-hidden
                       className="absolute inset-0 grid place-items-center"
-                      style={{ background: `linear-gradient(135deg, ${ACCENT}, ${VIOLET.bright})` }}
+                      style={{ background: `linear-gradient(135deg, ${ACCENT}, ${SEA.deep})` }}
                     >
                       <span className="font-display text-6xl font-black text-white/30">
                         {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
@@ -779,33 +801,11 @@ function GirlsFooter() {
   );
 }
 
-/* ----------------- Motion styles ----------------- */
+/* The page-local <style> block that lived here is gone.
 
-function MotionStyles() {
-  return (
-    <style>{`
-      :root { --ag-gold: ${GOLD}; }
-      @keyframes agComboIn {
-        0% { opacity: 0; transform: translateY(8px) scale(.92); }
-        100% { opacity: 1; transform: translateY(0) scale(1); }
-      }
-      @media (prefers-reduced-motion: no-preference) {
-        @keyframes agDriftA {
-          0%, 100% { transform: translate3d(0,0,0) scale(1); }
-          50% { transform: translate3d(20px, -10px, 0) scale(1.05); }
-        }
-        @keyframes agDriftB {
-          0%, 100% { transform: translate3d(0,0,0) scale(1); }
-          50% { transform: translate3d(-25px, 12px, 0) scale(1.08); }
-        }
-        .ag-bloom-a { animation: agDriftA 14s ease-in-out infinite; }
-        .ag-bloom-b { animation: agDriftB 18s ease-in-out infinite; }
-        .ag-hero { background-size: 200% 200%; animation: agHeroShift 22s ease-in-out infinite; }
-        @keyframes agHeroShift {
-          0%,100% { background-position: 0% 0%; }
-          50% { background-position: 100% 100%; }
-        }
-      }
-    `}</style>
-  );
-}
+   It defined agDriftA, agDriftB and agHeroShift — three infinite loops
+   driving the lilac gradient and the two blurred blooms behind the old
+   hero. That hero no longer exists, so the animations had nothing left to
+   animate, and a looping background wash is the exact pattern
+   motion-audits/2026-09-02 was commissioned to remove. agComboIn went with
+   them: nothing referenced it. */
