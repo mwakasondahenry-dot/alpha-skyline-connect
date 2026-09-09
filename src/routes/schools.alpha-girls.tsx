@@ -54,7 +54,7 @@ export const Route = createFileRoute("/schools/alpha-girls")({
       {
         name: "description",
         content:
-          "Alpha Girls High School, Kunduchi — a girls' secondary, Form 1–6, where every role is held by a girl. NECTA O-Level and A-Level, aviation, coding and competitive debate.",
+          "Alpha Girls High School, Kunduchi — a girls' secondary, Form 1–6, where leadership is practised daily. NECTA O-Level and A-Level, aviation, coding and competitive debate.",
       },
     ],
   }),
@@ -106,9 +106,9 @@ function Hero() {
   return (
     <CinematicHero
       eyebrow="Girls only · Form 1–6 · Kunduchi"
-      lineOne="Every seat at the"
-      lineTwo="table is theirs."
-      blurb="A girls' secondary where every role is held by a girl — prefect, head of house, club president, debater, coder. Form 1 to Form 6 on the Kunduchi campus."
+      lineOne="Where girls learn"
+      lineTwo="to lead."
+      blurb="Leadership is practised daily here — house, prefect and club roles are all held by girls. NECTA sciences and arts, Form 1 to Form 6 on the Kunduchi campus."
       media={
         <HeroSlideshow
           pageKey="alpha-girls"
@@ -230,14 +230,14 @@ function About() {
                 Our Promise
               </p>
               <h3 className="mt-2 font-display" style={T.cardTitle}>
-                Nothing here is somebody else's subject.
+                Leadership is practised, not promised.
               </h3>
               <ul className="mt-5 space-y-3 text-sm leading-relaxed text-white/90">
                 {[
                   "A full NECTA syllabus, its own laboratories, and no ceiling on what is expected.",
                   "Aviation and coding built into the timetable — not optional extras.",
                   "Leadership practised daily — house, prefect and club roles led by girls.",
-                  "A campus where every voice is the loudest one in the room.",
+                  "A campus where speaking up is ordinary, not brave.",
                 ].map((m) => (
                   <li key={m} className="flex gap-3">
                     <span
@@ -419,7 +419,7 @@ function WhatMakesAlphaGirls() {
   return (
     <section id="distinctive" className="bg-[var(--color-surface)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>Nothing off the table</p>
+        <p style={{ ...T.label, color: ACCENT }}>How they learn to lead</p>
         <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
           Cookery that runs as a business, debate that travels, and girls who learn to drive.
         </h2>
