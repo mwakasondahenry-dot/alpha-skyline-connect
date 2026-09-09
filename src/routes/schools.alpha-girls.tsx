@@ -54,7 +54,7 @@ export const Route = createFileRoute("/schools/alpha-girls")({
       {
         name: "description",
         content:
-          "Alpha Girls High School, Kunduchi — Form 1–6 for girls. NECTA O-Level and A-Level, aviation, coding, competitive debate and a cookery enterprise.",
+          "Alpha Girls High School, Kunduchi — a girls' secondary, Form 1–6, where every role is held by a girl. NECTA O-Level and A-Level, aviation, coding and competitive debate.",
       },
     ],
   }),
@@ -69,12 +69,17 @@ function AlphaGirlsRoute() {
       <SiteHeader overlay />
       <Hero />
       <SchoolSubNav items={SUB_NAV} />
+      {/* Claim, then proof, then the school behind it. The calendar used to
+          sit between the competitions and About, which put term dates in
+          front of a reader who did not yet know what the school was. It now
+          follows the campus, where someone already convinced is looking for
+          when things happen. */}
       <WhatMakesAlphaGirls />
       <WhereTheyCompete />
-      <TheSchoolYear />
       <About />
       <Academics />
       <LifeAtKunduchi />
+      <TheSchoolYear />
       <Staff staff={data.staff} />
       <ApplyBanner />
       <GirlsFooter />
@@ -101,9 +106,9 @@ function Hero() {
   return (
     <CinematicHero
       eyebrow="Girls only · Form 1–6 · Kunduchi"
-      lineOne="Built for girls who"
-      lineTwo="mean to lead."
-      blurb="Form 1 to Form 6 on the Kunduchi campus. NECTA sciences and arts, aviation and coding on the timetable, and a debating team that competes across the continent."
+      lineOne="Every seat at the"
+      lineTwo="table is theirs."
+      blurb="A girls' secondary where every role is held by a girl — prefect, head of house, club president, debater, coder. Form 1 to Form 6 on the Kunduchi campus."
       media={
         <HeroSlideshow
           pageKey="alpha-girls"
@@ -225,7 +230,7 @@ function About() {
                 Our Promise
               </p>
               <h3 className="mt-2 font-display" style={T.cardTitle}>
-                Every seat at the table is theirs.
+                Nothing here is somebody else's subject.
               </h3>
               <ul className="mt-5 space-y-3 text-sm leading-relaxed text-white/90">
                 {[
@@ -272,12 +277,14 @@ function Stat({ value, label }: { value: string; label: string }) {
 /** Section anchors. Alpha Girls leads with what is distinctly hers, not with
  *  the academics both schools share. Deliberately a different order from
  *  Alpha High. */
+/* Order follows the page. A sub-nav that lists sections in a different
+   order than the reader meets them is a map of a different building. */
 const SUB_NAV = [
   { label: "What's distinctive", href: "#distinctive" },
   { label: "Competing", href: "#compete" },
-  { label: "The school year", href: "#year" },
   { label: "Academics", href: "#academics" },
   { label: "Life at Kunduchi", href: "#life" },
+  { label: "The school year", href: "#year" },
 ] as const;
 
 /* ------------------------------------------------------------------ *
@@ -412,7 +419,7 @@ function WhatMakesAlphaGirls() {
   return (
     <section id="distinctive" className="bg-[var(--color-surface)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>What Alpha Girls is for</p>
+        <p style={{ ...T.label, color: ACCENT }}>Nothing off the table</p>
         <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
           Cookery that runs as a business, debate that travels, and girls who learn to drive.
         </h2>
