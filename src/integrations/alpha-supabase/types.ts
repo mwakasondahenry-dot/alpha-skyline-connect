@@ -84,6 +84,17 @@ export interface FacilityPhotoRow {
 }
 
 
+export interface PhotoSlotRow {
+  /** Stable `<school>.<section>.<name>` identity, declared in src/lib/photo-slots.ts. */
+  slot_key: string;
+  school_slug: SchoolSlug;
+  image_url: string;
+  /** Required. These photos are how a parent reads the school, screen reader or not. */
+  alt_text: string;
+  credit: string | null;
+  updated_at: string;
+}
+
 export interface ContactMessageRow {
   id: string;
   name: string;
@@ -141,6 +152,7 @@ export interface Database {
       staff: { Row: StaffRow; Insert: Partial<StaffRow>; Update: Partial<StaffRow> };
       facilities: { Row: FacilityRow; Insert: Partial<FacilityRow>; Update: Partial<FacilityRow> };
       facility_photos: { Row: FacilityPhotoRow; Insert: Partial<FacilityPhotoRow>; Update: Partial<FacilityPhotoRow> };
+      photo_slots: { Row: PhotoSlotRow; Insert: Partial<PhotoSlotRow>; Update: Partial<PhotoSlotRow> };
       contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow> };
       hero_slides: { Row: HeroSlideRow; Insert: Partial<HeroSlideRow>; Update: Partial<HeroSlideRow> };
       testimonials: { Row: TestimonialRow; Insert: Partial<TestimonialRow>; Update: Partial<TestimonialRow> };
