@@ -1,5 +1,6 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
+import { FacilityTile } from "@/components/school/facility-tile";
 import {
   CinematicHero,
   HeroCredentials,
@@ -23,7 +24,12 @@ import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
+import {
+  getSchoolBundle,
+  getSchoolPhotos,
+  type SchoolBundle,
+} from "@/lib/alpha-content.functions";
+import { slotPhoto, type SlotPhotoMap } from "@/lib/photo-slots";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
@@ -39,26 +45,19 @@ import {
 } from "lucide-react";
 import graduate from "@/assets/alpha-high-graduate.webp";
 import campusAerial from "@/assets/alpha-high-campus-aerial.webp";
-import campusHigh from "@/assets/campus-high.webp";
-import campusGirls from "@/assets/campus-girls.webp";
-import campusNursery from "@/assets/campus-nursery.webp";
-import aviation from "@/assets/aviation-uniform.webp";
 import clubAviation from "@/assets/club-aviation.webp";
-import clubDrama from "@/assets/club-drama.webp";
-import clubMusic from "@/assets/club-music-dance.webp";
-import clubDebate from "@/assets/club-debate.webp";
-import clubArt from "@/assets/club-art.webp";
-import clubCookery from "@/assets/club-cookery.webp";
-import clubScout from "@/assets/club-scout.webp";
-import clubSpeaking from "@/assets/club-public-speaking.webp";
-import clubUn from "@/assets/club-un.webp";
-import clubEnvironment from "@/assets/club-environment.webp";
 
 import { T } from "@/components/type-roles";
 
 const slug = "alpha-high" as const;
 const ACCENT = "var(--color-deep-blue)";
 const GOLD = "var(--color-gold)";
+
+const photosQuery = queryOptions({
+  queryKey: ["school-photos", "alpha-high"],
+  queryFn: () => getSchoolPhotos({ data: { slug: "alpha-high" as const } }),
+  staleTime: 5 * 60 * 1000,
+});
 
 const bundleQuery = queryOptions({
   queryKey: ["school-bundle", slug],
@@ -76,7 +75,11 @@ export const Route = createFileRoute("/schools/alpha-high")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(bundleQuery),
+  loader: ({ context }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(bundleQuery),
+      context.queryClient.ensureQueryData(photosQuery),
+    ]),
   component: AlphaHighRoute,
 });
 
@@ -657,20 +660,26 @@ function SignpostCard({
 // ---------- Beyond the classroom ----------
 
 const CLUBS = [
-  { name: "Aviation", photo: clubAviation },
-  { name: "Drama", photo: clubDrama },
-  { name: "Music & Dance", photo: clubMusic },
-  { name: "Debate", photo: clubDebate },
-  { name: "Art & Drawing", photo: clubArt },
-  { name: "Cookery", photo: clubCookery },
-  { name: "Scout", photo: clubScout },
-  { name: "Public Speaking", photo: clubSpeaking },
-  { name: "Model UN", photo: clubUn },
-  { name: "Environment", photo: clubEnvironment },
+  { name: "Aviation", key: "alpha-high.clubs.aviation" },
+  { name: "Drama", key: "alpha-high.clubs.drama" },
+  { name: "Music & Dance", key: "alpha-high.clubs.music" },
+  { name: "Debate", key: "alpha-high.clubs.debate" },
+  { name: "Art & Drawing", key: "alpha-high.clubs.art" },
+  { name: "Cookery", key: "alpha-high.clubs.cookery" },
+  { name: "Scout", key: "alpha-high.clubs.scout" },
+  { name: "Public Speaking", key: "alpha-high.clubs.speaking" },
+  { name: "Model UN", key: "alpha-high.clubs.model-un" },
+  { name: "Environment", key: "alpha-high.clubs.environment" },
 ];
-const SPORTS = ["Football", "Basketball", "Volleyball", "Netball", "Athletics"];
+const SPORTS = [
+  { name: "Football", key: "alpha-high.sport.football" },
+  { name: "Basketball", key: "alpha-high.sport.basketball" },
+  { name: "Volleyball", key: "alpha-high.sport.volleyball" },
+  { name: "Netball", key: "alpha-high.sport.netball" },
+  { name: "Athletics", key: "alpha-high.sport.athletics" },
+];
 
-function ClubsRibbon() {
+function ClubsRibbon({ photos }: { photos: SlotPhotoMap }) {
   // Duplicate the list so the marquee loops seamlessly.
   const loop = [...CLUBS, ...CLUBS];
   return (
@@ -697,8 +706,8 @@ function ClubsRibbon() {
               className="relative h-56 w-72 shrink-0 overflow-hidden rounded-xl shadow-md ring-1 ring-black/10 transition-transform duration-150 hover:scale-[1.03] active:scale-[0.97] hover:shadow-xl"
             >
               <img
-                src={c.photo}
-                alt={`${c.name} club at Alpha High`}
+                src={slotPhoto(photos, c.key)!.src}
+                alt={photos[c.key]?.alt_text ?? `${c.name} club at Alpha High`}
                 className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
                 loading="lazy"
                 decoding="async"
@@ -739,6 +748,10 @@ function ClubsRibbon() {
 }
 
 function BeyondClassroom() {
+  const photos = useSuspenseQuery(photosQuery).data;
+  // Two states rather than a half-filled grid: the pills below are the
+  // current design and stay until a sport photograph actually exists.
+  const anySport = SPORTS.some((s) => photos[s.key]);
   return (
     <section id="clubs" className="bg-white">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
@@ -749,7 +762,7 @@ function BeyondClassroom() {
           </h2>
         </Reveal>
 
-        <ClubsRibbon />
+        <ClubsRibbon photos={photos} />
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
           <Reveal direction="up" delay={80}>
@@ -757,22 +770,58 @@ function BeyondClassroom() {
               <h3 className="font-display text-lg font-bold" style={{ color: ACCENT }}>
                 Sports
               </h3>
-              <ul className="mt-4 space-y-2">
-                {SPORTS.map((s) => (
-                  <li
-                    key={s}
-                    className="flex items-center gap-3 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold ring-1 ring-black/5"
-                    style={{ color: ACCENT }}
-                  >
-                    <span
-                      aria-hidden
-                      className="h-2 w-2 rounded-full"
-                      style={{ background: GOLD }}
-                    />
-                    {s}
-                  </li>
-                ))}
-              </ul>
+              {anySport ? (
+                <ul className="mt-4 grid grid-cols-2 gap-3">
+                  {SPORTS.map((s) => {
+                    const photo = slotPhoto(photos, s.key);
+                    return (
+                      <li
+                        key={s.key}
+                        className="relative aspect-[4/5] overflow-hidden rounded-lg ring-1 ring-black/5"
+                      >
+                        {photo ? (
+                          <>
+                            <img
+                              src={photo.src}
+                              alt={photos[s.key]?.alt_text ?? `${s.name} at Alpha High`}
+                              loading="lazy"
+                              decoding="async"
+                              className="absolute inset-0 h-full w-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                          </>
+                        ) : (
+                          <div
+                            aria-hidden
+                            className="absolute inset-0"
+                            style={{ background: ACCENT }}
+                          />
+                        )}
+                        <span className="absolute inset-x-0 bottom-0 p-2 text-xs font-semibold text-white">
+                          {s.name}
+                        </span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              ) : (
+                <ul className="mt-4 space-y-2">
+                  {SPORTS.map((s) => (
+                    <li
+                      key={s.key}
+                      className="flex items-center gap-3 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold ring-1 ring-black/5"
+                      style={{ color: ACCENT }}
+                    >
+                      <span
+                        aria-hidden
+                        className="h-2 w-2 rounded-full"
+                        style={{ background: GOLD }}
+                      />
+                      {s.name}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           </Reveal>
 
@@ -810,13 +859,14 @@ function BeyondClassroom() {
 // ---------- Life at Mikocheni ----------
 
 const FACILITIES = [
-  { label: "Science labs", img: campusHigh },
-  { label: "Library", img: campusNursery },
-  { label: "Sports field", img: campusGirls },
-  { label: "Boarding", img: aviation },
+  { key: "alpha-high.facilities.science-labs", label: "Science labs" },
+  { key: "alpha-high.facilities.library", label: "Library" },
+  { key: "alpha-high.facilities.sports-field", label: "Sports field" },
+  { key: "alpha-high.facilities.boarding", label: "Boarding" },
 ];
 
 function LifeAtMikocheni() {
+  const photos = useSuspenseQuery(photosQuery).data;
   return (
     <section id="life" className="bg-[var(--color-off-white)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
@@ -838,27 +888,14 @@ function LifeAtMikocheni() {
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {FACILITIES.map((f, i) => (
-            <Reveal key={f.label} direction="up" delay={i * 70}>
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl ring-1 ring-black/5 shadow-sm transition hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
-                <img
-                  src={f.img}
-                  alt={f.label}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <span
-                    className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                    style={{ color: GOLD }}
-                  >
-                    Facility
-                  </span>
-                  <h3 className="mt-1 font-display text-lg font-bold text-white">{f.label}</h3>
-                </div>
-              </div>
-            </Reveal>
+            <FacilityTile
+              key={f.key}
+              slotKey={f.key}
+              label={f.label}
+              photos={photos}
+              accent={ACCENT}
+              delay={i * 70}
+            />
           ))}
         </div>
       </div>
