@@ -31,6 +31,7 @@ import { Route as AdminHeroSlidesRouteImport } from './routes/admin.hero-slides'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
+import { Route as AdminPhotosRouteImport } from './routes/admin.photos'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AlumniIndexRouteImport } from './routes/alumni.index'
@@ -149,6 +150,11 @@ const AdminNewsRoute = AdminNewsRouteImport.update({
   path: '/news',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPhotosRoute = AdminPhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminStaffRoute = AdminStaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -207,6 +213,7 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
+  '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
@@ -237,6 +244,7 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
+  '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
@@ -269,6 +277,7 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
+  '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
@@ -302,6 +311,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
+    | '/admin/photos'
     | '/admin/staff'
     | '/admin/testimonials'
     | '/alumni/submit'
@@ -332,6 +342,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
+    | '/admin/photos'
     | '/admin/staff'
     | '/admin/testimonials'
     | '/alumni/submit'
@@ -363,6 +374,7 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
+    | '/admin/photos'
     | '/admin/staff'
     | '/admin/testimonials'
     | '/alumni/submit'
@@ -550,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/photos': {
+      id: '/admin/photos'
+      path: '/photos'
+      fullPath: '/admin/photos'
+      preLoaderRoute: typeof AdminPhotosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/staff': {
       id: '/admin/staff'
       path: '/staff'
@@ -611,6 +630,7 @@ interface AdminRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminNewsRoute: typeof AdminNewsRoute
+  AdminPhotosRoute: typeof AdminPhotosRoute
   AdminStaffRoute: typeof AdminStaffRoute
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -625,6 +645,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminNewsRoute: AdminNewsRoute,
+  AdminPhotosRoute: AdminPhotosRoute,
   AdminStaffRoute: AdminStaffRoute,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,

@@ -62,7 +62,7 @@ function AdminGate() {
             <AdminNavLink to="/admin">Dashboard</AdminNavLink>
             <AdminNavLink to="/admin/news">News</AdminNavLink>
             <AdminNavLink to="/admin/events">Events</AdminNavLink>
-            <AdminNavLink to="/admin/gallery">Activities</AdminNavLink>
+            <AdminNavLink to="/admin/photos">School photos</AdminNavLink>
             <AdminNavLink to="/admin/facility-photos">Facilities Gallery</AdminNavLink>
             <AdminNavLink to="/admin/hero-slides">Hero slides</AdminNavLink>
             <AdminNavLink to="/admin/testimonials">Testimonials</AdminNavLink>
