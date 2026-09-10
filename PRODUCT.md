@@ -85,9 +85,16 @@ Fee structure per school · entry requirements for Nursery & Primary and Alpha
 High O-Level · approved aviation positioning wording · Alpha Girls' founding
 year (the timeline says 2020; their own document implies a 5th Form VI
 graduation in 2026) · whether Form Three and Form Four options are genuinely
-identical · testimonial quotes with consent · Director's message and
-photograph · application form PDF · term dates · confirmed social handles ·
-Google Maps links per campus.
+identical · testimonial quotes with consent · the Director's **photograph**
+(her message arrived September 2026) · the founder's correct full name — her
+message says "Professor Aloysius Mayo", the site says "Professor Wenceslaus
+Aloyce Mayo", and both are live on /about · application form PDF · term dates ·
+confirmed social handles · Google Maps links per campus.
+
+The aviation **module lists** are no longer owed: ground school and aircraft
+engineering modules arrived September 2026 and are live on /aviation. The
+aviation **positioning claim** is still blocked — see
+design/CONTENT-FROM-SCHOOL.md.
 
 ## Technical
 

@@ -12,7 +12,7 @@ import {
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
-import { CinematicHero } from "@/components/alpha-ui";
+import { CinematicHero, Marked, Backdrop } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
@@ -137,7 +137,7 @@ const SCHOOLS = [
     to: "/schools/alpha-girls",
     image: campusGirlsImage,
     alt: "Alpha Girls debate team celebrating with medals and certificates",
-    band: "var(--color-blue-violet)",
+    band: "var(--color-girls-teal)",
     Icon: Award,
   },
 ] as const;
@@ -334,18 +334,21 @@ function FindTheRightSchool() {
   return (
     <section
       id="find-the-right-school"
-      className={`${SHELL} scroll-mt-24 py-[var(--space-section-y)]`}
+      className={`${SHELL} relative scroll-mt-24 overflow-hidden py-[var(--space-section-y)]`}
     >
+      <Backdrop kind="star" className="right-2 top-8" width="2.75rem" rotate={12} />
       <Reveal direction="up">
         <SectionHeading>
           Find the{" "}
-          <span className="text-[var(--heading-accent-color)]">Right School</span>{" "}
+          <Marked kind="ring" color="var(--color-gold)">
+            <span className="text-[var(--heading-accent-color)]">Right School</span>
+          </Marked>{" "}
           for Your Child
         </SectionHeading>
       </Reveal>
 
       <ul
-        data-reveal
+        suppressHydrationWarning data-reveal
         data-reveal-delay="120"
         className="mt-[var(--space-block-y)] grid gap-0 overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] md:grid-cols-3 md:gap-[var(--space-card-gap)] md:overflow-visible md:bg-transparent md:shadow-none"
       >
@@ -486,8 +489,12 @@ function AviationBanner() {
  * published rows and disappears completely when there are none — no
  * placeholder names, ever.
  * ------------------------------------------------------------------ */
+/* Was a regex over `relationship`. That field now holds an alumni's job
+   title, so the regex would have filed every submission under Parent
+   Testimonials. grad_year is the reliable signal: required on the alumni
+   form, never set on a parent quote. */
 function isAlumni(t: TestimonialItem) {
-  return /alumn/i.test(t.relationship ?? "");
+  return t.grad_year != null;
 }
 
 function Testimonials({ items }: { items: TestimonialItem[] }) {
@@ -498,7 +505,7 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
 
   return (
     <section className={`${SHELL} pb-[var(--space-section-y)]`}>
-      <div data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
+      <div suppressHydrationWarning data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
         {parent && (
           <TestimonialCard
             title="Parent Testimonials"
@@ -641,7 +648,7 @@ function NewsAndEvents({
         </p>
       ) : (
         <ul
-          data-reveal
+          suppressHydrationWarning data-reveal
           data-reveal-delay="120"
           className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3"
         >

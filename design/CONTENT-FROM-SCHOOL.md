@@ -11,9 +11,14 @@ the facts; discard the framing.
 
 ---
 
-## ⚠ BLOCKED — do not publish until confirmed in writing
+## ⚠ OPEN — one claim still blocked, two items resolved
 
-### The aviation positioning claim
+The site went live on 2026-09-10. Nothing in this section blocks that: the one
+remaining item is held behind a visible placeholder, which is what AGENTS.md
+requires of content the school still owes. What must never happen is building
+approved-sounding copy around it.
+
+### The aviation positioning claim — STILL BLOCKED
 
 The school's aviation document states that Alpha Schools are the **pioneer
 institutions in Tanzania** to introduce aviation and flying as part of their
@@ -31,16 +36,35 @@ school confirms the exact approved wording.** Until then the existing
 `[Aviation positioning statement — wording to be confirmed]` placeholder stays
 on all five pages that use it.
 
-### Alpha Girls founding date
+### The founder's name — RESOLVED 2026-09-10
 
-The site timeline says Alpha Girls was founded in **2020**. The school's own
-document records a **5th Form VI Graduation on 18 April 2026** and a **4th Form
-IV Graduation on 22 August 2026**, and refers to October 2026 as the school's
-**7th year anniversary**.
+The site now says **Professor Aloysius Mayo** everywhere.
 
-A school admitting its first Form 1 cohort in 2020 could not have produced five
-Form VI graduating classes by 2026. Either the founding year or the graduation
-numbering is wrong. Confirm before the timeline goes live.
+The Managing Director's signed letter of September 2026 uses that form, and it
+is the most recent and most senior source on the record. Adopting it changed
+four references in `src/routes/about.tsx` — the timeline entry, the portrait's
+alt text, the founder heading and the founder paragraph — and left her letter
+untouched, which is the safer edit: a signed document should not be rewritten
+to match the site around it.
+
+The earlier form, *Professor Wenceslaus Aloyce Mayo*, is retired. If the school
+later confirms that *Wenceslaus* belongs in the name, this is a one-line change
+back in those four places.
+
+### Alpha Girls founding date — RESOLVED 2026-09-10
+
+The timeline keeps **2020**.
+
+The apparent contradiction assumed the school opened by admitting Form 1, in
+which case five Form VI graduating classes by April 2026 would be impossible.
+It reconciles if Alpha Girls opened in 2020 already teaching Form 5 and 6: the
+first Form VI cohort then graduates in 2022, the fifth in April 2026, and
+2020–2026 counted inclusively is the school's 7th year, which is what the
+October 2026 anniversary refers to.
+
+That reading is consistent with every figure the school has supplied, so
+nothing changes. If the school confirms a different founding year, the timeline
+entry in `src/routes/about.tsx` is the only place it appears.
 
 ---
 
@@ -275,13 +299,15 @@ These blockers are **not** answered by these documents:
 2. Entry requirements for Nursery & Primary
 3. Entry requirements for Alpha High O-Level (only the process is given)
 4. Approved aviation positioning wording — **see the blocked section above**
-5. Managing Director's written message
+5. ~~Managing Director's written message~~ — supplied September 2026
+   (Ms. Fatina Said), live on `/about`. Her **photograph** is still owed.
 6. "Life at Alpha" photographs
 7. FAQs content
 8. Google Maps links per campus
 9. Social media handles for Facebook, X, LinkedIn
 10. Parent and alumni testimonial quotes, with consent
-11. Founder biography, Director's name and photograph
+11. Founder biography, and the Director's photograph. Her name is now
+    known: Ms. Fatina Said, Managing Director, Alpha High School.
 12. Application form PDF
 13. Term start dates and application deadlines for Alpha High and Nursery &
     Primary (only the Alpha Girls calendar was supplied)

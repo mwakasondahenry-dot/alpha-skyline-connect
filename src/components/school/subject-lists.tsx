@@ -1,3 +1,22 @@
+import { useId, useMemo, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  Atom,
+  BookMarked,
+  BookOpen,
+  Briefcase,
+  Calculator,
+  ChevronDown,
+  FlaskConical,
+  Globe,
+  Landmark,
+  Languages,
+  Laptop,
+  Leaf,
+  ScrollText,
+  Store,
+  Users,
+  type LucideIcon,
+} from "lucide-react";
 import { T } from "@/components/type-roles";
 
 /**
@@ -8,107 +27,346 @@ import { T } from "@/components/type-roles";
  * without a refactor. Sharing the copy is exactly how the two pages became the
  * same page; sharing only the presentation is the fix.
  *
- * Tokens only — no new colours, type sizes or component shapes.
+ * Built to the "Subjects & Combinations" comp. Three things in that comp are
+ * deliberately absent, and the reasons are on record — see the ACADEMICS block
+ * in styles.css and design/CONTENT-FROM-SCHOOL.md.
  */
 
+/* ------------------------------------------------------------------ *
+ * Subject icons
+ *
+ * Decoration, not data. An icon says nothing the subject name does not
+ * already say, so choosing them here invents no claim about the
+ * curriculum. Matched on a keyword rather than an exact string because
+ * the two schools spell several subjects differently — "Book Keeping"
+ * against "Book-keeping", and the Historia title in either word order.
+ * ------------------------------------------------------------------ */
+const ICON_RULES: ReadonlyArray<[RegExp, LucideIcon]> = [
+  [/historia|maadili/i, Landmark],
+  [/civics/i, Users],
+  [/history/i, ScrollText],
+  [/geograph/i, Globe],
+  [/kiswahili/i, BookOpen],
+  [/literature/i, BookMarked],
+  [/english/i, BookOpen],
+  [/chinese|french/i, Languages],
+  [/business|commerce/i, Briefcase],
+  [/book.?keeping|account/i, Calculator],
+  [/computer|^ics$|comp(uter)? stud/i, Laptop],
+  [/physics/i, Atom],
+  [/chemistry/i, FlaskConical],
+  [/biology/i, Leaf],
+  [/mathematic/i, Calculator],
+  [/shop|entrepreneur/i, Store],
+];
+
+function iconFor(subject: string): LucideIcon {
+  return ICON_RULES.find(([re]) => re.test(subject))?.[1] ?? BookOpen;
+}
+
+/** Sets the accent for a subtree, or nothing when the caller passes none. */
+const accentVar = (accent?: string): CSSProperties | undefined =>
+  accent ? ({ "--dl-accent": accent } as CSSProperties) : undefined;
+
+/**
+ * Binds a row to a step of the panel's stagger. The index is a custom property
+ * rather than a written-out delay because the ceiling belongs in the stylesheet
+ * next to the rest of the motion, not in eleven call sites.
+ */
+const step = (i: number): CSSProperties => ({ "--dl-i": i }) as CSSProperties;
+
+/* ------------------------------------------------------------------ *
+ * The disclosure card
+ * ------------------------------------------------------------------ */
+
+/**
+ * One collapsible card. Collapsed on a phone, open from 768px up.
+ *
+ * The control is a hidden checkbox rather than a button with aria-expanded,
+ * and that is the whole reason this works. A button's expanded state lives in
+ * React, which means the server has to guess a viewport it cannot see: render
+ * open and every phone shows the subjects and then snatches them away once an
+ * effect measures the screen. That is the fault the motion audit found in the
+ * old reveal — content withheld from a reader already looking at it — with a
+ * layout shift added on top.
+ *
+ * A checkbox has no such problem, because the markup does not encode the
+ * state. `:checked` means "the reader changed it from however this viewport
+ * starts", and the stylesheet decides what starting means at each width.
+ * Identical HTML everywhere, no hydration disagreement, and it still opens and
+ * closes with the bundle dead.
+ *
+ * The cost is real and worth stating: a screen reader announces "Arts, 5
+ * combinations, checkbox" rather than a button that is expanded or collapsed.
+ * The collapsed panel is hidden with `visibility`, not merely sized to zero,
+ * so at least it leaves the accessibility tree honestly.
+ */
+function Disclosure({
+  title,
+  note,
+  count,
+  countLabel,
+  accent,
+  /** Alternates the header gradient, as the comp draws it. */
+  tone = "deep",
+  entering,
+  children,
+}: {
+  title: string;
+  note?: string;
+  count: number;
+  /** Omitted where the card is too narrow to seat it beside the chevron. */
+  countLabel?: string;
+  accent?: string;
+  tone?: "deep" | "bright";
+  /** Replays the arrival animation when a filter changes the set. */
+  entering?: boolean;
+  children: ReactNode;
+}) {
+  const id = useId();
+
+  return (
+    <section
+      className={[
+        "dl-card",
+        tone === "bright" ? "dl-card--bright" : "dl-card--deep",
+        entering ? "dl-card--entering" : "",
+      ]
+        .filter(Boolean)
+        .join(" ")}
+      /* One property drives the band, badge, chevron, rows, code chips and
+         border. Setting it here rather than styling six elements is what lets
+         Alpha Girls stay sea-green throughout instead of wearing blue chrome
+         around a teal heading. Omitted, the stylesheet's default stands. */
+      style={accentVar(accent)}
+    >
+      <input type="checkbox" id={id} className="dl-toggle" />
+      <label htmlFor={id} className="dl-band">
+        <span className="dl-band__title">
+          {/* These were <h3>s before the cards became collapsible, and a page
+              of academic sections is one people navigate by heading. A <label>
+              only admits phrasing content, so the element cannot come back —
+              the role does, which keeps the outline intact without invalid
+              markup. */}
+          <span role="heading" aria-level={3} className="block font-display" style={T.cardTitle}>
+            {title}
+          </span>
+          {note && (
+            <span className="dl-band__note" style={T.label}>
+              {note}
+            </span>
+          )}
+        </span>
+        <span className="dl-count">{count}</span>
+        {countLabel && (
+          <span className="dl-count-label" style={T.label}>
+            {countLabel}
+          </span>
+        )}
+        <span aria-hidden className="dl-chevron-disc">
+          <ChevronDown className="dl-chevron h-4 w-4" strokeWidth={2.5} />
+        </span>
+      </label>
+      <div className="dl-panel">
+        <div className="dl-panel__inner">
+          <div className="px-[var(--space-card-pad-sm)] py-[var(--space-card-pad-sm)]">
+            {children}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * A-Level combinations
+ * ------------------------------------------------------------------ */
 
 export type Combination = { code: string; subjects: string };
 export type CombinationGroup = { group: string; items: ReadonlyArray<Combination> };
 
 /**
- * A-Level combinations, grouped. Renders code and subjects inline — never
- * behind a title attribute, which is unreachable on a touchscreen and
- * invisible to a screen reader. The subjects are the decision-relevant fact
- * for a Form 5 parent, so they are always on the page.
+ * A-Level combinations, grouped, with a filter across the top.
+ *
+ * The chips are real <button>s rather than the CSS-only trick the cards use,
+ * and the difference is deliberate. The cards HIDE content, so they must work
+ * with the bundle dead. A filter that starts on "All" hides nothing, so with
+ * no JS the chips are inert and every combination is still on the page — the
+ * correct degraded state. It also means the server and the first client render
+ * agree, because "All" is the initial state on both.
+ *
+ * The groups are the school's own — Arts, Business, Science, confirmed in
+ * writing. The comp's five-way taxonomy is not built; a four-way version of it
+ * was live once and removed as invented (design/CONTENT-FROM-SCHOOL.md).
  */
 export function CombinationList({
   groups,
-  accent = "var(--color-deep-blue)",
+  accent,
 }: {
   groups: ReadonlyArray<CombinationGroup>;
   accent?: string;
 }) {
+  const [active, setActive] = useState<string | null>(null);
+  const total = useMemo(() => groups.reduce((n, g) => n + g.items.length, 0), [groups]);
+  const shown = active ? groups.filter((g) => g.group === active) : groups;
+
+  const chips: ReadonlyArray<{ key: string | null; label: string; n: number }> = [
+    { key: null, label: "All", n: total },
+    ...groups.map((g) => ({ key: g.group, label: g.group, n: g.items.length })),
+  ];
+
   return (
-    <div className="grid gap-[var(--space-card-gap)] md:grid-cols-3">
-      {groups.map((g) => (
-        <section
-          key={g.group}
-          className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
-        >
-          <h3 style={{ ...T.label, color: accent }}>{g.group}</h3>
-          <ul className="mt-4 grid gap-3">
-            {g.items.map((c) => (
-              <li key={c.code}>
-                <span
-                  className="font-mono font-bold text-[var(--color-ink)]"
-                  style={{ fontSize: "var(--text-body)" }}
-                >
-                  {c.code}
-                </span>
-                <span className="mt-0.5 block text-[var(--color-ink-soft)]" style={T.body}>
-                  {c.subjects}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+    <div style={accentVar(accent)}>
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Filter combinations by group">
+        {chips.map((c) => (
+          <button
+            key={c.label}
+            type="button"
+            className="dl-chip"
+            aria-pressed={active === c.key}
+            onClick={() => setActive(c.key)}
+          >
+            {c.label}
+            <span className="dl-chip__count">{c.n}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-5 grid gap-[var(--space-card-gap)] md:grid-cols-3">
+        {shown.map((g, gi) => (
+          <Disclosure
+            /* Keyed on the filter so a change replays the arrival animation
+               rather than letting the grid re-flow silently under the reader. */
+            key={`${active ?? "all"}-${g.group}`}
+            title={g.group}
+            count={g.items.length}
+            accent={accent}
+            tone={gi % 2 === 0 ? "deep" : "bright"}
+            entering
+          >
+            <ul className="dl-list dl-list--codes grid gap-1">
+              {g.items.map((c, i) => (
+                <li key={c.code} className="dl-row dl-item" style={step(i)}>
+                  <span
+                    className="dl-code font-mono font-bold"
+                    style={{ fontSize: "var(--text-body)" }}
+                  >
+                    {c.code}
+                  </span>
+                  <span className="dl-row__desc" style={T.body}>
+                    {c.subjects}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </Disclosure>
+        ))}
+      </div>
     </div>
   );
 }
 
-/** The full list of examinable subjects a school offers. */
-export function SubjectPillList({ items }: { items: ReadonlyArray<string> }) {
+/* ------------------------------------------------------------------ *
+ * The full subject list
+ * ------------------------------------------------------------------ */
+
+/**
+ * Every subject a school examines at O-Level, as the comp's icon tiles.
+ *
+ * Flat, and it stays flat. The comp splits this into "Core Subjects (for all
+ * students)" and a set of option categories; the school has never said which
+ * of its subjects are core, and the one grouping that was invented here before
+ * had to be removed. Callers that want to mark the split as outstanding should
+ * render a bracketed placeholder beside this list, not slice it.
+ */
+export function SubjectTileList({
+  items,
+  accent,
+}: {
+  items: ReadonlyArray<string>;
+  accent?: string;
+}) {
   return (
-    <ul className="flex flex-wrap gap-2">
-      {items.map((s) => (
-        <li
-          key={s}
-          className="rounded-[var(--radius-btn)] bg-[var(--color-surface-muted)] px-3 py-1.5 text-[var(--color-deep-blue)]"
-          style={T.body}
-        >
-          {s}
-        </li>
-      ))}
+    <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3" style={accentVar(accent)}>
+      {items.map((s) => {
+        const Icon = iconFor(s);
+        return (
+          <li key={s} className="dl-tile" style={T.body}>
+            <span aria-hidden className="dl-tile__icon">
+              <Icon className="h-4 w-4" />
+            </span>
+            {s}
+          </li>
+        );
+      })}
     </ul>
   );
 }
 
-export type FormOptions = { form: string; note?: string; items: ReadonlyArray<string> };
+/* ------------------------------------------------------------------ *
+ * Option subjects per form
+ * ------------------------------------------------------------------ */
+
+/**
+ * One option subject. The school supplies names only; the comp shows a
+ * description beside each. The shape accepts both so the descriptions drop in
+ * the day the school sends them, and the row layout is already two columns —
+ * see .dl-list--described in styles.css.
+ */
+export type OptionSubject = string | { name: string; description?: string };
+export type FormOptions = {
+  form: string;
+  note?: string;
+  items: ReadonlyArray<OptionSubject>;
+};
+
+const subjectName = (s: OptionSubject) => (typeof s === "string" ? s : s.name);
+const subjectDesc = (s: OptionSubject) => (typeof s === "string" ? undefined : s.description);
 
 /**
  * Option subjects per form. A different thing from the subject list above —
  * the subject list is what the school teaches, this is what a pupil in a given
  * form may choose between.
+ *
+ * The comp puts a checkbox on every row. Not built: this is a public page, not
+ * an enrolment form, and a control that submits nothing is a false affordance.
  */
-export function FormOptionsList({ forms }: { forms: ReadonlyArray<FormOptions> }) {
+export function FormOptionsList({
+  forms,
+  accent,
+}: {
+  forms: ReadonlyArray<FormOptions>;
+  accent?: string;
+}) {
   return (
     <div className="grid gap-[var(--space-card-gap)] sm:grid-cols-2">
-      {forms.map((f) => (
-        <section
-          key={f.form}
-          className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] p-[var(--space-card-pad)]"
-        >
-          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-            {f.form}
-          </h3>
-          {f.note && (
-            <p className="mt-1 text-[var(--color-ink-soft)]" style={T.label}>
-              {f.note}
-            </p>
-          )}
-          <ul className="mt-4 grid gap-2">
-            {f.items.map((s) => (
-              <li key={s} className="flex gap-2 text-[var(--color-ink)]" style={T.body}>
-                <span aria-hidden className="text-[var(--color-gold)]">
-                  ·
-                </span>
-                {s}
-              </li>
-            ))}
-          </ul>
-        </section>
-      ))}
+      {forms.map((f, fi) => {
+        const described = f.items.some((s) => subjectDesc(s));
+        return (
+          <Disclosure
+            key={f.form}
+            title={f.form}
+            note={f.note}
+            count={f.items.length}
+            countLabel="Option subjects"
+            accent={accent}
+            tone={fi % 2 === 0 ? "deep" : "bright"}
+          >
+            <ul className={`dl-list grid gap-1 ${described ? "dl-list--described" : ""}`}>
+              {f.items.map((s, i) => (
+                <li
+                  key={subjectName(s)}
+                  className="dl-row dl-item"
+                  style={{ ...T.body, ...step(i) }}
+                >
+                  <span className="text-[var(--color-ink)]">{subjectName(s)}</span>
+                  {subjectDesc(s) && <span className="dl-row__desc">{subjectDesc(s)}</span>}
+                </li>
+              ))}
+            </ul>
+          </Disclosure>
+        );
+      })}
     </div>
   );
 }

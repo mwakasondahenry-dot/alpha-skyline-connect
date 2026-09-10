@@ -18,7 +18,7 @@
  */
 import { Link } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { T, SHELL, heroStep } from "@/components/type-roles";
 
 export { SHELL };
@@ -564,5 +564,222 @@ export function HeroCredentials({
         ))}
       </ul>
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Marked — a hand-drawn stroke behind one word of a heading.
+ *
+ * This is the type treatment. A heading already carries its accent word
+ * in colour; the mark is what makes the word look chosen rather than
+ * recoloured, and it is the difference between a school that reads as
+ * careful and one that reads as alive.
+ *
+ * It stretches to whatever it wraps (preserveAspectRatio="none"), so the
+ * stroke belongs to the word at 375px and at 1440px rather than being a
+ * fixed-width decoration parked near it. The strokes are deliberately
+ * uneven — a drawn line that is perfectly symmetrical reads as a border.
+ * ------------------------------------------------------------------ */
+
+export type MarkKind = "underline" | "ring" | "sweep";
+
+const MARK: Record<MarkKind, { d: string; box: string; dash: number; w: number }> = {
+  // two quick passes, the way you underline a word twice without lifting
+  underline: {
+    d: "M2 12C40 4 120 3 198 9M6 17C58 11 140 10 196 15",
+    box: "0 0 200 22",
+    dash: 420,
+    w: 4,
+  },
+  // a lasso around the word
+  ring: {
+    d: "M186 21C150 5 44 3 12 18 2 23 6 34 30 39c40 8 132 5 158-6 8-4 4-10-14-15",
+    box: "0 0 200 46",
+    dash: 480,
+    w: 3.5,
+  },
+  // a single confident swipe, for a word sitting on a dark ground
+  sweep: {
+    d: "M3 13C54 5 132 4 197 10",
+    box: "0 0 200 20",
+    dash: 210,
+    w: 6,
+  },
+};
+
+export function Marked({
+  kind = "underline",
+  color = "var(--color-gold)",
+  delay = 240,
+  children,
+}: {
+  kind?: MarkKind;
+  color?: string;
+  delay?: number;
+  children: ReactNode;
+}) {
+  const it = MARK[kind];
+  return (
+    <span className="relative inline-block">
+      <span className="relative z-10">{children}</span>
+      <svg
+        aria-hidden
+        viewBox={it.box}
+        preserveAspectRatio="none"
+        className={`alpha-mark ${kind === "ring" ? "alpha-mark--ring" : ""}`}
+        fill="none"
+        stroke={color}
+        strokeWidth={it.w}
+        strokeLinecap="round"
+      >
+        <path
+          d={it.d}
+          className="alpha-draw"
+          style={
+            {
+              "--dash": String(it.dash),
+              "--draw-delay": `${delay}ms`,
+            } as CSSProperties
+          }
+        />
+      </svg>
+    </span>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Backdrop — sparse marks behind a section.
+ *
+ * These sit behind live copy, so they are a wash rather than a figure:
+ * faint enough that contrast is unaffected, present enough that the
+ * page stops feeling like a stack of rectangles. Purely decorative and
+ * hidden from assistive tech.
+ *
+ * Positioned by the caller, because "where necessary" is a judgement
+ * about the specific composition and not something a component can
+ * guess.
+ * ------------------------------------------------------------------ */
+
+export type BackdropKind = "orbit" | "star" | "arrow" | "scribble" | "plane";
+
+const BACKDROP: Record<BackdropKind, { d: string; box: string; w: number }> = {
+  orbit: { d: "M2 20c0-9 20-16 44-16s44 7 44 16-20 16-44 16S2 29 2 20", box: "0 0 92 40", w: 3 },
+  star: { d: "M14 2v24M2 14h24M6 6l16 16M22 6L6 22", box: "0 0 28 28", w: 2.5 },
+  arrow: { d: "M2 14c18-9 44-11 62-3M52 2l14 9-13 10", box: "0 0 70 26", w: 3 },
+  scribble: { d: "M2 18c14-14 28 12 42-2s28 10 42-4", box: "0 0 90 32", w: 3 },
+  // a paper plane, for the aviation surfaces
+  plane: { d: "M2 14 62 2 44 30 36 19 2 14ZM36 19 62 2", box: "0 0 66 34", w: 2.5 },
+};
+
+export function Backdrop({
+  kind,
+  className = "",
+  onDark = false,
+  width = "5rem",
+  rotate = 0,
+}: {
+  kind: BackdropKind;
+  /** Positioning, supplied by the section. */
+  className?: string;
+  onDark?: boolean;
+  width?: string;
+  rotate?: number;
+}) {
+  const it = BACKDROP[kind];
+  return (
+    <svg
+      aria-hidden
+      viewBox={it.box}
+      className={`alpha-backdrop ${onDark ? "alpha-backdrop--onDark" : ""} ${className}`}
+      style={{ width, transform: rotate ? `rotate(${rotate}deg)` : undefined }}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={it.w}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d={it.d} />
+    </svg>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Aviation motifs.
+ *
+ * Inline SVG, so the aviation pages gain their own visual language
+ * without a single extra byte over mobile data — the constraint that
+ * rules out decorative imagery here.
+ *
+ * Drawn from the programme itself rather than from clip-art: the path a
+ * training flight takes, the instrument a student is taught to read,
+ * the ticks on an altimeter.
+ * ------------------------------------------------------------------ */
+
+/** A climbing dotted track with a plane at its head. */
+export function FlightPath({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 320 90"
+      className={`alpha-flightpath ${className}`}
+      fill="none"
+      stroke="currentColor"
+    >
+      <path
+        d="M4 84C70 84 120 62 168 38 206 19 250 10 300 8"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeDasharray="2 12"
+      />
+      <path
+        d="M292 2 316 8 296 20 292 12 292 2Z"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/** The instrument, not an ornament: a compass rose with its cardinals. */
+export function CompassRose({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 120 120"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+    >
+      <circle cx="60" cy="60" r="52" strokeWidth="2" />
+      <circle cx="60" cy="60" r="40" strokeWidth="1" strokeDasharray="1 7" />
+      <path d="M60 6v14M60 100v14M6 60h14M100 60h14" strokeWidth="2" />
+      <path d="M60 22 70 60 60 98 50 60Z" strokeWidth="2" strokeLinejoin="round" />
+      <path d="M22 60 60 50 98 60 60 70Z" strokeWidth="1.5" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+/** Altimeter ticks — a vertical scale, long marks every fifth. */
+export function AltitudeTicks({ className = "" }: { className?: string }) {
+  const rows = Array.from({ length: 16 }, (_, i) => i);
+  return (
+    <svg
+      aria-hidden
+      viewBox="0 0 40 240"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+    >
+      {rows.map((i) => (
+        <path
+          key={i}
+          d={`M2 ${8 + i * 15}h${i % 5 === 0 ? 30 : 14}`}
+          strokeWidth={i % 5 === 0 ? 2.5 : 1.5}
+        />
+      ))}
+    </svg>
   );
 }

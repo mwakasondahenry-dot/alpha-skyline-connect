@@ -31,8 +31,11 @@ import { Route as AdminHeroSlidesRouteImport } from './routes/admin.hero-slides'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
+import { Route as AdminPhotosRouteImport } from './routes/admin.photos'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
+import { Route as AlumniIndexRouteImport } from './routes/alumni.index'
+import { Route as AlumniSubmitRouteImport } from './routes/alumni.submit'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
@@ -147,6 +150,11 @@ const AdminNewsRoute = AdminNewsRouteImport.update({
   path: '/news',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminPhotosRoute = AdminPhotosRouteImport.update({
+  id: '/photos',
+  path: '/photos',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminStaffRoute = AdminStaffRouteImport.update({
   id: '/staff',
   path: '/staff',
@@ -156,6 +164,16 @@ const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
   id: '/testimonials',
   path: '/testimonials',
   getParentRoute: () => AdminRoute,
+} as any)
+const AlumniIndexRoute = AlumniIndexRouteImport.update({
+  id: '/alumni/',
+  path: '/alumni/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlumniSubmitRoute = AlumniSubmitRouteImport.update({
+  id: '/alumni/submit',
+  path: '/alumni/submit',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
   id: '/schools/alpha-girls',
@@ -195,12 +213,15 @@ export interface FileRoutesByFullPath {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
+  '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/alumni/submit': typeof AlumniSubmitRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
+  '/alumni/': typeof AlumniIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -223,12 +244,15 @@ export interface FileRoutesByTo {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
+  '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/alumni/submit': typeof AlumniSubmitRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin': typeof AdminIndexRoute
+  '/alumni': typeof AlumniIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -253,12 +277,15 @@ export interface FileRoutesById {
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
+  '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
   '/admin/testimonials': typeof AdminTestimonialsRoute
+  '/alumni/submit': typeof AlumniSubmitRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
+  '/alumni/': typeof AlumniIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -284,12 +311,15 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
+    | '/admin/photos'
     | '/admin/staff'
     | '/admin/testimonials'
+    | '/alumni/submit'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
     | '/admin/'
+    | '/alumni/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -312,12 +342,15 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
+    | '/admin/photos'
     | '/admin/staff'
     | '/admin/testimonials'
+    | '/alumni/submit'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
     | '/admin'
+    | '/alumni'
   id:
     | '__root__'
     | '/'
@@ -341,12 +374,15 @@ export interface FileRouteTypes {
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
+    | '/admin/photos'
     | '/admin/staff'
     | '/admin/testimonials'
+    | '/alumni/submit'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
     | '/admin/'
+    | '/alumni/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -363,9 +399,11 @@ export interface RootRouteChildren {
   NewsRoute: typeof NewsRoute
   ScholarshipsRoute: typeof ScholarshipsRoute
   TestimonialsRoute: typeof TestimonialsRoute
+  AlumniSubmitRoute: typeof AlumniSubmitRoute
   SchoolsAlphaGirlsRoute: typeof SchoolsAlphaGirlsRoute
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
+  AlumniIndexRoute: typeof AlumniIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -524,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminNewsRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/photos': {
+      id: '/admin/photos'
+      path: '/photos'
+      fullPath: '/admin/photos'
+      preLoaderRoute: typeof AdminPhotosRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/staff': {
       id: '/admin/staff'
       path: '/staff'
@@ -537,6 +582,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/admin/testimonials'
       preLoaderRoute: typeof AdminTestimonialsRouteImport
       parentRoute: typeof AdminRoute
+    }
+    '/alumni/': {
+      id: '/alumni/'
+      path: '/alumni'
+      fullPath: '/alumni/'
+      preLoaderRoute: typeof AlumniIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alumni/submit': {
+      id: '/alumni/submit'
+      path: '/alumni/submit'
+      fullPath: '/alumni/submit'
+      preLoaderRoute: typeof AlumniSubmitRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/schools/alpha-girls': {
       id: '/schools/alpha-girls'
@@ -571,6 +630,7 @@ interface AdminRouteChildren {
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminNewsRoute: typeof AdminNewsRoute
+  AdminPhotosRoute: typeof AdminPhotosRoute
   AdminStaffRoute: typeof AdminStaffRoute
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -585,6 +645,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminLoginRoute: AdminLoginRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminNewsRoute: AdminNewsRoute,
+  AdminPhotosRoute: AdminPhotosRoute,
   AdminStaffRoute: AdminStaffRoute,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
@@ -606,9 +667,11 @@ const rootRouteChildren: RootRouteChildren = {
   NewsRoute: NewsRoute,
   ScholarshipsRoute: ScholarshipsRoute,
   TestimonialsRoute: TestimonialsRoute,
+  AlumniSubmitRoute: AlumniSubmitRoute,
   SchoolsAlphaGirlsRoute: SchoolsAlphaGirlsRoute,
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
+  AlumniIndexRoute: AlumniIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
