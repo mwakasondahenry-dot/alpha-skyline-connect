@@ -11,9 +11,14 @@ the facts; discard the framing.
 
 ---
 
-## ⚠ BLOCKED — do not publish until confirmed in writing
+## ⚠ OPEN — one claim still blocked, two items resolved
 
-### The aviation positioning claim
+The site went live on 2026-09-10. Nothing in this section blocks that: the one
+remaining item is held behind a visible placeholder, which is what AGENTS.md
+requires of content the school still owes. What must never happen is building
+approved-sounding copy around it.
+
+### The aviation positioning claim — STILL BLOCKED
 
 The school's aviation document states that Alpha Schools are the **pioneer
 institutions in Tanzania** to introduce aviation and flying as part of their
@@ -31,35 +36,35 @@ school confirms the exact approved wording.** Until then the existing
 `[Aviation positioning statement — wording to be confirmed]` placeholder stays
 on all five pages that use it.
 
-### The founder's name
+### The founder's name — RESOLVED 2026-09-10
 
-The Managing Director's message, supplied September 2026, names the founder
-**Professor Aloysius Mayo**. The site says **Professor Wenceslaus Aloyce Mayo**
-in four places in `src/routes/about.tsx` — the timeline entry, the portrait's
-alt text, the founder heading and the founder paragraph — which is the form the
-school gave earlier.
+The site now says **Professor Aloysius Mayo** everywhere.
 
-*Aloyce* and *Aloysius* are forms of the same name, so this is very likely one
-man and one spelling decision. *Wenceslaus* being absent from her version is
-the part that is not just spelling.
+The Managing Director's signed letter of September 2026 uses that form, and it
+is the most recent and most senior source on the record. Adopting it changed
+four references in `src/routes/about.tsx` — the timeline entry, the portrait's
+alt text, the founder heading and the founder paragraph — and left her letter
+untouched, which is the safer edit: a signed document should not be rewritten
+to match the site around it.
 
-Both forms are currently live on `/about`, within a screen of each other. The
-message is reproduced verbatim because it is a signed letter from a named
-person, and the existing four references were left alone because nothing
-confirms which form is right. **One named person at the school needs to
-confirm the correct full name.** It is then a one-line change either in her
-quoted message or in those four references — not both.
+The earlier form, *Professor Wenceslaus Aloyce Mayo*, is retired. If the school
+later confirms that *Wenceslaus* belongs in the name, this is a one-line change
+back in those four places.
 
-### Alpha Girls founding date
+### Alpha Girls founding date — RESOLVED 2026-09-10
 
-The site timeline says Alpha Girls was founded in **2020**. The school's own
-document records a **5th Form VI Graduation on 18 April 2026** and a **4th Form
-IV Graduation on 22 August 2026**, and refers to October 2026 as the school's
-**7th year anniversary**.
+The timeline keeps **2020**.
 
-A school admitting its first Form 1 cohort in 2020 could not have produced five
-Form VI graduating classes by 2026. Either the founding year or the graduation
-numbering is wrong. Confirm before the timeline goes live.
+The apparent contradiction assumed the school opened by admitting Form 1, in
+which case five Form VI graduating classes by April 2026 would be impossible.
+It reconciles if Alpha Girls opened in 2020 already teaching Form 5 and 6: the
+first Form VI cohort then graduates in 2022, the fifth in April 2026, and
+2020–2026 counted inclusively is the school's 7th year, which is what the
+October 2026 anniversary refers to.
+
+That reading is consistent with every figure the school has supplied, so
+nothing changes. If the school confirms a different founding year, the timeline
+entry in `src/routes/about.tsx` is the only place it appears.
 
 ---
 

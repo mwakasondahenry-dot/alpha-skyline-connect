@@ -41,7 +41,7 @@ const TIMELINE: ReadonlyArray<{ year: string; title: string; body: string }> = [
   {
     year: "2007",
     title: "Alpha High School",
-    body: "Established on 19 March 2007 by the late Professor Wenceslaus Aloyce Mayo, in Mikocheni.",
+    body: "Established on 19 March 2007 by the late Professor Aloysius Mayo, in Mikocheni.",
   },
   {
     year: "2020",
@@ -175,7 +175,7 @@ function AboutPage() {
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/90 ring-1 ring-[var(--color-deep-blue)]/20">
                 <img
                   src={profMayo}
-                  alt="Professor Wenceslaus Aloyce Mayo, founder of Alpha Schools"
+                  alt="Professor Aloysius Mayo, founder of Alpha Schools"
                   className="h-full w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -188,10 +188,10 @@ function AboutPage() {
               Our founder
             </p>
             <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-              In honour of the late<br />Professor Wenceslaus Aloyce Mayo.
+              In honour of the late<br />Professor Aloysius Mayo.
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
-              Alpha Schools was founded in 2007 by the late Professor Wenceslaus Aloyce Mayo —
+              Alpha Schools was founded in 2007 by the late Professor Aloysius Mayo —
               a man whose conviction that education should serve both intellect and character
               still anchors everything we do.
             </p>
@@ -210,12 +210,11 @@ function AboutPage() {
           signed letter from a named person, so it is not edited for house
           style. Two consequences worth knowing about:
 
-          1. It names the founder "Professor Aloysius Mayo". The rest of this
-             page says "Professor Wenceslaus Aloyce Mayo", which is the form
-             the school gave for the timeline and the founder section. The two
-             are almost certainly the same man, but nobody has confirmed which
-             form is correct, so neither has been changed to match the other.
-             design/CONTENT-FROM-SCHOOL.md is where that gets resolved.
+          1. It names the founder "Professor Aloysius Mayo". The site now uses
+             that form everywhere, decided 2026-09-10: her signed letter is the
+             most recent and most senior source, and adopting it changes four
+             site references rather than editing a signed document. The earlier
+             "Professor Wenceslaus Aloyce Mayo" is retired.
 
           2. It uses "Alpha Girls High School" and "Alpha Nursery and Primary
              School" where the brand names in AGENTS.md are "Alpha Girls" and
