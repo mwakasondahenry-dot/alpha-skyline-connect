@@ -223,9 +223,7 @@ export const submitContactMessage = createServerFn({ method: "POST" })
       subject: data.subject?.trim() || null,
       message: data.message.trim(),
     };
-    const { error } = await (sb.from("contact_messages") as unknown as {
-      insert: (v: typeof payload) => Promise<{ error: { message: string } | null }>;
-    }).insert(payload);
+    const { error } = await sb.from("contact_messages").insert(payload);
     if (error) {
       console.error("[submitContactMessage]", error);
       throw new Error("Could not send your message. Please try again or call us.");
@@ -240,6 +238,16 @@ export type SchoolGalleryItem = Pick<GalleryRow, "id" | "image_url" | "caption">
 export type SchoolStaffItem = Pick<StaffRow, "id" | "name" | "title" | "photo_url">;
 export type SchoolFacilityItem = PublicFacilityItem;
 
+/**
+ * Staff-uploaded photographs for this school, keyed by photo_slots.slot_key.
+ * The positions themselves are declared in src/lib/photo-slots.ts; a key
+ * missing here means the page renders what it shipped with.
+ */
+export type SchoolPhotoMap = Record<
+  string,
+  { image_url: string; alt_text: string; credit: string | null }
+>;
+
 export type SchoolBundle = {
   school: SchoolRow | null;
   news: SchoolNewsItem[];
@@ -247,15 +255,26 @@ export type SchoolBundle = {
   gallery: SchoolGalleryItem[];
   staff: SchoolStaffItem[];
   facilities: SchoolFacilityItem[];
+  photos: SchoolPhotoMap;
 };
 
 export const getSchoolBundle = createServerFn({ method: "GET" })
   .inputValidator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<SchoolBundle> => {
-    const empty: SchoolBundle = { school: null, news: [], events: [], gallery: [], staff: [], facilities: [] };
+    const empty: SchoolBundle = { school: null, news: [], events: [], gallery: [], staff: [], facilities: [], photos: {} };
     try {
       const sb = serverClient();
-      const slugFilter = [data.slug, "group-wide"];
+      const slugFilter: SchoolSlug[] = [data.slug, "group-wide"];
+      // Started here so it runs alongside the batch below, but deliberately
+      // kept out of that Promise.all: seven heterogeneous PostgREST builders
+      // defeat TypeScript's tuple inference and collapse every row type to
+      // `never`. The trailing .then() is what actually fires the request.
+      const photosPromise = sb
+        .from("photo_slots")
+        .select("slot_key,image_url,alt_text,credit")
+        .eq("school_slug", data.slug)
+        .then((r) => r);
+
       const [schoolRes, newsRes, eventsRes, galleryRes, staffRes, facilitiesRes] = await Promise.all([
         sb.from("schools").select("*").eq("slug", data.slug).maybeSingle(),
         sb.from("news").select("id,title,body,cover_url,published_at,school_slug")
@@ -272,6 +291,20 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
           .eq("school_slug", data.slug).eq("published", true)
           .order("sort_order", { ascending: true }),
       ]);
+
+      const photosRes = await photosPromise;
+
+      // A missing table or a failed query leaves this empty, which is the
+      // fallback path: the page renders the photographs it shipped with.
+      const photos: SchoolPhotoMap = {};
+      for (const row of photosRes.data ?? []) {
+        photos[row.slot_key] = {
+          image_url: row.image_url,
+          alt_text: row.alt_text,
+          credit: row.credit,
+        };
+      }
+
       return {
         school: schoolRes.data ?? null,
         news: newsRes.data ?? [],
@@ -279,6 +312,7 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
         gallery: galleryRes.data ?? [],
         staff: staffRes.data ?? [],
         facilities: facilitiesRes.data ?? [],
+        photos,
       };
     } catch (err) {
       console.error("[getSchoolBundle]", err);

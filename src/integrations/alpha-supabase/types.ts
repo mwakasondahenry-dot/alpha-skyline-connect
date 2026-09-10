@@ -7,7 +7,7 @@ export type SchoolSlug =
   | "alpha-high"
   | "alpha-girls";
 
-export interface SchoolRow {
+export type SchoolRow = {
   slug: SchoolSlug;
   name: string;
   campus: string | null;
@@ -16,7 +16,7 @@ export interface SchoolRow {
   created_at: string;
 }
 
-export interface NewsRow {
+export type NewsRow = {
   id: string;
   school_slug: SchoolSlug;
   title: string;
@@ -29,7 +29,7 @@ export interface NewsRow {
   created_at: string;
 }
 
-export interface EventRow {
+export type EventRow = {
   id: string;
   school_slug: SchoolSlug;
   title: string;
@@ -41,7 +41,7 @@ export interface EventRow {
   created_at: string;
 }
 
-export interface GalleryRow {
+export type GalleryRow = {
   id: string;
   school_slug: SchoolSlug;
   image_url: string;
@@ -50,7 +50,7 @@ export interface GalleryRow {
   created_at: string;
 }
 
-export interface StaffRow {
+export type StaffRow = {
   id: string;
   school_slug: SchoolSlug;
   name: string;
@@ -60,7 +60,7 @@ export interface StaffRow {
   created_at: string;
 }
 
-export interface FacilityRow {
+export type FacilityRow = {
   id: string;
   school_slug: SchoolSlug;
   name: string;
@@ -72,7 +72,7 @@ export interface FacilityRow {
   created_at: string;
 }
 
-export interface FacilityPhotoRow {
+export type FacilityPhotoRow = {
   id: string;
   school_slug: SchoolSlug;
   facility_id: string;
@@ -84,7 +84,7 @@ export interface FacilityPhotoRow {
 }
 
 
-export interface PhotoSlotRow {
+export type PhotoSlotRow = {
   /** Stable `<school>.<section>.<name>` identity, declared in src/lib/photo-slots.ts. */
   slot_key: string;
   school_slug: SchoolSlug;
@@ -95,7 +95,7 @@ export interface PhotoSlotRow {
   updated_at: string;
 }
 
-export interface ContactMessageRow {
+export type ContactMessageRow = {
   id: string;
   name: string;
   email: string;
@@ -107,7 +107,7 @@ export interface ContactMessageRow {
   created_at: string;
 }
 
-export interface HeroSlideRow {
+export type HeroSlideRow = {
   id: string;
   page_key: string;
   image_url: string;
@@ -118,7 +118,7 @@ export interface HeroSlideRow {
   created_at: string;
 }
 
-export interface TestimonialRow {
+export type TestimonialRow = {
   id: string;
   school_slug: SchoolSlug | null;
   author_name: string;
@@ -145,17 +145,21 @@ export interface TestimonialRow {
 export interface Database {
   public: {
     Tables: {
-      schools: { Row: SchoolRow; Insert: Partial<SchoolRow>; Update: Partial<SchoolRow> };
-      news: { Row: NewsRow; Insert: Partial<NewsRow>; Update: Partial<NewsRow> };
-      events: { Row: EventRow; Insert: Partial<EventRow>; Update: Partial<EventRow> };
-      gallery: { Row: GalleryRow; Insert: Partial<GalleryRow>; Update: Partial<GalleryRow> };
-      staff: { Row: StaffRow; Insert: Partial<StaffRow>; Update: Partial<StaffRow> };
-      facilities: { Row: FacilityRow; Insert: Partial<FacilityRow>; Update: Partial<FacilityRow> };
-      facility_photos: { Row: FacilityPhotoRow; Insert: Partial<FacilityPhotoRow>; Update: Partial<FacilityPhotoRow> };
-      photo_slots: { Row: PhotoSlotRow; Insert: Partial<PhotoSlotRow>; Update: Partial<PhotoSlotRow> };
-      contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow> };
-      hero_slides: { Row: HeroSlideRow; Insert: Partial<HeroSlideRow>; Update: Partial<HeroSlideRow> };
-      testimonials: { Row: TestimonialRow; Insert: Partial<TestimonialRow>; Update: Partial<TestimonialRow> };
+      schools: { Row: SchoolRow; Insert: Partial<SchoolRow>; Update: Partial<SchoolRow>; Relationships: [] };
+      news: { Row: NewsRow; Insert: Partial<NewsRow>; Update: Partial<NewsRow>; Relationships: [] };
+      events: { Row: EventRow; Insert: Partial<EventRow>; Update: Partial<EventRow>; Relationships: [] };
+      gallery: { Row: GalleryRow; Insert: Partial<GalleryRow>; Update: Partial<GalleryRow>; Relationships: [] };
+      staff: { Row: StaffRow; Insert: Partial<StaffRow>; Update: Partial<StaffRow>; Relationships: [] };
+      facilities: { Row: FacilityRow; Insert: Partial<FacilityRow>; Update: Partial<FacilityRow>; Relationships: [] };
+      facility_photos: { Row: FacilityPhotoRow; Insert: Partial<FacilityPhotoRow>; Update: Partial<FacilityPhotoRow>; Relationships: [] };
+      photo_slots: { Row: PhotoSlotRow; Insert: Partial<PhotoSlotRow>; Update: Partial<PhotoSlotRow>; Relationships: [] };
+      contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow>; Relationships: [] };
+      hero_slides: { Row: HeroSlideRow; Insert: Partial<HeroSlideRow>; Update: Partial<HeroSlideRow>; Relationships: [] };
+      testimonials: { Row: TestimonialRow; Insert: Partial<TestimonialRow>; Update: Partial<TestimonialRow>; Relationships: [] };
     };
+    Views: Record<string, never>;
+    Functions: Record<string, never>;
+    Enums: Record<string, never>;
+    CompositeTypes: Record<string, never>;
   };
 }
