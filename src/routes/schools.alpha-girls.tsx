@@ -1,5 +1,6 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
+import { FacilityTile } from "@/components/school/facility-tile";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import {
   CombinationList,
@@ -12,13 +13,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
+import { getSchoolPhotos } from "@/lib/alpha-content.functions";
+import { slotPhoto } from "@/lib/photo-slots";
 import { Reveal } from "@/components/reveal";
 import girlsHero from "@/assets/school-alpha-girls.webp";
 import girlUniform from "@/assets/alpha-girl-uniform.webp";
 import campusGirls from "@/assets/campus-girls.webp";
-import campusHigh from "@/assets/campus-high.webp";
-import campusNursery from "@/assets/campus-nursery.webp";
-import aviation from "@/assets/aviation-uniform.webp";
 import { T, heroStep } from "@/components/type-roles";
 import { Marked, Backdrop, CinematicHero, HeroCredentials } from "@/components/alpha-ui";
 import { HeroSlideshow } from "@/components/hero-slideshow";
@@ -43,6 +43,12 @@ const SEA = {
   deep: "var(--color-girls-teal-deep)",
 } as const;
 
+const photosQuery = queryOptions({
+  queryKey: ["school-photos", "alpha-girls"],
+  queryFn: () => getSchoolPhotos({ data: { slug: "alpha-girls" as const } }),
+  staleTime: 5 * 60 * 1000,
+});
+
 const bundleQuery = queryOptions({
   queryKey: ["school-bundle", slug],
   queryFn: () => getSchoolBundle({ data: { slug } }),
@@ -59,7 +65,11 @@ export const Route = createFileRoute("/schools/alpha-girls")({
       },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(bundleQuery),
+  loader: ({ context }) =>
+    Promise.all([
+      context.queryClient.ensureQueryData(bundleQuery),
+      context.queryClient.ensureQueryData(photosQuery),
+    ]),
   component: AlphaGirlsRoute,
 });
 
@@ -740,13 +750,15 @@ function Academics() {
 }
 
 const FACILITIES = [
-  { label: "Science labs", img: campusHigh },
-  { label: "Library", img: campusNursery },
-  { label: "Sports field", img: campusGirls },
-  { label: "Boarding", img: aviation },
+  { key: "alpha-girls.facilities.science-labs", label: "Science labs" },
+  { key: "alpha-girls.facilities.library", label: "Library" },
+  { key: "alpha-girls.facilities.sports-field", label: "Sports field" },
+  { key: "alpha-girls.facilities.boarding", label: "Boarding" },
 ];
 
 function LifeAtKunduchi() {
+  const photos = useSuspenseQuery(photosQuery).data;
+  const plate = slotPhoto(photos, "alpha-girls.students.campus-plate")!;
   return (
     <section id="life" className="relative overflow-hidden bg-white">
       {/* Marks around the campus plate rather than on it: the photograph is
@@ -796,8 +808,11 @@ function LifeAtKunduchi() {
                 for what it actually shows: alt text that names the wrong
                 subject is a lie told to a screen reader. */}
             <img
-              src={campusGirls}
-              alt="Alpha Girls students celebrating with medals and certificates"
+              src={plate.src}
+              alt={
+                photos["alpha-girls.students.campus-plate"]?.alt_text ??
+                "Alpha Girls students celebrating with medals and certificates"
+              }
               loading="lazy"
               decoding="async"
               className="block aspect-[16/10] w-full object-cover sm:aspect-[2/1]"
@@ -827,27 +842,14 @@ function LifeAtKunduchi() {
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {FACILITIES.map((f, i) => (
-            <Reveal key={f.label} direction="up" delay={i * 70}>
-              <div className="group relative aspect-[4/5] overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
-                <img
-                  src={f.img}
-                  alt={f.label}
-                  loading="lazy"
-                  decoding="async"
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-5">
-                  <span
-                    className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                    style={{ color: GOLD }}
-                  >
-                    Facility
-                  </span>
-                  <h3 className="mt-1 font-display text-lg font-bold text-white">{f.label}</h3>
-                </div>
-              </div>
-            </Reveal>
+            <FacilityTile
+              key={f.key}
+              slotKey={f.key}
+              label={f.label}
+              photos={photos}
+              accent={ACCENT}
+              delay={i * 70}
+            />
           ))}
         </div>
       </div>
