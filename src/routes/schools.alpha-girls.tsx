@@ -1,7 +1,13 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
-import { CombinationList, SubjectPillList, FormOptionsList, type CombinationGroup } from "@/components/school/subject-lists";
+import {
+  CombinationList,
+  SubjectTileList,
+  FormOptionsList,
+  type CombinationGroup,
+} from "@/components/school/subject-lists";
+import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
@@ -14,12 +20,7 @@ import campusHigh from "@/assets/campus-high.webp";
 import campusNursery from "@/assets/campus-nursery.webp";
 import aviation from "@/assets/aviation-uniform.webp";
 import { T, heroStep } from "@/components/type-roles";
-import {
-  Marked,
-  Backdrop,
-  CinematicHero,
-  HeroCredentials,
-} from "@/components/alpha-ui";
+import { Marked, Backdrop, CinematicHero, HeroCredentials } from "@/components/alpha-ui";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { Users, GraduationCap, MapPin } from "lucide-react";
 
@@ -180,7 +181,6 @@ function Hero() {
   );
 }
 
-
 /* ----------------- About ----------------- */
 
 function About() {
@@ -190,9 +190,7 @@ function About() {
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
-            <p style={{ ...T.label, color: ACCENT  }}>
-              About Alpha Girls
-            </p>
+            <p style={{ ...T.label, color: ACCENT }}>About Alpha Girls</p>
             <h2
               className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl"
               style={{ color: ACCENT }}
@@ -203,10 +201,13 @@ function About() {
               </Marked>
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
-              Alpha Girls High School sits at Kunduchi and teaches the Tanzanian national curriculum from Form 1 to Form 6 — NECTA sciences and arts, with aviation, coding and enterprise on the timetable rather than beside it.
+              Alpha Girls High School sits at Kunduchi and teaches the Tanzanian national curriculum
+              from Form 1 to Form 6 — NECTA sciences and arts, with aviation, coding and enterprise
+              on the timetable rather than beside it.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
-              The school exists to enable its students to achieve their best intellectually and physically, and to become responsible, self-directed citizens of a dynamic society.
+              The school exists to enable its students to achieve their best intellectually and
+              physically, and to become responsible, self-directed citizens of a dynamic society.
             </p>
 
             <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-5">
@@ -226,7 +227,10 @@ function About() {
                 className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-30 blur-2xl"
                 style={{ background: GOLD }}
               />
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.22em]"
+                style={{ color: GOLD }}
+              >
                 Our Promise
               </p>
               <h3 className="mt-2 font-display" style={T.cardTitle}>
@@ -260,10 +264,7 @@ function About() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="rounded-xl bg-[var(--color-off-white)] p-4 ring-1 ring-black/5">
-      <div
-        className="font-display text-2xl font-black leading-none"
-        style={{ color: ACCENT }}
-      >
+      <div className="font-display text-2xl font-black leading-none" style={{ color: ACCENT }}>
         {value}
       </div>
       <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-ink)]/60">
@@ -272,7 +273,6 @@ function Stat({ value, label }: { value: string; label: string }) {
     </div>
   );
 }
-
 
 /** Section anchors. Alpha Girls leads with what is distinctly hers, not with
  *  the academics both schools share. Deliberately a different order from
@@ -301,10 +301,23 @@ const SUB_NAV = [
 
 /** All 17 examinable subjects offered at O-Level. */
 const O_LEVEL_SUBJECTS = [
-  "Historia ya Tanzania na Maadili", "Civics", "History", "Geography",
-  "Kiswahili", "English Language", "Business Studies", "Book Keeping",
-  "Computer Science", "Physics", "Chemistry", "Biology", "Chinese",
-  "French", "Literature in English", "ICS", "Additional Mathematics",
+  "Historia ya Tanzania na Maadili",
+  "Civics",
+  "History",
+  "Geography",
+  "Kiswahili",
+  "English Language",
+  "Business Studies",
+  "Book Keeping",
+  "Computer Science",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Chinese",
+  "French",
+  "Literature in English",
+  "ICS",
+  "Additional Mathematics",
 ] as const;
 
 /* ⚠ SOURCE FLAG — FOR REVIEW, NOT FOR PARENTS ⚠
@@ -323,17 +336,46 @@ const FORM_OPTIONS = [
   {
     form: "Form Two",
     note: "The same seven, plus Book Keeping",
-    items: ["Chinese", "French", "Computer Science", "History", "Biology", "Physics", "Chemistry", "Book Keeping"],
+    items: [
+      "Chinese",
+      "French",
+      "Computer Science",
+      "History",
+      "Biology",
+      "Physics",
+      "Chemistry",
+      "Book Keeping",
+    ],
   },
   {
     form: "Form Three",
     note: "Nine option subjects",
-    items: ["Chinese", "French", "ICS", "Literature in English", "Commerce", "Book Keeping", "Physics", "Chemistry", "Additional Mathematics"],
+    items: [
+      "Chinese",
+      "French",
+      "ICS",
+      "Literature in English",
+      "Commerce",
+      "Book Keeping",
+      "Physics",
+      "Chemistry",
+      "Additional Mathematics",
+    ],
   },
   {
     form: "Form Four",
     note: "Nine option subjects",
-    items: ["Chinese", "French", "ICS", "Literature in English", "Commerce", "Book Keeping", "Physics", "Chemistry", "Additional Mathematics"],
+    items: [
+      "Chinese",
+      "French",
+      "ICS",
+      "Literature in English",
+      "Commerce",
+      "Book Keeping",
+      "Physics",
+      "Chemistry",
+      "Additional Mathematics",
+    ],
   },
 ] as const;
 
@@ -371,9 +413,18 @@ const A_COMBOS: ReadonlyArray<CombinationGroup> = [
 /** Entry criteria per stream. From ALPHA_GIRLS_WEBSITE.docx — NOT yet
  *  confirmed in writing, so it is rendered under an UnconfirmedNote. */
 const ENTRY_CRITERIA = [
-  { group: "Arts", rule: "At least Division III, maximum 23 points, with a minimum of C in every principal subject." },
-  { group: "Business", rule: "Division II with at least C in every principal subject, plus the mathematics or computer requirement for the chosen combination." },
-  { group: "Science", rule: "Minimum Division II with 19 points, plus the subject-specific requirements for the chosen combination." },
+  {
+    group: "Arts",
+    rule: "At least Division III, maximum 23 points, with a minimum of C in every principal subject.",
+  },
+  {
+    group: "Business",
+    rule: "Division II with at least C in every principal subject, plus the mathematics or computer requirement for the chosen combination.",
+  },
+  {
+    group: "Science",
+    rule: "Minimum Division II with 19 points, plus the subject-specific requirements for the chosen combination.",
+  },
 ] as const;
 
 /* ------------------------------------------------------------------ *
@@ -385,7 +436,13 @@ const ENTRY_CRITERIA = [
 
 /** The cookery club runs as an enterprise, not a hobby. */
 const ENTERPRISE_PATHWAY = [
-  "Learn", "Practise", "Produce", "Package", "Market", "Sell", "Account",
+  "Learn",
+  "Practise",
+  "Produce",
+  "Package",
+  "Market",
+  "Sell",
+  "Account",
 ] as const;
 
 /* ⚠ SOURCE FLAG — the school's table gives the Driving Club's focus as
@@ -410,7 +467,11 @@ const UPCOMING_2026 = [
 
 const COMPETITIONS = [
   { name: "Pan African Schools Championship", where: "South Africa", when: "June" },
-  { name: "Tanzania National World Schools Debate Championship", where: "National", when: "August" },
+  {
+    name: "Tanzania National World Schools Debate Championship",
+    where: "National",
+    when: "August",
+  },
   { name: "TCRO Dar Open Schools Debate Championship", where: "Dar es Salaam", when: "May" },
 ] as const;
 
@@ -420,10 +481,22 @@ function WhatMakesAlphaGirls() {
     <section id="distinctive" className="bg-[var(--color-surface)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <p style={{ ...T.label, color: ACCENT }}>How they learn to lead</p>
-        <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
+        <h2
+          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
+          style={T.section}
+        >
           Cookery that runs as a business, debate that travels, and girls who learn to drive.
         </h2>
-        <span aria-hidden className="mt-[var(--heading-rule-gap)] block" style={{ width: "var(--heading-rule-w)", height: "var(--heading-rule-h)", background: "var(--heading-rule-color)", borderRadius: "var(--heading-rule-radius)" }} />
+        <span
+          aria-hidden
+          className="mt-[var(--heading-rule-gap)] block"
+          style={{
+            width: "var(--heading-rule-w)",
+            height: "var(--heading-rule-h)",
+            background: "var(--heading-rule-color)",
+            borderRadius: "var(--heading-rule-radius)",
+          }}
+        />
 
         <div className="mt-[var(--space-block-y)]">
           <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
@@ -442,7 +515,9 @@ function WhatMakesAlphaGirls() {
                   {step}
                 </span>
                 {i < ENTERPRISE_PATHWAY.length - 1 && (
-                  <span aria-hidden className="text-[var(--color-gold)]">&rarr;</span>
+                  <span aria-hidden className="text-[var(--color-gold)]">
+                    &rarr;
+                  </span>
                 )}
               </li>
             ))}
@@ -462,16 +537,20 @@ function WhatMakesAlphaGirls() {
                 key={c.name}
                 className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] p-[var(--space-card-pad)]"
               >
-                <span className="font-display text-[var(--color-ink)]" style={T.cardTitle}>{c.name}</span>
+                <span className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
+                  {c.name}
+                </span>
                 {c.note && (
-                  <span className="mt-1 block text-[var(--color-ink-soft)]" style={T.label}>{c.note}</span>
+                  <span className="mt-1 block text-[var(--color-ink-soft)]" style={T.label}>
+                    {c.note}
+                  </span>
                 )}
               </li>
             ))}
           </ul>
           <UnconfirmedNote>
-            Supplied by the school, August 2026. Not yet confirmed in writing.
-            Club photographs are still outstanding.
+            Supplied by the school, August 2026. Not yet confirmed in writing. Club photographs are
+            still outstanding.
           </UnconfirmedNote>
         </div>
       </div>
@@ -485,17 +564,36 @@ function WhereTheyCompete() {
     <section id="compete" className="bg-[var(--color-off-white)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <p style={{ ...T.label, color: ACCENT }}>Beyond Kunduchi</p>
-        <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
+        <h2
+          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
+          style={T.section}
+        >
           They compete well past Dar es Salaam.
         </h2>
-        <span aria-hidden className="mt-[var(--heading-rule-gap)] block" style={{ width: "var(--heading-rule-w)", height: "var(--heading-rule-h)", background: "var(--heading-rule-color)", borderRadius: "var(--heading-rule-radius)" }} />
+        <span
+          aria-hidden
+          className="mt-[var(--heading-rule-gap)] block"
+          style={{
+            width: "var(--heading-rule-w)",
+            height: "var(--heading-rule-h)",
+            background: "var(--heading-rule-color)",
+            borderRadius: "var(--heading-rule-radius)",
+          }}
+        />
 
         <ul className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] md:grid-cols-3">
           {COMPETITIONS.map((c) => (
-            <li key={c.name} className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]">
+            <li
+              key={c.name}
+              className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
+            >
               <span style={{ ...T.label, color: ACCENT }}>{c.when}</span>
-              <h3 className="mt-2 font-display text-[var(--color-ink)]" style={T.cardTitle}>{c.name}</h3>
-              <p className="mt-1 text-[var(--color-ink-soft)]" style={T.body}>{c.where}</p>
+              <h3 className="mt-2 font-display text-[var(--color-ink)]" style={T.cardTitle}>
+                {c.name}
+              </h3>
+              <p className="mt-1 text-[var(--color-ink-soft)]" style={T.body}>
+                {c.where}
+              </p>
             </li>
           ))}
         </ul>
@@ -513,23 +611,39 @@ function TheSchoolYear() {
     <section id="year" className="bg-[var(--color-surface)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <p style={{ ...T.label, color: ACCENT }}>Still to come in 2026</p>
-        <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
+        <h2
+          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
+          style={T.section}
+        >
           What is next on the Kunduchi calendar.
         </h2>
-        <span aria-hidden className="mt-[var(--heading-rule-gap)] block" style={{ width: "var(--heading-rule-w)", height: "var(--heading-rule-h)", background: "var(--heading-rule-color)", borderRadius: "var(--heading-rule-radius)" }} />
+        <span
+          aria-hidden
+          className="mt-[var(--heading-rule-gap)] block"
+          style={{
+            width: "var(--heading-rule-w)",
+            height: "var(--heading-rule-h)",
+            background: "var(--heading-rule-color)",
+            borderRadius: "var(--heading-rule-radius)",
+          }}
+        />
 
         <ul className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-3">
           {UPCOMING_2026.map((e) => (
-            <li key={e.what} className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] p-[var(--space-card-pad)]">
+            <li
+              key={e.what}
+              className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] p-[var(--space-card-pad)]"
+            >
               <span style={{ ...T.label, color: ACCENT }}>{e.when}</span>
-              <p className="mt-2 font-display text-[var(--color-ink)]" style={T.cardTitle}>{e.what}</p>
+              <p className="mt-2 font-display text-[var(--color-ink)]" style={T.cardTitle}>
+                {e.what}
+              </p>
             </li>
           ))}
         </ul>
         <UnconfirmedNote>
-          From the 2026 calendar supplied by the school in August 2026, not yet
-          confirmed in writing. Earlier dates in that calendar have passed and
-          are not listed.
+          From the 2026 calendar supplied by the school in August 2026, not yet confirmed in
+          writing. Earlier dates in that calendar have passed and are not listed.
         </UnconfirmedNote>
       </div>
     </section>
@@ -539,57 +653,91 @@ function TheSchoolYear() {
 function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-off-white)]">
+      <CurriculumBand
+        eyebrow="Academics"
+        title="Seventeen subjects at O-Level, twelve combinations at A-Level."
+        intro="Every subject examinable across Forms One to Four, what a girl in each form may choose between, and all twelve A-Level combinations with their subjects written out."
+        accent={ACCENT}
+      />
+
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>Academics</p>
-        <h2 className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
-          Seventeen subjects at O-Level, twelve combinations at A-Level.
-        </h2>
-        <span aria-hidden className="mt-[var(--heading-rule-gap)] block" style={{ width: "var(--heading-rule-w)", height: "var(--heading-rule-h)", background: "var(--heading-rule-color)", borderRadius: "var(--heading-rule-radius)" }} />
-
-        <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>Subjects offered</h3>
-          <div className="mt-5"><SubjectPillList items={O_LEVEL_SUBJECTS} /></div>
+        <div>
+          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
+            Subjects offered
+          </h3>
+          <div className="mt-5">
+            <SubjectTileList items={O_LEVEL_SUBJECTS} accent={ACCENT} />
+          </div>
+          {/* The comp splits this list into "Core Subjects (for all students)"
+              and a set of option categories. The school has never said which
+              are core, and the one grouping invented here before had to be
+              removed — so the question is marked, not answered. See
+              design/CONTENT-FROM-SCHOOL.md. */}
+          <UnconfirmedNote>
+            [Which of these seventeen are core for every girl, and which are offered as options — to
+            be provided by the school.]
+          </UnconfirmedNote>
         </div>
 
         <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>Option subjects by form</h3>
+          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
+            Option subjects by form
+          </h3>
           <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            What a girl in each form may choose between &mdash; a different thing
-            from the full subject list above.
+            What a girl in each form may choose between &mdash; a different thing from the full
+            subject list above.
           </p>
-          <div className="mt-5"><FormOptionsList forms={FORM_OPTIONS} /></div>
+          <div className="mt-5">
+            <FormOptionsList forms={FORM_OPTIONS} accent={ACCENT} />
+          </div>
         </div>
 
         <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>A-Level combinations</h3>
+          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
+            A-Level combinations
+          </h3>
           <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
             All twelve, with their subjects written out. Form 5&ndash;6, ACSEE.
           </p>
-          <div className="mt-5"><CombinationList groups={A_COMBOS} accent={ACCENT} /></div>
+          <div className="mt-5">
+            <CombinationList groups={A_COMBOS} accent={ACCENT} />
+          </div>
         </div>
 
         <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>Entry criteria</h3>
+          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
+            Entry criteria
+          </h3>
           <ul className="mt-5 grid gap-[var(--space-card-gap)] md:grid-cols-3">
             {ENTRY_CRITERIA.map((e) => (
-              <li key={e.group} className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]">
+              <li
+                key={e.group}
+                className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
+              >
                 <span style={{ ...T.label, color: ACCENT }}>{e.group}</span>
-                <p className="mt-2 text-[var(--color-ink)]" style={T.body}>{e.rule}</p>
+                <p className="mt-2 text-[var(--color-ink)]" style={T.body}>
+                  {e.rule}
+                </p>
               </li>
             ))}
           </ul>
           <UnconfirmedNote>
-            Entry criteria come from the Alpha Girls document and are not yet
-            confirmed in writing.
+            Entry criteria come from the Alpha Girls document and are not yet confirmed in writing.
           </UnconfirmedNote>
+        </div>
+
+        <div className="mt-[var(--space-block-y)]">
+          <GuidanceCallout
+            title="Not sure which combination fits?"
+            body="The academic team can talk a girl through the options before Form Five."
+            cta="Talk to our team"
+            accent={ACCENT}
+          />
         </div>
       </div>
     </section>
   );
 }
-
-
-
 
 const FACILITIES = [
   { label: "Science labs", img: campusHigh },
@@ -603,24 +751,36 @@ function LifeAtKunduchi() {
     <section id="life" className="relative overflow-hidden bg-white">
       {/* Marks around the campus plate rather than on it: the photograph is
           the subject here, and a doodle over a face is graffiti. */}
-      <Backdrop kind="scribble" className="left-[3%] top-24 hidden md:block" width="6rem" rotate={-8} />
+      <Backdrop
+        kind="scribble"
+        className="left-[3%] top-24 hidden md:block"
+        width="6rem"
+        rotate={-8}
+      />
       <Backdrop kind="star" className="right-[6%] top-40" width="2.75rem" rotate={14} />
-      <Backdrop kind="orbit" className="bottom-24 right-[2%] hidden lg:block" width="8rem" rotate={6} />
+      <Backdrop
+        kind="orbit"
+        className="bottom-24 right-[2%] hidden lg:block"
+        width="8rem"
+        rotate={6}
+      />
 
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p style={{ ...T.label, color: ACCENT  }}>
-              Campus
-            </p>
-            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
+            <p style={{ ...T.label, color: ACCENT }}>Campus</p>
+            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
               Life at{" "}
               <Marked kind="underline" color="var(--color-gold)">
                 Kunduchi.
               </Marked>
             </h2>
           </div>
-          <Link to="/facilities" className="font-bold hover:underline" style={{ ...T.body, color: ACCENT  }}>
+          <Link
+            to="/facilities"
+            className="font-bold hover:underline"
+            style={{ ...T.body, color: ACCENT }}
+          >
             See facilities →
           </Link>
         </Reveal>
@@ -678,7 +838,10 @@ function LifeAtKunduchi() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-[0.2em]"
+                    style={{ color: GOLD }}
+                  >
                     Facility
                   </span>
                   <h3 className="mt-1 font-display text-lg font-bold text-white">{f.label}</h3>
@@ -700,10 +863,8 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
     <section style={{ background: SEA.tint }}>
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT  }}>
-            Leadership & teaching
-          </p>
-          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
+          <p style={{ ...T.label, color: ACCENT }}>Leadership & teaching</p>
+          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
             The women and men behind the climb.
           </h2>
         </Reveal>
@@ -728,7 +889,11 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                       style={{ background: `linear-gradient(135deg, ${ACCENT}, ${SEA.deep})` }}
                     >
                       <span className="font-display text-6xl font-black text-white/30">
-                        {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                        {p.name
+                          .split(" ")
+                          .map((w) => w[0])
+                          .slice(0, 2)
+                          .join("")}
                       </span>
                     </div>
                   )}

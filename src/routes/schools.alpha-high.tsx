@@ -1,7 +1,25 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
-import { CinematicHero, HeroCredentials, GoldButton, GhostButton, SectionHead, FeatureCard, StatBar, Marked, Backdrop, SHELL } from "@/components/alpha-ui";
-import { CombinationList, SubjectPillList, FormOptionsList, type CombinationGroup } from "@/components/school/subject-lists";
+import {
+  CinematicHero,
+  HeroCredentials,
+  GoldButton,
+  GhostButton,
+  SectionHead,
+  FeatureCard,
+  StatBar,
+  Marked,
+  Backdrop,
+  SHELL,
+} from "@/components/alpha-ui";
+import {
+  CombinationList,
+  SubjectTileList,
+  FormOptionsList,
+  type CombinationGroup,
+} from "@/components/school/subject-lists";
+import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
+import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -9,7 +27,16 @@ import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.function
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
-import { ArrowRight, Users, GraduationCap, Plane, Compass, Trophy, MapPin, Award } from "lucide-react";
+import {
+  ArrowRight,
+  Users,
+  GraduationCap,
+  Plane,
+  Compass,
+  Trophy,
+  MapPin,
+  Award,
+} from "lucide-react";
 import graduate from "@/assets/alpha-high-graduate.webp";
 import campusAerial from "@/assets/alpha-high-campus-aerial.webp";
 import campusHigh from "@/assets/campus-high.webp";
@@ -79,7 +106,6 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
   );
 }
 
-
 // ---------- Entry requirements ----------
 
 function EntryRequirements() {
@@ -148,9 +174,21 @@ function Hero() {
       foot={
         <HeroCredentials
           items={[
-            { label: "Co-education", sub: "Boys and girls, Form 1–6", icon: <Users className="h-5 w-5" /> },
-            { label: "NECTA curriculum", sub: "CSEE and ACSEE", icon: <GraduationCap className="h-5 w-5" /> },
-            { label: "Aviation programme", sub: "Ground school to PPL", icon: <Plane className="h-5 w-5" /> },
+            {
+              label: "Co-education",
+              sub: "Boys and girls, Form 1–6",
+              icon: <Users className="h-5 w-5" />,
+            },
+            {
+              label: "NECTA curriculum",
+              sub: "CSEE and ACSEE",
+              icon: <GraduationCap className="h-5 w-5" />,
+            },
+            {
+              label: "Aviation programme",
+              sub: "Ground school to PPL",
+              icon: <Plane className="h-5 w-5" />,
+            },
           ]}
         />
       }
@@ -161,21 +199,29 @@ function Hero() {
 function About() {
   return (
     <section id="about" className="relative overflow-hidden bg-[var(--color-off-white)]">
-      <Backdrop kind="arrow" className="right-[4%] top-12 hidden md:block" width="4.5rem" rotate={-8} />
+      <Backdrop
+        kind="arrow"
+        className="right-[4%] top-12 hidden md:block"
+        width="4.5rem"
+        rotate={-8}
+      />
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
           <Reveal direction="left">
-            <p style={{ ...T.label, color: ACCENT  }}>
-              About Alpha High
-            </p>
-            <h2 className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl" style={{ color: ACCENT }}>
+            <p style={{ ...T.label, color: ACCENT }}>About Alpha High</p>
+            <h2
+              className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl"
+              style={{ color: ACCENT }}
+            >
               Excellence through challenge —{" "}
               <Marked kind="underline" color="var(--color-gold)">
                 <span style={{ color: "var(--color-bright-blue)" }}>since 2007.</span>
               </Marked>
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
-              Established <strong>19 March 2007</strong>, Alpha High was founded to enable students to achieve academic excellence through intellectual and physical challenge, and to become responsible citizens of a dynamic society.
+              Established <strong>19 March 2007</strong>, Alpha High was founded to enable students
+              to achieve academic excellence through intellectual and physical challenge, and to
+              become responsible citizens of a dynamic society.
             </p>
             <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
               A nurturing ground for accomplished professionals and leaders — locally and globally.
@@ -198,7 +244,10 @@ function About() {
                 className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-25 blur-2xl"
                 style={{ background: GOLD }}
               />
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: GOLD }}>
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.22em]"
+                style={{ color: GOLD }}
+              >
                 Our Mission
               </p>
               <h3 className="mt-2 font-display" style={T.cardTitle}>
@@ -245,7 +294,6 @@ function Stat({ value, label }: { value: string; label: string }) {
 
 // ---------- Academics ----------
 
-
 /** Section anchors for the shared sub-nav. Alpha High's own order. */
 const SUB_NAV = [
   { label: "About", href: "#about" },
@@ -267,10 +315,23 @@ const SUB_NAV = [
 
 /** All 17 examinable subjects offered at O-Level. */
 const O_LEVEL_SUBJECTS = [
-  "Historia ya Tanzania na Maadili", "Civics", "History", "Geography",
-  "Kiswahili", "English Language", "Business Studies", "Book Keeping",
-  "Computer Science", "Physics", "Chemistry", "Biology", "Chinese",
-  "French", "Literature in English", "ICS", "Additional Mathematics",
+  "Historia ya Tanzania na Maadili",
+  "Civics",
+  "History",
+  "Geography",
+  "Kiswahili",
+  "English Language",
+  "Business Studies",
+  "Book Keeping",
+  "Computer Science",
+  "Physics",
+  "Chemistry",
+  "Biology",
+  "Chinese",
+  "French",
+  "Literature in English",
+  "ICS",
+  "Additional Mathematics",
 ] as const;
 
 /* ⚠ SOURCE FLAG — FOR REVIEW, NOT FOR PARENTS ⚠
@@ -289,17 +350,46 @@ const FORM_OPTIONS = [
   {
     form: "Form Two",
     note: "The same seven, plus Book Keeping",
-    items: ["Chinese", "French", "Computer Science", "History", "Biology", "Physics", "Chemistry", "Book Keeping"],
+    items: [
+      "Chinese",
+      "French",
+      "Computer Science",
+      "History",
+      "Biology",
+      "Physics",
+      "Chemistry",
+      "Book Keeping",
+    ],
   },
   {
     form: "Form Three",
     note: "Nine option subjects",
-    items: ["Chinese", "French", "ICS", "Literature in English", "Commerce", "Book Keeping", "Physics", "Chemistry", "Additional Mathematics"],
+    items: [
+      "Chinese",
+      "French",
+      "ICS",
+      "Literature in English",
+      "Commerce",
+      "Book Keeping",
+      "Physics",
+      "Chemistry",
+      "Additional Mathematics",
+    ],
   },
   {
     form: "Form Four",
     note: "Nine option subjects",
-    items: ["Chinese", "French", "ICS", "Literature in English", "Commerce", "Book Keeping", "Physics", "Chemistry", "Additional Mathematics"],
+    items: [
+      "Chinese",
+      "French",
+      "ICS",
+      "Literature in English",
+      "Commerce",
+      "Book Keeping",
+      "Physics",
+      "Chemistry",
+      "Additional Mathematics",
+    ],
   },
 ] as const;
 
@@ -355,8 +445,16 @@ function AtAGlance() {
       <StatBar
         items={[
           { figure: `${years}+`, label: "Years since 2007", icon: <Award className="h-5 w-5" /> },
-          { figure: String(O_LEVEL_SUBJECTS.length), label: "O-Level subjects", icon: <GraduationCap className="h-5 w-5" /> },
-          { figure: String(A_COMBOS.reduce((n, g) => n + g.items.length, 0)), label: "A-Level combinations", icon: <Compass className="h-5 w-5" /> },
+          {
+            figure: String(O_LEVEL_SUBJECTS.length),
+            label: "O-Level subjects",
+            icon: <GraduationCap className="h-5 w-5" />,
+          },
+          {
+            figure: String(A_COMBOS.reduce((n, g) => n + g.items.length, 0)),
+            label: "A-Level combinations",
+            icon: <Compass className="h-5 w-5" />,
+          },
           { figure: "1", label: "Aviation programme", icon: <Plane className="h-5 w-5" /> },
         ]}
       />
@@ -367,28 +465,14 @@ function AtAGlance() {
 function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-surface)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p className="text-[var(--color-deep-blue)]" style={T.label}>
-          Academics
-        </p>
-        <h2
-          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
-          Seventeen subjects at O-Level, twelve combinations at A-Level.
-        </h2>
-        <span
-          aria-hidden
-          className="mt-[var(--heading-rule-gap)] block"
-          style={{
-            width: "var(--heading-rule-w)",
-            height: "var(--heading-rule-h)",
-            background: "var(--heading-rule-color)",
-            borderRadius: "var(--heading-rule-radius)",
-          }}
-        />
+      <CurriculumBand
+        eyebrow="Academics"
+        title="Seventeen subjects at O-Level, twelve combinations at A-Level."
+        intro="Every subject examinable across Forms One to Four, what a pupil in each form may choose between, and all twelve A-Level combinations with their subjects written out."
+      />
 
-        <div className="mt-[var(--space-block-y)]">
+      <div className={`${SHELL} py-[var(--space-section-y)]`}>
+        <div>
           <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
             Subjects offered
           </h3>
@@ -396,8 +480,17 @@ function Academics() {
             Every subject examinable at O-Level across Forms One to Four.
           </p>
           <div className="mt-5">
-            <SubjectPillList items={O_LEVEL_SUBJECTS} />
+            <SubjectTileList items={O_LEVEL_SUBJECTS} />
           </div>
+          {/* The comp splits this list into "Core Subjects (for all students)"
+              and a set of option categories. The school has never said which
+              of the seventeen are core, and the one grouping invented here
+              before had to be removed — so the question is marked, not
+              answered. See design/CONTENT-FROM-SCHOOL.md. */}
+          <UnconfirmedNote>
+            [Which of these seventeen are core for every pupil, and which are offered as options —
+            to be provided by the school.]
+          </UnconfirmedNote>
         </div>
 
         <div className="mt-[var(--space-block-y)]">
@@ -405,8 +498,8 @@ function Academics() {
             Option subjects by form
           </h3>
           <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            What a pupil in each form may choose between — a different thing
-            from the full subject list above.
+            What a pupil in each form may choose between — a different thing from the full subject
+            list above.
           </p>
           <div className="mt-5">
             <FormOptionsList forms={FORM_OPTIONS} />
@@ -421,8 +514,16 @@ function Academics() {
             All twelve, with their subjects written out. Form 5&ndash;6, ACSEE.
           </p>
           <div className="mt-5">
-            <CombinationList groups={A_COMBOS} accent="var(--color-deep-blue)" />
+            <CombinationList groups={A_COMBOS} />
           </div>
+        </div>
+
+        <div className="mt-[var(--space-block-y)]">
+          <GuidanceCallout
+            title="Not sure which combination fits?"
+            body="The academic team can talk a pupil through the options before Form Five."
+            cta="Talk to our team"
+          />
         </div>
       </div>
     </section>
@@ -459,10 +560,7 @@ function AdmissionProcess() {
               key={step}
               className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
             >
-              <span
-                className="font-display text-[var(--color-deep-blue)]"
-                style={T.stat}
-              >
+              <span className="font-display text-[var(--color-deep-blue)]" style={T.stat}>
                 {i + 1}
               </span>
               <p className="mt-2 text-[var(--color-ink)]" style={T.body}>
@@ -473,8 +571,8 @@ function AdmissionProcess() {
         </ol>
 
         <p className="mt-6 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-          These two figures are part of the admission process, not the cost of
-          attending. [Fee structure per school &mdash; to be provided]
+          These two figures are part of the admission process, not the cost of attending. [Fee
+          structure per school &mdash; to be provided]
         </p>
       </div>
     </section>
@@ -485,12 +583,12 @@ function Distinctive() {
   return (
     <section className="bg-[var(--color-off-white)]">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-
         <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT  }}>
-            Distinctive at Alpha High
-          </p>
-          <h2 className="mt-2 font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
+          <p style={{ ...T.label, color: ACCENT }}>Distinctive at Alpha High</p>
+          <h2
+            className="mt-2 font-display text-2xl font-black sm:text-3xl"
+            style={{ color: ACCENT }}
+          >
             Two things you'll only find here.
           </h2>
         </Reveal>
@@ -531,9 +629,7 @@ function SignpostCard({
 }) {
   return (
     <Reveal direction="up">
-      <article
-        className="group relative h-full overflow-hidden rounded-2xl bg-white p-7 ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 active:translate-y-0 hover:shadow-xl"
-      >
+      <article className="group relative h-full overflow-hidden rounded-2xl bg-white p-7 ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
         <div
           aria-hidden
           className="absolute right-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-150 group-hover:scale-x-100"
@@ -542,7 +638,7 @@ function SignpostCard({
         <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
           {eyebrow}
         </p>
-        <h3 className="mt-2 font-display" style={{ ...T.cardTitle, color: ACCENT  }}>
+        <h3 className="mt-2 font-display" style={{ ...T.cardTitle, color: ACCENT }}>
           {title}
         </h3>
         <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink)]/75">{body}</p>
@@ -583,16 +679,13 @@ function ClubsRibbon() {
         <h3 className="font-display text-2xl font-black" style={{ color: ACCENT }}>
           Clubs & societies
         </h3>
-        <span style={{ ...T.label, color: ACCENT  }}>
-          {CLUBS.length}+ student-led clubs
-        </span>
+        <span style={{ ...T.label, color: ACCENT }}>{CLUBS.length}+ student-led clubs</span>
       </div>
 
       <div
         className="group relative mt-5 overflow-x-auto overflow-y-hidden rounded-2xl border border-black/5 bg-[var(--color-off-white)] py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{
-          maskImage:
-            "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+          maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
           WebkitMaskImage:
             "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
         }}
@@ -621,7 +714,11 @@ function ClubsRibbon() {
                 }}
               />
               <figcaption className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 pb-3 text-white">
-                <span aria-hidden className="h-1.5 w-1.5 rounded-full" style={{ background: GOLD }} />
+                <span
+                  aria-hidden
+                  className="h-1.5 w-1.5 rounded-full"
+                  style={{ background: GOLD }}
+                />
                 <span className="font-display text-sm font-bold tracking-wide">{c.name}</span>
               </figcaption>
             </figure>
@@ -646,10 +743,8 @@ function BeyondClassroom() {
     <section id="clubs" className="bg-white">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT  }}>
-            Beyond the classroom
-          </p>
-          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
+          <p style={{ ...T.label, color: ACCENT }}>Beyond the classroom</p>
+          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
             The other half of an Alpha education.
           </h2>
         </Reveal>
@@ -657,11 +752,11 @@ function BeyondClassroom() {
         <ClubsRibbon />
 
         <div className="mt-10 grid gap-6 lg:grid-cols-2">
-
-
           <Reveal direction="up" delay={80}>
             <div className="h-full rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-6">
-              <h3 className="font-display text-lg font-bold" style={{ color: ACCENT }}>Sports</h3>
+              <h3 className="font-display text-lg font-bold" style={{ color: ACCENT }}>
+                Sports
+              </h3>
               <ul className="mt-4 space-y-2">
                 {SPORTS.map((s) => (
                   <li
@@ -669,7 +764,11 @@ function BeyondClassroom() {
                     className="flex items-center gap-3 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold ring-1 ring-black/5"
                     style={{ color: ACCENT }}
                   >
-                    <span aria-hidden className="h-2 w-2 rounded-full" style={{ background: GOLD }} />
+                    <span
+                      aria-hidden
+                      className="h-2 w-2 rounded-full"
+                      style={{ background: GOLD }}
+                    />
                     {s}
                   </li>
                 ))}
@@ -678,14 +777,27 @@ function BeyondClassroom() {
           </Reveal>
 
           <Reveal direction="up" delay={160}>
-            <div className="relative h-full overflow-hidden rounded-2xl p-7 text-white shadow-xl" style={{ background: ACCENT }}>
-              <div aria-hidden className="absolute -bottom-10 -right-10 h-36 w-36 rounded-full opacity-25 blur-2xl" style={{ background: GOLD }} />
-              <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+            <div
+              className="relative h-full overflow-hidden rounded-2xl p-7 text-white shadow-xl"
+              style={{ background: ACCENT }}
+            >
+              <div
+                aria-hidden
+                className="absolute -bottom-10 -right-10 h-36 w-36 rounded-full opacity-25 blur-2xl"
+                style={{ background: GOLD }}
+              />
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.2em]"
+                style={{ color: GOLD }}
+              >
                 Counselling
               </p>
-              <h3 className="mt-2 font-display" style={T.cardTitle}>A confidential ear, always available.</h3>
+              <h3 className="mt-2 font-display" style={T.cardTitle}>
+                A confidential ear, always available.
+              </h3>
               <p className="mt-4 text-sm leading-relaxed text-white/85">
-                Alpha High runs a school counselling department, accessible to every student — confidential, professional, and built into school life.
+                Alpha High runs a school counselling department, accessible to every student —
+                confidential, professional, and built into school life.
               </p>
             </div>
           </Reveal>
@@ -710,14 +822,16 @@ function LifeAtMikocheni() {
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p style={{ ...T.label, color: ACCENT  }}>
-              Campus
-            </p>
-            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
+            <p style={{ ...T.label, color: ACCENT }}>Campus</p>
+            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
               Life at Mikocheni.
             </h2>
           </div>
-          <Link to="/facilities" className="font-bold hover:underline" style={{ ...T.body, color: ACCENT  }}>
+          <Link
+            to="/facilities"
+            className="font-bold hover:underline"
+            style={{ ...T.body, color: ACCENT }}
+          >
             See facilities →
           </Link>
         </Reveal>
@@ -735,7 +849,10 @@ function LifeAtMikocheni() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
                 <div className="absolute inset-x-0 bottom-0 p-5">
-                  <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: GOLD }}>
+                  <span
+                    className="text-[10px] font-bold uppercase tracking-[0.2em]"
+                    style={{ color: GOLD }}
+                  >
                     Facility
                   </span>
                   <h3 className="mt-1 font-display text-lg font-bold text-white">{f.label}</h3>
@@ -753,18 +870,17 @@ function LifeAtMikocheni() {
 
 function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
   // seed Head Teacher if backend hasn't supplied anyone yet
-  const list = staff.length > 0 ? staff : [
-    { id: "seed-head", name: "Richard Gatere Maina", title: "Head Teacher", photo_url: null },
-  ];
+  const list =
+    staff.length > 0
+      ? staff
+      : [{ id: "seed-head", name: "Richard Gatere Maina", title: "Head Teacher", photo_url: null }];
 
   return (
     <section className="bg-white">
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT  }}>
-            Leadership & teaching
-          </p>
-          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT  }}>
+          <p style={{ ...T.label, color: ACCENT }}>Leadership & teaching</p>
+          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
             The people behind the climb.
           </h2>
         </Reveal>
@@ -786,10 +902,16 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                     <div
                       aria-hidden
                       className="absolute inset-0 grid place-items-center"
-                      style={{ background: `linear-gradient(135deg, ${ACCENT}, var(--color-bright-blue))` }}
+                      style={{
+                        background: `linear-gradient(135deg, ${ACCENT}, var(--color-bright-blue))`,
+                      }}
                     >
                       <span className="font-display text-6xl font-black text-white/30">
-                        {p.name.split(" ").map((w) => w[0]).slice(0, 2).join("")}
+                        {p.name
+                          .split(" ")
+                          .map((w) => w[0])
+                          .slice(0, 2)
+                          .join("")}
                       </span>
                     </div>
                   )}

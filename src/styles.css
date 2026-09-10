@@ -724,3 +724,558 @@ html.rv-on [data-reveal][data-rv-in] {
   color: var(--color-gold);
   opacity: 0.75;
 }
+
+/* ===================================================================
+   ACADEMICS — the curriculum section on the secondary school pages.
+
+   Built to the "Subjects & Combinations" comp. Three things in that
+   comp are NOT built here, and the reason is on record:
+
+   - The five-way option-subject taxonomy (Sciences / Business /
+     Languages / Arts & Humanities / Technology). A four-way version of
+     exactly this was live once, identified as invented, and removed —
+     design/CONTENT-FROM-SCHOOL.md, "O-Level structure — CONFIRMED".
+     The chip row below therefore runs on the A-Level groups, which the
+     school confirmed in writing, and the O-Level split is marked as
+     content the school still owes.
+   - "Core Subjects (for all students)". The school's structure is
+     "17 subjects offered" plus "option subjects per form"; which of the
+     17 are core has never been stated.
+   - The taglines "Explore. Combine. Excel." and "Strong Foundations.
+     Brighter Futures." Neither appears anywhere in this codebase or in
+     any school document.
+
+   COLOUR. Every accent reads from --dl-accent, set per card by the
+   component and defaulting to brand blue, so Alpha Girls' sea-green
+   carries the whole section rather than a blue chrome around a teal
+   heading.
+
+   MOTION. Panel height animates as grid-template-rows 0fr -> 1fr, which
+   needs no measured pixel value and so needs no JS. That is a layout
+   animation, so each panel carries `contain` to bound the work to its
+   own card. Everything else is transform, opacity and colour, and the
+   whole layer collapses under prefers-reduced-motion.
+   =================================================================== */
+
+/* --- The section band -------------------------------------------- */
+
+/* The comp opens the section on a tinted band rather than on white.
+   Full-bleed inside the section, with the page's own container holding
+   the copy to its measure. */
+.ac-band {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      120% 140% at 88% 10%,
+      color-mix(in srgb, var(--ac-accent, var(--color-brand-blue)) 10%, transparent) 0%,
+      transparent 60%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-surface-muted) 0%,
+      color-mix(in srgb, var(--color-surface-muted) 45%, var(--color-surface)) 100%
+    );
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+/* The faint mark in the band's top-right corner. Decorative, sized in
+   em so it tracks the band's own type rather than a fixed pixel value. */
+.ac-band__mark {
+  position: absolute;
+  top: -1.5rem;
+  right: -1rem;
+  width: 13rem;
+  height: 13rem;
+  color: var(--ac-accent, var(--color-brand-blue));
+  opacity: 0.07;
+  pointer-events: none;
+}
+@media (max-width: 767px) {
+  .ac-band__mark { width: 8rem; height: 8rem; opacity: 0.05; }
+}
+
+/* --- Subject tiles ----------------------------------------------- */
+
+/* The comp's icon row, carrying the real 17-subject list. The icons are
+   decoration chosen here, not data from the school — they say nothing
+   the subject name does not already say. */
+.dl-tile {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.875rem 1rem;
+  border-radius: var(--radius-btn);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-deep-blue);
+  transition:
+    transform 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out),
+    background-color 180ms var(--ease-out);
+}
+.dl-tile__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: var(--radius-btn);
+  background: color-mix(in srgb, var(--dl-accent, var(--color-brand-blue)) 10%, transparent);
+  color: var(--dl-accent, var(--color-brand-blue));
+  transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out);
+}
+.dl-tile:hover {
+  transform: translate3d(0, -2px, 0);
+  border-color: var(--dl-accent, var(--color-brand-blue));
+  background: var(--color-surface);
+  box-shadow: 0 8px 20px -8px
+    color-mix(in srgb, var(--dl-accent, var(--color-brand-blue)) 35%, transparent);
+}
+.dl-tile:hover .dl-tile__icon {
+  background: var(--dl-accent, var(--color-brand-blue));
+  color: var(--color-surface);
+}
+
+/* --- Filter chips ------------------------------------------------- */
+
+/* Real <button>s, not the CSS-only trick the cards use. The cards must
+   work with the bundle dead because they HIDE content; a filter that
+   defaults to "All" hides nothing, so with no JS the chips are inert and
+   every combination is still on the page — the correct degraded state.
+   That also means the server and the first client render agree, because
+   "All" is the initial state on both. */
+.dl-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--radius-btn);
+  border: 1px solid var(--color-hairline);
+  background: var(--color-surface);
+  color: var(--color-deep-blue);
+  font-size: var(--text-label);
+  font-weight: 700;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background-color 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    color 180ms var(--ease-out),
+    transform 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+.dl-chip:hover {
+  border-color: var(--dl-accent, var(--color-brand-blue));
+  transform: translate3d(0, -1px, 0);
+}
+.dl-chip[aria-pressed="true"] {
+  background: var(--dl-accent, var(--color-brand-blue));
+  border-color: var(--dl-accent, var(--color-brand-blue));
+  color: var(--color-surface);
+  box-shadow: 0 6px 16px -6px
+    color-mix(in srgb, var(--dl-accent, var(--color-brand-blue)) 55%, transparent);
+}
+.dl-chip__count {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.65;
+}
+
+/* --- The disclosure card ------------------------------------------ */
+
+.dl-card {
+  --dl-accent: var(--color-brand-blue);
+  /* Derived once here so the rules below read as intent rather than as a
+     dozen repeated color-mix() calls, and so a card in any accent gets a
+     consistent set of tints. */
+  --dl-tint: color-mix(in srgb, var(--dl-accent) 5%, transparent);
+  --dl-tint-strong: color-mix(in srgb, var(--dl-accent) 11%, transparent);
+  --dl-glow: color-mix(in srgb, var(--dl-accent) 30%, transparent);
+  /* The band's two stops. The tone modifiers below swap them, which is
+     how the comp's alternating dark/light card headers are built without
+     a second gradient definition. */
+  --dl-band-from: var(--dl-accent);
+  --dl-band-to: color-mix(in srgb, var(--dl-accent) 65%, #001430);
+
+  position: relative;
+  border-radius: var(--radius-card);
+  background: var(--card-bg);
+  border: 1px solid var(--color-hairline);
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+  transition:
+    border-color 260ms var(--ease-out),
+    box-shadow 260ms var(--ease-out),
+    transform 260ms var(--ease-out);
+}
+
+/* Alternating header tone, as the comp draws it: the first card in a row
+   deep, the next lifted. Lightening toward white rather than toward a
+   blue keeps the pair in one hue, so Alpha Girls' teal alternates the
+   same way instead of drifting into blue. */
+.dl-card--deep {
+  --dl-band-from: color-mix(in srgb, var(--dl-accent) 62%, #001430);
+  --dl-band-to: var(--dl-accent);
+}
+.dl-card--bright {
+  --dl-band-from: var(--dl-accent);
+  --dl-band-to: color-mix(in srgb, var(--dl-accent) 74%, #ffffff);
+}
+
+/* The boundary answers before the panel does. :focus-within covers the
+   keyboard, whose focus lands on the hidden checkbox inside. */
+.dl-card:hover,
+.dl-card:focus-within {
+  border-color: var(--dl-accent);
+  box-shadow: var(--card-shadow), 0 14px 30px -12px var(--dl-glow);
+  transform: translate3d(0, -3px, 0);
+}
+
+/* Off-screen rather than display:none — a hidden checkbox must stay
+   focusable to be operable from a keyboard. */
+.dl-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The solid header band. This is the comp's defining move and the reason
+   the cards read as objects rather than as bordered regions. */
+.dl-band {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.25rem var(--space-card-pad);
+  position: relative;
+  cursor: pointer;
+  color: var(--color-surface);
+  background-image: linear-gradient(135deg, var(--dl-band-from) 0%, var(--dl-band-to) 100%);
+  -webkit-tap-highlight-color: transparent;
+  transition: filter 260ms var(--ease-out), transform 180ms var(--ease-out);
+}
+.dl-band:hover { filter: brightness(1.08); }
+.dl-band:active { transform: scale(0.995); }
+
+/* The focus ring belongs on the band: the input it belongs to is a pixel
+   wide and off in the corner. Inset and white, because the band is a
+   saturated fill and an outside ring would be lost against the card. */
+.dl-toggle:focus-visible + .dl-band {
+  outline: 2px solid var(--color-surface);
+  outline-offset: -5px;
+}
+
+.dl-band__title { flex: 1 1 auto; min-width: 0; }
+.dl-band__note {
+  display: block;
+  margin-top: 0.15rem;
+  color: color-mix(in srgb, var(--color-surface) 78%, transparent);
+}
+
+/* A white rule that draws across the foot of the band while the card is
+   open, tying the header to the list under it. */
+.dl-band::after {
+  content: "";
+  position: absolute;
+  left: var(--space-card-pad);
+  right: var(--space-card-pad);
+  bottom: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-surface) 55%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 420ms var(--ease-out);
+}
+
+/* The count, set as a white disc on the band with its label beside it —
+   so a folded card still says how much it holds. */
+.dl-count {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.125rem;
+  height: 2.125rem;
+  padding: 0 0.5rem;
+  border-radius: 999px;
+  background: var(--color-surface);
+  color: var(--dl-band-from);
+  font-size: var(--text-body);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.25);
+}
+/* Shrinkable, and allowed to break: "Option subjects" has to survive a
+   two-up card at 768px without pushing the chevron off the band. */
+.dl-count-label {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 5rem;
+  overflow-wrap: anywhere;
+  color: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  line-height: 1.15;
+}
+@media (max-width: 560px) {
+  .dl-count-label { display: none; }
+}
+
+/* The chevron as a ringed disc, so it reads as a control rather than as
+   punctuation, and rotates rather than swapping for a second icon. */
+.dl-chevron-disc {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--color-surface) 55%, transparent);
+  color: var(--color-surface);
+  transition:
+    background-color 260ms var(--ease-out),
+    border-color 260ms var(--ease-out),
+    color 260ms var(--ease-out),
+    transform 260ms var(--ease-out);
+}
+.dl-band:hover .dl-chevron-disc {
+  background: var(--color-surface);
+  border-color: var(--color-surface);
+  color: var(--dl-band-from);
+  transform: scale(1.08);
+}
+.dl-chevron { transition: transform 420ms var(--ease-out); }
+
+/* --- The panel and its rows --------------------------------------- */
+
+.dl-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 420ms var(--ease-out);
+  contain: layout paint;
+}
+/* visibility is transitioned, not just switched. Interpolating it holds
+   the visible end of the pair for the whole duration, so opening reveals
+   the content at once and closing keeps it readable until the card has
+   finished folding rather than blanking it on the first frame. Hiding it
+   at all is what takes a collapsed panel out of the accessibility tree —
+   a zero-height grid row on its own does not.
+
+   min-height:0 is what lets a grid item be shorter than its content;
+   without it the row refuses to collapse below the content's height. */
+.dl-panel__inner {
+  min-height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  transition: visibility 420ms;
+}
+
+/* Two columns, as the comp draws them: the thing, then what it is. The
+   second column is `auto`, so today — with no description data from the
+   school — it takes no width and the rows read as a single column. The
+   modifier below is the one-line change when that copy arrives. */
+.dl-list {
+  --dl-row-cols: minmax(0, 1fr) auto;
+}
+.dl-list--described {
+  --dl-row-cols: minmax(0, 1fr) auto;
+}
+@media (min-width: 640px) {
+  .dl-list--described { --dl-row-cols: minmax(0, 1fr) minmax(0, 1.25fr); }
+}
+/* Combinations put a short fixed code against a long subject line, so the
+   first column is sized to the code rather than sharing the row evenly —
+   at three-up card widths an even split leaves "HGL" adrift in half a
+   card. It stacks below 480px, where two columns stop being readable. */
+.dl-list--codes { --dl-row-cols: minmax(0, 1fr); }
+@media (min-width: 480px) {
+  .dl-list--codes { --dl-row-cols: max-content minmax(0, 1fr); }
+}
+
+.dl-row {
+  display: grid;
+  grid-template-columns: var(--dl-row-cols);
+  align-items: baseline;
+  gap: 0.15rem 1.5rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: var(--radius-btn);
+  transition: background-color 180ms var(--ease-out);
+}
+/* Zebra striping, so a nine-line list stays trackable across the row. */
+.dl-row:nth-child(odd) { background: var(--dl-tint); }
+.dl-row:hover { background: var(--dl-tint-strong); }
+
+.dl-row__desc { color: var(--color-ink-soft); }
+
+/* Rows rise into a panel that is already opening. The step is 40ms and
+   the ceiling is the 320ms the motion audit set, so a nine-subject form
+   never makes its last line wait longer than a three-subject one. */
+.dl-item {
+  opacity: 0;
+  transform: translate3d(0, 6px, 0);
+  transition:
+    opacity 420ms var(--ease-out),
+    transform 420ms var(--ease-out);
+  transition-delay: min(calc(var(--dl-i, 0) * 40ms), 320ms);
+}
+
+/* The combination code, set as a chip so the twelve codes are scannable
+   down the column before any subject line is read. */
+/* justify-self, because a grid item stretches to its column by default and
+   a code chip four characters wide should not be half a card wide. */
+.dl-code {
+  display: inline-block;
+  justify-self: start;
+  padding: 0.05rem 0.45rem;
+  border-radius: var(--radius-btn);
+  color: var(--dl-accent);
+  background: color-mix(in srgb, var(--dl-accent) 12%, transparent);
+  transition: background-color 180ms var(--ease-out), color 180ms var(--ease-out);
+}
+.dl-row:hover .dl-code {
+  background: var(--dl-accent);
+  color: var(--color-surface);
+}
+
+/* --- The two states, and the breakpoint that decides which is which ---
+
+   Collapsed on a phone, open on a desktop, with no flash and no JS.
+
+   The obvious build is to render open and close it in an effect after
+   measuring the viewport. That shows every phone the content and then
+   takes it away mid-scroll: the fault the motion audit found in the old
+   reveal, plus a layout shift to pay for it.
+
+   So the control is a visually hidden checkbox and its MEANING FLIPS at
+   the breakpoint. Unchecked is "however this viewport starts"; checked
+   is "the reader changed it". The markup is identical at every width, so
+   there is nothing for the server to guess, nothing for hydration to
+   disagree about, and it still works with the bundle dead.
+
+   768px is Tailwind's `md`, the width at which CombinationList already
+   goes to three columns. */
+
+@media (max-width: 767px) {
+  .dl-toggle:checked + .dl-band .dl-chevron { transform: rotate(0deg); }
+  .dl-toggle:not(:checked) + .dl-band .dl-chevron { transform: rotate(-90deg); }
+
+  .dl-toggle:checked + .dl-band::after { transform: scaleX(1); }
+  .dl-toggle:checked ~ .dl-panel { grid-template-rows: 1fr; }
+  .dl-toggle:checked ~ .dl-panel .dl-panel__inner { visibility: visible; }
+  .dl-toggle:checked ~ .dl-panel .dl-item {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (min-width: 768px) {
+  .dl-toggle:not(:checked) + .dl-band .dl-chevron { transform: rotate(0deg); }
+  .dl-toggle:checked + .dl-band .dl-chevron { transform: rotate(-90deg); }
+
+  .dl-toggle:not(:checked) + .dl-band::after { transform: scaleX(1); }
+  .dl-toggle:not(:checked) ~ .dl-panel { grid-template-rows: 1fr; }
+  .dl-toggle:not(:checked) ~ .dl-panel .dl-panel__inner { visibility: visible; }
+  .dl-toggle:not(:checked) ~ .dl-panel .dl-item {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Cards arriving after a filter change. Keyed on the active chip in the
+   component, so the animation replays rather than the grid silently
+   re-flowing under the reader. */
+@keyframes dl-card-in {
+  from { opacity: 0; transform: translate3d(0, 10px, 0) scale(0.985); }
+  to   { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .dl-card--entering { animation: dl-card-in 320ms var(--ease-out) both; }
+}
+
+/* --- The guidance callout ----------------------------------------- */
+
+.ac-callout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.25rem;
+  padding: 1.25rem var(--space-card-pad);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-hairline);
+  background: linear-gradient(
+    135deg,
+    var(--color-surface-muted) 0%,
+    color-mix(in srgb, var(--color-surface-muted) 40%, var(--color-surface)) 100%
+  );
+}
+.ac-callout__icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  background: var(--ac-accent, var(--color-brand-blue));
+  color: var(--color-surface);
+}
+.ac-callout__body { flex: 1 1 16rem; min-width: 0; }
+.ac-callout__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  border-radius: var(--radius-btn);
+  background: var(--ac-accent, var(--color-brand-blue));
+  color: var(--color-surface);
+  font-weight: 700;
+  transition: transform 180ms var(--ease-out), box-shadow 180ms var(--ease-out);
+}
+.ac-callout__cta:hover {
+  transform: translate3d(0, -2px, 0);
+  box-shadow: 0 10px 22px -10px
+    color-mix(in srgb, var(--ac-accent, var(--color-brand-blue)) 65%, transparent);
+}
+.ac-callout__cta svg { transition: transform 180ms var(--ease-out); }
+.ac-callout__cta:hover svg { transform: translateX(3px); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-card,
+  .dl-band,
+  .dl-band::after,
+  .dl-chevron,
+  .dl-chevron-disc,
+  .dl-count,
+  .dl-panel,
+  .dl-panel__inner,
+  .dl-item,
+  .dl-row,
+  .dl-code,
+  .dl-tile,
+  .dl-tile__icon,
+  .dl-chip,
+  .ac-callout__cta,
+  .ac-callout__cta svg {
+    transition: none;
+  }
+  .dl-card--entering { animation: none; }
+  /* Colour still changes — it is the state, not the animation. Only the
+     travel is dropped. */
+  .dl-card:hover,
+  .dl-card:focus-within,
+  .dl-band:active,
+  .dl-band:hover .dl-chevron-disc,
+  .dl-chip:hover,
+  .dl-tile:hover,
+  .ac-callout__cta:hover,
+  .ac-callout__cta:hover svg { transform: none; }
+}
