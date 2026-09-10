@@ -115,7 +115,7 @@ export type SlotDef = {
   label: string;               // 'Drama club'
   aspect: string;              // '16/10' | '1/1' | '4/5'
   guidance?: string;           // composition constraint shown on the card
-  fallback: string;            // the imported @/assets/*.webp URL
+  fallback?: string;           // the imported @/assets/*.webp URL; absent = no honest default exists
 };
 ```
 
@@ -124,24 +124,31 @@ the sections the pages already have, not invented:
 
 | School | Sections |
 |---|---|
-| Alpha High | Clubs · Campus & facilities |
+| Alpha High | Clubs · Sport · Campus & facilities |
 | Alpha Girls | Campus & facilities · Students |
 | Nursery & Primary | Our days · Primary · Gallery |
 
-### The 34 slots
+### The 39 slots
 
 **Alpha High — Clubs (10).** Each tile in `CLUBS`
 (`schools.alpha-high.tsx:659`) is labelled with a named club, so each is its own
 slot: `aviation`, `drama`, `music`, `debate`, `art`, `cookery`, `scout`,
 `speaking`, `model-un`, `environment`.
 
+**Alpha High — Sport (5).** `SPORTS` (`schools.alpha-high.tsx:670`):
+`football`, `basketball`, `volleyball`, `netball`, `athletics`. New positions —
+see Decision 1 for the two-state rendering. No `fallback`; no sport photograph
+exists in the repo.
+
 **Alpha High — Campus & facilities (4).** `FACILITIES`
 (`schools.alpha-high.tsx:812`): `science-labs`, `library`, `sports-field`,
-`boarding`. All four are currently wrong stand-ins.
+`boarding`. All four are currently wrong stand-ins and carry **no `fallback`** —
+see Decision 2.
 
 **Alpha Girls — Campus & facilities (4).** `FACILITIES`
 (`schools.alpha-girls.tsx:742`): the same four labels, the same four wrong
-stand-ins. Separate keys — Kunduchi's library is not Mikocheni's.
+stand-ins, and likewise no `fallback`. Separate keys — Kunduchi's library is not
+Mikocheni's.
 
 **Alpha Girls — Students (1).** `life.campus-plate`
 (`schools.alpha-girls.tsx:799`), the 16/10 → 2/1 figure currently showing the
@@ -212,14 +219,22 @@ A helper in `src/lib/photo-slots.ts`:
 export function slotPhoto(
   bundle: Pick<SchoolBundle, "photos">,
   key: string,
-): { src: string; alt: string } // uploaded row, else the registry fallback
+): { src: string; alt: string } | null
 ```
 
-`slotPhoto` never returns `null`. **The site can never show a hole** — an empty
-slot renders precisely what it renders today, from the same bundled asset. The
-three page files change only in that a literal `src={photoDance}` becomes a
-`slotPhoto(bundle, "nursery-primary.gallery.dance")` lookup; no layout, spacing,
-class or caption changes.
+Resolution order: the uploaded row, else the registry `fallback`, else `null`.
+
+`null` is returned only by the thirteen slots that deliberately have no
+fallback: the eight facility stand-ins (four per secondary page) and the five
+sport positions, per Decisions 1 and 2. Every other slot always resolves, so **for them the site can
+never show a hole**: an empty slot renders precisely what it renders today, from
+the same bundled asset. For those pages the only change is that a literal
+`src={photoDance}` becomes a `slotPhoto(bundle, "nursery-primary.gallery.dance")`
+lookup — no layout, spacing, class or caption changes.
+
+Components that consume a nullable slot (`FacilityTile`, the sport grid) render
+a labelled accent panel instead of an `<img>` when they get `null`. A `null`
+never reaches an `<img src>`.
 
 ## Image pipeline
 
@@ -266,31 +281,63 @@ The repo has no test runner, so verification is manual and evidence-based:
 3. Reject paths: a 5MB photo compresses and uploads; a file that stays over 400KB
    is refused; saving without alt text is refused.
 4. All three school pages at 375px, per `PRODUCT.md`.
-5. Confirm the three pages are byte-identical in layout with an empty
-   `photo_slots` table — the fallback path is the current site.
+5. With an empty `photo_slots` table, confirm the three pages are unchanged from
+   the current site **except** for the two changes Decisions 1 and 2 make
+   deliberately: the eight facility tiles show labelled accent panels rather
+   than the wrong photographs, and the sport block still renders as today's
+   pills. Everything else is the fallback path and must be pixel-identical.
 
 ## Out of scope
 
 - The `/gallery` public stub. Nursery & Primary's "See the full gallery →" link
   (`schools.nursery-primary.tsx:860`) still points at it. Unchanged here.
 - `facility_photos` and `hero_slides`, both already working.
-- Any photo position that does not exist on the pages today.
+- Any photo position that does not exist on the pages today, with the single
+  deliberate exception of the five sport slots (Decision 1).
 - Kiswahili alt text. The site is English-only; that gap is recorded in
   `PRODUCT.md` and is not this feature's to close.
 
-## Open questions
+## Decisions
 
-1. **Sport has no photograph anywhere.** `SPORTS` on Alpha High
-   (`schools.alpha-high.tsx:670`) is a five-item text list — Football,
-   Basketball, Volleyball, Netball, Athletics — rendered as pills with no
-   imagery. The brief names sport as a category, but under "fill existing
-   sections" there is no sport slot to fill. Adding one is a new layout position,
-   which this spec has scoped out. **Decision needed:** add sport photo positions
-   as a follow-up, or leave sport as text.
-2. **`/admin/gallery` and the `gallery` table.** Delinked from the nav by this
-   work and read by nothing. Leave dormant, or remove the route and drop the
-   table in a later migration? Recommend deciding after the school has used
-   `/admin/photos` for a term.
-3. **Alpha Girls has no Clubs section**, so it gets no club slots. If the school
-   wants club photographs for Kunduchi, that is a page section that does not
-   exist yet.
+Resolved 2026-09-10, on the instruction to do what gives the best experience.
+
+**1 · Sport gets photo slots.** `SPORTS` on Alpha High
+(`schools.alpha-high.tsx:670`) is a five-item text list — Football, Basketball,
+Volleyball, Netball, Athletics — rendered as pills with no imagery. Sport was
+named explicitly in the brief, so the five become slots:
+`alpha-high.sport.football` and so on.
+
+The section must look deliberate whether the school has uploaded five photos,
+two, or none, so it does not mix photo tiles with pills. It has two states:
+
+- **No sport photo uploaded** — renders exactly the pill list it renders today.
+  Zero visual change from the current site.
+- **One or more uploaded** — the whole block becomes a tile grid. Sports without
+  a photograph get an accent-filled tile carrying the sport's name in the same
+  type as the photo tiles, so the grid is uniform.
+
+This is the one place the design adds a layout position rather than filling an
+existing one, and it stays faithful because its empty state *is* the current
+design.
+
+**2 · The four facility stand-ins lose their photographs.** `FACILITIES` on both
+secondary pages currently captions a nursery-campus photo "Library" and an
+aviation photo "Boarding". `PRODUCT.md` is unambiguous — "No invented content,
+ever" — and this is exactly that, on the pages parents use to compare schools.
+
+Their registry entries therefore carry **no `fallback`**. Until the school
+uploads, the tile renders as an accent-filled panel with the facility name and
+the same "Facility" eyebrow — honest, deliberate-looking, and visibly awaiting a
+photograph. `SlotDef.fallback` becomes optional to allow this, and `slotPhoto`
+returns `null` for a slot with neither an upload nor a fallback, which the tile
+components handle.
+
+This is a visible change to the live site made before any upload exists. It is
+the point: a labelled blank is better than a confident lie.
+
+**3 · `/admin/gallery` and the `gallery` table stay dormant.** Delinked from the
+nav, route and table left in place. Removing them is a decision for after the
+school has used `/admin/photos` for a term.
+
+**4 · Alpha Girls gets no club slots.** The page has no Clubs section. Adding one
+is a content and layout question for the school, not something to invent here.
