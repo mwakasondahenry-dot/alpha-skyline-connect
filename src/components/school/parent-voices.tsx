@@ -50,7 +50,11 @@ function ParentVoicesBody({
   accent: string;
 }) {
   const reduced = usePrefersReducedMotion();
-  const [viewportRef, api] = useEmblaCarousel({ align: "start", duration: 24 });
+  const [viewportRef, api] = useEmblaCarousel({
+    align: "start",
+    containScroll: false,
+    duration: 24,
+  });
   const [index, setIndex] = useState(0);
   const count = quotes.length;
   const headingId = `parents-say-${school}`;
@@ -130,7 +134,7 @@ function ParentVoicesBody({
           className="min-w-0 rounded-[var(--radius-card)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--pv-accent)]"
         >
           <div ref={viewportRef} className="overflow-hidden">
-            <div className="flex">
+            <div className="-ml-8 flex">
               {quotes.map((q, i) => (
                 <figure
                   key={q.id}
@@ -138,7 +142,7 @@ function ParentVoicesBody({
                   aria-roledescription="slide"
                   aria-label={`Quote ${i + 1} of ${count}`}
                   aria-hidden={i !== index}
-                  className="min-w-0 shrink-0 grow-0 basis-full pr-6"
+                  className="min-w-0 shrink-0 grow-0 basis-full pl-8"
                 >
                   <blockquote
                     className="max-w-[34em] font-display text-pretty text-[var(--color-deep-blue)]"
