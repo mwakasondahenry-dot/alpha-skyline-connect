@@ -3,9 +3,10 @@
 **Date:** 2026-09-17
 **Status:** Awaiting review
 **Brief:** On the Testimonials admin page, staff invite alumni to write a
-testimonial — by uploading a CSV of names and phone numbers, or by typing one
-in (email optional). Each alumnus gets a link that walks them step by step
-through questions and ends in a testimonial for moderation.
+testimonial — by uploading a CSV of names and phone numbers, pasting a list, or
+typing one in (email optional). Each alumnus gets a link that walks them step by
+step through questions and ends in a testimonial for moderation. A general link
+does the same for any alumnus without a personal invite.
 
 ## Why
 
@@ -23,12 +24,16 @@ numbers) and reaches people on WhatsApp.
 | Link shape | **One personal link per invite**, re-shareable: the same link can be sent again as a reminder. |
 | Steps | About you → Where you are now → Story prompts → Quote → Photo + consent → Review. |
 | Published quote | **Written by the alumnus** in a dedicated step. Prompt answers are kept for staff as background, never published. |
-| Existing open form | `/alumni/submit` is unchanged. Invites are a separate route. |
+| Adding contacts | **Add one** form, **Paste a list** box, or **CSV upload**. Paste and CSV share one preview/import screen. |
+| General link | `/alumni/story` runs the same wizard for anyone, with no pre-fill and no invite. Staff copy or share it from the panel. |
+| Existing open form | `/alumni/submit` **redirects** to `/alumni/story`, so links already shared keep working and there is one public form. The one-page form component is removed. |
 
-Approach chosen over the alternatives: a dedicated invites table and route
-(rather than converting `/alumni/submit` into the wizard, which was kept to one
-page deliberately for mobile data, or storing invites as placeholder rows in
-`testimonials`, which would mix contact details into public content).
+Approach chosen over the alternatives: a dedicated invites table, with the
+wizard serving both personal and general links (rather than bolting invite
+codes onto the old one-page form, or storing invites as placeholder rows in
+`testimonials`, which would mix contact details into public content). The old
+form was one page to keep mobile data use down; the wizard keeps that property
+by uploading only once, at the end.
 
 ## 1. Data
 
@@ -102,6 +107,12 @@ what makes a double-tapped Submit produce exactly one story.
   `alpha girls`/`girls` → `alpha-girls`, `nursery`/`primary` →
   `nursery-primary`), year (`year`, `class of`, `grad year`). Returns
   `{ valid, invalid: {row, reason}[], duplicatesInFile }`. Cap: 500 rows.
+- `src/lib/invites/paste.ts` — `parsePastedList(text)`: one person per
+  non-empty line. On each line the email is taken by pattern, then the phone
+  (a run of digits, spaces, dashes and an optional leading `+`, at least 9
+  digits), and what remains — with separators (`,` `;` `-` `|` tabs) trimmed —
+  is the name. Returns the same shape as the CSV parser, with the same
+  500-row cap and duplicate detection.
 - `src/lib/invites/token.ts` — `newLinkCode()` (32 random bytes, base64url),
   `hashCode()`, `encryptCode()` / `decryptCode()` (Web Crypto AES-GCM; works
   in Node and on Cloudflare Workers).
@@ -134,13 +145,19 @@ Public:
   `{ state: "submitted" }`, `{ state: "invalid" }` (unknown or expired — not
   distinguished, so codes cannot be probed). Sets `opened` / `opened_at` on
   first open. Never returns phone, email or ids.
-- `submitInvitedStory(FormData)` — rate-limited through the existing
-  `claim_submission_slot` (key `invite:<ip>`), validates all fields with the
-  same limits and error-message discipline as `submitAlumniStory`
-  (`SubmissionError` for user-facing text, generic text for everything else),
-  uploads the optional photo to `alumni-pending`, then calls
-  `submit_invited_story`. If the RPC refuses or fails, the uploaded photo is
-  removed.
+- `submitStory(FormData)` — replaces `submitAlumniStory` and serves both
+  links. The form carries an optional `code`. Rate-limited through the
+  existing `claim_submission_slot` (key `invite:<ip>` with a code,
+  `alumni:<ip>` without; limit 5 per hour as today). Validates all fields with
+  the same error-message discipline as before (`SubmissionError` for
+  user-facing text, generic text for everything else) and uploads the optional
+  photo to `alumni-pending`. **With a code** it calls `submit_invited_story`;
+  **without** it inserts the unpublished row directly with `invite_id` null,
+  as the old function did. If the write refuses or fails, the uploaded photo
+  is removed.
+  `CONSENT_TEXT`, `MESSAGE_MAX`, `PHOTO_MAX_BYTES` and `PENDING_BUCKET` stay
+  exported from `alumni.functions.ts`; the approval code that uses them is
+  untouched.
 
 Field limits: name ≤ 120 (required); school one of the three schools
 (required); grad year 1960 – next year (required); role ≤ 120 (required);
@@ -156,10 +173,18 @@ the moderation queue.
 
 - **Add one** — name, phone, optional email, school, year. Inline validation
   using the same `normalizeTzPhone`.
-- **Upload CSV** — pick file → preview table in three groups: ready, invalid
-  (with reason), duplicates (in file or already invited). **Import N invites**
-  sends only the ready rows. A **Download template** button produces a CSV with
-  the headers `name,phone,email,school,year` from an in-memory Blob.
+- **General link** — a card at the top showing the `/alumni/story` address
+  with **Copy link** and **Share on WhatsApp** (`https://wa.me/?text=…`, which
+  lets staff pick any chat, group or status). Built client-side from the same
+  base URL as personal links; no server call.
+- **Paste a list** — a textarea ("one person per line: name, phone, email
+  optional") and a **Check list** button that opens the shared preview.
+- **Upload CSV** — pick file → the shared preview.
+- **Preview** (paste and CSV) — three groups: ready, invalid (with reason),
+  duplicates (in the input or already invited). **Import N invites** sends only
+  the ready rows. The CSV option also has a **Download template** button
+  producing a CSV with the headers `name,phone,email,school,year` from an
+  in-memory Blob.
 - **Invite list** — name, phone, status badge (Pending / Opened / Submitted /
   Expired), last shared. Filter by status. Row actions:
   **Send on WhatsApp**, **Copy link**, **Regenerate**, **Delete** (confirm in
@@ -172,19 +197,24 @@ the moderation queue.
 The list reads `testimonial_invites` directly through the staff browser
 client (RLS), newest first. Delete also goes through the browser client.
 
-`alumni-pending.tsx` gains an **Invited** tag for rows with `invite_id`, and a
+`alumni-pending.tsx` tags each row **Invited** (has `invite_id`) or
+**General link** (no `invite_id`), and gains a
 collapsible **Story answers** section showing `answers` and `city_country`.
 Approve / reject logic is unchanged.
 
-## 4. Alumnus — `/alumni/story/$code`
+## 4. Alumnus — `/alumni/story` and `/alumni/story/$code`
 
-Route `src/routes/alumni.story.$code.tsx`, `noindex, nofollow`, site header and
-footer, mobile-first. Wizard components under
-`src/components/alumni/story-wizard/`.
+Two routes render one wizard (`src/components/alumni/story-wizard/`), both
+`noindex, nofollow`, site header and footer, mobile-first:
 
-On load it calls `openInvite`. `invalid` → "This link isn't valid any more —
-please contact the school" with the school's contact details. `submitted` →
-"Thanks — we've already received your story."
+- `src/routes/alumni.story.index.tsx` — the **general link**. No lookup, no
+  pre-fill; the welcome step says "Hi there".
+- `src/routes/alumni.story.$code.tsx` — a **personal link**. On load it calls
+  `openInvite`. `invalid` → "This link isn't valid any more — please contact
+  the school" with the school's contact details. `submitted` → "Thanks — we've
+  already received your story."
+- `src/routes/alumni.submit.tsx` becomes a redirect to `/alumni/story`
+  (`beforeLoad` → `redirect`), keeping its `noindex`.
 
 Steps, with a "Step n of 7" progress bar and Back / Next:
 
@@ -208,7 +238,8 @@ Behaviour:
 
 - Next validates the current step only; the server validates everything.
 - Text answers are saved to `localStorage` under
-  `alpha-story-draft:<first 12 chars of code>` on change (wrapped in
+  `alpha-story-draft:<first 12 chars of code>` (or `alpha-story-draft:general`)
+  on change (wrapped in
   try/catch) and cleared on success. The photo is not saved — the review step
   says so if one was chosen and the page was reloaded.
 - Submit is disabled while in flight. On a network or server failure the draft
@@ -238,18 +269,24 @@ Unit (vitest, alongside the existing `src/lib/*.test.ts`):
   invalid rows with reasons, duplicates within the file, 500-row cap.
 - `token.test.ts` — code length/alphabet, hash stability, encrypt → decrypt
   round trip, tampered cipher and wrong key fail.
-- `whatsapp.test.ts` — first-name extraction, URL digits, text encoding.
-- Submission validation extracted into a pure `validateInvitedStory(form)` and
+- `paste.test.ts` — comma, tab and space separated lines, email in any
+  position, blank lines, a line with no phone (invalid), duplicates.
+- `whatsapp.test.ts` — first-name extraction, URL digits, text encoding, and
+  the number-less share URL for the general link.
+- Submission validation extracted into a pure `validateStory(form)` (with and without a code) and
   tested for each required field and limit.
 
 Manual, in the running app (requires the service key, `INVITE_LINK_KEY` and
-the migration): add an invite, import a CSV with a bad row and a duplicate,
-Send on WhatsApp, open the link on a phone-width window, complete all steps,
+the migration): add an invite, paste a three-line list, import a CSV with a
+bad row and a duplicate, Send on WhatsApp, open the link on a phone-width window, complete all steps,
 submit twice quickly (one story), reopen the link (already-received page),
 approve it in the queue, regenerate a pending invite and confirm the old link
-is invalid.
+is invalid. Then open `/alumni/submit` (lands on `/alumni/story`), complete the
+general wizard, and confirm it appears in the queue tagged **General link**.
 
 ## Out of scope
 
 Automatic SMS or email sending, bulk "send to all" (WhatsApp requires one tap
-per message), scheduled reminders, and editing a story after submission.
+per message), scheduled reminders, editing a story after submission, and a
+switch to turn the general link off (it is protected by the rate limit and by
+moderation, as the old form was).
