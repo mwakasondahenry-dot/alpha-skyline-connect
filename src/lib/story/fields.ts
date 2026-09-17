@@ -100,14 +100,14 @@ export function checkPrompts(d: StoryDraft): string | null {
   return tooLong ? `Please keep each answer under ${PROMPT_MAX} characters.` : null;
 }
 
-export function checkQuote(d: StoryDraft): string | null {
+export function checkQuote(d: { quote: string }): string | null {
   const quote = d.quote.trim();
   if (!quote) return "Please write a sentence or two for your quote.";
   if (quote.length > MESSAGE_MAX) return `Please keep your quote under ${MESSAGE_MAX} characters.`;
   return null;
 }
 
-export function checkConsent(d: StoryDraft): string | null {
+export function checkConsent(d: { consent: boolean }): string | null {
   return d.consent ? null : "Please agree to the consent statement to submit.";
 }
 

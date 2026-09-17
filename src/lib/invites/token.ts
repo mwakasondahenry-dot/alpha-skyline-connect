@@ -7,6 +7,8 @@
  * opened, and an AES-GCM ciphertext so staff can share the same link again.
  * Web Crypto only, so this runs in Node and on Cloudflare Workers.
  */
+import type { Audience } from "./audience";
+
 export const CODE_PATTERN = /^[A-Za-z0-9_-]{43}$/;
 
 const encoder = new TextEncoder();
@@ -30,8 +32,8 @@ export function newLinkCode(): string {
   return toBase64(raw).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
 }
 
-export function storyPath(code: string): string {
-  return `/alumni/story/${code}`;
+export function storyPath(code: string, audience: Audience = "alumni"): string {
+  return `${audience === "parent" ? "/parents/story" : "/alumni/story"}/${code}`;
 }
 
 export async function hashCode(code: string): Promise<string> {

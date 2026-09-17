@@ -21,3 +21,14 @@ export function whatsappUrl(phone: string | null, text: string): string {
   if (!phone) return `https://wa.me/?${query}`;
   return `https://wa.me/${phone.replace(/\D/g, "")}?${query}`;
 }
+
+const PARENT_PITCH =
+  "Alpha Schools would love to share your experience as a parent on our website. It takes about 5 minutes:";
+
+export function parentInviteMessage(fullName: string, link: string): string {
+  return `Hello ${firstName(fullName)}, ${PARENT_PITCH} ${link}`;
+}
+
+export function parentGeneralMessage(link: string): string {
+  return `Are you a parent at Alpha? Alpha Schools would love to share your experience on our website. It takes about 5 minutes: ${link}`;
+}

@@ -57,4 +57,9 @@ describe("link codes", () => {
   it("build the story path", () => {
     expect(storyPath("abc")).toBe("/alumni/story/abc");
   });
+
+  it("build the parent story path", () => {
+    expect(storyPath("abc", "parent")).toBe("/parents/story/abc");
+    expect(storyPath("abc", "alumni")).toBe("/alumni/story/abc");
+  });
 });

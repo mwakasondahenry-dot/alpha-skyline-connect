@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { firstName, generalMessage, inviteMessage, whatsappUrl } from "./whatsapp";
+import { firstName, generalMessage, inviteMessage, whatsappUrl, parentInviteMessage, parentGeneralMessage } from "./whatsapp";
 
 describe("whatsapp", () => {
   it("uses the first name, or a neutral greeting", () => {
@@ -29,5 +29,19 @@ describe("whatsapp", () => {
 
   it("lets the sender pick the chat when there is no number", () => {
     expect(whatsappUrl(null, "Hi")).toBe("https://wa.me/?text=Hi");
+  });
+
+  it("writes the parent invite message", () => {
+    expect(parentInviteMessage("Asha Mushi", "https://x.test/parents/story/abc")).toBe(
+      "Hello Asha, Alpha Schools would love to share your experience as a parent on our website. " +
+        "It takes about 5 minutes: https://x.test/parents/story/abc",
+    );
+  });
+
+  it("writes the parent general message", () => {
+    expect(parentGeneralMessage("https://x.test/parents/story")).toBe(
+      "Are you a parent at Alpha? Alpha Schools would love to share your experience on our website. " +
+        "It takes about 5 minutes: https://x.test/parents/story",
+    );
   });
 });
