@@ -4,8 +4,7 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SHELL, T } from "@/components/type-roles";
 import { CARD } from "./field-ui";
 
-/** The heading names the person when the link is personal. */
-export function StoryShell({ name, children }: { name?: string | null; children: ReactNode }) {
+export function StoryShell({ heading, children }: { heading: string; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
@@ -15,7 +14,7 @@ export function StoryShell({ name, children }: { name?: string | null; children:
             className="font-display tracking-tight text-balance text-[var(--color-deep-blue)]"
             style={T.section}
           >
-            {name ? `${name}, share your Alpha story` : "Share your Alpha story"}
+            {heading}
           </h1>
           <span
             aria-hidden

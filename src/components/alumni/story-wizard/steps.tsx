@@ -1,5 +1,5 @@
-/** The bodies of the six wizard steps. State lives in StoryWizard. */
-import { useEffect, useRef, useState } from "react";
+/** Step bodies for the story wizards, and the pieces both audiences share. */
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Upload } from "lucide-react";
 import { T } from "@/components/type-roles";
 import { ALUMNI_SCHOOLS } from "@/lib/invites/contacts";
@@ -9,6 +9,7 @@ import {
   MESSAGE_MAX,
   NAME_MAX,
   PHOTO_ACCEPT,
+  PHOTO_MAX_BYTES,
   PLACE_MAX,
   PROMPT_MAX,
   ROLE_MAX,
@@ -18,12 +19,7 @@ import {
 } from "@/lib/story/fields";
 import { BTN_SECONDARY, CountedTextArea, FieldLabel, TextField } from "./field-ui";
 
-type DraftProps = {
-  draft: StoryDraft;
-  update: (patch: Partial<StoryDraft>) => void;
-};
-
-function Body({ children }: { children: React.ReactNode }) {
+export function StepText({ children }: { children: ReactNode }) {
   return (
     <p className="text-[var(--color-ink-soft)]" style={T.body}>
       {children}
@@ -32,7 +28,7 @@ function Body({ children }: { children: React.ReactNode }) {
 }
 
 /** A local preview of the chosen photo. Nothing is uploaded until Send. */
-function usePreviewUrl(file: File | null): string | null {
+export function usePreviewUrl(file: File | null): string | null {
   const [url, setUrl] = useState<string | null>(null);
   useEffect(() => {
     if (!file) {
@@ -46,6 +42,66 @@ function usePreviewUrl(file: File | null): string | null {
   return url;
 }
 
+/** The chosen photo, with the client-side size check. */
+export function usePhoto() {
+  const [photo, setPhoto] = useState<File | null>(null);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const onPickPhoto = useCallback((file: File | null) => {
+    setPhotoError(null);
+    if (file && file.size > PHOTO_MAX_BYTES) {
+      setPhoto(null);
+      setPhotoError("That photo is larger than 5 MB. Please choose a smaller one.");
+      return;
+    }
+    setPhoto(file);
+  }, []);
+  return { photo, photoError, onPickPhoto };
+}
+
+export function SchoolChoice({
+  legend,
+  name,
+  value,
+  onChange,
+}: {
+  legend: string;
+  name: string;
+  value: string;
+  onChange: (slug: string) => void;
+}) {
+  return (
+    <fieldset>
+      <legend>
+        <FieldLabel required>{legend}</FieldLabel>
+      </legend>
+      <div className="mt-2 grid gap-2 sm:grid-cols-3">
+        {ALUMNI_SCHOOLS.map((s) => (
+          <label
+            key={s.value}
+            className="flex min-h-[var(--btn-primary-min-h)] cursor-pointer items-center gap-3 rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 has-[:checked]:border-[var(--color-bright-blue)] has-[:checked]:bg-[var(--color-surface-muted)]"
+            style={T.body}
+          >
+            <input
+              type="radio"
+              name={name}
+              value={s.value}
+              checked={value === s.value}
+              onChange={() => onChange(s.value)}
+              className="h-5 w-5 shrink-0 accent-[var(--color-bright-blue)]"
+            />
+            {s.label}
+          </label>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+type DraftProps = {
+  draft: StoryDraft;
+  update: (patch: Partial<StoryDraft>) => void;
+};
+
 export function AboutStep({ draft, update }: DraftProps) {
   return (
     <div className="space-y-5">
@@ -57,30 +113,12 @@ export function AboutStep({ draft, update }: DraftProps) {
         maxLength={NAME_MAX}
         autoComplete="name"
       />
-      <fieldset>
-        <legend>
-          <FieldLabel required>School you attended</FieldLabel>
-        </legend>
-        <div className="mt-2 grid gap-2 sm:grid-cols-3">
-          {ALUMNI_SCHOOLS.map((s) => (
-            <label
-              key={s.value}
-              className="flex min-h-[var(--btn-primary-min-h)] cursor-pointer items-center gap-3 rounded-xl border border-[var(--color-deep-blue)]/15 bg-[var(--color-off-white)] px-4 has-[:checked]:border-[var(--color-bright-blue)] has-[:checked]:bg-[var(--color-surface-muted)]"
-              style={T.body}
-            >
-              <input
-                type="radio"
-                name="school"
-                value={s.value}
-                checked={draft.schoolSlug === s.value}
-                onChange={() => update({ schoolSlug: s.value })}
-                className="h-5 w-5 shrink-0 accent-[var(--color-bright-blue)]"
-              />
-              {s.label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
+      <SchoolChoice
+        legend="School you attended"
+        name="school"
+        value={draft.schoolSlug}
+        onChange={(schoolSlug) => update({ schoolSlug })}
+      />
       <TextField
         label="Year you finished"
         required
@@ -121,25 +159,28 @@ export function NowStep({ draft, update }: DraftProps) {
   );
 }
 
+/** Optional questions, for either audience. */
 export function PromptsStep({
-  draft,
-  setAnswer,
+  prompts,
+  answers,
+  onAnswer,
 }: {
-  draft: StoryDraft;
-  setAnswer: (key: PromptKey, value: string) => void;
+  prompts: readonly { key: string; label: string }[];
+  answers: Record<string, string>;
+  onAnswer: (key: string, value: string) => void;
 }) {
   return (
     <div className="space-y-5">
-      <Body>
+      <StepText>
         Answer any you like, or none. These are for the school to read and are not published.
-      </Body>
-      {STORY_PROMPTS.map((p) => (
+      </StepText>
+      {prompts.map((p) => (
         <CountedTextArea
           key={p.key}
           id={`prompt-${p.key}`}
           label={p.label}
-          value={draft.answers[p.key]}
-          onChange={(value) => setAnswer(p.key, value)}
+          value={answers[p.key] ?? ""}
+          onChange={(value) => onAnswer(p.key, value)}
           max={PROMPT_MAX}
           rows={3}
         />
@@ -148,19 +189,24 @@ export function PromptsStep({
   );
 }
 
-export function QuoteStep({ draft, update }: DraftProps) {
+export function QuoteStep({
+  lead,
+  quote,
+  onChange,
+}: {
+  lead: string;
+  quote: string;
+  onChange: (quote: string) => void;
+}) {
   return (
     <div className="space-y-4">
-      <Body>
-        In a sentence or two, what did Alpha mean to you? This is the part we publish, next to
-        your name.
-      </Body>
+      <StepText>{lead}</StepText>
       <CountedTextArea
         id="quote"
         label="Your quote"
         required
-        value={draft.quote}
-        onChange={(quote) => update({ quote })}
+        value={quote}
+        onChange={onChange}
         max={MESSAGE_MAX}
         rows={5}
       />
@@ -169,12 +215,14 @@ export function QuoteStep({ draft, update }: DraftProps) {
 }
 
 export function PhotoConsentStep({
-  draft,
-  update,
+  consent,
+  onConsent,
   photo,
   photoError,
   onPickPhoto,
-}: DraftProps & {
+}: {
+  consent: boolean;
+  onConsent: (consent: boolean) => void;
   photo: File | null;
   photoError: string | null;
   onPickPhoto: (file: File | null) => void;
@@ -241,8 +289,8 @@ export function PhotoConsentStep({
       <label className="flex items-start gap-3 rounded-[var(--radius-btn)] bg-[var(--color-surface-muted)] p-4">
         <input
           type="checkbox"
-          checked={draft.consent}
-          onChange={(e) => update({ consent: e.target.checked })}
+          checked={consent}
+          onChange={(e) => onConsent(e.target.checked)}
           required
           className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-bright-blue)]"
         />
@@ -254,54 +302,44 @@ export function PhotoConsentStep({
   );
 }
 
-type ReviewItem = { label?: string; value: string };
+export type ReviewItem = { label?: string; value: string };
+export type ReviewSection = { step: number; title: string; items: ReviewItem[] };
 
-export function ReviewStep({
-  draft,
+/** The photo section's lines: empty when there is a photo (the preview shows instead). */
+export function photoItems(photo: File | null, lostOnReload: boolean): ReviewItem[] {
+  if (photo) return [];
+  return [
+    {
+      value: lostOnReload
+        ? "No photo attached. If you chose one before the page reloaded, choose it again."
+        : "No photo.",
+    },
+  ];
+}
+
+/** Answered prompts as review lines, or "Not answered." */
+export function answerItems(
+  prompts: readonly { key: string; label: string }[],
+  answers: Record<string, string>,
+): ReviewItem[] {
+  const answered = prompts.filter((p) => (answers[p.key] ?? "").trim());
+  return answered.length
+    ? answered.map((p) => ({ label: p.label, value: answers[p.key].trim() }))
+    : [{ value: "Not answered." }];
+}
+
+export function ReviewList({
+  sections,
   photo,
-  photoLostOnReload,
+  photoStep,
   onEdit,
 }: {
-  draft: StoryDraft;
+  sections: ReviewSection[];
   photo: File | null;
-  photoLostOnReload: boolean;
+  photoStep: number;
   onEdit: (step: number) => void;
 }) {
   const preview = usePreviewUrl(photo);
-  const school = ALUMNI_SCHOOLS.find((s) => s.value === draft.schoolSlug)?.label ?? "";
-  const answered = STORY_PROMPTS.filter((p) => draft.answers[p.key].trim());
-  const now = [draft.role, draft.company, draft.cityCountry].map((s) => s.trim()).filter(Boolean);
-
-  const sections: { step: number; title: string; items: ReviewItem[] }[] = [
-    {
-      step: 0,
-      title: "About you",
-      items: [{ value: `${draft.fullName.trim()}, ${school}, class of ${draft.gradYear}` }],
-    },
-    { step: 1, title: "Where you are now", items: [{ value: now.join(", ") }] },
-    {
-      step: 2,
-      title: "Your story",
-      items: answered.length
-        ? answered.map((p) => ({ label: p.label, value: draft.answers[p.key].trim() }))
-        : [{ value: "Not answered." }],
-    },
-    { step: 3, title: "Your quote", items: [{ value: draft.quote.trim() }] },
-    {
-      step: 4,
-      title: "Photo",
-      items: photo
-        ? []
-        : [
-            {
-              value: photoLostOnReload
-                ? "No photo attached. If you chose one before the page reloaded, choose it again."
-                : "No photo.",
-            },
-          ],
-    },
-  ];
-
   return (
     <dl className="divide-y divide-[var(--color-deep-blue)]/10 border-y border-[var(--color-deep-blue)]/10">
       {sections.map((s) => (
@@ -320,7 +358,7 @@ export function ReviewStep({
               Change
             </button>
           </div>
-          {s.step === 4 && preview && (
+          {s.step === photoStep && preview && (
             <dd className="mt-2">
               <img
                 src={preview}
@@ -336,10 +374,7 @@ export function ReviewStep({
                   {item.label}
                 </span>
               )}
-              <span
-                className="block whitespace-pre-line break-words text-[var(--color-ink)]"
-                style={T.body}
-              >
+              <span className="block whitespace-pre-line break-words text-[var(--color-ink)]" style={T.body}>
                 {item.value}
               </span>
             </dd>
@@ -348,4 +383,35 @@ export function ReviewStep({
       ))}
     </dl>
   );
+}
+
+export function ReviewStep({
+  draft,
+  photo,
+  photoLostOnReload,
+  onEdit,
+}: {
+  draft: StoryDraft;
+  photo: File | null;
+  photoLostOnReload: boolean;
+  onEdit: (step: number) => void;
+}) {
+  const school = ALUMNI_SCHOOLS.find((s) => s.value === draft.schoolSlug)?.label ?? "";
+  const now = [draft.role, draft.company, draft.cityCountry].map((s) => s.trim()).filter(Boolean);
+  const sections: ReviewSection[] = [
+    {
+      step: 0,
+      title: "About you",
+      items: [{ value: `${draft.fullName.trim()}, ${school}, class of ${draft.gradYear}` }],
+    },
+    { step: 1, title: "Where you are now", items: [{ value: now.join(", ") }] },
+    {
+      step: 2,
+      title: "Your story",
+      items: answerItems(STORY_PROMPTS, draft.answers as Record<PromptKey, string>),
+    },
+    { step: 3, title: "Your quote", items: [{ value: draft.quote.trim() }] },
+    { step: 4, title: "Photo", items: photoItems(photo, photoLostOnReload) },
+  ];
+  return <ReviewList sections={sections} photo={photo} photoStep={4} onEdit={onEdit} />;
 }

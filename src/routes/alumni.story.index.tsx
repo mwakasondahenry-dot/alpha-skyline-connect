@@ -21,7 +21,7 @@ export const Route = createFileRoute("/alumni/story/")({
 
 function GeneralStoryPage() {
   return (
-    <StoryShell>
+    <StoryShell heading="Share your Alpha story">
       <StoryWizard code={null} initial={EMPTY_DRAFT} />
     </StoryShell>
   );

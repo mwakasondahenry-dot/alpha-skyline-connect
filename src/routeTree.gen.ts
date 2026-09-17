@@ -41,6 +41,8 @@ import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-hig
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
 import { Route as AlumniStoryIndexRouteImport } from './routes/alumni.story.index'
 import { Route as AlumniStoryCodeRouteImport } from './routes/alumni.story.$code'
+import { Route as ParentsStoryIndexRouteImport } from './routes/parents.story.index'
+import { Route as ParentsStoryCodeRouteImport } from './routes/parents.story.$code'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -202,6 +204,16 @@ const AlumniStoryCodeRoute = AlumniStoryCodeRouteImport.update({
   path: '/alumni/story/$code',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ParentsStoryIndexRoute = ParentsStoryIndexRouteImport.update({
+  id: '/parents/story/',
+  path: '/parents/story/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ParentsStoryCodeRoute = ParentsStoryCodeRouteImport.update({
+  id: '/parents/story/$code',
+  path: '/parents/story/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -235,7 +247,9 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
+  '/parents/story/$code': typeof ParentsStoryCodeRoute
   '/alumni/story/': typeof AlumniStoryIndexRoute
+  '/parents/story/': typeof ParentsStoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -268,7 +282,9 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminIndexRoute
   '/alumni': typeof AlumniIndexRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
+  '/parents/story/$code': typeof ParentsStoryCodeRoute
   '/alumni/story': typeof AlumniStoryIndexRoute
+  '/parents/story': typeof ParentsStoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -303,7 +319,9 @@ export interface FileRoutesById {
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
+  '/parents/story/$code': typeof ParentsStoryCodeRoute
   '/alumni/story/': typeof AlumniStoryIndexRoute
+  '/parents/story/': typeof ParentsStoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -339,7 +357,9 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/alumni/'
     | '/alumni/story/$code'
+    | '/parents/story/$code'
     | '/alumni/story/'
+    | '/parents/story/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -372,7 +392,9 @@ export interface FileRouteTypes {
     | '/admin'
     | '/alumni'
     | '/alumni/story/$code'
+    | '/parents/story/$code'
     | '/alumni/story'
+    | '/parents/story'
   id:
     | '__root__'
     | '/'
@@ -406,7 +428,9 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/alumni/'
     | '/alumni/story/$code'
+    | '/parents/story/$code'
     | '/alumni/story/'
+    | '/parents/story/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -429,7 +453,9 @@ export interface RootRouteChildren {
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
   AlumniIndexRoute: typeof AlumniIndexRoute
   AlumniStoryCodeRoute: typeof AlumniStoryCodeRoute
+  ParentsStoryCodeRoute: typeof ParentsStoryCodeRoute
   AlumniStoryIndexRoute: typeof AlumniStoryIndexRoute
+  ParentsStoryIndexRoute: typeof ParentsStoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -658,6 +684,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlumniStoryCodeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/parents/story/': {
+      id: '/parents/story/'
+      path: '/parents/story'
+      fullPath: '/parents/story/'
+      preLoaderRoute: typeof ParentsStoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/parents/story/$code': {
+      id: '/parents/story/$code'
+      path: '/parents/story/$code'
+      fullPath: '/parents/story/$code'
+      preLoaderRoute: typeof ParentsStoryCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -713,7 +753,9 @@ const rootRouteChildren: RootRouteChildren = {
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
   AlumniIndexRoute: AlumniIndexRoute,
   AlumniStoryCodeRoute: AlumniStoryCodeRoute,
+  ParentsStoryCodeRoute: ParentsStoryCodeRoute,
   AlumniStoryIndexRoute: AlumniStoryIndexRoute,
+  ParentsStoryIndexRoute: ParentsStoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

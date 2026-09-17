@@ -4,13 +4,14 @@
  * fresh each time. The photo is not stored at all.
  *
  * Loaded in an effect, not in useState's initialiser, because the general
- * route is server-rendered and localStorage does not exist there.
+ * routes are server-rendered and localStorage does not exist there.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { PromptKey, StoryDraft } from "@/lib/story/fields";
 
-export function useStoryDraft(storageKey: string, initial: StoryDraft) {
-  const [draft, setDraft] = useState<StoryDraft>(initial);
+type DraftShape = { consent: boolean; answers: Record<string, string> };
+
+export function useStoryDraft<D extends DraftShape>(storageKey: string, initial: D) {
+  const [draft, setDraft] = useState<D>(initial);
   const [restored, setRestored] = useState(false);
   const loaded = useRef(false);
 
@@ -18,13 +19,16 @@ export function useStoryDraft(storageKey: string, initial: StoryDraft) {
     try {
       const raw = localStorage.getItem(storageKey);
       if (raw) {
-        const saved = JSON.parse(raw) as Partial<StoryDraft>;
-        setDraft((d) => ({
-          ...d,
-          ...saved,
-          answers: { ...d.answers, ...(saved.answers ?? {}) },
-          consent: false,
-        }));
+        const saved = JSON.parse(raw) as Partial<D>;
+        setDraft(
+          (d) =>
+            ({
+              ...d,
+              ...saved,
+              answers: { ...d.answers, ...(saved.answers ?? {}) },
+              consent: false,
+            }) as D,
+        );
         setRestored(true);
       }
     } catch {
@@ -43,12 +47,13 @@ export function useStoryDraft(storageKey: string, initial: StoryDraft) {
     }
   }, [draft, storageKey]);
 
-  const update = useCallback((patch: Partial<StoryDraft>) => {
-    setDraft((d) => ({ ...d, ...patch }));
+  /* Spreading a generic loses its type in TypeScript; the casts restore it. */
+  const update = useCallback((patch: Partial<D>) => {
+    setDraft((d) => ({ ...d, ...patch }) as D);
   }, []);
 
-  const setAnswer = useCallback((key: PromptKey, value: string) => {
-    setDraft((d) => ({ ...d, answers: { ...d.answers, [key]: value } }));
+  const setAnswer = useCallback((key: string, value: string) => {
+    setDraft((d) => ({ ...d, answers: { ...d.answers, [key]: value } }) as D);
   }, []);
 
   const clear = useCallback(() => {
