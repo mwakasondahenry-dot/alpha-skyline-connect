@@ -59,11 +59,11 @@ export function CurriculumBand({
                 aria-hidden
                 className="inline-block"
                 style={{
-              width: "var(--heading-rule-w)",
-              height: "var(--heading-rule-h)",
-              background: "var(--color-gold)",
-              borderRadius: "var(--heading-rule-radius)",
-            }}
+                  width: "var(--heading-rule-w)",
+                  height: "var(--heading-rule-h)",
+                  background: "var(--color-gold)",
+                  borderRadius: "var(--heading-rule-radius)",
+                }}
               />
               <span style={{ color: "var(--ac-accent, var(--color-brand-blue))" }}>{eyebrow}</span>
             </p>
