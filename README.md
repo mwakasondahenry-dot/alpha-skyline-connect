@@ -52,12 +52,12 @@ npm i
 npm run dev
 ```
 
-## Alumni invites — setup
+## Alumni and parent invites — setup
 
-1. **Run the SQL migrations**, in order, in the Supabase SQL editor: `alpha_migration_alumni_submissions.sql` (if not already run) then `alpha_migration_testimonial_invites.sql`. Both are safe to re-run. If you ever re-run `alpha_schema.sql` or `alpha_migration_hero_testimonials.sql` afterwards, run `alpha_migration_testimonial_invites.sql` again too — those two files grant anon table-wide `SELECT` on `testimonials`, which the invites migration then narrows to public columns only.
+1. **Run the SQL migrations**, in order, in the Supabase SQL editor: `alpha_migration_alumni_submissions.sql` (if not already run), then `alpha_migration_testimonial_invites.sql`, then `alpha_migration_parent_invites.sql`. All are safe to re-run. If you ever re-run `alpha_schema.sql` or `alpha_migration_hero_testimonials.sql` afterwards, run `alpha_migration_testimonial_invites.sql` again too — those two files grant anon table-wide `SELECT` on `testimonials`, which the invites migration then narrows to public columns only. If you re-run `alpha_migration_testimonial_invites.sql`, run `alpha_migration_parent_invites.sql` again as well.
 2. **Set the server secrets**, both locally (`.env.local`) and in the hosting environment:
    - `ALPHA_SUPABASE_SERVICE_ROLE_KEY` — Supabase → Project Settings → API → `service_role` secret.
    - `INVITE_LINK_KEY` — generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`. Keep a backup: if it is lost or changed, existing invite links still open, but they must be regenerated (staff → Regenerate) before they can be shared again. Use the same value everywhere invite links are created.
    - `PUBLIC_SITE_URL` — the live site address (e.g. `https://example.com`). Required in production so invite links point to the real domain.
 3. **Turn off Supabase sign-ups.** Supabase → Authentication → turn OFF "Allow new users to sign up". Any account with a profile row counts as staff.
-4. **Where things are:** admin → Testimonials → "Invite alumni" creates and manages invites; the general link is `/alumni/story`; personal invite links are `/alumni/story/<code>`; `/alumni/submit` redirects to the general link.
+4. **Where things are:** admin → Testimonials → "Invite alumni" creates and manages alumni invites; the general link is `/alumni/story`; personal invite links are `/alumni/story/<code>`; `/alumni/submit` redirects to the general link. Admin → Testimonials → "Invite parents" does the same for parents; the general parent link is `/parents/story`; personal parent links are `/parents/story/<code>`; parent quotes publish as "Parent, <school>".
