@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { AdminCrud, type CrudConfig } from "@/lib/admin-crud";
 import { AlumniPendingQueue } from "@/components/admin/alumni-pending";
+import { InvitePanel } from "@/components/admin/invites/invite-panel";
 
 export const Route = createFileRoute("/admin/testimonials")({
   head: () => ({ meta: [{ title: "Testimonials · Alpha Admin" }] }),
@@ -9,6 +10,9 @@ export const Route = createFileRoute("/admin/testimonials")({
 });
 
 /**
+ * The invite panel sits on top: invitations go out from there and come back
+ * as submissions in the queue.
+ *
  * Testimonials, plus the alumni moderation queue.
  *
  * The queue sits above the table rather than on a screen of its own: both are
@@ -28,6 +32,7 @@ function TestimonialsAdmin() {
 
   return (
     <div className="space-y-8">
+      <InvitePanel />
       <AlumniPendingQueue onChanged={() => setVersion((v) => v + 1)} />
       <AdminCrud key={version} config={CONFIG} />
     </div>
