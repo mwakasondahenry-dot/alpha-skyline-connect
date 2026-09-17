@@ -127,12 +127,16 @@ export type ProfileRow = {
 
 export type InviteStatus = "pending" | "opened" | "submitted";
 
+export type InviteAudience = "alumni" | "parent";
+
 /** See alpha_migration_testimonial_invites.sql. */
 export type TestimonialInviteRow = {
   id: string;
   full_name: string;
   /** E.164, e.g. +255712345678. Unique. */
   phone: string;
+  /** Who the invite is for. Phone numbers are unique per audience. */
+  audience: InviteAudience;
   email: string | null;
   school_slug: SchoolSlug | null;
   grad_year: number | null;
@@ -175,8 +179,8 @@ export type TestimonialRow = {
   /* Invites — see alpha_migration_testimonial_invites.sql. */
   /** Set when the story came through a personal link; null for the general link. */
   invite_id: string | null;
-  /** Story prompt answers, for staff only. Never published. */
-  answers: { gave_you?: string; moment?: string; advice?: string } | null;
+  /** Story prompt answers keyed by prompt (alumni or parent prompts). Staff only; never published. */
+  answers: Record<string, string> | null;
   city_country: string | null;
 }
 
