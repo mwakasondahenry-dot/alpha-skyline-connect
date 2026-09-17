@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import { getLinkBase } from "@/lib/invites.functions";
 import { AddInviteForm } from "./add-invite-form";
+import { BulkImport } from "./bulk-import";
 import { GeneralLinkCard } from "./general-link-card";
 import { InviteList } from "./invite-list";
 import { Notice } from "./ui";
@@ -44,6 +45,7 @@ export function InvitePanel() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <AddInviteForm onCreated={bump} />
+        <BulkImport onImported={bump} />
       </div>
 
       <InviteList reloadKey={reloadKey} />
