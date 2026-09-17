@@ -51,7 +51,12 @@ export function GoldButton({
   children: ReactNode;
 }) {
   const cls = `${BTN_BASE} bg-[var(--color-gold)] text-[var(--color-accent-foreground)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)]`;
-  if (href) return <a href={href} className={cls} style={BTN_TEXT}>{children}</a>;
+  if (href)
+    return (
+      <a href={href} className={cls} style={BTN_TEXT}>
+        {children}
+      </a>
+    );
   return (
     <Link to={to ?? "/"} className={cls} style={BTN_TEXT}>
       {children}
@@ -75,7 +80,12 @@ export function GhostButton({
     ? "border border-[var(--color-surface)]/40 text-[var(--color-surface)] hover:bg-[var(--color-surface)]/10"
     : "border border-[var(--color-hairline)] text-[var(--color-deep-blue)] hover:bg-[var(--color-surface-muted)]";
   const cls = `${BTN_BASE} ${tone}`;
-  if (href) return <a href={href} className={cls} style={BTN_TEXT}>{children}</a>;
+  if (href)
+    return (
+      <a href={href} className={cls} style={BTN_TEXT}>
+        {children}
+      </a>
+    );
   return (
     <Link to={to ?? "/"} className={cls} style={BTN_TEXT}>
       {children}
@@ -123,13 +133,21 @@ const DOODLE: Record<DoodleKind, { d: string; box: string; dash: number; w?: num
   // a quick double-stroke underline, the way you'd underline a word twice
   underline: { d: "M3 11c22-7 52-8 74-3M8 16c26-6 56-6 78-2", box: "0 0 92 20", dash: 180 },
   // a lasso circled around a word
-  circle: { d: "M96 12C74 2 30 1 12 12 2 19 6 31 24 35c26 6 66 3 74-8 5-6-1-12-14-16", box: "0 0 110 40", dash: 260 },
+  circle: {
+    d: "M96 12C74 2 30 1 12 12 2 19 6 31 24 35c26 6 66 3 74-8 5-6-1-12-14-16",
+    box: "0 0 110 40",
+    dash: 260,
+  },
   // a scribbled arrow
   arrow: { d: "M2 14c18-9 44-11 62-3M52 2l14 9-13 10", box: "0 0 70 26", dash: 140 },
   // a four-point sparkle
   star: { d: "M14 2v24M2 14h24M6 6l16 16M22 6L6 22", box: "0 0 28 28", dash: 120, w: 2.5 },
   // an orbit ring, for the aviation moments
-  orbit: { d: "M2 20c0-9 20-16 44-16s44 7 44 16-20 16-44 16S2 29 2 20", box: "0 0 92 40", dash: 230 },
+  orbit: {
+    d: "M2 20c0-9 20-16 44-16s44 7 44 16-20 16-44 16S2 29 2 20",
+    box: "0 0 92 40",
+    dash: 230,
+  },
 };
 
 export function Doodle({
@@ -337,7 +355,11 @@ export function StatBar({
               borderTop: i > 1 ? "1px solid rgba(255,255,255,0.15)" : undefined,
             }}
           >
-            {s.icon && <span aria-hidden className="text-[var(--color-gold)]">{s.icon}</span>}
+            {s.icon && (
+              <span aria-hidden className="text-[var(--color-gold)]">
+                {s.icon}
+              </span>
+            )}
             <div className="min-w-0">
               <div className="font-display text-[var(--color-gold)]" style={T.stat}>
                 {s.figure}
@@ -491,10 +513,7 @@ export function CinematicHero({
       </div>
 
       {foot && (
-        <div
-          className="hero-rise relative z-10"
-          style={heroStep("var(--hero-t-tail)", "320ms")}
-        >
+        <div className="hero-rise relative z-10" style={heroStep("var(--hero-t-tail)", "320ms")}>
           {foot}
         </div>
       )}
@@ -560,10 +579,7 @@ export function HeroCredentials({
               >
                 {c.label}
               </div>
-              <div
-                className="hidden text-[var(--color-surface)]/80 sm:block"
-                style={T.label}
-              >
+              <div className="hidden text-[var(--color-surface)]/80 sm:block" style={T.label}>
                 {c.sub}
               </div>
             </div>

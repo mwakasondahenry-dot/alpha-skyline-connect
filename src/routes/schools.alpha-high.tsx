@@ -25,11 +25,7 @@ import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import {
-  getSchoolBundle,
-  getSchoolPhotos,
-  type SchoolBundle,
-} from "@/lib/alpha-content.functions";
+import { getSchoolBundle, getSchoolPhotos, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { ParentVoices } from "@/components/school/parent-voices";
 import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto, type SlotPhotoMap } from "@/lib/photo-slots";
