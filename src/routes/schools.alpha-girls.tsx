@@ -14,6 +14,8 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getSchoolPhotos } from "@/lib/alpha-content.functions";
+import { ParentVoices } from "@/components/school/parent-voices";
+import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto } from "@/lib/photo-slots";
 import { Reveal } from "@/components/reveal";
 import girlsHero from "@/assets/school-alpha-girls.webp";
@@ -69,6 +71,7 @@ export const Route = createFileRoute("/schools/alpha-girls")({
     Promise.all([
       context.queryClient.ensureQueryData(bundleQuery),
       context.queryClient.ensureQueryData(photosQuery),
+      context.queryClient.ensureQueryData(testimonialsQuery),
     ]),
   component: AlphaGirlsRoute,
 });
@@ -92,6 +95,7 @@ function AlphaGirlsRoute() {
       <LifeAtKunduchi />
       <TheSchoolYear />
       <Staff staff={data.staff} />
+      <ParentVoices school="alpha-girls" accent="var(--color-girls-teal)" />
       <ApplyBanner />
       <GirlsFooter />
     </div>

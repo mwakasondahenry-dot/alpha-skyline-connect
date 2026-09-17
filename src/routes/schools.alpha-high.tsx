@@ -29,6 +29,8 @@ import {
   getSchoolPhotos,
   type SchoolBundle,
 } from "@/lib/alpha-content.functions";
+import { ParentVoices } from "@/components/school/parent-voices";
+import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto, type SlotPhotoMap } from "@/lib/photo-slots";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
@@ -79,6 +81,7 @@ export const Route = createFileRoute("/schools/alpha-high")({
     Promise.all([
       context.queryClient.ensureQueryData(bundleQuery),
       context.queryClient.ensureQueryData(photosQuery),
+      context.queryClient.ensureQueryData(testimonialsQuery),
     ]),
   component: AlphaHighRoute,
 });
@@ -103,6 +106,7 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
       <LifeAtMikocheni />
       <BeyondClassroom />
       <Distinctive />
+      <ParentVoices school="alpha-high" accent="var(--color-deep-blue)" />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>

@@ -1,9 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   ArrowRight,
   Award,
   Building2,
+  ChevronLeft,
+  ChevronRight,
   GraduationCap,
   MapPin,
   Plane,
@@ -17,6 +20,7 @@ import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
   getTestimonials,
+  parentQuotes,
   type HomeWhatsNew,
   type HomeEventItem,
   type TestimonialItem,
@@ -498,26 +502,28 @@ function isAlumni(t: TestimonialItem) {
 }
 
 function Testimonials({ items }: { items: TestimonialItem[] }) {
-  const parent = items.find((t) => !isAlumni(t));
+  /* Parent stories rotate, newest first, so quotes parents send in lead and
+     older staff-entered quotes follow. The alumni card shows one story. */
+  const parents = parentQuotes(items);
   const alumni = items.find(isAlumni);
 
-  if (!parent && !alumni) return null;
+  if (parents.length === 0 && !alumni) return null;
 
   return (
     <section className={`${SHELL} pb-[var(--space-section-y)]`}>
       <div suppressHydrationWarning data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
-        {parent && (
+        {parents.length > 0 && (
           <TestimonialCard
             title="Parent Testimonials"
             tint="var(--color-tint-parent)"
-            item={parent}
+            items={parents}
           />
         )}
         {alumni && (
           <TestimonialCard
             title="Alumni Testimonials"
             tint="var(--color-tint-alumni)"
-            item={alumni}
+            items={[alumni]}
           />
         )}
       </div>
@@ -528,12 +534,21 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
 function TestimonialCard({
   title,
   tint,
-  item,
+  items,
 }: {
   title: string;
   tint: string;
-  item: TestimonialItem;
+  items: TestimonialItem[];
 }) {
+  const [index, setIndex] = useState(0);
+  const count = items.length;
+  const item = items[Math.min(index, count - 1)];
+  const step =
+    "grid h-11 w-11 place-items-center rounded-full bg-white/70 text-[var(--color-brand-blue)] " +
+    "transition-colors duration-150 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 " +
+    "focus-visible:outline-[var(--color-brand-blue)] disabled:cursor-not-allowed disabled:opacity-35 " +
+    "motion-reduce:transition-none";
+
   return (
     <article
       className="flex gap-4 rounded-[var(--radius-card)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
@@ -557,12 +572,42 @@ function TestimonialCard({
           “{item.quote}”
         </blockquote>
         <p className="mt-3 text-[var(--color-ink-soft)]" style={T.label}>
-          — {item.author_name}
+          {item.author_name}
           {item.relationship ? `, ${item.relationship}` : ""}
         </p>
+        {count > 1 && (
+          <div className="mt-4 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIndex((i) => Math.max(0, i - 1))}
+              disabled={index === 0}
+              aria-label={`Previous ${title.toLowerCase()}`}
+              className={step}
+            >
+              <ChevronLeft className="h-5 w-5" aria-hidden />
+            </button>
+            <span
+              aria-live="polite"
+              className="min-w-[4.5rem] text-center tabular-nums text-[var(--color-ink-soft)]"
+              style={T.body}
+            >
+              {index + 1} of {count}
+            </span>
+            <button
+              type="button"
+              onClick={() => setIndex((i) => Math.min(count - 1, i + 1))}
+              disabled={index === count - 1}
+              aria-label={`Next ${title.toLowerCase()}`}
+              className={step}
+            >
+              <ChevronRight className="h-5 w-5" aria-hidden />
+            </button>
+          </div>
+        )}
       </div>
       {item.photo_url && (
         <img
+          key={item.id}
           src={item.photo_url}
           alt=""
           loading="lazy"

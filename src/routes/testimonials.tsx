@@ -3,7 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import { getTestimonials, type TestimonialItem } from "@/lib/alpha-content.functions";
+import { getTestimonials, parentQuotes } from "@/lib/alpha-content.functions";
 
 import { T, SHELL } from "@/components/type-roles";
 
@@ -41,39 +41,6 @@ export const Route = createFileRoute("/testimonials")({
   component: TestimonialsPage,
 });
 
-const PLACEHOLDERS: TestimonialItem[] = [
-  {
-    id: "placeholder-1",
-    author_name: "[Parent name — to be confirmed]",
-    relationship: "Parent, Alpha High",
-    quote: "[Parent testimonial — to be provided by the school]",
-    photo_url: null,
-    school_slug: "alpha-high",
-    grad_year: null,
-    company: null,
-  },
-  {
-    id: "placeholder-2",
-    author_name: "[Parent name — to be confirmed]",
-    relationship: "Parent, Nursery & Primary",
-    quote: "[Parent testimonial — to be provided by the school]",
-    photo_url: null,
-    school_slug: "nursery-primary",
-    grad_year: null,
-    company: null,
-  },
-  {
-    id: "placeholder-3",
-    author_name: "[Parent name — to be confirmed]",
-    relationship: "Parent, Alpha Girls",
-    quote: "[Parent testimonial — to be provided by the school]",
-    photo_url: null,
-    school_slug: "alpha-girls",
-    grad_year: null,
-    company: null,
-  },
-];
-
 const SCHOOL_LABELS: Record<string, string> = {
   "group-wide": "All Schools",
   "nursery-primary": "Nursery & Primary",
@@ -85,10 +52,9 @@ function TestimonialsPage() {
   const { data } = useSuspenseQuery(testimonialsQuery);
   /* This page is Parent Testimonials. Alumni stories live in the same table
      and are shown on /alumni, so they are filtered out here rather than
-     appearing under a heading that misdescribes them. */
-  const parentQuotes = data.filter((t) => t.grad_year == null);
-  const items = parentQuotes.length > 0 ? parentQuotes : PLACEHOLDERS;
-  const isPlaceholder = parentQuotes.length === 0;
+     appearing under a heading that misdescribes them. Newest first, so
+     stories parents send in lead. No placeholder quotes, ever. */
+  const items = parentQuotes(data);
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
@@ -109,9 +75,9 @@ function TestimonialsPage() {
       </section>
 
       <section className={`${SHELL} py-[var(--space-section-y)]`}>
-        {isPlaceholder && (
-          <p className="mb-8 rounded-lg border border-dashed border-[var(--color-brand-blue)]/40 bg-white px-4 py-3 text-[var(--color-ink-soft)]" style={T.body}>
-            Placeholder content — real parent testimonials can be added any time from the admin portal.
+        {items.length === 0 && (
+          <p className="max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+            Stories from Alpha parents will appear here as families share them.
           </p>
         )}
         <div className="grid gap-6 [&>*]:min-w-0 md:grid-cols-2 lg:grid-cols-3">

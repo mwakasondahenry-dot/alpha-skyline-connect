@@ -102,3 +102,12 @@ revoke all on function public.submit_invited_story(
 grant execute on function public.submit_invited_story(
   text, text, text, text, int, text, text, text, jsonb, text, text, text, inet
 ) to service_role;
+
+
+-- ---- 4. Public sort date for testimonials
+--
+-- The homepage and the school pages show the newest approved parent quotes
+-- first. created_at is not sensitive, so the anon column grant from
+-- alpha_migration_testimonial_invites.sql is widened by this one column.
+-- Column grants add to each other, so this is safe to run again.
+grant select (created_at) on public.testimonials to anon;
