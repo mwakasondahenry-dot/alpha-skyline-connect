@@ -5,6 +5,8 @@
  * grad_year — see alpha_migration_alumni_submissions.sql for why grad_year is
  * the alumni discriminator.
  *
+ * Stories from personal invite links are tagged Invited; everything else came through the general link (or the old one-page form).
+ *
  * The photo lives in the PRIVATE alumni-pending bucket and has no public URL,
  * which is the point: nothing a stranger uploads is reachable from the
  * internet before a person has looked at it. The preview here is a short-lived
@@ -17,6 +19,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Check, X, Loader2 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-auth";
+import { STORY_PROMPTS } from "@/lib/story/fields";
 
 const PENDING_BUCKET = "alumni-pending";
 const PUBLIC_BUCKET = "media";
@@ -34,6 +37,9 @@ type PendingRow = {
   consent_at: string | null;
   consent_text: string | null;
   created_at: string;
+  invite_id: string | null;
+  answers: { gave_you?: string; moment?: string; advice?: string } | null;
+  city_country: string | null;
 };
 
 function formatDate(iso: string) {
@@ -44,11 +50,11 @@ function formatDate(iso: string) {
   });
 }
 
-/** "Software engineer at Vodacom · Class of 2018" from whichever parts exist. */
+/** "Software engineer at Vodacom · Dar es Salaam · Class of 2018" from whichever parts exist. */
 function subtitle(row: PendingRow) {
   const work = [row.relationship, row.company].filter(Boolean).join(" at ");
   const year = row.grad_year ? `Class of ${row.grad_year}` : null;
-  return [work || null, year].filter(Boolean).join(" · ");
+  return [work || null, row.city_country, year].filter(Boolean).join(" · ");
 }
 
 export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
@@ -67,7 +73,7 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
     const { data, error: loadError } = await client
       .from("testimonials")
       .select(
-        "id,author_name,relationship,company,grad_year,quote,pending_photo_path,consent_at,consent_text,created_at",
+        "id,author_name,relationship,company,grad_year,quote,pending_photo_path,consent_at,consent_text,created_at,invite_id,answers,city_country",
       )
       .eq("published", false)
       .not("grad_year", "is", null)
@@ -256,12 +262,30 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
 
                   <div className="min-w-0 flex-1">
                     <p className="font-semibold text-[var(--color-deep-blue)]">
-                      {row.author_name}
+                      {row.author_name}{" "}
+                      <span className="ml-1 rounded-full bg-[var(--color-deep-blue)]/5 px-2 py-0.5 text-xs font-bold text-[var(--color-deep-blue)]">
+                        {row.invite_id ? "Invited" : "General link"}
+                      </span>
                     </p>
                     <p className="text-sm text-[var(--color-ink)]/70">{subtitle(row)}</p>
                     <blockquote className="mt-2 whitespace-pre-line text-sm text-[var(--color-ink)]">
                       {row.quote}
                     </blockquote>
+                    {row.answers && STORY_PROMPTS.some((p) => row.answers?.[p.key]) && (
+                      <details className="mt-2">
+                        <summary className="cursor-pointer text-xs text-[var(--color-ink)]/60">
+                          Story answers (not published)
+                        </summary>
+                        <dl className="mt-1 space-y-2 text-sm">
+                          {STORY_PROMPTS.filter((p) => row.answers?.[p.key]).map((p) => (
+                            <div key={p.key}>
+                              <dt className="text-xs font-semibold text-[var(--color-deep-blue)]">{p.label}</dt>
+                              <dd className="whitespace-pre-line text-[var(--color-ink)]">{row.answers?.[p.key]}</dd>
+                            </div>
+                          ))}
+                        </dl>
+                      </details>
+                    )}
 
                     <details className="mt-2">
                       <summary className="cursor-pointer text-xs text-[var(--color-ink)]/60">
