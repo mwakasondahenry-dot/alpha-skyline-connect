@@ -93,7 +93,11 @@ export function validateContact(
   };
 }
 
-export function buildBatch(rows: RawContact[], thisYear = new Date().getFullYear()): ContactBatch {
+export function buildBatch(
+  rows: RawContact[],
+  thisYear = new Date().getFullYear(),
+  opts?: { ignoreYear?: boolean },
+): ContactBatch {
   if (rows.length > MAX_CONTACTS) {
     throw new Error(`Up to ${MAX_CONTACTS} people at a time — this list has ${rows.length}.`);
   }
@@ -101,7 +105,8 @@ export function buildBatch(rows: RawContact[], thisYear = new Date().getFullYear
   const firstLineByPhone = new Map<string, number>();
 
   for (const r of rows) {
-    const result = validateContact(r, thisYear);
+    const contact = opts?.ignoreYear ? { ...r, year: "" } : r;
+    const result = validateContact(contact, thisYear);
     if (!result.ok) {
       batch.invalid.push({ line: r.line, raw: r.raw, reason: result.reason });
       continue;

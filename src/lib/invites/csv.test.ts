@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { parseCsvRows, parseInviteCsv, CSV_TEMPLATE } from "./csv";
+import { parseCsvRows, parseInviteCsv, CSV_TEMPLATE, PARENT_CSV_TEMPLATE } from "./csv";
 
 describe("parseCsvRows", () => {
   it("handles quotes, escaped quotes, commas and newlines inside quotes", () => {
@@ -70,5 +70,27 @@ describe("parseInviteCsv", () => {
 
   it("ships a template whose headers it can read", () => {
     expect(parseInviteCsv(CSV_TEMPLATE).valid).toEqual([]);
+  });
+
+  it("ships a parent template whose headers it can read", () => {
+    expect(parseInviteCsv(PARENT_CSV_TEMPLATE).valid).toEqual([]);
+  });
+
+  it("drops the year column when ignoreYear is set", () => {
+    const csv = ["Name,Phone,Year", "Asha Mushi,0712345678,Form 3", "John Kimaro,0754123456,5"].join("\r\n");
+
+    const batch = parseInviteCsv(csv, 2026, { ignoreYear: true });
+
+    expect(batch.invalid).toEqual([]);
+    expect(batch.valid.map((v) => v.gradYear)).toEqual([null, null]);
+  });
+
+  it("still validates the year column when ignoreYear is not set", () => {
+    const csv = ["Name,Phone,Year", "Asha Mushi,0712345678,Form 3", "John Kimaro,0754123456,5"].join("\r\n");
+
+    const batch = parseInviteCsv(csv, 2026);
+
+    expect(batch.valid).toEqual([]);
+    expect(batch.invalid).toHaveLength(2);
   });
 });

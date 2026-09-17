@@ -4,11 +4,12 @@
  *
  * Everything a stranger sends arrives here and is treated as hostile. The
  * client is used for nothing but convenience: every limit is enforced again
- * on this side (validateStory), and `published` is written as a literal so no
- * shape of request can set it.
+ * on this side (validateStory / validateParentStory), and `published` is
+ * written as a literal so no shape of request can set it.
  *
  * Schema: alpha_migration_alumni_submissions.sql,
- *         alpha_migration_testimonial_invites.sql
+ *         alpha_migration_testimonial_invites.sql,
+ *         alpha_migration_parent_invites.sql
  */
 import { createServerFn } from "@tanstack/react-start";
 import { callerIp, serviceClient } from "@/lib/server/supabase-service";

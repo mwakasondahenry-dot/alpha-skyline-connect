@@ -96,4 +96,14 @@ describe("buildBatch", () => {
     const rows = Array.from({ length: MAX_CONTACTS + 1 }, (_, i) => row(i + 1, "A", "0712345678"));
     expect(() => buildBatch(rows, YEAR)).toThrow(`Up to ${MAX_CONTACTS} people at a time`);
   });
+
+  it("ignores a year column when ignoreYear is set", () => {
+    const rows: RawContact[] = [
+      { line: 2, raw: "Asha, 0712345678, Form 3", name: "Asha", phone: "0712345678", year: "Form 3" },
+      { line: 3, raw: "John, 0754123456, 5", name: "John", phone: "0754123456", year: "5" },
+    ];
+    const batch = buildBatch(rows, YEAR, { ignoreYear: true });
+    expect(batch.invalid).toEqual([]);
+    expect(batch.valid.map((v) => v.gradYear)).toEqual([null, null]);
+  });
 });

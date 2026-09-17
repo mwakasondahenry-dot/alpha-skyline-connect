@@ -132,7 +132,7 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
         }
 
         const ext = row.pending_photo_path.split(".").pop() ?? "jpg";
-        const destination = `testimonials/alumni-${row.id}.${ext}`;
+        const destination = `testimonials/story-${row.id}.${ext}`;
 
         const { error: upError } = await client.storage
           .from(PUBLIC_BUCKET)
@@ -143,12 +143,15 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
           .data.publicUrl;
       }
 
+      /* Only overwrite photo_url when a pending photo was actually copied —
+         a row with no pending photo may already have a published photo, and
+         writing null here would wipe it. */
       const { error: updateError } = await client
         .from("testimonials")
         .update({
           published: true,
-          photo_url: publicUrl,
           pending_photo_path: null,
+          ...(publicUrl ? { photo_url: publicUrl } : {}),
         })
         .eq("id", row.id);
       if (updateError) throw new Error(updateError.message);

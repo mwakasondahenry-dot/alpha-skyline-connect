@@ -6,6 +6,8 @@ import { buildBatch, type ContactBatch, type RawContact } from "./contacts";
 
 /** Headers only. An example row would be imported by anyone who forgot to delete it. */
 export const CSV_TEMPLATE = "name,phone,email,school,year\r\n";
+/** Parents have no graduation year, so the template leaves that column out. */
+export const PARENT_CSV_TEMPLATE = "name,phone,email,school\r\n";
 
 export function parseCsvRows(text: string): string[][] {
   const src = text.replace(/^﻿/, "");
@@ -71,7 +73,11 @@ function columnFor(header: string): Column | undefined {
   return ALIASES[header.toLowerCase().replace(/[^a-z]/g, "")];
 }
 
-export function parseInviteCsv(text: string, thisYear = new Date().getFullYear()): ContactBatch {
+export function parseInviteCsv(
+  text: string,
+  thisYear = new Date().getFullYear(),
+  opts?: { ignoreYear?: boolean },
+): ContactBatch {
   const rows = parseCsvRows(text);
   if (rows.length === 0) throw new Error("The file is empty.");
 
@@ -103,5 +109,5 @@ export function parseInviteCsv(text: string, thisYear = new Date().getFullYear()
     });
   });
 
-  return buildBatch(contacts, thisYear);
+  return buildBatch(contacts, thisYear, opts);
 }

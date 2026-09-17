@@ -5,6 +5,10 @@
 -- consent columns, alumni-pending bucket, claim_submission_slot).
 -- Safe to run more than once. Paste into the Supabase SQL editor.
 --
+-- Re-running this file recreates the old 12-argument submit_invited_story
+-- (alumni-only). Run alpha_migration_parent_invites.sql again afterwards to
+-- restore the parent-aware version.
+--
 -- Section 4 narrows anon's SELECT on public.testimonials to public columns.
 -- alpha_schema.sql and alpha_migration_hero_testimonials.sql both grant
 -- table-wide anon SELECT on that table, so if either is re-run after this

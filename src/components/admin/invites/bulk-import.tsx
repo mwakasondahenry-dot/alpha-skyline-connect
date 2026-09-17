@@ -7,7 +7,7 @@ import { useRef, useState } from "react";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { createInvites } from "@/lib/invites.functions";
 import type { ContactBatch, RejectedContact } from "@/lib/invites/contacts";
-import { CSV_TEMPLATE, parseInviteCsv } from "@/lib/invites/csv";
+import { CSV_TEMPLATE, PARENT_CSV_TEMPLATE, parseInviteCsv } from "@/lib/invites/csv";
 import { parsePastedList } from "@/lib/invites/paste";
 import type { Audience } from "@/lib/invites/audience";
 import {
@@ -108,7 +108,7 @@ export function BulkImport({
       return;
     }
     const text = await file.text();
-    await preview(() => parseInviteCsv(text));
+    await preview(() => parseInviteCsv(text, undefined, { ignoreYear: audience === "parent" }));
   }
 
   async function importNow() {
@@ -134,10 +134,11 @@ export function BulkImport({
   }
 
   function downloadTemplate() {
-    const url = URL.createObjectURL(new Blob([CSV_TEMPLATE], { type: "text/csv" }));
+    const template = audience === "parent" ? PARENT_CSV_TEMPLATE : CSV_TEMPLATE;
+    const url = URL.createObjectURL(new Blob([template], { type: "text/csv" }));
     const a = document.createElement("a");
     a.href = url;
-    a.download = "alumni-invites-template.csv";
+    a.download = audience === "parent" ? "parent-invites-template.csv" : "alumni-invites-template.csv";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -182,7 +183,7 @@ export function BulkImport({
           </label>
           <button
             type="button"
-            onClick={() => preview(() => parsePastedList(pasteText))}
+            onClick={() => preview(() => parsePastedList(pasteText, undefined, { ignoreYear: audience === "parent" }))}
             disabled={busy || !pasteText.trim()}
             className={A_BTN_SECONDARY}
           >

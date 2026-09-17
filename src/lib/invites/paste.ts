@@ -9,7 +9,11 @@ const EMAIL = /[^\s,;|<>()]+@[^\s,;|<>()]+\.[^\s,;|<>()]+/;
 /** A leading + or digit, then digits/spaces/dots/dashes/brackets, ending on a digit. */
 const PHONE = /\+?\d[\d\s().-]{7,}\d/;
 
-export function parsePastedList(text: string, thisYear = new Date().getFullYear()): ContactBatch {
+export function parsePastedList(
+  text: string,
+  thisYear = new Date().getFullYear(),
+  opts?: { ignoreYear?: boolean },
+): ContactBatch {
   const contacts: RawContact[] = [];
 
   text.split(/\r?\n/).forEach((original, i) => {
@@ -32,5 +36,5 @@ export function parsePastedList(text: string, thisYear = new Date().getFullYear(
     contacts.push({ line: i + 1, raw, name, phone, email });
   });
 
-  return buildBatch(contacts, thisYear);
+  return buildBatch(contacts, thisYear, opts);
 }
