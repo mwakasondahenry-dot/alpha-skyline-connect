@@ -10,6 +10,7 @@ import { Loader2 } from "lucide-react";
 import type { TestimonialInviteRow } from "@/integrations/alpha-supabase/types";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { getInviteLink, regenerateInvite } from "@/lib/invites.functions";
+import type { Audience } from "@/lib/invites/audience";
 import { STATUS_LABEL, displayStatus, type DisplayStatus } from "@/lib/invites/status";
 import {
   Notice,
@@ -38,7 +39,7 @@ function formatDate(iso: string) {
   return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
 }
 
-export function InviteList({ reloadKey }: { reloadKey: number }) {
+export function InviteList({ audience, reloadKey }: { audience: Audience; reloadKey: number }) {
   const { client } = useAdminAuth();
   const accessToken = useAccessToken();
   const [rows, setRows] = useState<Row[]>([]);
@@ -54,6 +55,7 @@ export function InviteList({ reloadKey }: { reloadKey: number }) {
     const { data, error } = await client
       .from("testimonial_invites")
       .select("id,full_name,phone,email,status,expires_at,last_shared_at,created_at")
+      .eq("audience", audience)
       .order("created_at", { ascending: false })
       .limit(1000);
     if (error) {
@@ -62,7 +64,7 @@ export function InviteList({ reloadKey }: { reloadKey: number }) {
       setRows((data ?? []) as Row[]);
     }
     setLoading(false);
-  }, [client]);
+  }, [client, audience]);
 
   useEffect(() => {
     void load();

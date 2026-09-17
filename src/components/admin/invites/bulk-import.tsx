@@ -9,6 +9,7 @@ import { createInvites } from "@/lib/invites.functions";
 import type { ContactBatch, RejectedContact } from "@/lib/invites/contacts";
 import { CSV_TEMPLATE, parseInviteCsv } from "@/lib/invites/csv";
 import { parsePastedList } from "@/lib/invites/paste";
+import type { Audience } from "@/lib/invites/audience";
 import {
   A_BTN_PRIMARY,
   A_BTN_SECONDARY,
@@ -42,7 +43,13 @@ function RejectedList({ title, items, unit }: { title: string; items: RejectedCo
   );
 }
 
-export function BulkImport({ onImported }: { onImported: () => void }) {
+export function BulkImport({
+  audience,
+  onImported,
+}: {
+  audience: Audience;
+  onImported: () => void;
+}) {
   const { client } = useAdminAuth();
   const accessToken = useAccessToken();
   const [mode, setMode] = useState<Mode>("paste");
@@ -73,6 +80,7 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
           const { data, error } = await client
             .from("testimonial_invites")
             .select("phone")
+            .eq("audience", audience)
             .in("phone", phones.slice(i, i + LOOKUP_CHUNK));
           if (error) throw new Error(`Could not check existing invites: ${error.message}`);
           for (const r of (data ?? []) as { phone: string }[]) taken.add(r.phone);
@@ -108,8 +116,10 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
     setBusy(true);
     setNotice(null);
     try {
-      const rows = batch.valid.map(({ line: _line, raw: _raw, ...draft }) => draft);
-      const res = await createInvites({ data: { accessToken, audience: "alumni", rows } });
+      const rows = batch.valid.map(({ line: _line, raw: _raw, ...draft }) =>
+        audience === "parent" ? { ...draft, gradYear: null } : draft,
+      );
+      const res = await createInvites({ data: { accessToken, audience, rows } });
       const skipped = res.skippedExisting.length
         ? ` ${res.skippedExisting.length} already had an invite and were skipped.`
         : "";
@@ -182,8 +192,18 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
       ) : (
         <div className="space-y-2">
           <p className="text-sm text-[var(--color-ink)]/70">
-            Columns: <code>name</code>, <code>phone</code>, and optionally <code>email</code>, <code>school</code>,{" "}
-            <code>year</code>. Save from Excel or Google Sheets as CSV.
+            {audience === "parent" ? (
+              <>
+                Columns: <code>name</code>, <code>phone</code>, and optionally <code>email</code> and{" "}
+                <code>school</code> (the child's school).
+              </>
+            ) : (
+              <>
+                Columns: <code>name</code>, <code>phone</code>, and optionally <code>email</code>,{" "}
+                <code>school</code>, <code>year</code>.
+              </>
+            )}{" "}
+            Save from Excel or Google Sheets as CSV.
           </p>
           <div className="flex flex-wrap gap-2">
             <label className={`${A_BTN_SECONDARY} cursor-pointer`}>

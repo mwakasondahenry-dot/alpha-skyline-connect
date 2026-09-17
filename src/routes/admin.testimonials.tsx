@@ -10,10 +10,10 @@ export const Route = createFileRoute("/admin/testimonials")({
 });
 
 /**
- * The invite panel sits on top: invitations go out from there and come back
- * as submissions in the queue.
+ * Two invite panels sit on top, one for alumni and one for parents:
+ * invitations go out from there and come back as submissions in the queue.
  *
- * Testimonials, plus the alumni moderation queue.
+ * Testimonials, plus the moderation queue.
  *
  * The queue sits above the table rather than on a screen of its own: both are
  * rows in public.testimonials, and splitting them would mean two places to
@@ -32,7 +32,8 @@ function TestimonialsAdmin() {
 
   return (
     <div className="space-y-8">
-      <InvitePanel />
+      <InvitePanel audience="alumni" />
+      <InvitePanel audience="parent" />
       <AlumniPendingQueue onChanged={() => setVersion((v) => v + 1)} />
       <AdminCrud key={version} config={CONFIG} />
     </div>

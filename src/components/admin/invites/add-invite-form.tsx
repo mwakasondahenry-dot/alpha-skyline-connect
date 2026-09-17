@@ -1,12 +1,19 @@
-/** Add one alumnus by hand. */
+/** Add one alumnus or parent by hand. */
 import { useState, type FormEvent } from "react";
 import { createInvites } from "@/lib/invites.functions";
 import { ALUMNI_SCHOOLS, validateContact } from "@/lib/invites/contacts";
+import type { Audience } from "@/lib/invites/audience";
 import { A_BTN_PRIMARY, A_INPUT, Notice, errorText, useAccessToken, type NoticeState } from "./ui";
 
 const EMPTY = { name: "", phone: "", email: "", school: "", year: "" };
 
-export function AddInviteForm({ onCreated }: { onCreated: () => void }) {
+export function AddInviteForm({
+  audience,
+  onCreated,
+}: {
+  audience: Audience;
+  onCreated: () => void;
+}) {
   const accessToken = useAccessToken();
   const [fields, setFields] = useState(EMPTY);
   const [busy, setBusy] = useState(false);
@@ -17,7 +24,7 @@ export function AddInviteForm({ onCreated }: { onCreated: () => void }) {
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
-    const checked = validateContact(fields);
+    const checked = validateContact(audience === "parent" ? { ...fields, year: "" } : fields);
     if (!checked.ok) {
       setNotice({ tone: "error", text: checked.reason });
       return;
@@ -25,7 +32,7 @@ export function AddInviteForm({ onCreated }: { onCreated: () => void }) {
     setBusy(true);
     setNotice(null);
     try {
-      const res = await createInvites({ data: { accessToken, audience: "alumni", rows: [checked.draft] } });
+      const res = await createInvites({ data: { accessToken, audience, rows: [checked.draft] } });
       if (res.created === 0) {
         setNotice({ tone: "error", text: "This phone number already has an invite. It is in the list below." });
         return;
@@ -68,7 +75,7 @@ export function AddInviteForm({ onCreated }: { onCreated: () => void }) {
           <input value={fields.email} onChange={set("email")} type="email" className={`mt-1 ${A_INPUT}`} />
         </label>
         <label className={label}>
-          School
+          {audience === "parent" ? "Child's school" : "School"}
           <select value={fields.school} onChange={set("school")} className={`mt-1 ${A_INPUT}`}>
             <option value="">Not sure</option>
             {ALUMNI_SCHOOLS.map((s) => (
@@ -78,16 +85,18 @@ export function AddInviteForm({ onCreated }: { onCreated: () => void }) {
             ))}
           </select>
         </label>
-        <label className={label}>
-          Class of
-          <input
-            value={fields.year}
-            onChange={(e) => setFields((f) => ({ ...f, year: e.target.value.replace(/\D/g, "").slice(0, 4) }))}
-            inputMode="numeric"
-            placeholder="2018"
-            className={`mt-1 ${A_INPUT}`}
-          />
-        </label>
+        {audience === "alumni" && (
+          <label className={label}>
+            Class of
+            <input
+              value={fields.year}
+              onChange={(e) => setFields((f) => ({ ...f, year: e.target.value.replace(/\D/g, "").slice(0, 4) }))}
+              inputMode="numeric"
+              placeholder="2018"
+              className={`mt-1 ${A_INPUT}`}
+            />
+          </label>
+        )}
       </div>
       <button type="submit" disabled={busy} className={A_BTN_PRIMARY}>
         {busy ? "Adding…" : "Add invite"}

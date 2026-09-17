@@ -1,9 +1,10 @@
 /**
- * Moderation queue for alumni submissions, shown above the testimonials CRUD.
+ * Moderation queue for alumni and parent submissions, shown above the
+ * testimonials CRUD.
  *
  * A pending submission is a testimonials row with published = false and a
- * grad_year — see alpha_migration_alumni_submissions.sql for why grad_year is
- * the alumni discriminator.
+ * consent record (consent_at is not null) — staff-typed rows in the CRUD
+ * below have none, which is what keeps them out of this queue.
  *
  * Stories from personal invite links are tagged Invited; everything else came through the general link (or the old one-page form).
  *
@@ -20,6 +21,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { Check, X, Loader2 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { STORY_PROMPTS } from "@/lib/story/fields";
+import { PARENT_PROMPTS } from "@/lib/story/parent-fields";
+
+const ALL_PROMPTS = [...STORY_PROMPTS, ...PARENT_PROMPTS];
 
 const PENDING_BUCKET = "alumni-pending";
 const PUBLIC_BUCKET = "media";
@@ -38,7 +42,7 @@ type PendingRow = {
   consent_text: string | null;
   created_at: string;
   invite_id: string | null;
-  answers: { gave_you?: string; moment?: string; advice?: string } | null;
+  answers: Record<string, string> | null;
   city_country: string | null;
 };
 
@@ -76,7 +80,7 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
         "id,author_name,relationship,company,grad_year,quote,pending_photo_path,consent_at,consent_text,created_at,invite_id,answers,city_country",
       )
       .eq("published", false)
-      .not("grad_year", "is", null)
+      .not("consent_at", "is", null)
       .order("created_at", { ascending: false });
 
     if (loadError) {
@@ -204,13 +208,13 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
   if (!loading && rows.length === 0 && !error) {
     return (
       <p className="text-sm text-[var(--color-ink)]/60">
-        No alumni submissions waiting for review.
+        No stories waiting for review.
       </p>
     );
   }
 
   return (
-    <section aria-label="Alumni submissions awaiting review" className="space-y-3">
+    <section aria-label="Submissions awaiting review" className="space-y-3">
       <header className="flex flex-wrap items-center gap-3">
         <h2 className="text-lg font-bold text-[var(--color-deep-blue)]">
           Awaiting review
@@ -264,6 +268,9 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
                     <p className="font-semibold text-[var(--color-deep-blue)]">
                       {row.author_name}{" "}
                       <span className="ml-1 rounded-full bg-[var(--color-deep-blue)]/5 px-2 py-0.5 text-xs font-bold text-[var(--color-deep-blue)]">
+                        {row.grad_year == null ? "Parent" : "Alumnus"}
+                      </span>
+                      <span className="ml-1 rounded-full bg-[var(--color-deep-blue)]/5 px-2 py-0.5 text-xs font-bold text-[var(--color-deep-blue)]">
                         {row.invite_id ? "Invited" : "General link"}
                       </span>
                     </p>
@@ -271,13 +278,13 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
                     <blockquote className="mt-2 whitespace-pre-line text-sm text-[var(--color-ink)]">
                       {row.quote}
                     </blockquote>
-                    {row.answers && STORY_PROMPTS.some((p) => row.answers?.[p.key]) && (
+                    {row.answers && ALL_PROMPTS.some((p) => row.answers?.[p.key]) && (
                       <details className="mt-2">
                         <summary className="cursor-pointer text-xs text-[var(--color-ink)]/60">
                           Story answers (not published)
                         </summary>
                         <dl className="mt-1 space-y-2 text-sm">
-                          {STORY_PROMPTS.filter((p) => row.answers?.[p.key]).map((p) => (
+                          {ALL_PROMPTS.filter((p) => row.answers?.[p.key]).map((p) => (
                             <div key={p.key}>
                               <dt className="text-xs font-semibold text-[var(--color-deep-blue)]">{p.label}</dt>
                               <dd className="whitespace-pre-line text-[var(--color-ink)]">{row.answers?.[p.key]}</dd>
