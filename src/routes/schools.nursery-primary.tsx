@@ -6,6 +6,7 @@ import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import {
   getTestimonials,
+  isAlumniStory,
   submitContactMessage,
   type TestimonialItem,
 } from "@/lib/alpha-content.functions";
@@ -1002,8 +1003,15 @@ function WhatParentsSay() {
   // Real published rows for this school only, and nothing at all when there
   // are none. The blue section above closes itself with its own bottom wave,
   // so this section can disappear without leaving a seam.
+  //
+  // Alumni stories now also carry a school_slug (the school they attended),
+  // so filtering on school_slug alone would let an approved alumni story
+  // show up here as if it were a parent quote. isAlumniStory (grad_year !=
+  // null) is the discriminator used everywhere else this table is read.
   const quotes: TestimonialItem[] = testimonials.filter(
-    (t) => t.school_slug === "nursery-primary" || t.school_slug === null,
+    (t) =>
+      (t.school_slug === "nursery-primary" || t.school_slug === null) &&
+      !isAlumniStory(t),
   );
   if (quotes.length === 0) return null;
 

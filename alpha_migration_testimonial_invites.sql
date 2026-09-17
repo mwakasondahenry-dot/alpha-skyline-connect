@@ -4,6 +4,11 @@
 -- Requires alpha_migration_alumni_submissions.sql (is_staff, testimonials
 -- consent columns, alumni-pending bucket, claim_submission_slot).
 -- Safe to run more than once. Paste into the Supabase SQL editor.
+--
+-- Section 4 narrows anon's SELECT on public.testimonials to public columns.
+-- alpha_schema.sql and alpha_migration_hero_testimonials.sql both grant
+-- table-wide anon SELECT on that table, so if either is re-run after this
+-- file, re-run this file again afterwards to restore the column narrowing.
 -- ============================================================
 
 
@@ -130,3 +135,43 @@ revoke all on function public.submit_invited_story(text, text, text, int, text, 
   from public, anon, authenticated;
 grant execute on function public.submit_invited_story(text, text, text, int, text, text, text, jsonb, text, text, text, inet)
   to service_role;
+
+
+-- ---- 4. Anon SELECT narrowed to public columns
+--
+-- alpha_migration_alumni_submissions.sql section 3 (and, before it,
+-- alpha_schema.sql / alpha_migration_hero_testimonials.sql) grant anon
+-- table-wide SELECT on public.testimonials, relying only on the RLS policy
+-- "published = true" as a gate. RLS filters ROWS, not COLUMNS — it does not
+-- stop a column being read on a row it lets through. The anon key ships to
+-- every browser, so once a story is approved anyone can already call
+-- GET /rest/v1/testimonials?select=answers,city_country,invite_id,submitted_ip&published=eq.true
+-- and read an alumnus's free-text prompt answers, city/country and the IP
+-- address that submitted the story.
+--
+-- The fix is a column-level grant covering exactly what the anon-key readers
+-- need. Both readers of this table on the anon key (getTestimonials and
+-- getAlumniStories, src/lib/alpha-content.functions.ts, via serverClient()
+-- using ALPHA_SUPABASE_ANON_KEY_SERVER) select only:
+--   id, author_name, relationship, quote, photo_url, school_slug, grad_year, company
+-- and filter/order on: published, sort_order (grad_year is already selected).
+-- Nothing else reads testimonials on the anon key (the admin queue and story
+-- wizard use the authenticated role and the service role respectively — see
+-- alumni-pending.tsx's useAdminAuth() client and alumni.functions.ts's
+-- serviceClient()). So the grant below is the union of those two lists, and
+-- deliberately excludes answers, city_country, invite_id, submitted_ip,
+-- consent_at, consent_text and pending_photo_path.
+--
+-- authenticated and service_role keep their existing table-wide grants
+-- unchanged (the admin panel reads/writes through authenticated, gated by
+-- the "testimonials staff all" RLS policy using is_staff(); server functions
+-- use service_role, which bypasses RLS and column grants entirely).
+--
+-- Re-running alpha_schema.sql or alpha_migration_hero_testimonials.sql
+-- re-grants table-wide anon SELECT and undoes this narrowing — always run
+-- this file again after either of those.
+revoke select on public.testimonials from anon;
+grant select (
+  id, author_name, relationship, quote, photo_url, school_slug,
+  grad_year, company, published, sort_order
+) on public.testimonials to anon;
