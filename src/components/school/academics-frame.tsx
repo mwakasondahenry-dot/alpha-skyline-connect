@@ -34,20 +34,49 @@ export function CurriculumBand({
   title,
   intro,
   accent,
+  image,
 }: {
-  eyebrow: string;
+  /** Optional small label above the heading. The redesigned pages omit it. */
+  eyebrow?: string;
   title: ReactNode;
   intro?: ReactNode;
   accent?: string;
+  /** Decorative photograph faded in from the right. */
+  image?: string;
 }) {
   return (
-    <div className="ac-band" style={accentVar(accent)}>
-      <GraduationCap aria-hidden className="ac-band__mark" strokeWidth={1} />
+    <div className={`ac-band${image ? " ac-band--photo" : ""}`} style={accentVar(accent)}>
+      {image ? (
+        <img src={image} alt="" aria-hidden className="ac-band__photo" decoding="async" />
+      ) : (
+        <GraduationCap aria-hidden className="ac-band__mark" strokeWidth={1} />
+      )}
       <div className={`${SHELL} relative py-[var(--space-block-y)]`}>
-        <p className="flex items-center gap-3" style={T.label}>
+        <div className={image ? "md:max-w-[50%]" : undefined}>
+          {eyebrow && (
+            <p className="mb-3 flex items-center gap-3" style={T.label}>
+              <span
+                aria-hidden
+                className="inline-block"
+                style={{
+              width: "var(--heading-rule-w)",
+              height: "var(--heading-rule-h)",
+              background: "var(--color-gold)",
+              borderRadius: "var(--heading-rule-radius)",
+            }}
+              />
+              <span style={{ color: "var(--ac-accent, var(--color-brand-blue))" }}>{eyebrow}</span>
+            </p>
+          )}
+          <h2
+            className="max-w-3xl font-display tracking-tight text-balance text-[var(--color-ink)]"
+            style={T.section}
+          >
+            {title}
+          </h2>
           <span
             aria-hidden
-            className="inline-block"
+            className="mt-[var(--heading-rule-gap)] block"
             style={{
               width: "var(--heading-rule-w)",
               height: "var(--heading-rule-h)",
@@ -55,19 +84,12 @@ export function CurriculumBand({
               borderRadius: "var(--heading-rule-radius)",
             }}
           />
-          <span style={{ color: "var(--ac-accent, var(--color-brand-blue))" }}>{eyebrow}</span>
-        </p>
-        <h2
-          className="mt-3 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
-          {title}
-        </h2>
-        {intro && (
-          <p className="mt-3 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            {intro}
-          </p>
-        )}
+          {intro && (
+            <p className="mt-4 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+              {intro}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

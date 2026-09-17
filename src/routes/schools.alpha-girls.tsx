@@ -9,6 +9,7 @@ import {
   type CombinationGroup,
 } from "@/components/school/subject-lists";
 import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
+import labBench from "@/assets/subjects/lab-bench.webp";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
@@ -668,7 +669,7 @@ function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-off-white)]">
       <CurriculumBand
-        eyebrow="Academics"
+        image={labBench}
         title="Seventeen subjects at O-Level, twelve combinations at A-Level."
         intro="Every subject examinable across Forms One to Four, what a girl in each form may choose between, and all twelve A-Level combinations with their subjects written out."
         accent={ACCENT}

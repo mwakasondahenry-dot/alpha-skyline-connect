@@ -20,6 +20,7 @@ import {
   type CombinationGroup,
 } from "@/components/school/subject-lists";
 import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
+import labBench from "@/assets/subjects/lab-bench.webp";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -473,7 +474,7 @@ function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-surface)]">
       <CurriculumBand
-        eyebrow="Academics"
+        image={labBench}
         title="Seventeen subjects at O-Level, twelve combinations at A-Level."
         intro="Every subject examinable across Forms One to Four, what a pupil in each form may choose between, and all twelve A-Level combinations with their subjects written out."
       />
