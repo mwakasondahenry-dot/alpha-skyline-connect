@@ -48,17 +48,6 @@ async function mintToken(key: string) {
   };
 }
 
-/** Staff-facing errors pass through; anything else is logged and replaced. */
-async function guarded<T>(label: string, run: () => Promise<T>): Promise<T> {
-  try {
-    return await run();
-  } catch (err) {
-    if (err instanceof InviteError || err instanceof StaffAuthError) throw err;
-    console.error(`[${label}]`, err);
-    throw new Error("Something went wrong. Please try again.");
-  }
-}
-
 export const getLinkBase = createServerFn({ method: "GET" }).handler(async () => {
   const base = siteBase();
   return { base, isLocal: /\/\/(localhost|127\.|192\.168\.|10\.)/.test(base) };
@@ -68,8 +57,8 @@ export type CreateInvitesResult = { created: number; skippedExisting: string[] }
 
 export const createInvites = createServerFn({ method: "POST" })
   .inputValidator((data: { accessToken: string; rows: InviteDraft[] }) => data)
-  .handler(({ data }) =>
-    guarded("createInvites", async (): Promise<CreateInvitesResult> => {
+  .handler(async ({ data }): Promise<CreateInvitesResult> => {
+    try {
       const { userId } = await requireStaff(data.accessToken);
 
       const rows = Array.isArray(data.rows) ? data.rows : [];
@@ -148,15 +137,19 @@ export const createInvites = createServerFn({ method: "POST" })
         created: inserts.length,
         skippedExisting: clean.filter((c) => taken.has(c.phone)).map((c) => c.fullName),
       };
-    }),
-  );
+    } catch (err) {
+      if (err instanceof InviteError || err instanceof StaffAuthError) throw err;
+      console.error("[createInvites]", err);
+      throw new Error("Something went wrong. Please try again.");
+    }
+  });
 
 type InviteRef = { accessToken: string; inviteId: string };
 
 export const getInviteLink = createServerFn({ method: "POST" })
   .inputValidator((data: InviteRef) => data)
-  .handler(({ data }) =>
-    guarded("getInviteLink", async () => {
+  .handler(async ({ data }) => {
+    try {
       await requireStaff(data.accessToken);
       const sb = serviceClient();
       const { data: row, error } = await sb
@@ -191,13 +184,17 @@ export const getInviteLink = createServerFn({ method: "POST" })
       if (stampError) console.error("[getInviteLink] stamp", stampError);
 
       return { link, whatsapp: whatsappUrl(row.phone, inviteMessage(row.full_name, link)) };
-    }),
-  );
+    } catch (err) {
+      if (err instanceof InviteError || err instanceof StaffAuthError) throw err;
+      console.error("[getInviteLink]", err);
+      throw new Error("Something went wrong. Please try again.");
+    }
+  });
 
 export const regenerateInvite = createServerFn({ method: "POST" })
   .inputValidator((data: InviteRef) => data)
-  .handler(({ data }) =>
-    guarded("regenerateInvite", async () => {
+  .handler(async ({ data }) => {
+    try {
       await requireStaff(data.accessToken);
       const sb = serviceClient();
       const { data: row, error } = await sb
@@ -225,8 +222,12 @@ export const regenerateInvite = createServerFn({ method: "POST" })
         .neq("status", "submitted");
       if (updateError) throw updateError;
       return { ok: true as const };
-    }),
-  );
+    } catch (err) {
+      if (err instanceof InviteError || err instanceof StaffAuthError) throw err;
+      console.error("[regenerateInvite]", err);
+      throw new Error("Something went wrong. Please try again.");
+    }
+  });
 
 export type OpenInviteResult =
   | { state: "ok"; fullName: string; schoolSlug: AlumniSchool | null; gradYear: number | null }

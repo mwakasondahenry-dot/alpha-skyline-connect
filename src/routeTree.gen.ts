@@ -39,6 +39,8 @@ import { Route as AlumniSubmitRouteImport } from './routes/alumni.submit'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
+import { Route as AlumniStoryIndexRouteImport } from './routes/alumni.story.index'
+import { Route as AlumniStoryCodeRouteImport } from './routes/alumni.story.$code'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -190,6 +192,16 @@ const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
   path: '/schools/nursery-primary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlumniStoryIndexRoute = AlumniStoryIndexRouteImport.update({
+  id: '/alumni/story/',
+  path: '/alumni/story/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlumniStoryCodeRoute = AlumniStoryCodeRouteImport.update({
+  id: '/alumni/story/$code',
+  path: '/alumni/story/$code',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -222,6 +234,8 @@ export interface FileRoutesByFullPath {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/alumni/story/$code': typeof AlumniStoryCodeRoute
+  '/alumni/story/': typeof AlumniStoryIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -253,6 +267,8 @@ export interface FileRoutesByTo {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin': typeof AdminIndexRoute
   '/alumni': typeof AlumniIndexRoute
+  '/alumni/story/$code': typeof AlumniStoryCodeRoute
+  '/alumni/story': typeof AlumniStoryIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -286,6 +302,8 @@ export interface FileRoutesById {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/alumni/story/$code': typeof AlumniStoryCodeRoute
+  '/alumni/story/': typeof AlumniStoryIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -320,6 +338,8 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/alumni/story/$code'
+    | '/alumni/story/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -351,6 +371,8 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin'
     | '/alumni'
+    | '/alumni/story/$code'
+    | '/alumni/story'
   id:
     | '__root__'
     | '/'
@@ -383,6 +405,8 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/alumni/story/$code'
+    | '/alumni/story/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -404,6 +428,8 @@ export interface RootRouteChildren {
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
   AlumniIndexRoute: typeof AlumniIndexRoute
+  AlumniStoryCodeRoute: typeof AlumniStoryCodeRoute
+  AlumniStoryIndexRoute: typeof AlumniStoryIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -618,6 +644,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alumni/story/': {
+      id: '/alumni/story/'
+      path: '/alumni/story'
+      fullPath: '/alumni/story/'
+      preLoaderRoute: typeof AlumniStoryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alumni/story/$code': {
+      id: '/alumni/story/$code'
+      path: '/alumni/story/$code'
+      fullPath: '/alumni/story/$code'
+      preLoaderRoute: typeof AlumniStoryCodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -672,6 +712,8 @@ const rootRouteChildren: RootRouteChildren = {
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
   AlumniIndexRoute: AlumniIndexRoute,
+  AlumniStoryCodeRoute: AlumniStoryCodeRoute,
+  AlumniStoryIndexRoute: AlumniStoryIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
