@@ -18,8 +18,17 @@ import { CONSENT_TEXT, PENDING_BUCKET, PHOTO_MAX_BYTES, StoryError, validateStor
 
 export { CONSENT_TEXT, MESSAGE_MAX, PHOTO_MAX_BYTES, PENDING_BUCKET } from "@/lib/story/fields";
 
-/** Submissions allowed from one address per hour. */
+/** General-link submissions allowed from one address per hour. */
 const RATE_LIMIT = 5;
+/**
+ * Personal-invite-link submissions allowed from one address per hour.
+ * Higher than the general link's limit because invite links are shared over
+ * WhatsApp/SMS and several invited alumni behind the same shared mobile-
+ * carrier IP (CGNAT) can legitimately submit within the same hour; the
+ * 256-bit link code and the one-story-per-invite lock (submit_invited_story)
+ * already bound how much abuse this can absorb. Owner-approved.
+ */
+const INVITE_RATE_LIMIT = 30;
 
 function fail(message: string): never {
   throw new StoryError(message);
@@ -43,8 +52,15 @@ export const submitStory = createServerFn({ method: "POST" })
 
     const discardPhoto = async () => {
       if (!sb || !pendingPath) return;
-      const { error } = await sb.storage.from(PENDING_BUCKET).remove([pendingPath]);
-      if (error) console.error("[submitStory] discard photo", error);
+      // Never let a discard failure escape and replace the caller's
+      // user-facing error: a thrown (not returned) storage error here is
+      // logged and swallowed, same as a returned one.
+      try {
+        const { error } = await sb.storage.from(PENDING_BUCKET).remove([pendingPath]);
+        if (error) console.error("[submitStory] discard photo", error);
+      } catch (err) {
+        console.error("[submitStory] discard photo", err);
+      }
       pendingPath = null;
     };
 
@@ -56,7 +72,7 @@ export const submitStory = createServerFn({ method: "POST" })
       /* Rate limit before any storage write, so a flood costs the bucket nothing. */
       const { data: allowed, error: rateError } = await sb.rpc("claim_submission_slot", {
         p_key: `${input.code ? "invite" : "alumni"}:${ip}`,
-        p_limit: RATE_LIMIT,
+        p_limit: input.code ? INVITE_RATE_LIMIT : RATE_LIMIT,
       });
       if (rateError) {
         console.error("[submitStory] rate limit", rateError);
