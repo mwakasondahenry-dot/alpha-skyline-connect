@@ -9,7 +9,7 @@ import { AddInviteForm } from "./add-invite-form";
 import { BulkImport } from "./bulk-import";
 import { GeneralLinkCard } from "./general-link-card";
 import { InviteList } from "./invite-list";
-import { Notice } from "./ui";
+import { A_CARD, Notice } from "./ui";
 
 export function InvitePanel() {
   const [reloadKey, setReloadKey] = useState(0);
@@ -27,8 +27,8 @@ export function InvitePanel() {
           Invite alumni
         </h2>
         <p className="text-sm text-[var(--color-ink)]/70">
-          Each person gets their own link to a short step-by-step form. Send it from WhatsApp; their story
-          appears under "Awaiting review" when they finish.
+          Each person gets their own link to a short form. When they send it, their story waits
+          under "Awaiting review" below.
         </p>
       </header>
 
@@ -43,7 +43,9 @@ export function InvitePanel() {
 
       <GeneralLinkCard base={base?.base ?? null} />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div
+        className={`${A_CARD} grid gap-6 lg:grid-cols-2 lg:gap-0 lg:divide-x lg:divide-[var(--color-deep-blue)]/10 lg:[&>*]:px-6 lg:[&>*:first-child]:pl-0 lg:[&>*:last-child]:pr-0`}
+      >
         <AddInviteForm onCreated={bump} />
         <BulkImport onImported={bump} />
       </div>

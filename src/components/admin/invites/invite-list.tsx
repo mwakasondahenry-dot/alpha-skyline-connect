@@ -6,14 +6,12 @@
  * await would be treated as an unrequested popup and blocked.
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Copy, Loader2, MessageCircle, RefreshCw, Trash2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import type { TestimonialInviteRow } from "@/integrations/alpha-supabase/types";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { getInviteLink, regenerateInvite } from "@/lib/invites.functions";
 import { STATUS_LABEL, displayStatus, type DisplayStatus } from "@/lib/invites/status";
 import {
-  A_BTN_SECONDARY,
-  A_CARD,
   Notice,
   copyText,
   errorText,
@@ -140,7 +138,7 @@ export function InviteList({ reloadKey }: { reloadKey: number }) {
         await regenerateInvite({ data: { accessToken, inviteId: row.id } });
         setNotice({
           tone: "ok",
-          text: `New link made for ${row.full_name}. The old one no longer works — send the new one.`,
+          text: `New link made for ${row.full_name}. Send them the new one; the old link no longer works.`,
         });
         await load();
       } catch (err) {
@@ -163,121 +161,147 @@ export function InviteList({ reloadKey }: { reloadKey: number }) {
     });
   }
 
+  const rowBtn =
+    "rounded border border-[var(--color-deep-blue)]/20 px-2.5 py-1 text-xs font-semibold text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)] hover:text-white disabled:cursor-not-allowed disabled:opacity-50";
+  const dangerBtn =
+    "rounded border border-red-300 px-2.5 py-1 text-xs font-semibold text-red-700 hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50";
+
   return (
     <div className="space-y-3">
-      <div className="flex flex-wrap items-center gap-2">
-        <h3 className="mr-2 font-semibold text-[var(--color-deep-blue)]">Invited</h3>
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            type="button"
-            onClick={() => setFilter(f)}
-            aria-pressed={filter === f}
-            className={`rounded-full border px-3 py-1 text-xs font-semibold ${
-              filter === f
-                ? "border-[var(--color-deep-blue)] bg-[var(--color-deep-blue)] text-white"
-                : "border-[var(--color-deep-blue)]/20 bg-white text-[var(--color-deep-blue)]"
-            }`}
-          >
-            {f === "all" ? "All" : STATUS_LABEL[f]} ({counts[f]})
-          </button>
-        ))}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h3 className="font-semibold text-[var(--color-deep-blue)]">Invited</h3>
+        <div role="group" aria-label="Filter by status" className="flex flex-wrap gap-1">
+          {FILTERS.map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFilter(f)}
+              aria-pressed={filter === f}
+              className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+                filter === f
+                  ? "bg-[var(--color-deep-blue)] text-white"
+                  : "text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)]/5"
+              }`}
+            >
+              {f === "all" ? "All" : STATUS_LABEL[f]}{" "}
+              <span className="tabular-nums opacity-70">{counts[f]}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       <Notice notice={notice} />
 
-      {loading ? (
-        <div className={`${A_CARD} text-sm text-[var(--color-deep-blue)]`}>Loading…</div>
-      ) : visible.length === 0 ? (
-        <p className="text-sm text-[var(--color-ink)]/60">
-          {rows.length === 0 ? "Nobody invited yet." : "No invites with this status."}
-        </p>
-      ) : (
-        <ul className="space-y-2">
-          {visible.map((row) => {
-            const busy = busyId === row.id;
-            const confirming = confirm?.id === row.id ? confirm.action : null;
-            const canShare = row.shown === "pending" || row.shown === "opened";
-            return (
-              <li key={row.id} className={A_CARD}>
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="font-semibold text-[var(--color-deep-blue)]">
-                      {row.full_name}{" "}
-                      <span className={`ml-1 rounded-full px-2 py-0.5 text-xs font-bold ${BADGE[row.shown]}`}>
-                        {STATUS_LABEL[row.shown]}
-                      </span>
-                    </p>
-                    <p className="text-sm text-[var(--color-ink)]/70 break-words">
-                      {row.phone}
-                      {row.email ? ` · ${row.email}` : ""}
-                    </p>
-                    <p className="text-xs text-[var(--color-ink)]/60">
-                      {row.last_shared_at ? `Last shared ${formatDate(row.last_shared_at)}` : "Not shared yet"}
-                    </p>
-                  </div>
-
-                  {confirming ? (
-                    <div className="flex flex-wrap items-center gap-2 text-sm">
-                      <span className="text-[var(--color-ink)]">
-                        {confirming === "delete"
-                          ? "Delete this invite?"
-                          : "Make a new link? The old one stops working."}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => (confirming === "delete" ? remove(row) : regenerate(row))}
-                        className={`${A_BTN_SECONDARY} ${confirming === "delete" ? "text-red-700" : ""}`}
-                      >
-                        {confirming === "delete" ? "Delete" : "Make new link"}
-                      </button>
-                      <button type="button" onClick={() => setConfirm(null)} className={A_BTN_SECONDARY}>
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="flex flex-wrap gap-2">
-                      {busy && <Loader2 className="h-5 w-5 animate-spin self-center" aria-label="Working" />}
-                      {canShare && (
-                        <>
-                          <button type="button" onClick={() => share(row)} disabled={busy} className={A_BTN_SECONDARY}>
-                            <MessageCircle className="h-4 w-4" aria-hidden />
-                            Send on WhatsApp
-                          </button>
-                          <button type="button" onClick={() => copy(row)} disabled={busy} className={A_BTN_SECONDARY}>
-                            <Copy className="h-4 w-4" aria-hidden />
-                            Copy link
-                          </button>
-                        </>
-                      )}
-                      {row.shown !== "submitted" && (
-                        <button
-                          type="button"
-                          onClick={() => setConfirm({ id: row.id, action: "regenerate" })}
-                          disabled={busy}
-                          className={A_BTN_SECONDARY}
-                        >
-                          <RefreshCw className="h-4 w-4" aria-hidden />
-                          Regenerate
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        onClick={() => setConfirm({ id: row.id, action: "delete" })}
-                        disabled={busy}
-                        className={`${A_BTN_SECONDARY} text-red-700`}
-                        aria-label={`Delete invite for ${row.full_name}`}
-                      >
-                        <Trash2 className="h-4 w-4" aria-hidden />
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </li>
-            );
-          })}
-        </ul>
-      )}
+      <div className="overflow-hidden rounded-xl border border-[var(--color-deep-blue)]/10 bg-white shadow-sm">
+        {loading ? (
+          <div className="p-6 text-sm text-[var(--color-deep-blue)]">Loading…</div>
+        ) : visible.length === 0 ? (
+          <div className="p-6 text-sm text-[var(--color-ink)]/70">
+            {rows.length === 0
+              ? "Nobody invited yet. Add someone above."
+              : "No invites with this status."}
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-[var(--color-deep-blue)]/5 text-left text-[11px] font-semibold uppercase tracking-wide text-[var(--color-deep-blue)]">
+                <tr>
+                  <th className="px-4 py-2.5">Name</th>
+                  <th className="px-4 py-2.5">Status</th>
+                  <th className="hidden px-4 py-2.5 md:table-cell">Last shared</th>
+                  <th className="px-4 py-2.5 text-right">
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[var(--color-deep-blue)]/5">
+                {visible.map((row) => {
+                  const busy = busyId === row.id;
+                  const confirming = confirm?.id === row.id ? confirm.action : null;
+                  const canShare = row.shown === "pending" || row.shown === "opened";
+                  return (
+                    <tr key={row.id} className="align-top hover:bg-[var(--color-deep-blue)]/[0.03]">
+                      <td className="px-4 py-2.5">
+                        <span className="font-semibold text-[var(--color-deep-blue)]">
+                          {row.full_name}
+                        </span>
+                        <span className="block break-words text-[var(--color-ink)]/70">
+                          {row.phone}
+                          {row.email ? `, ${row.email}` : ""}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2.5 whitespace-nowrap">
+                        <span className={`rounded px-1.5 py-0.5 text-xs font-semibold ${BADGE[row.shown]}`}>
+                          {STATUS_LABEL[row.shown]}
+                        </span>
+                      </td>
+                      <td className="hidden px-4 py-2.5 whitespace-nowrap text-[var(--color-ink)]/70 md:table-cell">
+                        {row.last_shared_at ? formatDate(row.last_shared_at) : "Not yet"}
+                      </td>
+                      <td className="px-4 py-2.5 text-right">
+                        {confirming ? (
+                          <div className="flex flex-wrap items-center justify-end gap-2">
+                            <span className="text-[var(--color-ink)]">
+                              {confirming === "delete"
+                                ? "Delete this invite?"
+                                : "The current link will stop working."}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => (confirming === "delete" ? remove(row) : regenerate(row))}
+                              className={confirming === "delete" ? dangerBtn : rowBtn}
+                            >
+                              {confirming === "delete" ? "Delete" : "Make new link"}
+                            </button>
+                            <button type="button" onClick={() => setConfirm(null)} className={rowBtn}>
+                              Cancel
+                            </button>
+                          </div>
+                        ) : (
+                          <div className="flex flex-wrap items-center justify-end gap-2">
+                            {busy && (
+                              <Loader2 className="h-4 w-4 animate-spin text-[var(--color-deep-blue)]" aria-label="Working" />
+                            )}
+                            {canShare && (
+                              <>
+                                <button type="button" onClick={() => share(row)} disabled={busy} className={rowBtn}>
+                                  Send on WhatsApp
+                                </button>
+                                <button type="button" onClick={() => copy(row)} disabled={busy} className={rowBtn}>
+                                  Copy link
+                                </button>
+                              </>
+                            )}
+                            {row.shown !== "submitted" && (
+                              <button
+                                type="button"
+                                onClick={() => setConfirm({ id: row.id, action: "regenerate" })}
+                                disabled={busy}
+                                className={rowBtn}
+                              >
+                                New link
+                              </button>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => setConfirm({ id: row.id, action: "delete" })}
+                              disabled={busy}
+                              className={dangerBtn}
+                              aria-label={`Delete invite for ${row.full_name}`}
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

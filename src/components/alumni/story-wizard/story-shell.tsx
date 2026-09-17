@@ -4,17 +4,18 @@ import { SiteFooter, SiteHeader } from "@/components/site-chrome";
 import { SHELL, T } from "@/components/type-roles";
 import { CARD } from "./field-ui";
 
-export function StoryShell({ children }: { children: ReactNode }) {
+/** The heading names the person when the link is personal. */
+export function StoryShell({ name, children }: { name?: string | null; children: ReactNode }) {
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
       <main className={`${SHELL} py-[var(--space-section-y)]`}>
         <div className="mx-auto max-w-2xl">
-          <p className="text-[var(--color-bright-blue)]" style={T.label}>
-            Alpha Alumni
-          </p>
-          <h1 className="mt-2 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-            Share your story
+          <h1
+            className="font-display tracking-tight text-balance text-[var(--color-deep-blue)]"
+            style={T.section}
+          >
+            {name ? `${name}, share your Alpha story` : "Share your Alpha story"}
           </h1>
           <span
             aria-hidden
@@ -26,7 +27,7 @@ export function StoryShell({ children }: { children: ReactNode }) {
               borderRadius: "var(--heading-rule-radius)",
             }}
           />
-          <div className="mt-[var(--space-block-y)]">{children}</div>
+          <div className="mt-5">{children}</div>
         </div>
       </main>
       <SiteFooter />
@@ -34,19 +35,10 @@ export function StoryShell({ children }: { children: ReactNode }) {
   );
 }
 
-export function MessageCard({
-  title,
-  icon,
-  children,
-}: {
-  title: string;
-  icon?: ReactNode;
-  children?: ReactNode;
-}) {
+export function MessageCard({ title, children }: { title: string; children?: ReactNode }) {
   return (
     <div className={CARD} role="status">
-      {icon}
-      <h2 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
+      <h2 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
         {title}
       </h2>
       {children}

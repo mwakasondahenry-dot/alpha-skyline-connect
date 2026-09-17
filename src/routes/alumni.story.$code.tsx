@@ -50,7 +50,11 @@ function PersonalStoryPage() {
   }, [load]);
 
   return (
-    <StoryShell>
+    <StoryShell
+      name={
+        state.kind === "loaded" && state.invite.state === "ok" ? firstName(state.invite.fullName) : null
+      }
+    >
       <PersonalStoryBody state={state} code={code} onRetry={load} />
     </StoryShell>
   );
@@ -87,7 +91,6 @@ function PersonalStoryBody({
   return (
     <StoryWizard
       code={code}
-      greetingName={firstName(invite.fullName)}
       initial={{
         ...EMPTY_DRAFT,
         fullName: invite.fullName,

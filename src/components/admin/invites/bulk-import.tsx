@@ -4,7 +4,6 @@
  * the server checks them again and writes all or nothing.
  */
 import { useRef, useState } from "react";
-import { Download, FileUp, ListPlus } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { createInvites } from "@/lib/invites.functions";
 import type { ContactBatch, RejectedContact } from "@/lib/invites/contacts";
@@ -13,7 +12,6 @@ import { parsePastedList } from "@/lib/invites/paste";
 import {
   A_BTN_PRIMARY,
   A_BTN_SECONDARY,
-  A_CARD,
   A_INPUT,
   Notice,
   errorText,
@@ -35,7 +33,8 @@ function RejectedList({ title, items, unit }: { title: string; items: RejectedCo
       <ul className="mt-1 space-y-1 text-sm">
         {items.map((r) => (
           <li key={`${r.line}-${r.raw}`} className="break-words text-[var(--color-ink)]/80">
-            {unit} {r.line}: <span className="text-[var(--color-ink)]">{r.raw || "(empty)"}</span> — {r.reason}
+            <span className="font-semibold text-[var(--color-ink)]">{r.reason}</span> {unit} {r.line}:{" "}
+            {r.raw || "(empty)"}
           </li>
         ))}
       </ul>
@@ -114,7 +113,7 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
       const skipped = res.skippedExisting.length
         ? ` ${res.skippedExisting.length} already had an invite and were skipped.`
         : "";
-      setNotice({ tone: "ok", text: `${res.created} invites created.${skipped} Send them from the list below.` });
+      setNotice({ tone: "ok", text: `${res.created} added.${skipped} Send their links from the list below.` });
       reset();
       onImported();
     } catch (err) {
@@ -152,8 +151,8 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
   );
 
   return (
-    <div className={`${A_CARD} space-y-3`}>
-      <h3 className="font-semibold text-[var(--color-deep-blue)]">Add many</h3>
+    <div className="space-y-3">
+      <h3 className="font-semibold text-[var(--color-deep-blue)]">Add many people</h3>
       <div role="tablist" className="flex gap-1">
         {tab("paste", "Paste a list")}
         {tab("csv", "Upload CSV")}
@@ -168,7 +167,7 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
               onChange={(e) => setPasteText(e.target.value)}
               rows={6}
               placeholder={"Full name, 0712 345 678\nFull name, 0754 123 456, name@example.com"}
-              className={`mt-1 ${A_INPUT} font-mono`}
+              className={`mt-1 ${A_INPUT}`}
             />
           </label>
           <button
@@ -177,7 +176,6 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
             disabled={busy || !pasteText.trim()}
             className={A_BTN_SECONDARY}
           >
-            <ListPlus className="h-4 w-4" aria-hidden />
             Check list
           </button>
         </div>
@@ -189,7 +187,6 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
           </p>
           <div className="flex flex-wrap gap-2">
             <label className={`${A_BTN_SECONDARY} cursor-pointer`}>
-              <FileUp className="h-4 w-4" aria-hidden />
               Choose CSV file
               <input
                 ref={fileRef}
@@ -200,7 +197,6 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
               />
             </label>
             <button type="button" onClick={downloadTemplate} className={A_BTN_SECONDARY}>
-              <Download className="h-4 w-4" aria-hidden />
               Download template
             </button>
           </div>
@@ -223,7 +219,7 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
               <ul className="mt-1 space-y-1 text-sm">
                 {batch.valid.map((v) => (
                   <li key={v.phone} className="break-words">
-                    {v.fullName} — {v.phone}
+                    {v.fullName}, {v.phone}
                     {v.email ? ` · ${v.email}` : ""}
                   </li>
                 ))}
@@ -239,7 +235,7 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
               disabled={busy || batch.valid.length === 0}
               className={A_BTN_PRIMARY}
             >
-              {busy ? "Importing…" : `Import ${batch.valid.length} invites`}
+              {busy ? "Adding…" : `Add ${batch.valid.length} ${batch.valid.length === 1 ? "person" : "people"}`}
             </button>
             <button type="button" onClick={reset} disabled={busy} className={A_BTN_SECONDARY}>
               Cancel

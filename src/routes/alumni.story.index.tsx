@@ -22,7 +22,7 @@ export const Route = createFileRoute("/alumni/story/")({
 function GeneralStoryPage() {
   return (
     <StoryShell>
-      <StoryWizard code={null} greetingName={null} initial={EMPTY_DRAFT} />
+      <StoryWizard code={null} initial={EMPTY_DRAFT} />
     </StoryShell>
   );
 }

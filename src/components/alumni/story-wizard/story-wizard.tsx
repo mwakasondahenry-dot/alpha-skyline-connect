@@ -1,11 +1,10 @@
 /**
  * The alumni story wizard, for the general link (code = null) and personal
  * links. Each step's check runs before Next; the server runs all of them
- * again. Nothing is uploaded until Submit, to keep mobile data use down.
+ * again. Nothing is uploaded until Send, to keep mobile data use down.
  */
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { CheckCircle2 } from "lucide-react";
 import { T } from "@/components/type-roles";
 import { submitStory } from "@/lib/alumni.functions";
 import {
@@ -27,24 +26,22 @@ import {
   PromptsStep,
   QuoteStep,
   ReviewStep,
-  WelcomeStep,
 } from "./steps";
 import { useStoryDraft } from "./use-story-draft";
 
 type Check = (d: StoryDraft) => string | null;
 
-const STEPS: { title: string; check?: Check }[] = [
-  { title: "Welcome" },
-  { title: "About you", check: (d) => checkAbout(d) },
-  { title: "Where you are now", check: checkNow },
-  { title: "Your story", check: checkPrompts },
-  { title: "Your quote", check: checkQuote },
-  { title: "Photo & consent", check: checkConsent },
-  { title: "Review" },
+const STEPS: { title: string; short: string; check?: Check }[] = [
+  { title: "About you", short: "You", check: (d) => checkAbout(d) },
+  { title: "Where you are now", short: "Now", check: checkNow },
+  { title: "Your story", short: "Story", check: checkPrompts },
+  { title: "Your quote", short: "Quote", check: checkQuote },
+  { title: "Photo and consent", short: "Photo", check: checkConsent },
+  { title: "Check and send", short: "Send" },
 ];
 
 const BodyText = ({ children }: { children: React.ReactNode }) => (
-  <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+  <p className="mt-2 max-w-[60ch] text-[var(--color-ink-soft)]" style={T.body}>
     {children}
   </p>
 );
@@ -57,10 +54,10 @@ const HomeLink = () => (
 
 export function InvalidLinkCard() {
   return (
-    <MessageCard title="This link isn't valid any more">
+    <MessageCard title="This link no longer works">
       <BodyText>
-        It may have expired or been replaced. Please contact the school and we will send you a
-        new one.
+        It may have expired, or the school may have sent you a newer one. Contact the school and
+        we will send you a fresh link.
       </BodyText>
       <Link to="/contact" className={`mt-5 ${BTN_PRIMARY}`} style={BTN_PRIMARY_STYLE}>
         Contact the school
@@ -71,11 +68,8 @@ export function InvalidLinkCard() {
 
 export function AlreadyReceivedCard() {
   return (
-    <MessageCard
-      title="Thank you — we've already received your story."
-      icon={<CheckCircle2 className="h-8 w-8 text-[var(--color-bright-blue)]" aria-hidden />}
-    >
-      <BodyText>If you need to change or withdraw it, contact the school and we will help.</BodyText>
+    <MessageCard title="We already have your story">
+      <BodyText>Thank you. To change or withdraw it, contact the school and we will help.</BodyText>
       <HomeLink />
     </MessageCard>
   );
@@ -83,29 +77,48 @@ export function AlreadyReceivedCard() {
 
 function DoneCard() {
   return (
-    <MessageCard
-      title="Thank you — we have your story."
-      icon={<CheckCircle2 className="h-8 w-8 text-[var(--color-bright-blue)]" aria-hidden />}
-    >
+    <MessageCard title="Thank you. Your story is with us.">
       <BodyText>
-        Someone at the school reads every submission before anything is published, so it will not
-        appear on the site straight away. If you need to change or withdraw it, contact the school
-        and we will take it down.
+        A member of staff will read it before anything is published, so it will not appear on the
+        site straight away. To change or withdraw it later, contact the school.
       </BodyText>
       <HomeLink />
     </MessageCard>
   );
 }
 
-export function StoryWizard({
-  code,
-  greetingName,
-  initial,
-}: {
-  code: string | null;
-  greetingName: string | null;
-  initial: StoryDraft;
-}) {
+/**
+ * Where the reader is. Named steps on wider screens, where they fit and
+ * show what is still to come; a single line on phones.
+ */
+function StepIndicator({ step }: { step: number }) {
+  return (
+    <>
+      <p className="text-[var(--color-ink-soft)] sm:hidden" style={T.body}>
+        Step {step + 1} of {STEPS.length}
+      </p>
+      <ol className="hidden gap-1 sm:grid sm:grid-cols-6" aria-label="Steps">
+        {STEPS.map((s, i) => (
+          <li
+            key={s.title}
+            aria-current={i === step ? "step" : undefined}
+            className={`border-t-2 pt-2 text-sm ${
+              i === step
+                ? "border-[var(--color-gold)] font-semibold text-[var(--color-deep-blue)]"
+                : i < step
+                  ? "border-[var(--color-deep-blue)] text-[var(--color-deep-blue)]"
+                  : "border-[var(--color-deep-blue)]/15 text-[var(--color-ink-soft)]"
+            }`}
+          >
+            {s.short}
+          </li>
+        ))}
+      </ol>
+    </>
+  );
+}
+
+export function StoryWizard({ code, initial }: { code: string | null; initial: StoryDraft }) {
   const storageKey = `alpha-story-draft:${code ? code.slice(0, 12) : "general"}`;
   const { draft, update, setAnswer, clear, restored } = useStoryDraft(storageKey, initial);
 
@@ -178,7 +191,7 @@ export function StoryWizard({
       setError(
         err instanceof Error && err.message
           ? err.message
-          : "Could not send your story. Please check your connection and try again.",
+          : "Could not send your story. Check your connection and try again.",
       );
     } finally {
       setBusy(false);
@@ -192,92 +205,90 @@ export function StoryWizard({
   const last = step === STEPS.length - 1;
 
   return (
-    <div className={CARD}>
-      <p className="text-[var(--color-ink-soft)]" style={T.label}>
-        Step {step + 1} of {STEPS.length}
+    <>
+      <p className="max-w-[60ch] text-[var(--color-ink-soft)]" style={T.body}>
+        We would like to feature former students on our alumni page. It takes about five minutes,
+        you can change any answer before you send it, and a member of staff reads every story
+        before it is published.
       </p>
-      <div
-        role="progressbar"
-        aria-label="Progress"
-        aria-valuemin={1}
-        aria-valuemax={STEPS.length}
-        aria-valuenow={step + 1}
-        className="mt-2 h-1.5 overflow-hidden rounded-full bg-[var(--color-surface-muted)]"
-      >
-        <div
-          className="h-full rounded-full bg-[var(--color-bright-blue)] transition-[width] duration-200 motion-reduce:transition-none"
-          style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
-        />
-      </div>
 
-      <h2
-        ref={headingRef}
-        tabIndex={-1}
-        className="mt-5 font-display text-[var(--color-deep-blue)] focus:outline-none"
-        style={T.cardTitle}
-      >
-        {STEPS[step].title}
-      </h2>
+      <div className={`${CARD} mt-[var(--space-block-y)]`}>
+        <StepIndicator step={step} />
 
-      <div className="mt-4">
-        {step === 0 && <WelcomeStep greetingName={greetingName} />}
-        {step === 1 && <AboutStep draft={draft} update={update} />}
-        {step === 2 && <NowStep draft={draft} update={update} />}
-        {step === 3 && <PromptsStep draft={draft} setAnswer={setAnswer} />}
-        {step === 4 && <QuoteStep draft={draft} update={update} />}
-        {step === 5 && (
-          <PhotoConsentStep
-            draft={draft}
-            update={update}
-            photo={photo}
-            photoError={photoError}
-            onPickPhoto={onPickPhoto}
-          />
-        )}
-        {step === 6 && (
-          <ReviewStep
-            draft={draft}
-            photo={photo}
-            photoLostOnReload={restored && !photo}
-            onEdit={goTo}
-          />
-        )}
-      </div>
-
-      {error && (
-        <p
-          className="mt-5 rounded-[var(--radius-btn)] bg-[var(--color-danger)]/10 p-3 text-[var(--color-danger)]"
-          style={T.body}
-          role="alert"
+        <h2
+          ref={headingRef}
+          tabIndex={-1}
+          className="mt-5 font-display text-[var(--color-deep-blue)] focus:outline-none"
+          style={T.cardTitle}
         >
-          {error}
-        </p>
-      )}
+          {STEPS[step].title}
+        </h2>
 
-      <div className="mt-6 flex flex-wrap-reverse items-center justify-between gap-3">
-        {step > 0 ? (
-          <button type="button" onClick={() => goTo(step - 1)} className={BTN_SECONDARY} style={T.body}>
-            Back
-          </button>
-        ) : (
-          <span />
-        )}
-        {last ? (
-          <button
-            type="button"
-            onClick={onSubmit}
-            disabled={busy}
-            className={`${BTN_PRIMARY} w-full sm:w-auto`}
-            style={BTN_PRIMARY_STYLE}
+        <div className="mt-4">
+          {step === 0 && <AboutStep draft={draft} update={update} />}
+          {step === 1 && <NowStep draft={draft} update={update} />}
+          {step === 2 && <PromptsStep draft={draft} setAnswer={setAnswer} />}
+          {step === 3 && <QuoteStep draft={draft} update={update} />}
+          {step === 4 && (
+            <PhotoConsentStep
+              draft={draft}
+              update={update}
+              photo={photo}
+              photoError={photoError}
+              onPickPhoto={onPickPhoto}
+            />
+          )}
+          {step === 5 && (
+            <ReviewStep
+              draft={draft}
+              photo={photo}
+              photoLostOnReload={restored && !photo}
+              onEdit={goTo}
+            />
+          )}
+        </div>
+
+        {error && (
+          <p
+            className="mt-5 rounded-[var(--radius-btn)] bg-[var(--color-danger)]/10 p-3 text-[var(--color-danger)]"
+            style={T.body}
+            role="alert"
           >
-            {busy ? "Sending…" : "Send my story"}
-          </button>
-        ) : (
-          <button type="button" onClick={onNext} className={BTN_PRIMARY} style={BTN_PRIMARY_STYLE}>
-            {step === 0 ? "Start" : "Next"}
-          </button>
+            {error}
+          </p>
         )}
+
+        <div className="mt-6 flex flex-wrap-reverse items-center justify-between gap-3">
+          {step > 0 ? (
+            <button
+              type="button"
+              onClick={() => goTo(step - 1)}
+              className={BTN_SECONDARY}
+              style={T.body}
+            >
+              Back
+            </button>
+          ) : (
+            <span />
+          )}
+          {last ? (
+            <button
+              type="button"
+              onClick={onSubmit}
+              disabled={busy}
+              aria-busy={busy}
+              className={`${BTN_PRIMARY} w-full sm:w-auto`}
+              style={BTN_PRIMARY_STYLE}
+            >
+              {busy ? "Sending…" : "Send my story"}
+            </button>
+          ) : (
+            <button type="button" onClick={onNext} className={BTN_PRIMARY} style={BTN_PRIMARY_STYLE}>
+              Next: {STEPS[step + 1].title.toLowerCase()}
+            </button>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

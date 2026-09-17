@@ -1,6 +1,6 @@
-/** The bodies of the seven wizard steps. State lives in StoryWizard. */
-import { useRef } from "react";
-import { Upload, X } from "lucide-react";
+/** The bodies of the six wizard steps. State lives in StoryWizard. */
+import { useEffect, useRef, useState } from "react";
+import { Upload } from "lucide-react";
 import { T } from "@/components/type-roles";
 import { ALUMNI_SCHOOLS } from "@/lib/invites/contacts";
 import {
@@ -31,19 +31,19 @@ function Body({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function WelcomeStep({ greetingName }: { greetingName: string | null }) {
-  return (
-    <div className="space-y-3">
-      <p className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-        Hi {greetingName ?? "there"} 👋
-      </p>
-      <Body>
-        Alpha Schools would love to feature your story on our alumni page. It takes about 5
-        minutes, and you can go back to change any answer before you send it.
-      </Body>
-      <Body>A member of staff reads every story before anything is published.</Body>
-    </div>
-  );
+/** A local preview of the chosen photo. Nothing is uploaded until Send. */
+function usePreviewUrl(file: File | null): string | null {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!file) {
+      setUrl(null);
+      return;
+    }
+    const next = URL.createObjectURL(file);
+    setUrl(next);
+    return () => URL.revokeObjectURL(next);
+  }, [file]);
+  return url;
 }
 
 export function AboutStep({ draft, update }: DraftProps) {
@@ -130,7 +130,9 @@ export function PromptsStep({
 }) {
   return (
     <div className="space-y-5">
-      <Body>All optional. Answer the ones you like. These help us know you; they are not published.</Body>
+      <Body>
+        Answer any you like, or none. These are for the school to read and are not published.
+      </Body>
       {STORY_PROMPTS.map((p) => (
         <CountedTextArea
           key={p.key}
@@ -150,8 +152,8 @@ export function QuoteStep({ draft, update }: DraftProps) {
   return (
     <div className="space-y-4">
       <Body>
-        Sum up what Alpha means to you in a sentence or two. <strong>This is the part we publish</strong>,
-        with your name.
+        In a sentence or two, what did Alpha mean to you? This is the part we publish, next to
+        your name.
       </Body>
       <CountedTextArea
         id="quote"
@@ -178,6 +180,7 @@ export function PhotoConsentStep({
   onPickPhoto: (file: File | null) => void;
 }) {
   const fileRef = useRef<HTMLInputElement | null>(null);
+  const preview = usePreviewUrl(photo);
 
   function clearPhoto() {
     onPickPhoto(null);
@@ -188,10 +191,20 @@ export function PhotoConsentStep({
     <div className="space-y-6">
       <div>
         <FieldLabel>Photo (optional)</FieldLabel>
+        {preview && (
+          <img
+            src={preview}
+            alt="Your chosen photo"
+            className="mt-2 aspect-square w-32 rounded-xl object-cover ring-1 ring-[var(--color-deep-blue)]/10"
+          />
+        )}
         <div className="mt-2 flex flex-wrap items-center gap-3">
-          <label className={`${BTN_SECONDARY} cursor-pointer`} style={T.body}>
+          <label
+            className={`${BTN_SECONDARY} cursor-pointer focus-within:ring-2 focus-within:ring-[var(--color-bright-blue)]`}
+            style={T.body}
+          >
             <Upload className="h-4 w-4" aria-hidden />
-            {photo ? "Change photo" : "Choose a photo"}
+            {photo ? "Choose a different photo" : "Choose a photo"}
             <input
               ref={fileRef}
               type="file"
@@ -205,21 +218,18 @@ export function PhotoConsentStep({
             />
           </label>
           {photo && (
-            <span className="inline-flex min-w-0 items-center gap-2 text-[var(--color-ink-soft)]" style={T.body}>
-              <span className="truncate">{photo.name}</span>
-              <button
-                type="button"
-                onClick={clearPhoto}
-                aria-label="Remove photo"
-                className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[var(--color-deep-blue)]/15 text-[var(--color-deep-blue)] hover:bg-[var(--color-surface-muted)]"
-              >
-                <X className="h-4 w-4" aria-hidden />
-              </button>
-            </span>
+            <button
+              type="button"
+              onClick={clearPhoto}
+              className="text-[var(--color-deep-blue)] underline underline-offset-2 hover:text-[var(--color-bright-blue)]"
+              style={T.body}
+            >
+              Remove photo
+            </button>
           )}
         </div>
-        <p className="mt-2 text-[var(--color-ink-soft)]" style={T.label}>
-          JPEG, PNG or WebP · up to 5 MB
+        <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+          A clear photo of you. JPEG, PNG or WebP, up to 5 MB.
         </p>
         {photoError && (
           <p className="mt-2 text-[var(--color-danger)]" style={T.body} role="alert">
@@ -244,6 +254,8 @@ export function PhotoConsentStep({
   );
 }
 
+type ReviewItem = { label?: string; value: string };
+
 export function ReviewStep({
   draft,
   photo,
@@ -255,68 +267,85 @@ export function ReviewStep({
   photoLostOnReload: boolean;
   onEdit: (step: number) => void;
 }) {
+  const preview = usePreviewUrl(photo);
   const school = ALUMNI_SCHOOLS.find((s) => s.value === draft.schoolSlug)?.label ?? "";
   const answered = STORY_PROMPTS.filter((p) => draft.answers[p.key].trim());
+  const now = [draft.role, draft.company, draft.cityCountry].map((s) => s.trim()).filter(Boolean);
 
-  const sections: { step: number; title: string; lines: string[] }[] = [
+  const sections: { step: number; title: string; items: ReviewItem[] }[] = [
     {
-      step: 1,
+      step: 0,
       title: "About you",
-      lines: [draft.fullName.trim(), school, `Class of ${draft.gradYear}`],
+      items: [{ value: `${draft.fullName.trim()}, ${school}, class of ${draft.gradYear}` }],
     },
+    { step: 1, title: "Where you are now", items: [{ value: now.join(", ") }] },
     {
       step: 2,
-      title: "Where you are now",
-      lines: [draft.role, draft.company, draft.cityCountry].map((s) => s.trim()).filter(Boolean),
-    },
-    {
-      step: 3,
       title: "Your story",
-      lines: answered.length
-        ? answered.map((p) => `${p.label}: ${draft.answers[p.key].trim()}`)
-        : ["No answers — that's fine."],
+      items: answered.length
+        ? answered.map((p) => ({ label: p.label, value: draft.answers[p.key].trim() }))
+        : [{ value: "Not answered." }],
     },
-    { step: 4, title: "Your quote", lines: [draft.quote.trim()] },
+    { step: 3, title: "Your quote", items: [{ value: draft.quote.trim() }] },
     {
-      step: 5,
+      step: 4,
       title: "Photo",
-      lines: [
-        photo
-          ? photo.name
-          : photoLostOnReload
-            ? "No photo attached. If you chose one before the page reloaded, please choose it again."
-            : "No photo",
-      ],
+      items: photo
+        ? []
+        : [
+            {
+              value: photoLostOnReload
+                ? "No photo attached. If you chose one before the page reloaded, choose it again."
+                : "No photo.",
+            },
+          ],
     },
   ];
 
   return (
-    <div className="space-y-4">
-      <Body>Check your answers, then send your story.</Body>
-      <dl className="divide-y divide-[var(--color-deep-blue)]/10">
-        {sections.map((s) => (
-          <div key={s.title} className="py-3">
-            <div className="flex items-baseline justify-between gap-3">
-              <dt className="text-[var(--color-deep-blue)]" style={T.label}>
-                {s.title}
-              </dt>
-              <button
-                type="button"
-                onClick={() => onEdit(s.step)}
-                className="text-[var(--color-bright-blue)] underline underline-offset-2"
-                style={T.label}
-              >
-                Edit
-              </button>
-            </div>
-            {s.lines.map((line, i) => (
-              <dd key={i} className="mt-1 whitespace-pre-line break-words text-[var(--color-ink)]" style={T.body}>
-                {line}
-              </dd>
-            ))}
+    <dl className="divide-y divide-[var(--color-deep-blue)]/10 border-y border-[var(--color-deep-blue)]/10">
+      {sections.map((s) => (
+        <div key={s.title} className="py-4">
+          <div className="flex items-baseline justify-between gap-3">
+            <dt className="text-[var(--color-deep-blue)]" style={T.label}>
+              {s.title}
+            </dt>
+            <button
+              type="button"
+              onClick={() => onEdit(s.step)}
+              aria-label={`Change ${s.title.toLowerCase()}`}
+              className="text-[var(--color-bright-blue)] underline underline-offset-2 hover:text-[var(--color-deep-blue)]"
+              style={T.body}
+            >
+              Change
+            </button>
           </div>
-        ))}
-      </dl>
-    </div>
+          {s.step === 4 && preview && (
+            <dd className="mt-2">
+              <img
+                src={preview}
+                alt="Your chosen photo"
+                className="aspect-square w-20 rounded-lg object-cover ring-1 ring-[var(--color-deep-blue)]/10"
+              />
+            </dd>
+          )}
+          {s.items.map((item, i) => (
+            <dd key={i} className={i === 0 ? "mt-1" : "mt-3"}>
+              {item.label && (
+                <span className="block text-[var(--color-ink-soft)]" style={T.body}>
+                  {item.label}
+                </span>
+              )}
+              <span
+                className="block whitespace-pre-line break-words text-[var(--color-ink)]"
+                style={T.body}
+              >
+                {item.value}
+              </span>
+            </dd>
+          ))}
+        </div>
+      ))}
+    </dl>
   );
 }
