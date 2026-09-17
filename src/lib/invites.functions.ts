@@ -12,6 +12,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { serviceClient } from "@/lib/server/supabase-service";
 import { requireStaff, StaffAuthError } from "@/lib/server/staff-guard";
 import { inviteLinkKey, siteBase } from "@/lib/server/invite-env";
+import { isAudience, type Audience } from "@/lib/invites/audience";
 import {
   ALUMNI_SCHOOLS,
   MAX_CONTACTS,
@@ -27,7 +28,7 @@ import {
   newLinkCode,
   storyPath,
 } from "@/lib/invites/token";
-import { inviteMessage, whatsappUrl } from "@/lib/invites/whatsapp";
+import { inviteMessage, parentInviteMessage, whatsappUrl } from "@/lib/invites/whatsapp";
 
 const INVITE_TTL_DAYS = 60;
 const LOOKUP_CHUNK = 100;
@@ -67,10 +68,12 @@ export const getLinkBase = createServerFn({ method: "GET" }).handler(async () =>
 export type CreateInvitesResult = { created: number; skippedExisting: string[] };
 
 export const createInvites = createServerFn({ method: "POST" })
-  .inputValidator((data: { accessToken: string; rows: InviteDraft[] }) => data)
+  .inputValidator((data: { accessToken: string; audience: Audience; rows: InviteDraft[] }) => data)
   .handler(({ data }) =>
     guarded("createInvites", async (): Promise<CreateInvitesResult> => {
       const { userId } = await requireStaff(data.accessToken);
+      if (!isAudience(data.audience)) throw new InviteError("Choose who you are inviting.");
+      const audience = data.audience;
 
       const rows = Array.isArray(data.rows) ? data.rows : [];
       if (rows.length === 0) throw new InviteError("There is nobody to invite.");
@@ -87,7 +90,7 @@ export const createInvites = createServerFn({ method: "POST" })
           phone: String(r?.phone ?? ""),
           email: String(r?.email ?? ""),
           school: String(r?.schoolSlug ?? ""),
-          year: r?.gradYear == null ? "" : String(r.gradYear),
+          year: audience === "parent" || r?.gradYear == null ? "" : String(r.gradYear),
         });
         if (!result.ok) {
           throw new InviteError(
@@ -106,6 +109,7 @@ export const createInvites = createServerFn({ method: "POST" })
         const { data: existing, error } = await sb
           .from("testimonial_invites")
           .select("phone")
+          .eq("audience", audience)
           .in("phone", phones);
         if (error) throw error;
         for (const e of (existing ?? []) as { phone: string }[]) taken.add(e.phone);
@@ -120,6 +124,7 @@ export const createInvites = createServerFn({ method: "POST" })
           return {
             full_name: c.fullName,
             phone: c.phone,
+            audience,
             email: c.email,
             school_slug: c.schoolSlug,
             grad_year: c.gradYear,
@@ -161,7 +166,7 @@ export const getInviteLink = createServerFn({ method: "POST" })
       const sb = serviceClient();
       const { data: row, error } = await sb
         .from("testimonial_invites")
-        .select("id,full_name,phone,status,expires_at,token_cipher")
+        .select("id,full_name,phone,status,expires_at,token_cipher,audience")
         .eq("id", data.inviteId)
         .maybeSingle();
       if (error) throw error;
@@ -183,14 +188,17 @@ export const getInviteLink = createServerFn({ method: "POST" })
         );
       }
 
-      const link = `${siteBase()}${storyPath(code)}`;
+      const audience: Audience = row.audience === "parent" ? "parent" : "alumni";
+      const link = `${siteBase()}${storyPath(code, audience)}`;
       const { error: stampError } = await sb
         .from("testimonial_invites")
         .update({ last_shared_at: new Date().toISOString() })
         .eq("id", row.id);
       if (stampError) console.error("[getInviteLink] stamp", stampError);
 
-      return { link, whatsapp: whatsappUrl(row.phone, inviteMessage(row.full_name, link)) };
+      const message =
+        audience === "parent" ? parentInviteMessage(row.full_name, link) : inviteMessage(row.full_name, link);
+      return { link, whatsapp: whatsappUrl(row.phone, message) };
     }),
   );
 
@@ -239,7 +247,7 @@ export type OpenInviteResult =
  * invite as opened.
  */
 export const openInvite = createServerFn({ method: "POST" })
-  .inputValidator((data: { code: string }) => data)
+  .inputValidator((data: { code: string; audience: Audience }) => data)
   .handler(async ({ data }): Promise<OpenInviteResult> => {
     try {
       const code = typeof data?.code === "string" ? data.code : "";
@@ -248,11 +256,14 @@ export const openInvite = createServerFn({ method: "POST" })
       const sb = serviceClient();
       const { data: row, error } = await sb
         .from("testimonial_invites")
-        .select("id,full_name,school_slug,grad_year,status,expires_at")
+        .select("id,full_name,school_slug,grad_year,status,expires_at,audience")
         .eq("token_hash", await hashCode(code))
         .maybeSingle();
       if (error) throw error;
-      if (!row || new Date(row.expires_at).getTime() < Date.now()) return { state: "invalid" };
+      const audience = isAudience(data?.audience) ? data.audience : "alumni";
+      if (!row || row.audience !== audience || new Date(row.expires_at).getTime() < Date.now()) {
+        return { state: "invalid" };
+      }
       if (row.status === "submitted") return { state: "submitted" };
 
       if (row.status === "pending") {
@@ -265,7 +276,12 @@ export const openInvite = createServerFn({ method: "POST" })
       }
 
       const school = ALUMNI_SCHOOLS.find((s) => s.value === row.school_slug)?.value ?? null;
-      return { state: "ok", fullName: row.full_name, schoolSlug: school, gradYear: row.grad_year };
+      return {
+        state: "ok",
+        fullName: row.full_name,
+        schoolSlug: school,
+        gradYear: audience === "parent" ? null : row.grad_year,
+      };
     } catch (err) {
       console.error("[openInvite]", err);
       throw new Error("We couldn't load your invitation. Please try again shortly.");

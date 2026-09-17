@@ -109,7 +109,7 @@ export function BulkImport({ onImported }: { onImported: () => void }) {
     setNotice(null);
     try {
       const rows = batch.valid.map(({ line: _line, raw: _raw, ...draft }) => draft);
-      const res = await createInvites({ data: { accessToken, rows } });
+      const res = await createInvites({ data: { accessToken, audience: "alumni", rows } });
       const skipped = res.skippedExisting.length
         ? ` ${res.skippedExisting.length} already had an invite and were skipped.`
         : "";

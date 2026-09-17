@@ -39,7 +39,7 @@ function PersonalStoryPage() {
 
   const load = useCallback(() => {
     setState({ kind: "loading" });
-    openInvite({ data: { code } }).then(
+    openInvite({ data: { code, audience: "alumni" } }).then(
       (invite) => setState({ kind: "loaded", invite }),
       () => setState({ kind: "error" }),
     );

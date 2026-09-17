@@ -25,7 +25,7 @@ export function AddInviteForm({ onCreated }: { onCreated: () => void }) {
     setBusy(true);
     setNotice(null);
     try {
-      const res = await createInvites({ data: { accessToken, rows: [checked.draft] } });
+      const res = await createInvites({ data: { accessToken, audience: "alumni", rows: [checked.draft] } });
       if (res.created === 0) {
         setNotice({ tone: "error", text: "This phone number already has an invite. It is in the list below." });
         return;
