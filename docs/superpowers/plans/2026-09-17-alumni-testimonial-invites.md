@@ -4493,12 +4493,13 @@ The user does these; the executor asks for them and waits. They are needed befor
    # PUBLIC_SITE_URL=https://alphaschools.co.tz
    ```
 3. **Keep a safe copy of `INVITE_LINK_KEY`.** Production must use the same value as whatever created the invites. If it is lost or changed, existing links still open but staff must press Regenerate before they can share them again.
-4. **Restart the dev server** so the new variables load.
-5. **Before going live:** add the same three variables to the hosting environment's secrets, with `PUBLIC_SITE_URL` set to the live address.
+4. **Turn off Supabase sign-ups.** Supabase dashboard → Authentication → turn OFF "Allow new users to sign up". Any account with a profile row counts as staff (`is_staff()`), so an open sign-up page would let a stranger self-register into staff access.
+5. **Restart the dev server** so the new variables load.
+6. **Before going live:** add the same three variables to the hosting environment's secrets, with `PUBLIC_SITE_URL` set to the live address.
 
 - [ ] **Step 1: Confirm setup**
 
-Ask the user whether steps 1–4 are done. Then check without printing secrets:
+Ask the user whether steps 1–5 are done. Then check without printing secrets:
 
 Run: `awk -F= '/^(ALPHA_SUPABASE_SERVICE_ROLE_KEY|INVITE_LINK_KEY)=/{print $1, (length($2) > 0 ? "set" : "EMPTY")}' .env.local`
 Expected: both `set`.
@@ -4520,11 +4521,12 @@ With `npm run dev` running, go through the spec's manual test list and record ea
 3. Open that link in a 375px-wide private window; complete all steps; submit.
 4. Double submit: open another invite's link in two tabs, fill both in, and send from both. Exactly one story appears in the queue; the second tab shows "already received".
 5. Reopen a submitted link → "Thank you — we've already received your story."
-6. Approve the invited story in the queue → it appears on `/alumni`; the prompt answers do not.
+6. Approve the invited story in the queue → it appears on `/alumni`; the prompt answers do not. Then, with the public anon key, confirm directly that the private columns cannot be selected, e.g. `curl "$SUPABASE_URL/rest/v1/testimonials?select=answers&published=eq.true" -H "apikey: <anon key>"` → permission error (repeat for `city_country`, `invite_id`, `submitted_ip`). Also confirm `/alumni`, the homepage and the three school pages still show testimonials (the anon column grant did not silently break a reader).
 7. Regenerate a pending invite → the old link is invalid; the new one works.
 8. Open `/alumni/submit` → lands on `/alumni/story`; complete it → the queue shows it tagged **General link**.
 9. In Supabase → Table editor → `testimonial_invites`: the columns `token_hash` and `token_cipher` hold no readable link code; the invite you submitted shows `submitted` with `submitted_at`.
 10. Staff-only checks: confirm by reading the code that `createInvites`, `getInviteLink` and `regenerateInvite` each call `requireStaff(...)` before anything else. In a signed-out private window, `/admin/testimonials` redirects to sign-in.
+11. Approve an invited alumni story whose school is Nursery & Primary → it does not appear under the Nursery & Primary page's "What parents say" section (only under alumni content, if any).
 
 - [ ] **Step 4: Report and hand over**
 
