@@ -113,7 +113,7 @@
      >=1280px, so each role is one token rather than a media query. */
 
   /* Hero headline — two-tone: line 1 white, line 2 gold. 30 -> 48px */
-  --text-hero: clamp(1.875rem, 1.10rem + 3.30vw, 3rem);
+  --text-hero: clamp(2.125rem, 1.15rem + 4.15vw, 3.75rem);
   --leading-hero: 1.08;
   --weight-hero: 800;
   --hero-line-1-color: var(--color-surface);
@@ -273,19 +273,34 @@
      through real photos of varying exposure and the headline plus the
      stat rail must stay legible over every one of them. Not optional,
      and not a function of how dark the photo happens to be. */
-  --hero-scrim: linear-gradient(
-    100deg,
-    rgba(0, 26, 60, 0.88) 0%,
-    rgba(0, 26, 60, 0.72) 38%,
-    rgba(0, 26, 60, 0.32) 68%,
-    rgba(0, 26, 60, 0.18) 100%
-  );
-  --hero-scrim-mobile: linear-gradient(
-    180deg,
-    rgba(0, 26, 60, 0.55) 0%,
-    rgba(0, 26, 60, 0.70) 55%,
-    rgba(0, 26, 60, 0.88) 100%
-  );
+  /* Two layers: a warm gold glow behind the headline, then the navy wash
+     that guarantees legibility. The navy clears earlier than it used to,
+     so the photograph keeps its colour on the right of the frame. */
+  --hero-scrim:
+    radial-gradient(
+      70% 90% at 6% 22%,
+      color-mix(in srgb, var(--color-gold) 26%, transparent) 0%,
+      transparent 62%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(0, 26, 60, 0.94) 0%,
+      rgba(0, 26, 60, 0.84) 30%,
+      rgba(0, 26, 60, 0.44) 58%,
+      rgba(0, 26, 60, 0.10) 100%
+    );
+  --hero-scrim-mobile:
+    radial-gradient(
+      90% 55% at 18% 18%,
+      color-mix(in srgb, var(--color-gold) 20%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 26, 60, 0.42) 0%,
+      rgba(0, 26, 60, 0.62) 50%,
+      rgba(0, 26, 60, 0.88) 100%
+    );
 }
 
 /* Vibrant brand helpers */
@@ -637,6 +652,21 @@ html.rv-on [data-reveal][data-rv-in] {
   min-height: 100vh;
   min-height: 100svh;
 }
+/* The hero's credentials strip takes as many columns as it has items, so a
+   page can carry three or four without a second layout. */
+@media (min-width: 640px) {
+  .hero-viewport ul[style*="--cred-cols"],
+  .hero-viewport-inset ul[style*="--cred-cols"] {
+    grid-template-columns: repeat(var(--cred-cols, 3), minmax(0, 1fr));
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hero-viewport ul[style*="--cred-cols"],
+  .hero-viewport-inset ul[style*="--cred-cols"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* For a hero under a header that is in flow rather than overlaid. */
 .hero-viewport-inset {
   min-height: calc(100vh - var(--header-h));

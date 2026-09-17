@@ -432,17 +432,21 @@ export function CinematicHero({
           <div
             className={`${SHELL} pb-[var(--space-block-y)] pt-[calc(var(--header-h)+var(--space-block-y))]`}
           >
-            <div className="max-w-xl">
+            <div className="max-w-xl lg:max-w-2xl">
               {eyebrow && (
                 <p
-                  className="hero-rise text-[var(--color-gold)]"
+                  className="hero-rise flex items-center gap-3 text-[var(--color-gold)]"
                   style={{ ...T.label, ...heroStep("var(--hero-t-eyebrow)") }}
                 >
+                  <span
+                    aria-hidden
+                    className="inline-block h-[3px] w-8 shrink-0 rounded-full bg-[var(--color-gold)]"
+                  />
                   {eyebrow}
                 </p>
               )}
 
-              <h1 className="mt-3 font-display tracking-tight" style={T.hero}>
+              <h1 className="mt-4 font-display tracking-tight text-balance" style={T.hero}>
                 <span
                   className="hero-rise block text-[var(--hero-line-1-color)]"
                   style={heroStep("var(--hero-t-line-1)", "420ms")}
@@ -458,7 +462,7 @@ export function CinematicHero({
               </h1>
 
               <p
-                className="hero-rise mt-4 max-w-md text-[var(--color-surface)]/90"
+                className="hero-rise mt-5 max-w-lg text-[var(--color-surface)]/95"
                 style={{ ...T.body, ...heroStep("var(--hero-t-blurb)") }}
               >
                 {blurb}
@@ -532,16 +536,19 @@ export function HeroCredentials({
   items: ReadonlyArray<{ label: string; sub: string; icon?: ReactNode }>;
 }) {
   return (
-    <div className="border-t border-[var(--color-surface)]/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm">
+    <div className="border-t border-[var(--color-gold)]/30 bg-[rgba(0,26,60,0.72)] backdrop-blur-sm">
       <ul
-        className={`${SHELL} flex gap-5 overflow-x-auto py-3 [scrollbar-width:none] sm:grid sm:grid-cols-3 sm:gap-6 sm:overflow-visible sm:py-4 [&::-webkit-scrollbar]:hidden`}
+        className={`${SHELL} flex gap-5 overflow-x-auto py-3 [scrollbar-width:none] sm:grid sm:gap-6 sm:overflow-visible sm:py-5 [&::-webkit-scrollbar]:hidden`}
+        style={{
+          ["--cred-cols" as string]: String(items.length),
+        }}
       >
         {items.map((c) => (
-          <li key={c.label} className="flex shrink-0 items-center gap-3 sm:shrink">
+          <li key={c.label} className="hero-cred flex shrink-0 items-center gap-3 sm:shrink">
             {c.icon && (
               <span
                 aria-hidden
-                className="grid h-9 w-9 shrink-0 place-items-center rounded-[var(--radius-pill)] bg-[var(--color-surface)]/15 text-[var(--color-gold)] sm:h-11 sm:w-11"
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-[var(--radius-pill)] bg-[var(--color-gold)]/20 text-[var(--color-gold)] ring-1 ring-[var(--color-gold)]/30 sm:h-12 sm:w-12"
               >
                 {c.icon}
               </span>
@@ -554,7 +561,7 @@ export function HeroCredentials({
                 {c.label}
               </div>
               <div
-                className="hidden text-[var(--color-surface)]/70 sm:block"
+                className="hidden text-[var(--color-surface)]/80 sm:block"
                 style={T.label}
               >
                 {c.sub}

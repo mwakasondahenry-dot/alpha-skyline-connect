@@ -38,6 +38,7 @@ import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import {
   ArrowRight,
+  Laptop,
   Users,
   GraduationCap,
   Plane,
@@ -196,6 +197,11 @@ function Hero() {
               label: "Aviation programme",
               sub: "Ground school to PPL",
               icon: <Plane className="h-5 w-5" />,
+            },
+            {
+              label: "Coding",
+              sub: "From primary up",
+              icon: <Laptop className="h-5 w-5" />,
             },
           ]}
         />
