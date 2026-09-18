@@ -52,6 +52,26 @@ npm i
 npm run dev
 ```
 
+## Images
+
+Photographs are stored at the size the layout actually uses, not at camera
+size, because the audience is on mobile data:
+
+| Kind | Longest side | Quality |
+|---|---|---|
+| Hero and full-bleed photos | 1600px | 80 |
+| Campus and school cards | 900px | 80 |
+| Club tiles (rendered 288x224) | 700px | 80 |
+| Subject tiles (rendered ~200px) | 480px | 78 |
+| Everything else | 1100px | 80 |
+
+The logo is the exception: `alpha-logo-mark.webp` (256px) is the header and
+footer mark, and `alpha-logo.webp` (800px) is the large one on /about. Fine
+lettering needs the higher quality, so do not re-encode either below 88.
+
+Adding a photo? Resize it before committing. A 250KB photograph costs a parent
+on mobile data more than it costs us.
+
 ## Hosting
 
 The site deploys to Cloudflare Workers with `npm run deploy`. Setup, secrets

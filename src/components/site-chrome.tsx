@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Menu, X, Instagram, Youtube, Facebook, Linkedin } from "lucide-react";
-import alphaLogo from "@/assets/alpha-logo.webp";
+import alphaLogo from "@/assets/alpha-logo-mark.webp";
 import schoolNurseryPhoto from "@/assets/school-nursery-primary.webp";
 import schoolHighPhoto from "@/assets/school-alpha-high.webp";
 import schoolGirlsPhoto from "@/assets/school-alpha-girls.webp";
