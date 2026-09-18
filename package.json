@@ -10,7 +10,7 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "deploy": "vite build && wrangler deploy --config .output/server/wrangler.json --name alpha-schools",
+    "deploy": "vite build && node scripts/wrangler-routes.mjs && wrangler deploy --config .output/server/wrangler.json --name alpha-schools",
     "format": "prettier --write ."
   },
   "dependencies": {

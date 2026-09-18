@@ -50,7 +50,19 @@ That builds and uploads. The first deploy prints a `*.workers.dev` address —
 open it and check the home page, `/testimonials` and `/admin/login` before
 attaching the domain.
 
-## 4. Attach the domain
+## 4. The domain
+
+`npm run deploy` attaches **alphaschools.co.tz** and **www.alphaschools.co.tz**
+to the Worker on every deploy: `scripts/wrangler-routes.mjs` writes them into
+the generated Worker config, and wrangler creates the DNS records and the HTTPS
+certificate. Change the domains there, not in the dashboard.
+
+Declaring custom domains disables the `*.workers.dev` address. To keep one for
+testing, add `"workers_dev": true` in that script's config object.
+
+The domain must already be a zone in the same Cloudflare account:
+
+## Setting the domain up the first time
 
 1. In the Cloudflare dashboard, add **alphaschools.co.tz** as a site (Websites
    → Add a site). Cloudflare gives two nameservers.
