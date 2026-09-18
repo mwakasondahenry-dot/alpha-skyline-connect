@@ -2,6 +2,7 @@
 import { submitStory } from "@/lib/alumni.functions";
 import { checkConsent, checkQuote } from "@/lib/story/fields";
 import {
+  PARENT_CONSENT_TEXT,
   PARENT_PROMPTS,
   checkParentAbout,
   checkParentPrompts,
@@ -18,7 +19,13 @@ const INTRO =
   "minutes, you can change any answer before you send it, and a member of staff reads every " +
   "story before it is published.";
 
-export function ParentStoryWizard({ code, initial }: { code: string | null; initial: ParentDraft }) {
+export function ParentStoryWizard({
+  code,
+  initial,
+}: {
+  code: string | null;
+  initial: ParentDraft;
+}) {
   const storageKey = `alpha-parent-draft:${code ? code.slice(0, 12) : "general"}`;
   const { draft, update, setAnswer, clear, restored } = useStoryDraft(storageKey, initial);
   const { photo, photoError, onPickPhoto } = usePhoto();
@@ -54,6 +61,7 @@ export function ParentStoryWizard({ code, initial }: { code: string | null; init
             <PhotoConsentStep
               consent={draft.consent}
               onConsent={(consent) => update({ consent })}
+              consentText={PARENT_CONSENT_TEXT}
               photo={photo}
               photoError={photoError}
               onPickPhoto={onPickPhoto}

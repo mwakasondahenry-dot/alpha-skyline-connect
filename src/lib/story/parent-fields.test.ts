@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { StoryError } from "./fields";
 import {
   EMPTY_PARENT_DRAFT,
+  PARENT_CONSENT_TEXT,
   PARENT_PROMPTS,
   checkParentAbout,
   checkParentPrompts,
@@ -28,6 +29,13 @@ describe("parent prompts", () => {
       "What has changed for your child since joining?",
       "What would you tell a parent deciding now?",
     ]);
+  });
+});
+
+describe("parent consent wording", () => {
+  it("covers the school the quote is published with", () => {
+    expect(PARENT_CONSENT_TEXT).toContain("the school my child attends");
+    expect(PARENT_CONSENT_TEXT).toContain("request removal at any time");
   });
 });
 

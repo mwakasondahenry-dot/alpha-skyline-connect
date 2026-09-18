@@ -6,6 +6,16 @@ import { ALUMNI_SCHOOLS, type AlumniSchool } from "@/lib/invites/contacts";
 import { CODE_PATTERN } from "@/lib/invites/token";
 import { NAME_MAX, PROMPT_MAX, StoryError, checkConsent, checkQuote } from "./fields";
 
+/**
+ * The wording a parent agrees to. It names the school their child attends,
+ * because that is published beside the quote as "Parent, <school>", and a
+ * consent that did not mention it would not cover it.
+ */
+export const PARENT_CONSENT_TEXT =
+  "I agree that Alpha Schools may publish my name, my message, my photo and " +
+  "the school my child attends on its public website. I understand I can " +
+  "request removal at any time by contacting the school.";
+
 export type ParentPromptKey = "chose_alpha" | "changed" | "advice_parents";
 
 export const PARENT_PROMPTS: readonly { key: ParentPromptKey; label: string }[] = [
@@ -56,7 +66,11 @@ export function checkParentPrompts(d: ParentDraft): string | null {
   return tooLong ? `Please keep each answer under ${PROMPT_MAX} characters.` : null;
 }
 
-export function parentDraftToForm(d: ParentDraft, code: string | null, photo: File | null): FormData {
+export function parentDraftToForm(
+  d: ParentDraft,
+  code: string | null,
+  photo: File | null,
+): FormData {
   const form = new FormData();
   form.set("audience", "parent");
   if (code) form.set("code", code);

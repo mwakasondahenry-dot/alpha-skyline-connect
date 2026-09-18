@@ -16,8 +16,14 @@ import { callerIp, serviceClient } from "@/lib/server/supabase-service";
 import { sniffImage } from "@/lib/image-sniff";
 import { formAudience, type Audience } from "@/lib/invites/audience";
 import { hashCode } from "@/lib/invites/token";
-import { validateParentStory } from "@/lib/story/parent-fields";
-import { CONSENT_TEXT, PENDING_BUCKET, PHOTO_MAX_BYTES, StoryError, validateStory } from "@/lib/story/fields";
+import { PARENT_CONSENT_TEXT, validateParentStory } from "@/lib/story/parent-fields";
+import {
+  CONSENT_TEXT,
+  PENDING_BUCKET,
+  PHOTO_MAX_BYTES,
+  StoryError,
+  validateStory,
+} from "@/lib/story/fields";
 
 export { CONSENT_TEXT, MESSAGE_MAX, PHOTO_MAX_BYTES, PENDING_BUCKET } from "@/lib/story/fields";
 
@@ -42,6 +48,8 @@ export type StorySubmissionResult = { ok: true } | { ok: false; state: "invalid"
 /** One shape for both audiences, matching the testimonials columns. */
 type StoryRow = {
   audience: Audience;
+  /** The exact wording this submitter agreed to. */
+  consentText: string;
   code: string | null;
   schoolSlug: string;
   fullName: string;
@@ -59,6 +67,7 @@ function readStory(form: FormData): StoryRow {
     const p = validateParentStory(form);
     return {
       audience: "parent",
+      consentText: PARENT_CONSENT_TEXT,
       code: p.code,
       schoolSlug: p.schoolSlug,
       fullName: p.fullName,
@@ -73,6 +82,7 @@ function readStory(form: FormData): StoryRow {
   const a = validateStory(form);
   return {
     audience: "alumni",
+    consentText: CONSENT_TEXT,
     code: a.code,
     schoolSlug: a.schoolSlug,
     fullName: a.fullName,
@@ -170,7 +180,7 @@ export const submitStory = createServerFn({ method: "POST" })
           p_answers: input.answers,
           p_quote: input.quote,
           p_pending_photo_path: pendingPath,
-          p_consent_text: CONSENT_TEXT,
+          p_consent_text: input.consentText,
           p_submitted_ip: submittedIp,
         });
         if (error) {
@@ -200,7 +210,7 @@ export const submitStory = createServerFn({ method: "POST" })
         pending_photo_path: pendingPath,
         published: false,
         consent_at: new Date().toISOString(),
-        consent_text: CONSENT_TEXT,
+        consent_text: input.consentText,
         submitted_ip: submittedIp,
         sort_order: 0,
         invite_id: null,

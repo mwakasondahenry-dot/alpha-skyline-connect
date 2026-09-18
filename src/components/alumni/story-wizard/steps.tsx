@@ -217,12 +217,15 @@ export function QuoteStep({
 export function PhotoConsentStep({
   consent,
   onConsent,
+  consentText = CONSENT_TEXT,
   photo,
   photoError,
   onPickPhoto,
 }: {
   consent: boolean;
   onConsent: (consent: boolean) => void;
+  /** The exact wording agreed to. Stored with the submission. */
+  consentText?: string;
   photo: File | null;
   photoError: string | null;
   onPickPhoto: (file: File | null) => void;
@@ -295,7 +298,7 @@ export function PhotoConsentStep({
           className="mt-1 h-5 w-5 shrink-0 accent-[var(--color-bright-blue)]"
         />
         <span className="text-[var(--color-ink)]" style={T.body}>
-          {CONSENT_TEXT}
+          {consentText}
         </span>
       </label>
     </div>
@@ -374,7 +377,10 @@ export function ReviewList({
                   {item.label}
                 </span>
               )}
-              <span className="block whitespace-pre-line break-words text-[var(--color-ink)]" style={T.body}>
+              <span
+                className="block whitespace-pre-line break-words text-[var(--color-ink)]"
+                style={T.body}
+              >
                 {item.value}
               </span>
             </dd>
