@@ -52,6 +52,11 @@ npm i
 npm run dev
 ```
 
+## Hosting
+
+The site deploys to Cloudflare Workers with `npm run deploy`. Setup, secrets
+and the domain are in [docs/DEPLOY.md](docs/DEPLOY.md).
+
 ## Alumni and parent invites — setup
 
 1. **Run the SQL migrations**, in order, in the Supabase SQL editor: `alpha_migration_alumni_submissions.sql` (if not already run), then `alpha_migration_testimonial_invites.sql`, then `alpha_migration_parent_invites.sql`. All are safe to re-run. If you ever re-run `alpha_schema.sql` or `alpha_migration_hero_testimonials.sql` afterwards, run `alpha_migration_testimonial_invites.sql` again too — those two files grant anon table-wide `SELECT` on `testimonials`, which the invites migration then narrows to public columns only. If you re-run `alpha_migration_testimonial_invites.sql`, run `alpha_migration_parent_invites.sql` again as well.
