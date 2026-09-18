@@ -28,6 +28,12 @@ export type RevealDirection = "up" | "left" | "right" | "none";
  *      never mounts to stamp `data-rv-ready`. SSR output, a failed bundle and a
  *      reader with JS off all get fully visible content.
  *
+ *      Three further guarantees, because a section left blank reads as a
+ *      broken page rather than as an animation: the inline script gives up
+ *      after 1.2s, it never hides at all when the page loads in a background
+ *      tab (no observer callbacks arrive there), and the watcher sweeps up
+ *      anything still unrevealed 1.5s after it mounts.
+ *
  *   3. It withheld copy the reader was already looking at for another 600ms.
  *      The transition is 420ms, the observer fires a block slightly before its
  *      top edge clears the fold, and delays are capped at 350ms so a staggered
@@ -121,6 +127,21 @@ export function RevealWatcher() {
        run reveals, so it should leave `html.rv-on` in place. */
     document.documentElement.setAttribute("data-rv-ready", "");
 
+    const revealAll = () => {
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]:not([data-rv-in])")
+        .forEach((el) => el.setAttribute("data-rv-in", ""));
+    };
+
+    /* A background tab gets no IntersectionObserver callbacks, so a block
+       hidden there stays hidden until the reader returns. Nobody is watching
+       an animation they cannot see: show everything instead. */
+    if (document.visibilityState !== "visible") {
+      document.documentElement.classList.remove("rv-on");
+      revealAll();
+      return;
+    }
+
     const targets = document.querySelectorAll<HTMLElement>(
       "[data-reveal]:not([data-rv-in])",
     );
@@ -129,11 +150,35 @@ export function RevealWatcher() {
     if (!obs) {
       /* No IntersectionObserver: show everything rather than gating content
          behind a feature the browser lacks. */
-      targets.forEach((el) => el.setAttribute("data-rv-in", ""));
+      revealAll();
       return;
     }
 
     targets.forEach((el) => obs.observe(el));
+
+    /* The safety net. The observer is the normal path, but a block must never
+       be left invisible because a callback did not arrive — a slow phone, a
+       tab switched away mid-load, a restored page. Anything still unrevealed
+       once the reader has had time to reach it is simply shown. */
+    const sweep = window.setTimeout(() => {
+      document
+        .querySelectorAll<HTMLElement>("[data-reveal]:not([data-rv-in])")
+        .forEach((el) => {
+          if (el.getBoundingClientRect().top < window.innerHeight * 1.5) {
+            el.setAttribute("data-rv-in", "");
+          }
+        });
+    }, 1500);
+
+    const onHidden = () => {
+      if (document.visibilityState !== "visible") revealAll();
+    };
+    document.addEventListener("visibilitychange", onHidden);
+
+    return () => {
+      window.clearTimeout(sweep);
+      document.removeEventListener("visibilitychange", onHidden);
+    };
   }, [pathname]);
 
   return null;

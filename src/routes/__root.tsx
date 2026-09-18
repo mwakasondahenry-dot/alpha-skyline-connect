@@ -126,8 +126,14 @@ function RootShell({ children }: { children: ReactNode }) {
             is fully visible on its own — a reader with no JS, or one whose
             bundle fails, never sees a blank page. The timer is the second
             half of that guarantee: RevealWatcher stamps data-rv-ready when it
-            mounts, and if that never happens the class is dropped and every
-            block falls back to visible.
+            mounts, and if that never happens within 1.2s the class is dropped
+            and every block falls back to visible. A slow phone must never be
+            left looking at a blank section, so that window is short.
+
+            It also never hides anything when the page loads in a background
+            tab: IntersectionObserver does not deliver callbacks there, so the
+            reveal would have nothing to trigger it and the content would sit
+            invisible until the reader came back to the tab.
 
             It has to run here, in the head, rather than on hydration: hiding
             has to be in effect before first paint or a revealed block would
@@ -136,9 +142,10 @@ function RootShell({ children }: { children: ReactNode }) {
           suppressHydrationWarning
           dangerouslySetInnerHTML={{
             __html:
-              'var e=document.documentElement;e.classList.add("rv-on");' +
+              'var e=document.documentElement;' +
+              'if(document.visibilityState==="visible"){e.classList.add("rv-on");' +
               'setTimeout(function(){if(!e.hasAttribute("data-rv-ready"))' +
-              'e.classList.remove("rv-on")},4000);',
+              'e.classList.remove("rv-on")},1200);}',
           }}
         />
       </head>
