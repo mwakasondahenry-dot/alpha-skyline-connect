@@ -1,6 +1,7 @@
 // Server functions that read PUBLISHED public content from Alpha's Supabase.
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
+import { supabaseBaseUrl } from "@/lib/server/supabase-url";
 import type {
   Database,
   NewsRow,
@@ -15,13 +16,19 @@ import type {
   TestimonialRow,
 } from "@/integrations/alpha-supabase/types";
 
+/* The _SERVER variants are an override, not a requirement: a deployment that
+   sets only ALPHA_SUPABASE_URL and ALPHA_SUPABASE_ANON_KEY reads the same
+   project. Without this fallback every content query threw, and because each
+   one is caught and logged the pages simply rendered empty. */
 function serverClient() {
-  const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER;
-  const key = process.env.ALPHA_SUPABASE_ANON_KEY_SERVER;
-  if (!rawUrl || !key) {
-    throw new Error("ALPHA_SUPABASE_URL_SERVER / ALPHA_SUPABASE_ANON_KEY_SERVER not configured");
+  const url = supabaseBaseUrl(
+    process.env.ALPHA_SUPABASE_URL_SERVER ?? process.env.ALPHA_SUPABASE_URL,
+  );
+  const key = process.env.ALPHA_SUPABASE_ANON_KEY_SERVER ?? process.env.ALPHA_SUPABASE_ANON_KEY;
+  if (!url) {
+    throw new Error("ALPHA_SUPABASE_URL_SERVER / ALPHA_SUPABASE_URL is missing or not a URL");
   }
-  const url = rawUrl.replace(/\/+$/, "").replace(/\/rest\/v1$/, "");
+  if (!key) throw new Error("ALPHA_SUPABASE_ANON_KEY_SERVER / ALPHA_SUPABASE_ANON_KEY not set");
   return createClient<Database>(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });

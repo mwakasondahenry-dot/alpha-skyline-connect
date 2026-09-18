@@ -6,14 +6,17 @@
  */
 import { createClient } from "@supabase/supabase-js";
 import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
+import { supabaseBaseUrl } from "./supabase-url";
 
 export function serviceClient() {
-  const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER ?? process.env.ALPHA_SUPABASE_URL;
+  const url = supabaseBaseUrl(
+    process.env.ALPHA_SUPABASE_URL_SERVER ?? process.env.ALPHA_SUPABASE_URL,
+  );
   const key = process.env.ALPHA_SUPABASE_SERVICE_ROLE_KEY;
-  if (!rawUrl || !key) {
-    throw new Error("ALPHA_SUPABASE_SERVICE_ROLE_KEY / ALPHA_SUPABASE_URL_SERVER not configured");
+  if (!url) {
+    throw new Error("ALPHA_SUPABASE_URL_SERVER / ALPHA_SUPABASE_URL is missing or not a URL");
   }
-  const url = rawUrl.replace(/\/+$/, "").replace(/\/rest\/v1$/, "");
+  if (!key) throw new Error("ALPHA_SUPABASE_SERVICE_ROLE_KEY not configured");
   return createClient(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });

@@ -38,6 +38,11 @@ The values are the ones in `.env.local`, except:
 `ALPHA_SUPABASE_URL_SERVER` and `ALPHA_SUPABASE_ANON_KEY_SERVER` are optional;
 the server falls back to the two above.
 
+Paste each value on its own, with no quotes and no line break after it. A
+stray newline or quote used to reach Supabase as part of the URL and fail
+every database call with "Invalid supabaseUrl"; the code now trims those, but
+a wrong value is still a wrong value.
+
 To check what is set: `npx wrangler secret list --name alpha-schools`.
 
 ## 3. Deploy
@@ -91,6 +96,13 @@ Cloudflare issues the HTTPS certificate itself; nothing else to configure.
 ```
 npm run deploy
 ```
+
+If a change does not appear on the live site, delete `.output` and deploy
+again: a reused build directory has shipped new assets with stale server code,
+which looks exactly like a slow cache.
+
+To see what the Worker itself is doing — the real error behind any "something
+went wrong" page — run `npx wrangler tail alpha-schools` and reproduce it.
 
 Secrets stay in place between deploys. Pushing to GitHub no longer publishes
 anything by itself; it only syncs the code with Lovable's editor.
