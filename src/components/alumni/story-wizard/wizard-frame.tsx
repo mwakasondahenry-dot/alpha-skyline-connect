@@ -33,8 +33,8 @@ export function InvalidLinkCard() {
   return (
     <MessageCard title="This link no longer works">
       <BodyText>
-        It may have expired, or the school may have sent you a newer one. Contact the school and
-        we will send you a fresh link.
+        It may have expired, or the school may have sent you a newer one. Contact the school and we
+        will send you a fresh link.
       </BodyText>
       <Link to="/contact" className={`mt-5 ${BTN_PRIMARY}`} style={BTN_PRIMARY_STYLE}>
         Contact the school
@@ -55,10 +55,6 @@ export function AlreadyReceivedCard() {
 export function DoneCard() {
   return (
     <MessageCard title="Thank you. Your story is with us.">
-      <BodyText>
-        A member of staff will read it before anything is published, so it will not appear on the
-        site straight away. To change or withdraw it later, contact the school.
-      </BodyText>
       <HomeLink />
     </MessageCard>
   );
@@ -215,7 +211,12 @@ export function StoryWizardFrame({
 
         <div className="mt-6 flex flex-wrap-reverse items-center justify-between gap-3">
           {step > 0 ? (
-            <button type="button" onClick={() => goTo(step - 1)} className={BTN_SECONDARY} style={T.body}>
+            <button
+              type="button"
+              onClick={() => goTo(step - 1)}
+              className={BTN_SECONDARY}
+              style={T.body}
+            >
               Back
             </button>
           ) : (
@@ -233,7 +234,12 @@ export function StoryWizardFrame({
               {busy ? "Sending…" : "Send my story"}
             </button>
           ) : (
-            <button type="button" onClick={onNext} className={BTN_PRIMARY} style={BTN_PRIMARY_STYLE}>
+            <button
+              type="button"
+              onClick={onNext}
+              className={BTN_PRIMARY}
+              style={BTN_PRIMARY_STYLE}
+            >
               Next: {steps[step + 1].title.toLowerCase()}
             </button>
           )}
