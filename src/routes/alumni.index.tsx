@@ -10,7 +10,7 @@
  * alumni at. It just says the wall is empty rather than filling it with
  * fiction.
  *
- * There is deliberately no link to /alumni/submit here. That form is unlisted
+ * There is deliberately no link to /alumni/story here. That form is unlisted
  * and shared by hand.
  */
 import { createFileRoute } from "@tanstack/react-router";

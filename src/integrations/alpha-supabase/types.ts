@@ -118,6 +118,41 @@ export type HeroSlideRow = {
   created_at: string;
 }
 
+export type ProfileRow = {
+  id: string;
+  full_name: string | null;
+  role: string;
+  created_at: string;
+}
+
+export type InviteStatus = "pending" | "opened" | "submitted";
+
+export type InviteAudience = "alumni" | "parent";
+
+/** See alpha_migration_testimonial_invites.sql. */
+export type TestimonialInviteRow = {
+  id: string;
+  full_name: string;
+  /** E.164, e.g. +255712345678. Unique. */
+  phone: string;
+  /** Who the invite is for. Phone numbers are unique per audience. */
+  audience: InviteAudience;
+  email: string | null;
+  school_slug: SchoolSlug | null;
+  grad_year: number | null;
+  /** SHA-256 hex of the link code. */
+  token_hash: string;
+  /** base64(iv ‖ AES-GCM ciphertext) of the link code. Server key only. */
+  token_cipher: string;
+  status: InviteStatus;
+  expires_at: string;
+  opened_at: string | null;
+  submitted_at: string | null;
+  last_shared_at: string | null;
+  created_by: string | null;
+  created_at: string;
+}
+
 export type TestimonialRow = {
   id: string;
   school_slug: SchoolSlug | null;
@@ -140,6 +175,13 @@ export type TestimonialRow = {
   /** Object path in the PRIVATE alumni-pending bucket, while awaiting review. */
   pending_photo_path: string | null;
   submitted_ip: string | null;
+
+  /* Invites — see alpha_migration_testimonial_invites.sql. */
+  /** Set when the story came through a personal link; null for the general link. */
+  invite_id: string | null;
+  /** Story prompt answers keyed by prompt (alumni or parent prompts). Staff only; never published. */
+  answers: Record<string, string> | null;
+  city_country: string | null;
 }
 
 export interface Database {
@@ -156,6 +198,8 @@ export interface Database {
       contact_messages: { Row: ContactMessageRow; Insert: Partial<ContactMessageRow>; Update: Partial<ContactMessageRow>; Relationships: [] };
       hero_slides: { Row: HeroSlideRow; Insert: Partial<HeroSlideRow>; Update: Partial<HeroSlideRow>; Relationships: [] };
       testimonials: { Row: TestimonialRow; Insert: Partial<TestimonialRow>; Update: Partial<TestimonialRow>; Relationships: [] };
+      profiles: { Row: ProfileRow; Insert: Partial<ProfileRow>; Update: Partial<ProfileRow>; Relationships: [] };
+      testimonial_invites: { Row: TestimonialInviteRow; Insert: Partial<TestimonialInviteRow>; Update: Partial<TestimonialInviteRow>; Relationships: [] };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;

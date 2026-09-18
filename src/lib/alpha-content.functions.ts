@@ -432,7 +432,22 @@ export type TestimonialItem = Pick<
   | "school_slug"
   | "grad_year"
   | "company"
+  | "created_at"
 >;
+
+/**
+ * Parent quotes for one school (or every school when slug is omitted),
+ * newest first, so stories parents send in lead and older staff-entered
+ * quotes follow. School-wide quotes count for every school.
+ */
+export function parentQuotes(items: TestimonialItem[], slug?: SchoolSlug): TestimonialItem[] {
+  return items
+    .filter((t) => !isAlumniStory(t))
+    .filter(
+      (t) => !slug || t.school_slug === slug || t.school_slug === null || t.school_slug === "group-wide",
+    )
+    .sort((a, b) => b.created_at.localeCompare(a.created_at));
+}
 
 /** True for an approved alumni story, false for a parent quote. */
 export function isAlumniStory(t: Pick<TestimonialItem, "grad_year">) {
@@ -445,7 +460,7 @@ export const getTestimonials = createServerFn({ method: "GET" }).handler(
       const sb = serverClient();
       const { data, error } = await sb
         .from("testimonials")
-        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company")
+        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at")
         .eq("published", true)
         .order("sort_order", { ascending: true });
       if (error) throw error;
@@ -472,7 +487,7 @@ export const getAlumniStories = createServerFn({ method: "GET" }).handler(
       const sb = serverClient();
       const { data, error } = await sb
         .from("testimonials")
-        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company")
+        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at")
         .eq("published", true)
         .not("grad_year", "is", null)
         .order("grad_year", { ascending: false })

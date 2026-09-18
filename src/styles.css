@@ -113,7 +113,7 @@
      >=1280px, so each role is one token rather than a media query. */
 
   /* Hero headline — two-tone: line 1 white, line 2 gold. 30 -> 48px */
-  --text-hero: clamp(1.875rem, 1.10rem + 3.30vw, 3rem);
+  --text-hero: clamp(2.125rem, 1.15rem + 4.15vw, 3.75rem);
   --leading-hero: 1.08;
   --weight-hero: 800;
   --hero-line-1-color: var(--color-surface);
@@ -273,19 +273,34 @@
      through real photos of varying exposure and the headline plus the
      stat rail must stay legible over every one of them. Not optional,
      and not a function of how dark the photo happens to be. */
-  --hero-scrim: linear-gradient(
-    100deg,
-    rgba(0, 26, 60, 0.88) 0%,
-    rgba(0, 26, 60, 0.72) 38%,
-    rgba(0, 26, 60, 0.32) 68%,
-    rgba(0, 26, 60, 0.18) 100%
-  );
-  --hero-scrim-mobile: linear-gradient(
-    180deg,
-    rgba(0, 26, 60, 0.55) 0%,
-    rgba(0, 26, 60, 0.70) 55%,
-    rgba(0, 26, 60, 0.88) 100%
-  );
+  /* Two layers: a warm gold glow behind the headline, then the navy wash
+     that guarantees legibility. The navy clears earlier than it used to,
+     so the photograph keeps its colour on the right of the frame. */
+  --hero-scrim:
+    radial-gradient(
+      70% 90% at 6% 22%,
+      color-mix(in srgb, var(--color-gold) 26%, transparent) 0%,
+      transparent 62%
+    ),
+    linear-gradient(
+      100deg,
+      rgba(0, 26, 60, 0.94) 0%,
+      rgba(0, 26, 60, 0.84) 30%,
+      rgba(0, 26, 60, 0.44) 58%,
+      rgba(0, 26, 60, 0.10) 100%
+    );
+  --hero-scrim-mobile:
+    radial-gradient(
+      90% 55% at 18% 18%,
+      color-mix(in srgb, var(--color-gold) 20%, transparent) 0%,
+      transparent 70%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(0, 26, 60, 0.42) 0%,
+      rgba(0, 26, 60, 0.62) 50%,
+      rgba(0, 26, 60, 0.88) 100%
+    );
 }
 
 /* Vibrant brand helpers */
@@ -637,6 +652,21 @@ html.rv-on [data-reveal][data-rv-in] {
   min-height: 100vh;
   min-height: 100svh;
 }
+/* The hero's credentials strip takes as many columns as it has items, so a
+   page can carry three or four without a second layout. */
+@media (min-width: 640px) {
+  .hero-viewport ul[style*="--cred-cols"],
+  .hero-viewport-inset ul[style*="--cred-cols"] {
+    grid-template-columns: repeat(var(--cred-cols, 3), minmax(0, 1fr));
+  }
+}
+@media (min-width: 640px) and (max-width: 1023px) {
+  .hero-viewport ul[style*="--cred-cols"],
+  .hero-viewport-inset ul[style*="--cred-cols"] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* For a hero under a header that is in flow rather than overlaid. */
 .hero-viewport-inset {
   min-height: calc(100vh - var(--header-h));
@@ -795,6 +825,38 @@ html.rv-on [data-reveal][data-rv-in] {
   .ac-band__mark { width: 8rem; height: 8rem; opacity: 0.05; }
 }
 
+/* The band with a photograph: the picture fills the right side and fades
+   into the tint, so the heading on the left always sits on a calm ground.
+   On phones the picture becomes a faint wash behind the text. */
+.ac-band--photo {
+  border-bottom: 0;
+}
+.ac-band__photo {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 58%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 42%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 42%);
+}
+@media (max-width: 767px) {
+  .ac-band__photo {
+    width: 100%;
+    opacity: 0.16;
+    -webkit-mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+    mask-image: linear-gradient(to bottom, #000 0%, transparent 100%);
+  }
+}
+@media (min-width: 768px) {
+  .ac-band--photo > div {
+    padding-block: calc(var(--space-block-y) * 1.6);
+  }
+}
+
 /* --- Subject tiles ----------------------------------------------- */
 
 /* The comp's icon row, carrying the real 17-subject list. The icons are
@@ -837,6 +899,56 @@ html.rv-on [data-reveal][data-rv-in] {
 .dl-tile:hover .dl-tile__icon {
   background: var(--dl-accent, var(--color-brand-blue));
   color: var(--color-surface);
+}
+
+/* Photo tiles: the subject tiles with a still-life on top. The photo is
+   decoration; the name row carries the meaning. */
+.dl-subject {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-chip);
+  background: var(--color-surface);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-deep-blue);
+  transition:
+    transform 180ms var(--ease-out),
+    border-color 180ms var(--ease-out),
+    box-shadow 180ms var(--ease-out);
+}
+.dl-subject__photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: var(--color-surface-muted);
+}
+.dl-subject__name {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.dl-subject:hover {
+  transform: translate3d(0, -2px, 0);
+  border-color: var(--dl-accent, var(--color-brand-blue));
+  box-shadow: 0 8px 20px -8px
+    color-mix(in srgb, var(--dl-accent, var(--color-brand-blue)) 35%, transparent);
+}
+.dl-subject:hover .dl-tile__icon {
+  background: var(--dl-accent, var(--color-brand-blue));
+  color: var(--color-surface);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dl-subject,
+  .dl-subject:hover {
+    transition: none;
+    transform: none;
+  }
 }
 
 /* --- Filter chips ------------------------------------------------- */

@@ -1,13 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   ArrowRight,
   Award,
+  BookOpen,
   Building2,
+  ChevronLeft,
+  ChevronRight,
   GraduationCap,
+  Laptop,
   MapPin,
   Plane,
   Quote,
+  Users,
 } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
@@ -17,6 +23,7 @@ import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
   getTestimonials,
+  parentQuotes,
   type HomeWhatsNew,
   type HomeEventItem,
   type TestimonialItem,
@@ -98,45 +105,64 @@ const BTN_BASE =
 
 const SHELL = "mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]";
 
+/* The school cards. Every fact here is confirmed in PRODUCT.md or already
+   on the school pages: ages and forms, campus, NECTA, aviation and coding.
+   The comp's taglines ("Big Beginnings", "Excellence Today"...) and its
+   "Cambridge Curriculum" line are not built: the taglines are unapproved
+   and Alpha teaches NECTA only. The photos are the school's own. */
 const SCHOOLS = [
   {
     slug: "nursery-primary",
-    badge: "AGE 2 – 12",
+    tag: "Early years",
+    TagIcon: Users,
     name: "Nursery & Primary",
-    campus: "COMBINED CAMPUS",
-    blurb:
-      "Where curiosity starts. Play-led early years into a strong, structured primary foundation.",
+    blurb: "Where curiosity starts: play-led early years into a strong, structured primary.",
+    facts: [
+      { Icon: Users, text: "Ages 2 to 12" },
+      { Icon: MapPin, text: "Kunduchi campus" },
+      { Icon: Laptop, text: "Coding from primary" },
+    ],
     to: "/schools/nursery-primary",
     image: campusNurseryImage,
     alt: "Young Alpha primary students in green sports kit",
+    focus: "50% 30%",
     band: "var(--color-bright-blue)",
     Icon: Building2,
   },
   {
     slug: "alpha-high",
-    badge: "FORM 1 – 6",
+    /* PRODUCT.md and AGENTS.md: say "Co-education", never "Mixed". */
+    tag: "Co-education",
+    TagIcon: GraduationCap,
     name: "Alpha High",
-    /* PRODUCT.md and AGENTS.md: say "Co-education", never "Mixed". This card
-       was the last place on the site still saying Mixed. */
-    campus: "CO-EDUCATION · MIKOCHENI",
-    blurb:
-      "Our flagship secondary. NECTA pathways, aviation and coding at the core.",
+    blurb: "Our flagship secondary, with aviation and coding at the core.",
+    facts: [
+      { Icon: Users, text: "Forms 1 to 6, Mikocheni" },
+      { Icon: BookOpen, text: "NECTA: CSEE and ACSEE" },
+      { Icon: Plane, text: "Aviation and coding" },
+    ],
     to: "/schools/alpha-high",
     image: campusHighImage,
     alt: "Alpha High aviation students in safety vests at JNIA",
+    focus: "50% 35%",
     band: "var(--color-deep-blue)",
     Icon: GraduationCap,
   },
   {
     slug: "alpha-girls",
-    badge: "FORM 1 – 6",
+    tag: "Girls only",
+    TagIcon: Award,
     name: "Alpha Girls",
-    campus: "GIRLS ONLY · KUNDUCHI",
-    blurb:
-      "A secondary built for girls to lead — same rigour, same aviation and coding, room to thrive.",
+    blurb: "A secondary built for girls to lead, with the same rigour, aviation and coding.",
+    facts: [
+      { Icon: Users, text: "Forms 1 to 6, Kunduchi" },
+      { Icon: BookOpen, text: "NECTA: CSEE and ACSEE" },
+      { Icon: Plane, text: "Aviation and coding" },
+    ],
     to: "/schools/alpha-girls",
     image: campusGirlsImage,
     alt: "Alpha Girls debate team celebrating with medals and certificates",
+    focus: "50% 35%",
     band: "var(--color-girls-teal)",
     Icon: Award,
   },
@@ -345,88 +371,89 @@ function FindTheRightSchool() {
           </Marked>{" "}
           for Your Child
         </SectionHeading>
+        <p className="mt-4 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+          Three schools on two campuses in Dar es Salaam, from the first day of nursery to Form Six.
+        </p>
       </Reveal>
 
       <ul
-        suppressHydrationWarning data-reveal
+        suppressHydrationWarning
+        data-reveal
         data-reveal-delay="120"
-        className="mt-[var(--space-block-y)] grid gap-0 overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] md:grid-cols-3 md:gap-[var(--space-card-gap)] md:overflow-visible md:bg-transparent md:shadow-none"
+        className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] md:grid-cols-3"
       >
-        {SCHOOLS.map((s, i) => (
-          <li
-            key={s.slug}
-            style={{ ["--band" as string]: s.band }}
-            className={
-              i === 0 ? undefined : "border-t border-[var(--color-hairline)] md:border-t-0"
-            }
-          >
+        {SCHOOLS.map((s) => (
+          <li key={s.slug} style={{ ["--band" as string]: s.band }}>
             <Link
               to={s.to}
-              className="group flex h-full items-center gap-4 p-[var(--space-card-pad-sm)] md:block md:overflow-hidden md:rounded-[var(--radius-card)] md:bg-[var(--card-bg)] md:p-0 md:shadow-[var(--card-shadow)] md:transition-shadow md:hover:shadow-[var(--card-shadow-hover)]"
+              className="group relative isolate flex h-full min-h-[32rem] flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-[var(--band)] text-[var(--color-surface)] shadow-[var(--card-shadow)] transition-shadow duration-200 hover:shadow-[var(--card-shadow-hover)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--band)] md:min-h-[33rem]"
             >
-              {/* 375px: icon tile. Hidden from md up. */}
+              <img
+                src={s.image}
+                alt={s.alt}
+                loading="lazy"
+                decoding="async"
+                className="absolute inset-0 -z-20 h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                style={{ objectPosition: s.focus }}
+              />
+              {/* The school colour rises from the bottom so the text always
+                  sits on a solid ground, whatever the photograph does. */}
               <span
                 aria-hidden
-                className="grid h-12 w-12 shrink-0 place-items-center rounded-[var(--radius-btn)] bg-[var(--band)] text-[var(--color-surface)] md:hidden"
+                className="absolute inset-0 -z-10"
+                style={{
+                  background:
+                    "linear-gradient(to top, var(--band) 0%, var(--band) 38%, color-mix(in srgb, var(--band) 70%, transparent) 55%, transparent 80%)",
+                }}
+              />
+
+              <span
+                className="absolute left-4 top-4 inline-flex items-center gap-2 rounded-full bg-[var(--band)] px-3 py-1.5 font-semibold text-[var(--color-surface)] shadow-sm"
+                style={T.body}
               >
-                <s.Icon className="h-6 w-6" />
+                <s.TagIcon className="h-4 w-4" aria-hidden />
+                {s.tag}
               </span>
 
-              {/* Desktop: photo. Hidden below md. */}
-              <div className="hidden md:block">
-                <img
-                  src={s.image}
-                  alt={s.alt}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-[4/3] w-full object-cover"
-                />
-              </div>
-
-              <div className="flex min-w-0 flex-1 items-center justify-between gap-3 md:block md:bg-[var(--band)] md:p-[var(--space-card-pad-sm)]">
-                <div className="min-w-0">
-                  <h3
-                    className="font-display text-[var(--color-ink)] md:text-[var(--color-surface)]"
-                    style={T.cardTitle}
-                  >
-                    {s.name}
-                  </h3>
-                  <p
-                    className="mt-1 text-[var(--color-ink-soft)] md:text-[var(--color-surface)]/85"
-                    style={T.label}
-                  >
-                    {s.campus}
-                  </p>
-                  <p
-                    className="mt-0.5 text-[var(--color-ink-soft)] md:text-[var(--color-surface)]/85"
-                    style={T.label}
-                  >
-                    {s.badge}
-                  </p>
-                </div>
-
-                {/* 375px: coloured pill on a white row. From md up it sits
-                    inside the coloured band, so it inverts to a white pill —
-                    these must be Tailwind classes, not inline style, or the
-                    breakpoint cannot override them. */}
+              <div className="p-[var(--space-card-pad)]">
+                <h3 className="font-display" style={T.section}>
+                  {s.name}
+                </h3>
+                <p className="mt-1 text-[var(--color-surface)]/90" style={T.body}>
+                  {s.blurb}
+                </p>
+                <ul className="mt-4 space-y-2">
+                  {s.facts.map((f) => (
+                    <li
+                      key={f.text}
+                      className="flex items-center gap-3 text-[var(--color-surface)]/95"
+                      style={T.body}
+                    >
+                      <f.Icon className="h-4 w-4 shrink-0 opacity-80" aria-hidden />
+                      {f.text}
+                    </li>
+                  ))}
+                </ul>
                 <span
-                  className={`${BTN_BASE} shrink-0 bg-[var(--band)] text-[var(--color-surface)] md:mt-4 md:bg-[var(--color-surface)] md:text-[var(--color-ink)]`}
+                  className={`${BTN_BASE} mt-6 bg-[var(--color-surface)] text-[var(--color-ink)] group-hover:scale-[1.02]`}
                   style={{
                     borderRadius: "var(--btn-primary-radius)",
-                    padding: "0.5rem 0.875rem",
+                    padding: "0.625rem 1.125rem",
                     fontWeight: "var(--btn-primary-weight)",
-                    fontSize: "var(--text-label)",
+                    fontSize: "var(--text-body)",
                   }}
                 >
-                  Explore
-                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                  Explore {s.name}
+                  <ArrowRight
+                    className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 motion-reduce:transition-none"
+                    aria-hidden
+                  />
                 </span>
               </div>
             </Link>
           </li>
         ))}
       </ul>
-
     </section>
   );
 }
@@ -498,26 +525,28 @@ function isAlumni(t: TestimonialItem) {
 }
 
 function Testimonials({ items }: { items: TestimonialItem[] }) {
-  const parent = items.find((t) => !isAlumni(t));
+  /* Parent stories rotate, newest first, so quotes parents send in lead and
+     older staff-entered quotes follow. The alumni card shows one story. */
+  const parents = parentQuotes(items);
   const alumni = items.find(isAlumni);
 
-  if (!parent && !alumni) return null;
+  if (parents.length === 0 && !alumni) return null;
 
   return (
     <section className={`${SHELL} pb-[var(--space-section-y)]`}>
       <div suppressHydrationWarning data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
-        {parent && (
+        {parents.length > 0 && (
           <TestimonialCard
             title="Parent Testimonials"
             tint="var(--color-tint-parent)"
-            item={parent}
+            items={parents}
           />
         )}
         {alumni && (
           <TestimonialCard
             title="Alumni Testimonials"
             tint="var(--color-tint-alumni)"
-            item={alumni}
+            items={[alumni]}
           />
         )}
       </div>
@@ -528,12 +557,21 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
 function TestimonialCard({
   title,
   tint,
-  item,
+  items,
 }: {
   title: string;
   tint: string;
-  item: TestimonialItem;
+  items: TestimonialItem[];
 }) {
+  const [index, setIndex] = useState(0);
+  const count = items.length;
+  const item = items[Math.min(index, count - 1)];
+  const step =
+    "grid h-11 w-11 place-items-center rounded-full bg-white/70 text-[var(--color-brand-blue)] " +
+    "transition-colors duration-150 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-2 " +
+    "focus-visible:outline-[var(--color-brand-blue)] disabled:cursor-not-allowed disabled:opacity-35 " +
+    "motion-reduce:transition-none";
+
   return (
     <article
       className="flex gap-4 rounded-[var(--radius-card)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
@@ -557,12 +595,42 @@ function TestimonialCard({
           “{item.quote}”
         </blockquote>
         <p className="mt-3 text-[var(--color-ink-soft)]" style={T.label}>
-          — {item.author_name}
+          {item.author_name}
           {item.relationship ? `, ${item.relationship}` : ""}
         </p>
+        {count > 1 && (
+          <div className="mt-4 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIndex((i) => Math.max(0, i - 1))}
+              disabled={index === 0}
+              aria-label={`Previous ${title.toLowerCase()}`}
+              className={step}
+            >
+              <ChevronLeft className="h-5 w-5" aria-hidden />
+            </button>
+            <span
+              aria-live="polite"
+              className="min-w-[4.5rem] text-center tabular-nums text-[var(--color-ink-soft)]"
+              style={T.body}
+            >
+              {index + 1} of {count}
+            </span>
+            <button
+              type="button"
+              onClick={() => setIndex((i) => Math.min(count - 1, i + 1))}
+              disabled={index === count - 1}
+              aria-label={`Next ${title.toLowerCase()}`}
+              className={step}
+            >
+              <ChevronRight className="h-5 w-5" aria-hidden />
+            </button>
+          </div>
+        )}
       </div>
       {item.photo_url && (
         <img
+          key={item.id}
           src={item.photo_url}
           alt=""
           loading="lazy"

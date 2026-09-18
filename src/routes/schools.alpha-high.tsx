@@ -20,21 +20,21 @@ import {
   type CombinationGroup,
 } from "@/components/school/subject-lists";
 import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
+import labBench from "@/assets/subjects/lab-bench.webp";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import {
-  getSchoolBundle,
-  getSchoolPhotos,
-  type SchoolBundle,
-} from "@/lib/alpha-content.functions";
+import { getSchoolBundle, getSchoolPhotos, type SchoolBundle } from "@/lib/alpha-content.functions";
+import { ParentVoices } from "@/components/school/parent-voices";
+import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto, type SlotPhotoMap } from "@/lib/photo-slots";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
 import {
   ArrowRight,
+  Laptop,
   Users,
   GraduationCap,
   Plane,
@@ -79,6 +79,7 @@ export const Route = createFileRoute("/schools/alpha-high")({
     Promise.all([
       context.queryClient.ensureQueryData(bundleQuery),
       context.queryClient.ensureQueryData(photosQuery),
+      context.queryClient.ensureQueryData(testimonialsQuery),
     ]),
   component: AlphaHighRoute,
 });
@@ -103,6 +104,7 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
       <LifeAtMikocheni />
       <BeyondClassroom />
       <Distinctive />
+      <ParentVoices school="alpha-high" accent="var(--color-deep-blue)" />
       <ApplyBanner />
       <AlphaHighFooter />
     </div>
@@ -191,6 +193,11 @@ function Hero() {
               label: "Aviation programme",
               sub: "Ground school to PPL",
               icon: <Plane className="h-5 w-5" />,
+            },
+            {
+              label: "Coding",
+              sub: "From primary up",
+              icon: <Laptop className="h-5 w-5" />,
             },
           ]}
         />
@@ -469,7 +476,7 @@ function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-surface)]">
       <CurriculumBand
-        eyebrow="Academics"
+        image={labBench}
         title="Seventeen subjects at O-Level, twelve combinations at A-Level."
         intro="Every subject examinable across Forms One to Four, what a pupil in each form may choose between, and all twelve A-Level combinations with their subjects written out."
       />

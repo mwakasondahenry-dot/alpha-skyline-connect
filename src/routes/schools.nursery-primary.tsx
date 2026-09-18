@@ -4,11 +4,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
-import {
-  getTestimonials,
-  submitContactMessage,
-  type TestimonialItem,
-} from "@/lib/alpha-content.functions";
+import { submitContactMessage } from "@/lib/alpha-content.functions";
 import {
   BookOpen,
   FlaskConical,
@@ -31,18 +27,14 @@ import {
 
 import { getSchoolPhotos } from "@/lib/alpha-content.functions";
 import { slotPhoto } from "@/lib/photo-slots";
+import { ParentVoices } from "@/components/school/parent-voices";
+import { testimonialsQuery } from "@/lib/testimonials-query";
 import { T, heroStep } from "@/components/type-roles";
 import { Marked, Backdrop } from "@/components/alpha-ui";
 
 const photosQuery = queryOptions({
   queryKey: ["school-photos", "nursery-primary"],
   queryFn: () => getSchoolPhotos({ data: { slug: "nursery-primary" as const } }),
-  staleTime: 5 * 60 * 1000,
-});
-
-const testimonialsQuery = queryOptions({
-  queryKey: ["testimonials"],
-  queryFn: () => getTestimonials(),
   staleTime: 5 * 60 * 1000,
 });
 
@@ -143,7 +135,7 @@ function NurseryPrimaryPage() {
       <WhatTheyExplore />
       <OutstandingExtracurriculum />
       <LetsGetStarted />
-      <WhatParentsSay />
+      <ParentVoices school="nursery-primary" accent="var(--color-bright-blue)" />
       <PeekInside />
       <ComeMeetUs />
       <EntryRequirements />
@@ -990,93 +982,6 @@ function Field({
         style={T.body}
       />
     </label>
-  );
-}
-
-// ---------- What parents say ----------
-
-function WhatParentsSay() {
-  const { data: testimonials } = useSuspenseQuery(testimonialsQuery);
-
-  // design/README.md + AGENTS.md: never render invented or placeholder quotes.
-  // Real published rows for this school only, and nothing at all when there
-  // are none. The blue section above closes itself with its own bottom wave,
-  // so this section can disappear without leaving a seam.
-  const quotes: TestimonialItem[] = testimonials.filter(
-    (t) => t.school_slug === "nursery-primary" || t.school_slug === null,
-  );
-  if (quotes.length === 0) return null;
-
-  return (
-    <section className="relative bg-[var(--color-off-white)] pt-20">
-      <div className="mx-auto max-w-7xl px-6 pt-10 lg:px-10">
-        <p
-          suppressHydrationWarning
-          data-reveal
-          className="text-center text-[var(--color-bright-blue)]"
-          style={T.label}
-        >
-          From our families
-        </p>
-        <h2
-          suppressHydrationWarning
-          data-reveal
-          data-reveal-delay="80"
-          className="mt-2 text-center font-display tracking-tight text-[var(--color-deep-blue)]"
-          style={T.section}
-        >
-          What <span className="text-[var(--color-bright-blue)]">parents</span> say
-        </h2>
-
-        <div
-          suppressHydrationWarning
-          data-reveal
-          data-reveal-delay="160"
-          className="mt-12 grid gap-6 md:grid-cols-3"
-        >
-          {quotes.map((q, i) => (
-            <article
-              key={q.id}
-              className="rounded-3xl bg-white p-7 shadow-[0_10px_30px_-12px_rgba(12,68,124,0.15)]"
-            >
-              <span className="font-display text-3xl leading-none text-[var(--color-bright-blue)]">
-                &ldquo;
-              </span>
-              <p className="mt-4 text-[var(--color-ink)]/85" style={T.body}>
-                {q.quote}
-              </p>
-              <div className="mt-6 flex items-center gap-3">
-                {q.photo_url ? (
-                  <img
-                    src={q.photo_url}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="h-11 w-11 shrink-0 rounded-full object-cover"
-                  />
-                ) : (
-                  <StripePanel
-                    tone={i % 2 === 1 ? "gold" : "blue"}
-                    label=""
-                    className="h-11 w-11 rounded-full"
-                  />
-                )}
-                <div>
-                  <p className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-                    {q.author_name}
-                  </p>
-                  {q.relationship && (
-                    <p className="text-[var(--color-ink)]/65" style={T.label}>
-                      {q.relationship}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </article>
-          ))}
-        </div>
-      </div>
-    </section>
   );
 }
 

@@ -18,6 +18,23 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { T } from "@/components/type-roles";
+import imgBiology from "@/assets/subjects/biology.webp";
+import imgBookKeeping from "@/assets/subjects/book-keeping.webp";
+import imgBusiness from "@/assets/subjects/business.webp";
+import imgChemistry from "@/assets/subjects/chemistry.webp";
+import imgChinese from "@/assets/subjects/chinese.webp";
+import imgCivics from "@/assets/subjects/civics.webp";
+import imgComputer from "@/assets/subjects/computer-science.webp";
+import imgEnglish from "@/assets/subjects/english.webp";
+import imgFrench from "@/assets/subjects/french.webp";
+import imgGeography from "@/assets/subjects/geography.webp";
+import imgHistoria from "@/assets/subjects/historia.webp";
+import imgHistory from "@/assets/subjects/history.webp";
+import imgIcs from "@/assets/subjects/ics.webp";
+import imgKiswahili from "@/assets/subjects/kiswahili.webp";
+import imgLiterature from "@/assets/subjects/literature.webp";
+import imgMaths from "@/assets/subjects/maths.webp";
+import imgPhysics from "@/assets/subjects/physics.webp";
 
 /**
  * Shared presentation for the academic blocks on the secondary school pages.
@@ -59,6 +76,34 @@ const ICON_RULES: ReadonlyArray<[RegExp, LucideIcon]> = [
   [/mathematic/i, Calculator],
   [/shop|entrepreneur/i, Store],
 ];
+
+/* Subject photographs. Generated still-lifes of objects only (no people,
+   no uniforms, no text), so none of them claims to show Alpha pupils or
+   Alpha rooms. Matched the same way as the icons; a subject with no match
+   renders without a photo. */
+const IMAGE_RULES: ReadonlyArray<[RegExp, string]> = [
+  [/historia|maadili/i, imgHistoria],
+  [/civics/i, imgCivics],
+  [/history/i, imgHistory],
+  [/geograph/i, imgGeography],
+  [/kiswahili/i, imgKiswahili],
+  [/literature/i, imgLiterature],
+  [/english/i, imgEnglish],
+  [/chinese/i, imgChinese],
+  [/french/i, imgFrench],
+  [/business|commerce/i, imgBusiness],
+  [/book.?keeping|account/i, imgBookKeeping],
+  [/^ics$|information/i, imgIcs],
+  [/computer/i, imgComputer],
+  [/physics/i, imgPhysics],
+  [/chemistry/i, imgChemistry],
+  [/biology/i, imgBiology],
+  [/mathematic/i, imgMaths],
+];
+
+function imageFor(subject: string): string | undefined {
+  return IMAGE_RULES.find(([re]) => re.test(subject))?.[1];
+}
 
 function iconFor(subject: string): LucideIcon {
   return ICON_RULES.find(([re]) => re.test(subject))?.[1] ?? BookOpen;
@@ -287,15 +332,32 @@ export function SubjectTileList({
   accent?: string;
 }) {
   return (
-    <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3" style={accentVar(accent)}>
+    <ul
+      className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6"
+      style={accentVar(accent)}
+    >
       {items.map((s) => {
         const Icon = iconFor(s);
+        const image = imageFor(s);
         return (
-          <li key={s} className="dl-tile" style={T.body}>
-            <span aria-hidden className="dl-tile__icon">
-              <Icon className="h-4 w-4" />
+          <li key={s} className="dl-subject">
+            {image && (
+              <img
+                src={image}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                width={640}
+                height={482}
+                className="dl-subject__photo"
+              />
+            )}
+            <span className="dl-subject__name" style={T.body}>
+              <span aria-hidden className="dl-tile__icon">
+                <Icon className="h-4 w-4" />
+              </span>
+              <span className="min-w-0">{s}</span>
             </span>
-            {s}
           </li>
         );
       })}

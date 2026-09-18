@@ -9,11 +9,14 @@ import {
   type CombinationGroup,
 } from "@/components/school/subject-lists";
 import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
+import labBench from "@/assets/subjects/lab-bench.webp";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getSchoolPhotos } from "@/lib/alpha-content.functions";
+import { ParentVoices } from "@/components/school/parent-voices";
+import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto } from "@/lib/photo-slots";
 import { Reveal } from "@/components/reveal";
 import girlsHero from "@/assets/school-alpha-girls.webp";
@@ -69,6 +72,7 @@ export const Route = createFileRoute("/schools/alpha-girls")({
     Promise.all([
       context.queryClient.ensureQueryData(bundleQuery),
       context.queryClient.ensureQueryData(photosQuery),
+      context.queryClient.ensureQueryData(testimonialsQuery),
     ]),
   component: AlphaGirlsRoute,
 });
@@ -92,6 +96,7 @@ function AlphaGirlsRoute() {
       <LifeAtKunduchi />
       <TheSchoolYear />
       <Staff staff={data.staff} />
+      <ParentVoices school="alpha-girls" accent="var(--color-girls-teal)" />
       <ApplyBanner />
       <GirlsFooter />
     </div>
@@ -664,7 +669,7 @@ function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-off-white)]">
       <CurriculumBand
-        eyebrow="Academics"
+        image={labBench}
         title="Seventeen subjects at O-Level, twelve combinations at A-Level."
         intro="Every subject examinable across Forms One to Four, what a girl in each form may choose between, and all twelve A-Level combinations with their subjects written out."
         accent={ACCENT}

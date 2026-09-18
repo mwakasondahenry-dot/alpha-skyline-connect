@@ -1,267 +1,230 @@
 /**
- * Server functions for the alumni submission flow.
+ * Server function for the story wizards: alumni (/alumni/story) and parents
+ * (/parents/story), general and personal links.
  *
  * Everything a stranger sends arrives here and is treated as hostile. The
- * client is used for nothing but convenience: every limit below is enforced
- * again on this side, and `published` is written as a literal so no shape of
- * request can set it.
+ * client is used for nothing but convenience: every limit is enforced again
+ * on this side (validateStory / validateParentStory), and `published` is
+ * written as a literal so no shape of request can set it.
  *
- * Schema, RLS and the private bucket: alpha_migration_alumni_submissions.sql
+ * Schema: alpha_migration_alumni_submissions.sql,
+ *         alpha_migration_testimonial_invites.sql,
+ *         alpha_migration_parent_invites.sql
  */
 import { createServerFn } from "@tanstack/react-start";
-import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
-import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/alpha-supabase/types";
+import { callerIp, serviceClient } from "@/lib/server/supabase-service";
+import { sniffImage } from "@/lib/image-sniff";
+import { formAudience, type Audience } from "@/lib/invites/audience";
+import { hashCode } from "@/lib/invites/token";
+import { PARENT_CONSENT_TEXT, validateParentStory } from "@/lib/story/parent-fields";
+import {
+  CONSENT_TEXT,
+  PENDING_BUCKET,
+  PHOTO_MAX_BYTES,
+  StoryError,
+  validateStory,
+} from "@/lib/story/fields";
 
-/** The exact wording a submitter agrees to. Stored with every submission. */
-export const CONSENT_TEXT =
-  "I agree that Alpha Schools may publish my name, message and photo on its " +
-  "public website. I understand I can request removal at any time by " +
-  "contacting the school.";
+export { CONSENT_TEXT, MESSAGE_MAX, PHOTO_MAX_BYTES, PENDING_BUCKET } from "@/lib/story/fields";
 
-export const MESSAGE_MAX = 400;
-export const PHOTO_MAX_BYTES = 5 * 1024 * 1024;
-export const PENDING_BUCKET = "alumni-pending";
-
-/** Submissions allowed from one address per hour. */
+/** General-link submissions allowed from one address per hour. */
 const RATE_LIMIT = 5;
-
 /**
- * Accepted image types, keyed by the magic bytes that actually identify them.
- *
- * The browser-supplied Content-Type is a claim, not evidence — it is trivially
- * forged and is never consulted. The extension written to storage is derived
- * from whichever signature matches here, so a .png holding a script is stored
- * as whatever it really is, or rejected.
+ * Personal-invite-link submissions allowed from one address per hour.
+ * Higher than the general link's limit because invite links are shared over
+ * WhatsApp/SMS and several invited alumni behind the same shared mobile-
+ * carrier IP (CGNAT) can legitimately submit within the same hour; the
+ * 256-bit link code and the one-story-per-invite lock (submit_invited_story)
+ * already bound how much abuse this can absorb. Owner-approved.
  */
-const SIGNATURES: ReadonlyArray<{
-  ext: string;
-  mime: string;
-  match: (b: Uint8Array) => boolean;
-}> = [
-  {
-    ext: "jpg",
-    mime: "image/jpeg",
-    match: (b) => b[0] === 0xff && b[1] === 0xd8 && b[2] === 0xff,
-  },
-  {
-    ext: "png",
-    mime: "image/png",
-    match: (b) =>
-      b[0] === 0x89 &&
-      b[1] === 0x50 &&
-      b[2] === 0x4e &&
-      b[3] === 0x47 &&
-      b[4] === 0x0d &&
-      b[5] === 0x0a &&
-      b[6] === 0x1a &&
-      b[7] === 0x0a,
-  },
-  {
-    ext: "webp",
-    mime: "image/webp",
-    // "RIFF" .... "WEBP"
-    match: (b) =>
-      b[0] === 0x52 &&
-      b[1] === 0x49 &&
-      b[2] === 0x46 &&
-      b[3] === 0x46 &&
-      b[8] === 0x57 &&
-      b[9] === 0x45 &&
-      b[10] === 0x42 &&
-      b[11] === 0x50,
-  },
-];
-
-function sniffImage(bytes: Uint8Array) {
-  return SIGNATURES.find((s) => s.match(bytes)) ?? null;
-}
-
-/**
- * Service-role client. Bypasses RLS, so it exists only inside this module and
- * is never handed to a route. It is what lets the alumni-pending bucket carry
- * no anonymous policy at all: the sole path a byte can take into that bucket
- * runs through the validation below.
- */
-function serviceClient() {
-  const rawUrl = process.env.ALPHA_SUPABASE_URL_SERVER ?? process.env.ALPHA_SUPABASE_URL;
-  const key = process.env.ALPHA_SUPABASE_SERVICE_ROLE_KEY;
-  if (!rawUrl || !key) {
-    throw new Error("ALPHA_SUPABASE_SERVICE_ROLE_KEY / ALPHA_SUPABASE_URL_SERVER not configured");
-  }
-  const url = rawUrl.replace(/\/+$/, "").replace(/\/rest\/v1$/, "");
-  return createClient<Database>(url, key, {
-    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-  });
-}
-
-/**
- * Caller's address, for rate limiting.
- *
- * cf-connecting-ip first: this deploys behind Cloudflare, which sets it and
- * strips any client-supplied copy, so it cannot be spoofed. x-forwarded-for is
- * the fallback and is only as trustworthy as the proxy in front — it is used
- * for the limit, never for anything security-bearing.
- */
-function callerIp(): string {
-  return getRequestHeader("cf-connecting-ip") ?? getRequestIP({ xForwardedFor: true }) ?? "unknown";
-}
-
-function str(form: FormData, key: string): string {
-  const v = form.get(key);
-  return typeof v === "string" ? v.trim() : "";
-}
-
-export type AlumniSubmissionResult = { ok: true };
-
-/**
- * A message intended for the person filling in the form.
- *
- * Everything thrown from a server function reaches the browser, so the
- * distinction matters: only these are shown. Anything else — a missing
- * environment variable, a Postgres error, a storage failure — is logged here
- * and replaced with a generic line, because the alternative is a public form
- * telling a stranger which environment variables the server is missing.
- */
-class SubmissionError extends Error {}
+const INVITE_RATE_LIMIT = 30;
 
 function fail(message: string): never {
-  throw new SubmissionError(message);
+  throw new StoryError(message);
 }
 
-export const submitAlumniStory = createServerFn({ method: "POST" })
+export type StorySubmissionResult = { ok: true } | { ok: false; state: "invalid" | "submitted" };
+
+/** One shape for both audiences, matching the testimonials columns. */
+type StoryRow = {
+  audience: Audience;
+  /** The exact wording this submitter agreed to. */
+  consentText: string;
+  code: string | null;
+  schoolSlug: string;
+  fullName: string;
+  relationship: string;
+  company: string | null;
+  cityCountry: string | null;
+  gradYear: number | null;
+  answers: Partial<Record<string, string>> | null;
+  quote: string;
+};
+
+/** Validates with the audience's own rules. Throws StoryError. */
+function readStory(form: FormData): StoryRow {
+  if (formAudience(form) === "parent") {
+    const p = validateParentStory(form);
+    return {
+      audience: "parent",
+      consentText: PARENT_CONSENT_TEXT,
+      code: p.code,
+      schoolSlug: p.schoolSlug,
+      fullName: p.fullName,
+      relationship: p.relationship,
+      company: null,
+      cityCountry: null,
+      gradYear: null,
+      answers: p.answers,
+      quote: p.quote,
+    };
+  }
+  const a = validateStory(form);
+  return {
+    audience: "alumni",
+    consentText: CONSENT_TEXT,
+    code: a.code,
+    schoolSlug: a.schoolSlug,
+    fullName: a.fullName,
+    relationship: a.role,
+    company: a.company,
+    cityCountry: a.cityCountry,
+    gradYear: a.gradYear,
+    answers: a.answers,
+    quote: a.quote,
+  };
+}
+
+/**
+ * The story wizard's submit, for both the general link and personal links.
+ * A code in the form means a personal link: the story is written through
+ * submit_invited_story, which locks the invite so it yields one story.
+ */
+export const submitStory = createServerFn({ method: "POST" })
   .inputValidator((data: FormData) => {
     if (!(data instanceof FormData)) throw new Error("Invalid submission.");
     return data;
   })
-  .handler(async ({ data }): Promise<AlumniSubmissionResult> => {
+  .handler(async ({ data }): Promise<StorySubmissionResult> => {
+    let sb: ReturnType<typeof serviceClient> | null = null;
+    let pendingPath: string | null = null;
+
+    const discardPhoto = async () => {
+      if (!sb || !pendingPath) return;
+      // Never let a discard failure escape and replace the caller's
+      // user-facing error: a thrown (not returned) storage error here is
+      // logged and swallowed, same as a returned one.
+      try {
+        const { error } = await sb.storage.from(PENDING_BUCKET).remove([pendingPath]);
+        if (error) console.error("[submitStory] discard photo", error);
+      } catch (err) {
+        console.error("[submitStory] discard photo", err);
+      }
+      pendingPath = null;
+    };
+
     try {
-      const fullName = str(data, "full_name");
-      const gradYearRaw = str(data, "grad_year");
-      const role = str(data, "role");
-      const company = str(data, "company");
-      const message = str(data, "message");
-      const consent = str(data, "consent");
-
-      /* ---- Field validation ------------------------------------------- */
-      if (!fullName) fail("Please enter your full name.");
-      if (fullName.length > 120) fail("That name is too long.");
-
-      const gradYear = Number.parseInt(gradYearRaw, 10);
-      const thisYear = new Date().getFullYear();
-      if (!Number.isInteger(gradYear) || gradYear < 1960 || gradYear > thisYear + 1) {
-        fail("Please enter the year you finished, e.g. 2018.");
-      }
-
-      if (!message) fail("Please write a short message.");
-      if (message.length > MESSAGE_MAX) {
-        fail(`Please keep your message under ${MESSAGE_MAX} characters.`);
-      }
-      if (role.length > 120) fail("That role is too long.");
-      if (company.length > 120) fail("That company name is too long.");
-
-      /* Consent is the reason the rest of this is publishable at all. */
-      if (consent !== "yes") {
-        fail("Please agree to the consent statement to submit.");
-      }
-
-      /* ---- Rate limit --------------------------------------------------
-       Before any storage write, so a flood costs the bucket nothing. */
-      const sb = serviceClient();
+      const input = readStory(data);
+      sb = serviceClient();
       const ip = callerIp();
 
-      const { data: allowed, error: rateError } = await sb.rpc(
-        "claim_submission_slot" as never,
-        { p_key: `alumni:${ip}`, p_limit: RATE_LIMIT } as never,
-      );
+      /* Rate limit before any storage write, so a flood costs the bucket nothing. */
+      const { data: allowed, error: rateError } = await sb.rpc("claim_submission_slot", {
+        p_key: `${input.code ? "invite" : input.audience}:${ip}`,
+        p_limit: input.code ? INVITE_RATE_LIMIT : RATE_LIMIT,
+      });
       if (rateError) {
-        console.error("[submitAlumniStory] rate limit", rateError);
+        console.error("[submitStory] rate limit", rateError);
         fail("Could not accept your story right now. Please try again shortly.");
       }
       if (allowed === false) {
         fail("That is a few submissions in a short time. Please try again in an hour.");
       }
 
-      /* ---- Photo -------------------------------------------------------
-       Optional. Sniffed, size-checked, and stored under a name of our
-       choosing in the private bucket. The submitted filename is discarded
-       entirely rather than sanitised. */
-      let pendingPath: string | null = null;
+      /* Photo: optional, sniffed, size-checked, stored under our own name. */
       const photo = data.get("photo");
-
       if (photo instanceof File && photo.size > 0) {
         if (photo.size > PHOTO_MAX_BYTES) {
           fail("That photo is larger than 5 MB. Please choose a smaller one.");
         }
-
         const buffer = new Uint8Array(await photo.arrayBuffer());
-        /* Re-check after reading: size is a claim until the bytes are counted. */
         if (buffer.byteLength > PHOTO_MAX_BYTES) {
           fail("That photo is larger than 5 MB. Please choose a smaller one.");
         }
-
         const kind = sniffImage(buffer);
-        if (!kind) {
-          fail("That file is not a JPEG, PNG or WebP image.");
-        }
+        if (!kind) fail("That file is not a JPEG, PNG or WebP image.");
 
-        pendingPath = `${new Date().getFullYear()}/${crypto.randomUUID()}.${kind.ext}`;
-
+        const path = `${new Date().getFullYear()}/${crypto.randomUUID()}.${kind.ext}`;
         const { error: uploadError } = await sb.storage
           .from(PENDING_BUCKET)
-          .upload(pendingPath, buffer, {
-            contentType: kind.mime,
-            upsert: false,
-          });
-
+          .upload(path, buffer, { contentType: kind.mime, upsert: false });
         if (uploadError) {
-          console.error("[submitAlumniStory] upload", uploadError);
+          console.error("[submitStory] upload", uploadError);
           fail("Could not save your photo. Please try again without it.");
         }
+        pendingPath = path;
       }
 
-      /* ---- Insert ------------------------------------------------------
-       published is a literal false. There is no code path, and no request
-       shape, that can make it anything else. photo_url stays null until a
-       member of staff approves and the file is copied into the public
-       bucket. */
-      const row = {
-        school_slug: "group-wide",
-        author_name: fullName,
-        relationship: role || null,
-        company: company || null,
-        grad_year: gradYear,
-        quote: message,
+      const submittedIp = ip === "unknown" ? null : ip;
+
+      if (input.code) {
+        const { data: outcome, error } = await sb.rpc("submit_invited_story", {
+          p_token_hash: await hashCode(input.code),
+          p_audience: input.audience,
+          p_author_name: input.fullName,
+          p_school_slug: input.schoolSlug,
+          p_grad_year: input.gradYear,
+          p_relationship: input.relationship,
+          p_company: input.company,
+          p_city_country: input.cityCountry,
+          p_answers: input.answers,
+          p_quote: input.quote,
+          p_pending_photo_path: pendingPath,
+          p_consent_text: input.consentText,
+          p_submitted_ip: submittedIp,
+        });
+        if (error) {
+          console.error("[submitStory] invited insert", error);
+          await discardPhoto();
+          fail("Could not save your story. Please try again.");
+        }
+        if (outcome !== "ok") {
+          await discardPhoto();
+          return { ok: false, state: outcome === "submitted" ? "submitted" : "invalid" };
+        }
+        return { ok: true };
+      }
+
+      /* General link. published is a literal false; photo_url stays null
+         until staff approve and the file is copied to the public bucket. */
+      const { error } = await sb.from("testimonials").insert({
+        school_slug: input.schoolSlug,
+        author_name: input.fullName,
+        relationship: input.relationship,
+        company: input.company,
+        city_country: input.cityCountry,
+        grad_year: input.gradYear,
+        quote: input.quote,
+        answers: input.answers,
         photo_url: null,
         pending_photo_path: pendingPath,
         published: false,
         consent_at: new Date().toISOString(),
-        consent_text: CONSENT_TEXT,
-        submitted_ip: ip === "unknown" ? null : ip,
+        consent_text: input.consentText,
+        submitted_ip: submittedIp,
         sort_order: 0,
-      };
-
-      const { error } = await (
-        sb.from("testimonials") as unknown as {
-          insert: (v: typeof row) => Promise<{ error: { message: string } | null }>;
-        }
-      ).insert(row);
-
+        invite_id: null,
+      });
       if (error) {
-        console.error("[submitAlumniStory] insert", error);
-        /* Do not orphan the photo if the row failed to land. */
-        if (pendingPath) {
-          await sb.storage.from(PENDING_BUCKET).remove([pendingPath]);
-        }
+        console.error("[submitStory] insert", error);
+        await discardPhoto();
         fail("Could not save your story. Please try again.");
       }
-
       return { ok: true };
     } catch (err) {
-      if (err instanceof SubmissionError) throw err;
-      /* Misconfiguration, a database error, a storage outage. The submitter can
-       do nothing with any of it, and some of it should not leave the server. */
-      console.error("[submitAlumniStory]", err);
+      await discardPhoto();
+      if (err instanceof StoryError) throw err;
+      console.error("[submitStory]", err);
       throw new Error("Could not save your story. Please try again, or contact the school.");
     }
   });
