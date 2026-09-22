@@ -1,10 +1,15 @@
 import { createFileRoute, Outlet, useNavigate, useRouterState, Link } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AdminAuthProvider, useAdminAuth } from "@/lib/admin-auth";
+import { noindexHead } from "@/lib/seo";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
-  head: () => ({ meta: [{ title: "Admin · Alpha Schools" }] }),
+  /* Applies to every /admin/* page: a child route sets its own title and
+     nothing else, so the robots tag from this layout is what they all serve.
+     robots.txt disallows /admin as well, which is belt and braces — the tree
+     is behind a login wall and has nothing worth crawling either way. */
+  head: () => noindexHead("Admin · Alpha Schools"),
   component: AdminLayout,
 });
 
