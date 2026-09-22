@@ -15,6 +15,12 @@ npx wrangler login
 A browser window opens for the Cloudflare account. If the school has its own
 Cloudflare account, sign in as that account, not a personal one.
 
+Signing in with an address that can see more than one account is fine: the
+deploy names the school's account (`Alpha Schools`) itself, in
+`scripts/wrangler-routes.mjs`, so it cannot land in a personal one by
+accident. Without that, wrangler stops with "More than one account available
+but unable to select one in non-interactive mode".
+
 ## 2. Set the server secrets (once, then whenever one changes)
 
 The Worker reads these at runtime. Set each one, pasting the value when asked:
