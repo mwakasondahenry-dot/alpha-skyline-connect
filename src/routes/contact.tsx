@@ -1,5 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import {
+  CAMPUSES,
+  EMAIL,
+  OFFICE_HOURS,
+  PHONE_DISPLAY,
+  PHONE_E164,
+  POSTAL_ADDRESS,
+} from "@/lib/contact-details";
 import { breadcrumbLd } from "@/lib/structured-data";
 import { useState, type FormEvent } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -129,21 +137,29 @@ function ContactPage() {
 
         <aside className="space-y-4">
           <InfoCard title="Call or WhatsApp">
-            <p className="font-semibold text-[var(--color-deep-blue)]" style={T.body}>+255 (0)22 277 5046</p>
-            <p className="text-[var(--color-ink)]/70" style={T.body}>Mon – Fri · 7:30 – 16:30</p>
+            <p className="font-semibold text-[var(--color-deep-blue)]" style={T.body}>
+              <a href={`tel:${PHONE_E164}`} className="hover:underline">{PHONE_DISPLAY}</a>
+            </p>
+            <p className="text-[var(--color-ink)]/70" style={T.body}>{OFFICE_HOURS}</p>
           </InfoCard>
           <InfoCard title="Email">
-            <a href="mailto:info@alphaschools.ac.tz" className="font-semibold text-[var(--color-deep-blue)] hover:underline" style={T.body}>
-              info@alphaschools.ac.tz
+            <a href={`mailto:${EMAIL}`} className="font-semibold text-[var(--color-deep-blue)] hover:underline" style={T.body}>
+              {EMAIL}
             </a>
           </InfoCard>
           <InfoCard title="Postal address">
-            <p className="text-[var(--color-ink)]/80" style={T.body}>ALFA EDUCATION CENTRE<br />P.O. Box 35136<br />Dar es Salaam, Tanzania</p>
+            <p className="text-[var(--color-ink)]/80" style={T.body}>
+              ALFA EDUCATION CENTRE<br />{POSTAL_ADDRESS.poBox}<br />
+              {POSTAL_ADDRESS.locality}, {POSTAL_ADDRESS.country}
+            </p>
           </InfoCard>
           <InfoCard title="Campuses">
             <ul className="space-y-1 text-[var(--color-ink)]/80" style={T.body}>
-              <li><span className="font-semibold">Mikocheni</span> — Alpha High</li>
-              <li><span className="font-semibold">Kunduchi</span> — Alpha Girls · Nursery & Primary</li>
+              {CAMPUSES.map((c) => (
+                <li key={c.locality}>
+                  <span className="font-semibold">{c.locality}</span> — {c.schools}
+                </li>
+              ))}
             </ul>
           </InfoCard>
         </aside>

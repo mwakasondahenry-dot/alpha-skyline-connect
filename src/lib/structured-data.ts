@@ -27,12 +27,14 @@
  * EDUCATION CENTRE, and the postal address belongs to the legal entity.
  */
 import { SITE_URL, SITE_NAME, LEGAL_NAME, absoluteUrl } from "./seo";
+import { EMAIL, PHONE_E164, POSTAL_ADDRESS } from "./contact-details";
 
 export const ORG_ID = `${SITE_URL}/#organization`;
 
-/** Confirmed on /contact, and the only phone and postal address the site has. */
-const PHONE = "+255222775046";
-const EMAIL = "info@alphaschools.ac.tz";
+/* The phone, email and address come from contact-details.ts, which is also
+   what the footer and /contact render. The markup and the visible text are
+   then the same string by construction rather than by review. */
+const PHONE = PHONE_E164;
 
 /** Only handles the school has confirmed. Facebook, X and LinkedIn are still outstanding. */
 const SAME_AS = [
@@ -77,8 +79,8 @@ export function organizationLd() {
     telephone: PHONE,
     address: {
       "@type": "PostalAddress",
-      postOfficeBoxNumber: "35136",
-      addressLocality: "Dar es Salaam",
+      postOfficeBoxNumber: POSTAL_ADDRESS.poBox.replace(/^P\.O\. Box /, ""),
+      addressLocality: POSTAL_ADDRESS.locality,
       addressCountry: "TZ",
     },
     areaServed: { "@type": "City", name: "Dar es Salaam" },

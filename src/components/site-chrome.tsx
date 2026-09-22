@@ -1,4 +1,11 @@
 import { Link } from "@tanstack/react-router";
+import {
+  CAMPUSES,
+  EMAIL,
+  PHONE_DISPLAY,
+  PHONE_E164,
+  POSTAL_ADDRESS,
+} from "@/lib/contact-details";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ChevronDown, Menu, X, Instagram, Youtube, Facebook, Linkedin } from "lucide-react";
@@ -460,6 +467,33 @@ export function SiteFooter() {
           </div>
           <p className="mt-4 max-w-xs text-sm text-white/70">
             ALFA EDUCATION CENTRE. Three schools, two campuses across Dar es Salaam, Tanzania.
+          </p>
+
+          {/* Name, address and phone, on every page. A search engine reads
+              these as the business's identity and weighs them against the
+              same details wherever else it finds them, so they come from
+              src/lib/contact-details.ts and are never retyped here. The
+              postal address is the legal entity's, per AGENTS.md. */}
+          <address className="mt-4 max-w-xs space-y-1 text-sm not-italic text-white/70">
+            <p>
+              {POSTAL_ADDRESS.poBox}
+              <br />
+              {POSTAL_ADDRESS.locality}, {POSTAL_ADDRESS.country}
+            </p>
+            <p>
+              <a href={`tel:${PHONE_E164}`} className="hover:text-[var(--color-gold)]">
+                {PHONE_DISPLAY}
+              </a>
+            </p>
+            <p>
+              <a href={`mailto:${EMAIL}`} className="hover:text-[var(--color-gold)]">
+                {EMAIL}
+              </a>
+            </p>
+          </address>
+
+          <p className="mt-3 max-w-xs text-sm text-white/70">
+            {CAMPUSES.map((c) => `${c.locality} — ${c.schools}`).join(" · ")}
           </p>
           <p className="mt-3 font-display text-sm font-semibold text-[var(--color-gold)]">
             Your Child's Education is Our Priority

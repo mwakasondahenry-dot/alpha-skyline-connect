@@ -188,7 +188,12 @@ function Hero() {
             className="hero-rise text-[var(--color-bright-blue)]"
             style={{ ...T.label, ...heroStep("var(--hero-t-eyebrow)") }}
           >
-            Combined campus · Ages 2–12
+            {/* The neighbourhood, in visible text, in the eyebrow — the same
+                place /schools/alpha-high says "Mikocheni" and
+                /schools/alpha-girls says "Kunduchi". This page said
+                "Combined campus", which told a parent searching for a
+                primary school in Kunduchi nothing at all. */}
+            Kunduchi · Ages 2–12
           </p>
 
           <h1 className="mt-3 font-display text-[2.375rem] font-black leading-[1.02] tracking-tight text-[var(--color-deep-blue)] sm:text-6xl lg:text-[64px]">
@@ -209,8 +214,8 @@ function Hero() {
             className="hero-rise mt-6 max-w-md text-[var(--color-ink)]/75"
             style={{ ...T.body, ...heroStep("var(--hero-t-blurb)") }}
           >
-            Play-led early years that grow into a warm, structured primary — the joyful first
-            chapter of your child's Alpha journey.
+            Play-led early years at our Kunduchi campus in Dar es Salaam, growing into a warm,
+            structured primary — the joyful first chapter of your child's Alpha journey.
           </p>
 
           <div
