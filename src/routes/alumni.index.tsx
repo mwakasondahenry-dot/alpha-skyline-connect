@@ -15,6 +15,7 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -37,6 +38,7 @@ export const Route = createFileRoute("/alumni/")({
       description:
         "Alpha has taught in Dar es Salaam since 2007. Former pupils of Alpha High and Alpha Girls describe where their education has taken them since.",
       path: "/alumni",
+      ld: [breadcrumbLd([{ name: "Alumni", path: "/alumni" }])],
     }),
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(alumniQuery),

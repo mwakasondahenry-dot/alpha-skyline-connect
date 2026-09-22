@@ -12,6 +12,8 @@
  * structured data. LEGAL_NAME is exported for that second use, not this one.
  */
 
+import type React from "react";
+
 /** No trailing slash: every path is appended directly. */
 export const SITE_URL = "https://alphaschools.co.tz";
 
@@ -44,7 +46,24 @@ export type SeoOptions = {
   type?: "website" | "article";
   /** Keeps a page out of the index without hiding the links on it. */
   noindex?: boolean;
+  /**
+   * JSON-LD nodes for this page, from src/lib/structured-data.ts.
+   *
+   * They ride in the meta array rather than in head().scripts because the
+   * router special-cases a "script:ld+json" meta entry: it serialises the
+   * object and HTML-escapes it into a <script type="application/ld+json">.
+   * Passing the object rather than a string is what keeps a stray quote in a
+   * database-driven event title from breaking out of the tag.
+   */
+  ld?: Array<object>;
 };
+
+/**
+ * The meta shape the router accepts. The router understands a
+ * "script:ld+json" entry but React's own meta typing does not, so a JSON-LD
+ * node is cast to this on the way in.
+ */
+type MetaTag = React.JSX.IntrinsicElements["meta"];
 
 /**
  * The meta and link tags for one route, ready to spread into head().
@@ -54,7 +73,7 @@ export type SeoOptions = {
  * the defaults in __root.tsx without either side having to know about the
  * other.
  */
-export function seo({ title, description, path, image, type = "website", noindex }: SeoOptions) {
+export function seo({ title, description, path, image, type = "website", noindex, ld }: SeoOptions) {
   const url = absoluteUrl(path);
   const img = image ?? OG_IMAGE;
 
@@ -79,6 +98,8 @@ export function seo({ title, description, path, image, type = "website", noindex
       { name: "twitter:image", content: img },
 
       ...(noindex ? [{ name: "robots", content: "noindex, follow" }] : []),
+
+      ...(ld ?? []).map((node) => ({ "script:ld+json": node }) as unknown as MetaTag),
     ],
     links: [{ rel: "canonical", href: url }],
   };

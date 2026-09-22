@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import admissionHeroFallback from "@/assets/campus-nursery.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/admission")({
       description:
         "How to apply to Alpha Nursery & Primary, Alpha High or Alpha Girls in Dar es Salaam: the application fee, the entrance exam and what follows.",
       path: "/admission",
+      ld: [breadcrumbLd([{ name: "Admissions", path: "/admission" }])],
     }),
   }),
   component: AdmissionPage,

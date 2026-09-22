@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import heroFloatplane from "@/assets/hero-floatplane.webp";
@@ -120,6 +121,7 @@ export const Route = createFileRoute("/aviation")({
       description:
         "Alpha secondary students study ground school and aircraft engineering, train in hangars with qualified instructors, and can progress toward a PPL.",
       path: "/aviation",
+      ld: [breadcrumbLd([{ name: "Aviation", path: "/aviation" }])],
     }),
   }),
   component: AviationPage,

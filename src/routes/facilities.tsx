@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import {
   getAllFacilities,
@@ -23,6 +24,7 @@ export const Route = createFileRoute("/facilities")({
       description:
         "Classrooms, laboratories, libraries, sports grounds and aviation facilities across the Alpha campuses in Mikocheni and Kunduchi, Dar es Salaam.",
       path: "/facilities",
+      ld: [breadcrumbLd([{ name: "Facilities", path: "/facilities" }])],
     }),
   }),
   loader: async (): Promise<LoaderData> => {

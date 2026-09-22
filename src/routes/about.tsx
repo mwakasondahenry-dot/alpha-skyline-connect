@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import aboutHeroFallback from "@/assets/campus-high.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/about")({
       description:
         "How Alpha grew from one school in 2007 into three across Dar es Salaam, and the mission, vision and values the group still teaches by today.",
       path: "/about",
+      ld: [breadcrumbLd([{ name: "About", path: "/about" }])],
     }),
   }),
   component: AboutPage,

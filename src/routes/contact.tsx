@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { useState, type FormEvent } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { submitContactMessage } from "@/lib/alpha-content.functions";
@@ -13,6 +14,7 @@ export const Route = createFileRoute("/contact")({
       description:
         "Call, email or visit Alpha Schools in Dar es Salaam. Alpha High is in Mikocheni; Alpha Girls and Alpha Nursery & Primary are both in Kunduchi.",
       path: "/contact",
+      ld: [breadcrumbLd([{ name: "Contact", path: "/contact" }])],
     }),
   }),
   component: ContactPage,

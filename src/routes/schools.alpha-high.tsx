@@ -25,6 +25,7 @@ import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { schoolLd, breadcrumbLd } from "@/lib/structured-data";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, getSchoolPhotos, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { ParentVoices } from "@/components/school/parent-voices";
@@ -72,6 +73,13 @@ export const Route = createFileRoute("/schools/alpha-high")({
       description:
         "Alpha High School in Mikocheni, Dar es Salaam: a co-education secondary teaching Form 1 to Form 6, with 17 O-Level subjects and 12 A-Level combinations.",
       path: "/schools/alpha-high",
+      ld: [
+        schoolLd(
+          "alpha-high",
+          "A co-education secondary school in Mikocheni, Dar es Salaam, teaching Form 1 to Form 6.",
+        ),
+        breadcrumbLd([{ name: "Alpha High", path: "/schools/alpha-high" }]),
+      ],
     }),
   }),
   loader: ({ context }) =>

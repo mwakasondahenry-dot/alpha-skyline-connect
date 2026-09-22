@@ -1,17 +1,22 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { eventsLd, breadcrumbLd } from "@/lib/structured-data";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getAllEvents, type PublicEventItem } from "@/lib/alpha-content.functions";
 
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/events")({
-  head: () => ({
+  head: (ctx) => ({
     ...seo({
       title: "Events — Alpha Schools, Dar es Salaam",
       description:
         "Open days, parents' meetings, sports days and graduations across the three Alpha schools in Dar es Salaam, with dates as the school confirms them.",
       path: "/events",
+      ld: [
+        ...eventsLd((ctx.loaderData ?? []) as PublicEventItem[]),
+        breadcrumbLd([{ name: "Events", path: "/events" }]),
+      ],
     }),
   }),
   loader: () => getAllEvents(),

@@ -12,6 +12,7 @@ import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-f
 import labBench from "@/assets/subjects/lab-bench.webp";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { schoolLd, breadcrumbLd } from "@/lib/structured-data";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -65,6 +66,13 @@ export const Route = createFileRoute("/schools/alpha-girls")({
       description:
         "Alpha Girls High School in Kunduchi, Dar es Salaam: a girls' secondary teaching Form 1 to Form 6, with 15 O-Level subjects and 12 A-Level combinations.",
       path: "/schools/alpha-girls",
+      ld: [
+        schoolLd(
+          "alpha-girls",
+          "A girls' secondary school in Kunduchi, Dar es Salaam, teaching Form 1 to Form 6.",
+        ),
+        breadcrumbLd([{ name: "Alpha Girls", path: "/schools/alpha-girls" }]),
+      ],
     }),
   }),
   loader: ({ context }) =>

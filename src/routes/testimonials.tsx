@@ -10,6 +10,7 @@
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { breadcrumbLd } from "@/lib/structured-data";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Award, Building2, MapPin, Plane } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -36,6 +37,7 @@ export const Route = createFileRoute("/testimonials")({
       description:
         "Parents and alumni of Alpha Schools in Dar es Salaam, in their own words: what the schools have meant for their families and where they led.",
       path: "/testimonials",
+      ld: [breadcrumbLd([{ name: "Testimonials", path: "/testimonials" }])],
     }),
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(testimonialsQuery),

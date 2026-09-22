@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
+import { organizationLd, websiteLd } from "@/lib/structured-data";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useState } from "react";
 import {
@@ -64,6 +65,7 @@ export const Route = createFileRoute("/")({
       description:
         "Three Alpha schools in Dar es Salaam: a nursery and primary from age 2, a co-education secondary in Mikocheni and a girls' secondary in Kunduchi.",
       path: "/",
+      ld: [organizationLd(), websiteLd()],
     }),
   }),
   loader: ({ context }) =>
