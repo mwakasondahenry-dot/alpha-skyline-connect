@@ -24,6 +24,7 @@ import labBench from "@/assets/subjects/lab-bench.webp";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, getSchoolPhotos, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { ParentVoices } from "@/components/school/parent-voices";
@@ -66,14 +67,12 @@ const bundleQuery = queryOptions({
 
 export const Route = createFileRoute("/schools/alpha-high")({
   head: () => ({
-    meta: [
-      { title: "Alpha High · Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "Alpha High School, Mikocheni — co-education secondary, Form 1–6. The flagship: NECTA rigour with aviation and coding that exist nowhere else in Tanzania.",
-      },
-    ],
+    ...seo({
+      title: "Alpha High, Mikocheni — Alpha Schools, Dar es Salaam",
+      description:
+        "Alpha High School in Mikocheni, Dar es Salaam: a co-education secondary teaching Form 1 to Form 6, with 17 O-Level subjects and 12 A-Level combinations.",
+      path: "/schools/alpha-high",
+    }),
   }),
   loader: ({ context }) =>
     Promise.all([

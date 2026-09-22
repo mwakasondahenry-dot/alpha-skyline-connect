@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import admissionHeroFallback from "@/assets/campus-nursery.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
@@ -9,20 +10,12 @@ import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/admission")({
   head: () => ({
-    meta: [
-      { title: "Admissions · Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "Apply to Alpha Schools — Nursery, Primary, Alpha High and Alpha Girls. Rolling admissions across the year in Dar es Salaam.",
-      },
-      { property: "og:title", content: "Admissions · Alpha Schools" },
-      {
-        property: "og:description",
-        content:
-          "How to apply to Alpha Schools — six-step admission process, required documents, entry requirements, intake and fees.",
-      },
-    ],
+    ...seo({
+      title: "Admissions — Alpha Schools, Dar es Salaam",
+      description:
+        "How to apply to Alpha Nursery & Primary, Alpha High or Alpha Girls in Dar es Salaam: the application fee, the entrance exam and what follows.",
+      path: "/admission",
+    }),
   }),
   component: AdmissionPage,
 });

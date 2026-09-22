@@ -11,6 +11,7 @@ import {
 import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
 import labBench from "@/assets/subjects/lab-bench.webp";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -59,14 +60,12 @@ const bundleQuery = queryOptions({
 
 export const Route = createFileRoute("/schools/alpha-girls")({
   head: () => ({
-    meta: [
-      { title: "Alpha Girls · Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "Alpha Girls High School, Kunduchi — a girls' secondary, Form 1–6, where leadership is practised daily. NECTA O-Level and A-Level, aviation, coding and competitive debate.",
-      },
-    ],
+    ...seo({
+      title: "Alpha Girls, Kunduchi — Alpha Schools, Dar es Salaam",
+      description:
+        "Alpha Girls High School in Kunduchi, Dar es Salaam: a girls' secondary teaching Form 1 to Form 6, with 15 O-Level subjects and 12 A-Level combinations.",
+      path: "/schools/alpha-girls",
+    }),
   }),
   loader: ({ context }) =>
     Promise.all([

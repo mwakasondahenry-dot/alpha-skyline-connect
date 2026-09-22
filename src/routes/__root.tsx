@@ -14,6 +14,11 @@ import alphaLogo from "@/assets/alpha-logo.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { UrgentAnnouncements } from "../components/urgent-announcements";
 import { RevealWatcher } from "../components/reveal";
+import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
+
+const DEFAULT_TITLE = "Alpha Schools — Nursery to A-Level, Dar es Salaam";
+const DEFAULT_DESCRIPTION =
+  "Alpha Schools teaches in Dar es Salaam from nursery through A-Level: a nursery and primary, a co-education secondary in Mikocheni and a girls' secondary in Kunduchi.";
 
 function NotFoundComponent() {
   return (
@@ -80,21 +85,36 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "Three schools, two campuses in Dar es Salaam. [Aviation positioning statement — wording to be confirmed]",
-      },
+
+      /* Site-wide fallbacks only. Every public route calls seo() in its own
+         head() and overrides all of these; what is left here is what an
+         un-decorated route (admin, the 404) would otherwise serve.
+
+         There used to be two name="description" tags in this array. The
+         router keeps the last one it walks in a route's list, so the generic
+         one won and the other never shipped — which was the lucky half of the
+         bug. The losing one carried the text
+         "[Aviation positioning statement — wording to be confirmed]", a
+         placeholder for a claim the client has not approved (see
+         design/CONTENT-FROM-SCHOOL.md). Placeholders belong in visible page
+         content where the school can see what it still owes, never in a meta
+         tag where they would reach search results. */
+      { title: DEFAULT_TITLE },
+      { name: "description", content: DEFAULT_DESCRIPTION },
+
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: SITE_NAME },
+      { property: "og:title", content: DEFAULT_TITLE },
+      { property: "og:description", content: DEFAULT_DESCRIPTION },
+      { property: "og:image", content: OG_IMAGE },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:locale", content: "en_TZ" },
+
       { name: "twitter:card", content: "summary_large_image" },
-      { property: "og:title", content: "Alpha Schools" },
-      { name: "twitter:title", content: "Alpha Schools" },
-      { name: "description", content: "Alpha Schools website showcases educational offerings, campus finder, news, and events." },
-      { property: "og:description", content: "Alpha Schools website showcases educational offerings, campus finder, news, and events." },
-      { name: "twitter:description", content: "Alpha Schools website showcases educational offerings, campus finder, news, and events." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9fsIYijJomVf9VXNEbIilVCAzqB2/social-images/social-1782718904373-5R5A4481.webp" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/9fsIYijJomVf9VXNEbIilVCAzqB2/social-images/social-1782718904373-5R5A4481.webp" },
+      { name: "twitter:title", content: DEFAULT_TITLE },
+      { name: "twitter:description", content: DEFAULT_DESCRIPTION },
+      { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
       { rel: "stylesheet", href: appCss },

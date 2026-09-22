@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useState } from "react";
 import {
@@ -58,21 +59,12 @@ const testimonialsQuery = queryOptions({
 
 export const Route = createFileRoute("/")({
   head: () => ({
-    meta: [
-      { title: "Alpha Schools — Learning that takes off · Dar es Salaam" },
-      {
-        name: "description",
-        content:
-          "Three schools, two campuses in Dar es Salaam. NECTA O-Level and A-Level, coding and an aviation programme.",
-      },
-      { property: "og:title", content: "Alpha Schools — Learning that takes off" },
-      {
-        property: "og:description",
-        content:
-          "Nursery & Primary, Alpha High, Alpha Girls — Your Child's Education is Our Priority.",
-      },
-      { property: "og:type", content: "website" },
-    ],
+    ...seo({
+      title: "Alpha Schools — Nursery to A-Level, Dar es Salaam",
+      description:
+        "Three Alpha schools in Dar es Salaam: a nursery and primary from age 2, a co-education secondary in Mikocheni and a girls' secondary in Kunduchi.",
+      path: "/",
+    }),
   }),
   loader: ({ context }) =>
     Promise.all([

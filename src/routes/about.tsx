@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import aboutHeroFallback from "@/assets/campus-high.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Plane, Award, GraduationCap, Quote } from "lucide-react";
@@ -11,20 +12,12 @@ import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/about")({
   head: () => ({
-    meta: [
-      { title: "About · Alpha Schools — Dar es Salaam" },
-      {
-        name: "description",
-        content:
-          "From a single school in 2007 to three schools across Dar es Salaam — founded on one belief: your education is our priority.",
-      },
-      { property: "og:title", content: "About Alpha Schools" },
-      {
-        property: "og:description",
-        content:
-          "Mission, vision, values and the story of ALFA EDUCATION CENTRE — founded 2007 in Dar es Salaam.",
-      },
-    ],
+    ...seo({
+      title: "About — Alpha Schools, Dar es Salaam",
+      description:
+        "How Alpha grew from one school in 2007 into three across Dar es Salaam, and the mission, vision and values the group still teaches by today.",
+      path: "/about",
+    }),
   }),
   component: AboutPage,
 });

@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import heroFloatplane from "@/assets/hero-floatplane.webp";
@@ -114,21 +115,12 @@ function ModuleCard({
 
 export const Route = createFileRoute("/aviation")({
   head: () => ({
-    meta: [
-      { title: "Aviation Programme · Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "In partnership with the Kenya School of Flying, students train toward a real Private Pilot Licence.",
-      },
-      { property: "og:title", content: "Aviation Programme · Alpha Schools" },
-      {
-        property: "og:description",
-        content:
-          "Ground school, simulator hours and time in the air — the Alpha aviation pathway from Form One to the cockpit.",
-      },
-      { property: "og:image", content: heroFloatplane },
-    ],
+    ...seo({
+      title: "Aviation Programme — Alpha Schools, Dar es Salaam",
+      description:
+        "Alpha secondary students study ground school and aircraft engineering, train in hangars with qualified instructors, and can progress toward a PPL.",
+      path: "/aviation",
+    }),
   }),
   component: AviationPage,
 });

@@ -2,6 +2,7 @@ import { SchoolFacilitiesSection } from "@/components/school/facilities-section"
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 import { submitContactMessage } from "@/lib/alpha-content.functions";
@@ -40,14 +41,12 @@ const photosQuery = queryOptions({
 
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
-    meta: [
-      { title: "Nursery & Primary · Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "Play-led early years that grow into a warm, structured primary — the joyful first chapter of your child's Alpha journey.",
-      },
-    ],
+    ...seo({
+      title: "Nursery & Primary, Kunduchi — Alpha Schools",
+      description:
+        "Alpha Nursery & Primary in Kunduchi, Dar es Salaam: play-led early years from age 2 growing into a structured primary that prepares pupils for Form 1.",
+      path: "/schools/nursery-primary",
+    }),
   }),
   loader: ({ context }) =>
     Promise.all([

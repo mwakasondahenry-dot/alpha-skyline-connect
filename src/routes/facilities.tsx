@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import {
   getAllFacilities,
@@ -6,7 +7,8 @@ import {
   type PublicFacilityItem,
   type PublicFacilityPhoto,
 } from "@/lib/alpha-content.functions";
-import type { SchoolSlug } from "@/integrations/alpha-supabase/types";
+import type { SchoolSlug } from "@/integrations/alpha-supabase/types";
+
 import { T, SHELL } from "@/components/type-roles";
 
 type LoaderData = {
@@ -16,10 +18,12 @@ type LoaderData = {
 
 export const Route = createFileRoute("/facilities")({
   head: () => ({
-    meta: [
-      { title: "Facilities · Alpha Schools" },
-      { name: "description", content: "Tour facilities across our three Dar es Salaam campuses." },
-    ],
+    ...seo({
+      title: "Facilities — Alpha Schools, Dar es Salaam",
+      description:
+        "Classrooms, laboratories, libraries, sports grounds and aviation facilities across the Alpha campuses in Mikocheni and Kunduchi, Dar es Salaam.",
+      path: "/facilities",
+    }),
   }),
   loader: async (): Promise<LoaderData> => {
     const slugs: SchoolSlug[] = ["nursery-primary", "alpha-high", "alpha-girls"];

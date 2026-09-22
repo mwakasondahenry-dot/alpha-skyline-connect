@@ -1,15 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { useState, type FormEvent } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { submitContactMessage } from "@/lib/alpha-content.functions";
+import { submitContactMessage } from "@/lib/alpha-content.functions";
+
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
-    meta: [
-      { title: "Contact · Alpha Schools" },
-      { name: "description", content: "Call, WhatsApp, email or visit Alpha Schools in Dar es Salaam." },
-    ],
+    ...seo({
+      title: "Contact — Alpha Schools, Dar es Salaam",
+      description:
+        "Call, email or visit Alpha Schools in Dar es Salaam. Alpha High is in Mikocheni; Alpha Girls and Alpha Nursery & Primary are both in Kunduchi.",
+      path: "/contact",
+    }),
   }),
   component: ContactPage,
 });

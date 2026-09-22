@@ -14,6 +14,7 @@
  * and shared by hand.
  */
 import { createFileRoute } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Quote } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -31,16 +32,12 @@ const alumniQuery = queryOptions({
 
 export const Route = createFileRoute("/alumni/")({
   head: () => ({
-    meta: [
-      { title: "Alumni · Alpha Schools" },
-      {
-        name: "description",
-        content:
-          "Where Alpha alumni are now — in their own words.",
-      },
-      { property: "og:title", content: "Alumni · Alpha Schools" },
-      { property: "og:type", content: "website" },
-    ],
+    ...seo({
+      title: "Alumni — Alpha Schools, Dar es Salaam",
+      description:
+        "Alpha has taught in Dar es Salaam since 2007. Former pupils of Alpha High and Alpha Girls describe where their education has taken them since.",
+      path: "/alumni",
+    }),
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(alumniQuery),
   component: AlumniPage,

@@ -9,6 +9,7 @@
  * that says it is waiting rather than filling itself with fiction.
  */
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Award, Building2, MapPin, Plane } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -30,21 +31,12 @@ const SCHOOL_LABELS: Record<string, string> = {
 
 export const Route = createFileRoute("/testimonials")({
   head: () => ({
-    meta: [
-      { title: "Testimonials — Alpha Schools, Dar es Salaam" },
-      {
-        name: "description",
-        content:
-          "Parents and alumni in their own words: what Alpha Schools has meant for families across our nursery, primary and secondary schools in Dar es Salaam.",
-      },
-      { property: "og:title", content: "Testimonials — Alpha Schools" },
-      {
-        property: "og:description",
-        content: "Parents and alumni of Alpha Schools, in their own words.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+    ...seo({
+      title: "Testimonials — Alpha Schools, Dar es Salaam",
+      description:
+        "Parents and alumni of Alpha Schools in Dar es Salaam, in their own words: what the schools have meant for their families and where they led.",
+      path: "/testimonials",
+    }),
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(testimonialsQuery),
   errorComponent: ({ error }) => (
