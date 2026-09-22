@@ -107,6 +107,8 @@ function FacilitiesPage() {
                       title={p.caption ?? facilityNameById.get(p.facility_id) ?? ""}
                     >
                       <img
+                        width={192}
+                        height={128}
                         src={p.image_url}
                         alt={p.caption ?? facilityNameById.get(p.facility_id) ?? "Facility photo"}
                         loading="lazy"
@@ -155,6 +157,8 @@ function FacilityCard({ item }: { item: PublicFacilityItem }) {
       {item.image_url ? (
         <div className="aspect-[4/3] overflow-hidden bg-black/5">
           <img
+            width={800}
+            height={600}
             src={item.image_url}
             alt={item.name}
             loading="lazy"

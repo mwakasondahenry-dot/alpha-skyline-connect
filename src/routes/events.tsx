@@ -88,7 +88,7 @@ function EventCard({ item, dim = false }: { item: PublicEventItem; dim?: boolean
     <li className={`group overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-black/5 transition hover:-translate-y-0.5 hover:shadow-lg ${dim ? "opacity-80" : ""}`}>
       {item.cover_url ? (
         <div className="relative aspect-[16/9] overflow-hidden bg-[var(--color-deep-blue)]/5">
-          <img src={item.cover_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+          <img width={800} height={600} src={item.cover_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
         </div>
       ) : null}
       <div className="flex">

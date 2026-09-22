@@ -121,9 +121,21 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "icon", type: "image/webp", href: alphaLogo },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      /* Twelve font files were requested, six per family, and four of them
+         were never used. Mulish is --font-display: it sets every h1-h4 and
+         anything with .font-display, and the lightest weight any of them ask
+         for is 600. Hanken Grotesk is --font-sans, the body face, and nothing
+         in it goes above 700 — the one font-extrabold outside a heading is
+         explicitly font-[Mulish].
+
+         Check before widening either list: `font-medium` on a heading or
+         `font-black` on body text would silently fall back to a synthesised
+         weight. display=swap stays — on a mid-range phone on mobile data,
+         text that arrives in a fallback face beats text that does not
+         arrive. */
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700;800;900&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap",
       },
     ],
   }),

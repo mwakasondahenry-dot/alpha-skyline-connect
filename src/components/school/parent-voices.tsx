@@ -182,6 +182,8 @@ function Avatar({ item }: { item: TestimonialItem }) {
   if (item.photo_url) {
     return (
       <img
+        width={56}
+        height={56}
         src={item.photo_url}
         alt=""
         loading="lazy"

@@ -65,6 +65,8 @@ export function SchoolFacilitiesSection({
                 {f.image_url ? (
                   <div className="aspect-[4/3] overflow-hidden bg-black/5">
                     <img
+                      width={800}
+                      height={600}
                       src={f.image_url}
                       alt={f.name}
                       loading="lazy"
@@ -96,6 +98,8 @@ export function SchoolFacilitiesSection({
                           title={p.caption ?? ""}
                         >
                           <img
+                            width={96}
+                            height={64}
                             src={p.image_url}
                             alt={p.caption ?? `${f.name} photo`}
                             loading="lazy"

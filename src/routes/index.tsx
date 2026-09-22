@@ -383,6 +383,8 @@ function FindTheRightSchool() {
               className="group relative isolate flex h-full min-h-[32rem] flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-[var(--band)] text-[var(--color-surface)] shadow-[var(--card-shadow)] transition-shadow duration-200 hover:shadow-[var(--card-shadow-hover)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--band)] md:min-h-[33rem]"
             >
               <img
+                width={800}
+                height={600}
                 src={s.image}
                 alt={s.alt}
                 loading="lazy"
@@ -461,6 +463,8 @@ function AviationBanner() {
       <Reveal direction="up">
         <div className="relative isolate overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-banner)]">
           <img
+            width={1080}
+            height={810}
             src={aviationUniformAsset}
             alt="Alpha Schools aviation cadet in uniform at the airport"
             loading="lazy"
@@ -624,6 +628,8 @@ function TestimonialCard({
       </div>
       {item.photo_url && (
         <img
+          width={80}
+          height={80}
           key={item.id}
           src={item.photo_url}
           alt=""
@@ -722,6 +728,8 @@ function NewsAndEvents({
               >
                 {c.image && (
                   <img
+                    width={1600}
+                    height={1000}
                     src={c.image}
                     alt=""
                     loading="lazy"

@@ -252,6 +252,8 @@ export function PhotoMosaic({
           }}
         >
           <img
+            width={ph.span ? 1600 : 800}
+            height={ph.span ? 900 : 1000}
             src={ph.src}
             alt={ph.alt}
             loading={eager ? "eager" : "lazy"}

@@ -113,7 +113,7 @@ function SchoolsDropdown() {
                 className="group/item flex items-start gap-3 rounded-lg px-3 py-3 transition-all duration-200 hover:bg-[var(--color-brand-blue)] hover:translate-x-1"
               >
                 <span className="mt-0.5 h-14 w-14 shrink-0 overflow-hidden rounded-lg ring-2 ring-black/10 transition-all duration-300 group-hover/item:ring-white group-hover/item:scale-105">
-                  <img src={s.photo} alt={s.label} className="h-full w-full object-cover transition-transform duration-500 group-hover/item:scale-110" loading="lazy" />
+                  <img width={56} height={56} src={s.photo} alt={s.label} className="h-full w-full object-cover transition-transform duration-500 group-hover/item:scale-110" loading="lazy" />
                 </span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-display text-[15px] font-bold text-[var(--color-deep-blue)] transition-colors group-hover/item:text-white">
@@ -212,7 +212,7 @@ function MobileNav() {
         <div className="flex items-center justify-between border-b border-white/15 px-5 py-4">
           <span className="flex items-center gap-2.5">
             <span className="grid h-9 w-9 place-items-center overflow-hidden rounded-full bg-white">
-              <img src={alphaLogo} alt="" className="h-8 w-8 object-contain" />
+              <img width={32} height={32} loading="lazy" src={alphaLogo} alt="" className="h-8 w-8 object-contain" />
             </span>
             <span className="font-display text-sm font-bold tracking-wider">
               ALPHA <span className="font-normal text-white/70">SCHOOLS</span>
@@ -262,7 +262,7 @@ function MobileNav() {
                       className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-white/80 transition-colors hover:bg-white/10 hover:text-white"
                     >
                       <span className="h-9 w-9 shrink-0 overflow-hidden rounded-md ring-1 ring-white/25">
-                        <img src={s.photo} alt="" className="h-full w-full object-cover" loading="lazy" />
+                        <img width={36} height={36} src={s.photo} alt="" className="h-full w-full object-cover" loading="lazy" />
                       </span>
                       <span className="min-w-0">
                         <span className="block font-semibold">{s.label}</span>
@@ -394,7 +394,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean } = {}) {
       <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-3 sm:px-6 lg:flex lg:justify-between lg:gap-4 lg:px-10">
         <Link to="/" className="flex min-w-0 items-center gap-3 hover:opacity-90">
           <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-full bg-white ring-1 ring-white/30">
-            <img src={alphaLogo} alt="Alpha Schools" className="h-10 w-10 object-contain" />
+            <img width={40} height={40} src={alphaLogo} alt="Alpha Schools" className="h-10 w-10 object-contain" />
           </span>
           <span className="min-w-0 leading-tight">
             <span className="block truncate font-display text-sm font-bold tracking-wider text-white">
@@ -452,7 +452,7 @@ export function SiteFooter() {
         <div>
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center overflow-hidden rounded-full bg-white">
-              <img src={alphaLogo} alt="Alpha Schools" className="h-9 w-9 object-contain" />
+              <img width={36} height={36} loading="lazy" src={alphaLogo} alt="Alpha Schools" className="h-9 w-9 object-contain" />
             </span>
             <span className="font-display text-sm font-bold tracking-wider text-white">
               ALPHA <span className="font-normal text-white/70">SCHOOLS</span>

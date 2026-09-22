@@ -193,6 +193,8 @@ function Portrait({ item }: { item: TestimonialItem }) {
   if (item.photo_url) {
     return (
       <img
+        width={112}
+        height={140}
         src={item.photo_url}
         alt=""
         loading="lazy"

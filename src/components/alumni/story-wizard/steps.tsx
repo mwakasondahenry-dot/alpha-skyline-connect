@@ -244,6 +244,9 @@ export function PhotoConsentStep({
         <FieldLabel>Photo (optional)</FieldLabel>
         {preview && (
           <img
+            width={128}
+            height={128}
+            loading="lazy"
             src={preview}
             alt="Your chosen photo"
             className="mt-2 aspect-square w-32 rounded-xl object-cover ring-1 ring-[var(--color-deep-blue)]/10"
@@ -364,6 +367,9 @@ export function ReviewList({
           {s.step === photoStep && preview && (
             <dd className="mt-2">
               <img
+                width={80}
+                height={80}
+                loading="lazy"
                 src={preview}
                 alt="Your chosen photo"
                 className="aspect-square w-20 rounded-lg object-cover ring-1 ring-[var(--color-deep-blue)]/10"

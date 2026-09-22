@@ -87,6 +87,8 @@ export function HeroSlideshow({
     >
       {images.map((img, i) => (
         <img
+          width={1600}
+          height={900}
           key={`${img.src}-${i}`}
           src={img.src}
           alt={i === idx ? img.alt : ""}

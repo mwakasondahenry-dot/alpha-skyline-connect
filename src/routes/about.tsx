@@ -108,6 +108,8 @@ function AboutPage() {
             <div className="relative">
               <div aria-hidden className="absolute inset-0 -m-8 rounded-full bg-[var(--color-gold)]/15 blur-2xl" />
               <img
+                width={800}
+                height={800}
                 src={alphaLogo}
                 alt="Alpha Schools crest"
                 className="relative h-auto w-[260px] drop-shadow-[0_18px_30px_rgba(0,0,0,0.45)] sm:w-[320px] lg:w-[380px]"
@@ -169,6 +171,8 @@ function AboutPage() {
               <div aria-hidden className="absolute -inset-3 rounded-2xl bg-[var(--color-gold)]/20 blur-xl" />
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/90 ring-1 ring-[var(--color-deep-blue)]/20">
                 <img
+                  width={1100}
+                  height={1010}
                   src={profMayo}
                   alt="Professor Aloysius Mayo, founder of Alpha Schools"
                   className="h-full w-full object-cover"

@@ -69,6 +69,8 @@ export function UrgentAnnouncements() {
 
         {current.cover_url && (
           <img
+            width={1200}
+            height={480}
             src={current.cover_url}
             alt=""
             className="h-48 w-full object-cover sm:h-56"

@@ -796,6 +796,8 @@ function BeyondClassroom() {
                         {photo ? (
                           <>
                             <img
+                              width={800}
+                              height={600}
                               src={photo.src}
                               alt={photos[s.key]?.alt_text ?? `${s.name} at Alpha High`}
                               loading="lazy"
@@ -943,6 +945,8 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                 <div className="relative aspect-[4/5] overflow-hidden">
                   {p.photo_url ? (
                     <img
+                      width={600}
+                      height={800}
                       src={p.photo_url}
                       alt={p.name}
                       loading="lazy"

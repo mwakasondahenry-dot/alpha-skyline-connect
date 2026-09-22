@@ -820,6 +820,8 @@ function LifeAtKunduchi() {
                 for what it actually shows: alt text that names the wrong
                 subject is a lie told to a screen reader. */}
             <img
+              width={1600}
+              height={1000}
               src={plate.src}
               alt={
                 photos["alpha-girls.students.campus-plate"]?.alt_text ??
@@ -890,6 +892,8 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                 <div className="relative aspect-[4/5] overflow-hidden">
                   {p.photo_url ? (
                     <img
+                      width={600}
+                      height={800}
                       src={p.photo_url}
                       alt={p.name}
                       loading="lazy"

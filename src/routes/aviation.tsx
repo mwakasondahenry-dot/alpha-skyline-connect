@@ -300,6 +300,8 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "0s" }}
               >
                 <img
+                  width={563}
+                  height={703}
                   src={heroSolo}
                   alt="Alpha student pilot after his first solo flight"
                   className="h-full w-full object-cover"
@@ -316,6 +318,8 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "-2.5s" }}
               >
                 <img
+                  width={720}
+                  height={480}
                   src={heroCockpit}
                   alt="Alpha aviation student at the controls of a training aircraft"
                   className="h-full w-full object-cover"
@@ -329,6 +333,8 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "-5s" }}
               >
                 <img
+                  width={1080}
+                  height={1132}
                   src={heroDronePair}
                   alt="Alpha aviation students during practical drone training"
                   className="h-full w-full object-cover"
@@ -342,6 +348,8 @@ function AviationPage() {
                 style={{ ["--float-delay" as never]: "-1.2s" }}
               >
                 <img
+                  width={1080}
+                  height={1132}
                   src={heroDroneGirls}
                   alt="Alpha girls operating drones during aviation practical"
                   className="h-full w-full object-cover"
@@ -461,6 +469,8 @@ function AviationPage() {
               <FlightPath className="absolute -top-10 left-0 hidden h-16 w-full lg:block" />
               <div className="alpha-photo overflow-hidden rounded-2xl border-4 border-white/90 shadow-2xl" style={{ ["--tilt" as string]: "-2deg", transform: "rotate(-2deg)" }}>
                 <img
+                  width={752}
+                  height={501}
                   src={avGroundSchool2}
                   alt="Alpha students in an Aviation Technology theory class"
                   loading="lazy"
@@ -470,6 +480,8 @@ function AviationPage() {
               </div>
               <div className="alpha-photo -mt-6 ml-10 overflow-hidden rounded-2xl border-4 border-white/90 shadow-2xl" style={{ ["--tilt" as string]: "3deg", transform: "rotate(3deg)" }}>
                 <img
+                  width={853}
+                  height={568}
                   src={avEngineering}
                   alt="Alpha students working on an aircraft during a hangar practical"
                   loading="lazy"
@@ -616,6 +628,8 @@ function AviationPage() {
             />
             <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
               <img
+                width={1100}
+                height={734}
                 src={avCockpitStudents}
                 alt="Alpha student pilots training inside a Cessna cockpit"
 
@@ -672,6 +686,8 @@ function AviationPage() {
                 }`}
               >
                 <img
+                  width={800}
+                  height={600}
                   src={s.src}
                   alt={s.caption}
                   loading="lazy"

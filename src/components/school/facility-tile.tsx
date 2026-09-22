@@ -35,6 +35,8 @@ export function FacilityTile({
         {photo ? (
           <>
             <img
+              width={800}
+              height={600}
               src={photo.src}
               alt={alt}
               loading="lazy"

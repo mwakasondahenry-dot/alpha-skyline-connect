@@ -126,6 +126,10 @@ function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-[var(--color-deep-blue)] text-[var(--color-surface)]">
       <img
+        width={1600}
+        height={900}
+        loading="eager"
+        fetchPriority="high"
         src={heroGraduate}
         alt=""
         aria-hidden
@@ -283,6 +287,8 @@ function ShareYourStory() {
     <section className="bg-[var(--color-surface)]">
       <div className="grid md:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <img
+          width={1200}
+          height={600}
           src={shareBand}
           alt="Alpha Girls students with their certificates and medals"
           loading="lazy"

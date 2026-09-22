@@ -278,6 +278,8 @@ function Hero() {
           >
             <div className="overflow-hidden rounded-xl">
               <img
+                width={800}
+                height={450}
                 src={hippo.src}
                 alt={
                   photos["nursery-primary.days.hippo-ride"]?.alt_text ??
@@ -285,6 +287,7 @@ function Hero() {
                 }
                 className="h-28 w-full object-cover sm:h-48 lg:h-56"
                 loading="eager"
+                fetchPriority="high"
               />
             </div>
           </div>
@@ -293,6 +296,8 @@ function Hero() {
           <div className="absolute -left-2 top-24 w-[55%] -rotate-[6deg] rounded-2xl bg-[var(--color-gold)] p-2 shadow-2xl sm:top-32 lg:top-36">
             <div className="overflow-hidden rounded-xl">
               <img
+                width={800}
+                height={600}
                 src={portrait.src}
                 alt={
                   photos["nursery-primary.days.girl-portrait"]?.alt_text ??
@@ -308,6 +313,8 @@ function Hero() {
           <div className="absolute bottom-0 right-0 w-[58%] rotate-[3deg] rounded-2xl bg-[var(--color-deep-blue)] p-2 shadow-2xl">
             <div className="overflow-hidden rounded-xl">
               <img
+                width={800}
+                height={450}
                 src={teacher.src}
                 alt={
                   photos["nursery-primary.days.teacher"]?.alt_text ??
@@ -581,6 +588,9 @@ function AlphaChild() {
               style={{ background: "rgba(255,255,255,0.55)" }}
             />
             <img
+              width={288}
+              height={352}
+              loading="lazy"
               src={pupil.src}
               alt={photos["nursery-primary.primary.pupil-portrait"]?.alt_text ?? "Alpha pupil"}
               className="absolute left-1/2 top-1/2 h-[22rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-[50%] object-cover object-top drop-shadow-[0_18px_18px_rgba(12,68,124,0.35)]"
@@ -1124,6 +1134,8 @@ function GalleryTile({
       className={`group relative overflow-hidden rounded-2xl shadow-md ring-1 ring-[var(--color-deep-blue)]/10 ${className}`}
     >
       <img
+        width={800}
+        height={600}
         src={src}
         alt={alt}
         loading="lazy"

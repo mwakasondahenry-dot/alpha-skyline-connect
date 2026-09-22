@@ -47,7 +47,7 @@ export function CurriculumBand({
   return (
     <div className={`ac-band${image ? " ac-band--photo" : ""}`} style={accentVar(accent)}>
       {image ? (
-        <img src={image} alt="" aria-hidden className="ac-band__photo" decoding="async" />
+        <img width={1200} height={800} loading="lazy" src={image} alt="" aria-hidden className="ac-band__photo" decoding="async" />
       ) : (
         <GraduationCap aria-hidden className="ac-band__mark" strokeWidth={1} />
       )}

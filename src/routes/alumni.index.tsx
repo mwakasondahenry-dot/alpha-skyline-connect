@@ -96,6 +96,8 @@ function AlumniPage() {
                   <figcaption className="mt-6 flex items-center gap-3 border-t border-[var(--color-hairline)] pt-5">
                     {t.photo_url && (
                       <img
+                        width={48}
+                        height={48}
                         src={t.photo_url}
                         alt=""
                         loading="lazy"
