@@ -165,7 +165,7 @@ export const getAllFacilities = createServerFn({ method: "GET" }).handler(
 );
 
 export const getFacilitiesBySchool = createServerFn({ method: "GET" })
-  .inputValidator((data: { slug: SchoolSlug }) => data)
+  .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<PublicFacilityItem[]> => {
     try {
       const sb = serverClient();
@@ -190,7 +190,7 @@ export type PublicFacilityPhoto = Pick<
 >;
 
 export const getFacilityPhotosByFacility = createServerFn({ method: "GET" })
-  .inputValidator((data: { facilityId: string }) => data)
+  .validator((data: { facilityId: string }) => data)
   .handler(async ({ data }): Promise<PublicFacilityPhoto[]> => {
     try {
       const sb = serverClient();
@@ -210,7 +210,7 @@ export const getFacilityPhotosByFacility = createServerFn({ method: "GET" })
   });
 
 export const getFacilityPhotosBySchool = createServerFn({ method: "GET" })
-  .inputValidator((data: { slug: SchoolSlug }) => data)
+  .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<PublicFacilityPhoto[]> => {
     try {
       const sb = serverClient();
@@ -231,7 +231,7 @@ export const getFacilityPhotosBySchool = createServerFn({ method: "GET" })
 
 // ---- Contact form --------------------------------------------------------
 export const submitContactMessage = createServerFn({ method: "POST" })
-  .inputValidator(
+  .validator(
     (data: {
       name: string;
       email: string;
@@ -299,7 +299,7 @@ export type SchoolBundle = {
 };
 
 export const getSchoolBundle = createServerFn({ method: "GET" })
-  .inputValidator((data: { slug: SchoolSlug }) => data)
+  .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<SchoolBundle> => {
     const empty: SchoolBundle = {
       school: null,
@@ -372,7 +372,7 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
  * built-in photo never flashes before the uploaded one arrives.
  */
 export const getSchoolPhotos = createServerFn({ method: "GET" })
-  .inputValidator((data: { slug: SchoolSlug }) => data)
+  .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<SchoolPhotoMap> => {
     try {
       const sb = serverClient();
@@ -405,7 +405,7 @@ export type HeroSlideItem = Pick<
 >;
 
 export const getHeroSlides = createServerFn({ method: "GET" })
-  .inputValidator((data: { page: string }) => data)
+  .validator((data: { page: string }) => data)
   .handler(async ({ data }): Promise<HeroSlideItem[]> => {
     try {
       const sb = serverClient();

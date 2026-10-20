@@ -68,7 +68,7 @@ export const getLinkBase = createServerFn({ method: "GET" }).handler(async () =>
 export type CreateInvitesResult = { created: number; skippedExisting: string[] };
 
 export const createInvites = createServerFn({ method: "POST" })
-  .inputValidator((data: { accessToken: string; audience: Audience; rows: InviteDraft[] }) => data)
+  .validator((data: { accessToken: string; audience: Audience; rows: InviteDraft[] }) => data)
   .handler(({ data }) =>
     guarded("createInvites", async (): Promise<CreateInvitesResult> => {
       const { userId } = await requireStaff(data.accessToken);
@@ -159,7 +159,7 @@ export const createInvites = createServerFn({ method: "POST" })
 type InviteRef = { accessToken: string; inviteId: string };
 
 export const getInviteLink = createServerFn({ method: "POST" })
-  .inputValidator((data: InviteRef) => data)
+  .validator((data: InviteRef) => data)
   .handler(({ data }) =>
     guarded("getInviteLink", async () => {
       await requireStaff(data.accessToken);
@@ -203,7 +203,7 @@ export const getInviteLink = createServerFn({ method: "POST" })
   );
 
 export const regenerateInvite = createServerFn({ method: "POST" })
-  .inputValidator((data: InviteRef) => data)
+  .validator((data: InviteRef) => data)
   .handler(({ data }) =>
     guarded("regenerateInvite", async () => {
       await requireStaff(data.accessToken);
@@ -247,7 +247,7 @@ export type OpenInviteResult =
  * invite as opened.
  */
 export const openInvite = createServerFn({ method: "POST" })
-  .inputValidator((data: { code: string; audience: Audience }) => data)
+  .validator((data: { code: string; audience: Audience }) => data)
   .handler(async ({ data }): Promise<OpenInviteResult> => {
     try {
       const code = typeof data?.code === "string" ? data.code : "";

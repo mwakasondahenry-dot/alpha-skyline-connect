@@ -129,12 +129,10 @@ Do this before any visual work.
 
 Track these separately. They are real and they matter before launch.
 
-- **CSRF middleware is missing.** The dev server warns about it on every start.
-  Every admin action runs through server functions; without it, a malicious
-  page could trigger them using a logged-in staff member's session. Fix before
-  going live.
-- **`inputValidator()` is deprecated** in `src/lib/alpha-content.functions.ts`
-  (6 occurrences). Harmless now, will break on a future upgrade.
+- ~~**CSRF middleware is missing.**~~ Fixed 2026-10-20 in `src/start.ts`.
+  Cross-site calls to server functions now get a 403.
+- ~~**`inputValidator()` is deprecated.**~~ Fixed 2026-10-20: all 12 calls
+  now use `.validator()`.
 - **Images are Lovable-hosted pointers.** Production builds contain zero
   images. `grep -r "__l5e" .output/` must return nothing before deploying.
 - **Deploy target** is nitro preset `cloudflare-module`. Cloudflare is already

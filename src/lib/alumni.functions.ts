@@ -101,7 +101,7 @@ function readStory(form: FormData): StoryRow {
  * submit_invited_story, which locks the invite so it yields one story.
  */
 export const submitStory = createServerFn({ method: "POST" })
-  .inputValidator((data: FormData) => {
+  .validator((data: FormData) => {
     if (!(data instanceof FormData)) throw new Error("Invalid submission.");
     return data;
   })
