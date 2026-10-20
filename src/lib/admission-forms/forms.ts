@@ -122,7 +122,7 @@ function buildPartB(school: School, kind: Kind): Part {
   const lines: Field[][] = [
     nameFields("Student"),
     [f("examNumber", "Student's PSLE/FTNA/CSEE number", 3)],
-    [f("prem", "PREM Number", 3)],
+    [f("prem", girls ? "PREM NUMBER" : "PREM Number", 3)],
     [f("prevSchool", girls ? "Previous school name" : "School name", 3)],
     [f("prevContact", "Previous school contact", 3, "phone")],
     location(girls ? "Previous School Location" : "School Location"),
@@ -178,7 +178,7 @@ function buildPartC(school: School, kind: Kind): string[] {
 
   return [
     ...itemsIntro,
-    "iii) Results slip (For A-Level)",
+    girls ? "iii) Result slip (For A-Level)" : "iii) Results slip (For A-Level)",
     "2. Entrance examination subjects will be ALL SUBJECTS TAKEN IN CLASS OF ADMISSION.",
     girls
       ? "3. Date of interview will be on ____________ from 08:00am at Alpha Girls High School – KUNDUCHI"

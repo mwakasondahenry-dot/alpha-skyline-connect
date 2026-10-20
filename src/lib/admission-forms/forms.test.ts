@@ -72,6 +72,26 @@ describe("FORMS", () => {
     }
   });
 
+  it("follows each source PDF's wording for the transfer results slip line", () => {
+    expect(getForm("alpha-girls-transfer")!.partC).toContain("iii) Result slip (For A-Level)");
+    expect(getForm("alpha-high-transfer")!.partC).toContain("iii) Results slip (For A-Level)");
+  });
+
+  it("follows each source PDF's wording for the PREM label", () => {
+    const label = (id: string) =>
+      getForm(id)!
+        .partB.questions.flatMap((q) => q.fields)
+        .find((field) => field.key === "prem")!.label;
+    expect(label("alpha-girls-transfer")).toBe("PREM NUMBER");
+    expect(label("alpha-high-transfer")).toBe("PREM Number");
+  });
+
+  it("lists the girls Form I exam subjects with the corrected wording", () => {
+    expect(getForm("alpha-girls-form-1")!.partC).toContain(
+      "2. Entrance examination subjects will be ENGLISH, MATHEMATICS, and GENERAL KNOWLEDGE & SCIENCE.",
+    );
+  });
+
   it("points each form at its crest and blank PDF", () => {
     expect(getForm("alpha-high-transfer")!.crest).toBe("alpha-high.jpg");
     expect(getForm("alpha-girls-form-1")!.crest).toBe("alpha-schools.png");
