@@ -3,7 +3,7 @@ import { seo } from "@/lib/seo";
 import { breadcrumbLd } from "@/lib/structured-data";
 import admissionHeroFallback from "@/assets/campus-nursery.webp";
 import { HeroSlideshow } from "@/components/hero-slideshow";
-import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
+import { ArrowDown, ArrowRight, Mail, MapPin, Phone, Check } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import { FormPicker } from "@/components/admission-forms/form-picker";
@@ -103,7 +103,7 @@ function AdmissionPage() {
                 href="#forms"
                 className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md" style={T.body}
               >
-                <Download className="h-4 w-4" />
+                <ArrowDown className="h-4 w-4" />
                 Get the application form
               </a>
               <Link
@@ -343,7 +343,7 @@ function AdmissionPage() {
                   href="#forms"
                   className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]" style={T.body}
                 >
-                  <Download className="h-4 w-4" /> Get the application form
+                  <ArrowDown className="h-4 w-4" /> Get the application form
                 </a>
               </div>
             </Reveal>
