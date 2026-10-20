@@ -137,3 +137,4 @@ Track these separately. They are real and they matter before launch.
   images. `grep -r "__l5e" .output/` must return nothing before deploying.
 - **Deploy target** is nitro preset `cloudflare-module`. Cloudflare is already
   wired up; switching to Vercel means changing the preset.
+- **Admission form phone numbers** are copied from each source PDF and differ between a school's two forms. The school should confirm they are current before launch.
