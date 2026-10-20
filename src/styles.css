@@ -27,6 +27,7 @@
      Token NAMES are unchanged from the previous palette; only values moved.
      Every delta is listed in the session summary — none is a rename. */
   --color-deep-blue: #002e6a;     /* footer, stat rail, Alpha High card band */
+  --color-deep-blue-dark: #08305a; /* dark end of the navy banner gradients */
   --color-brand-blue: #004a98;    /* mobile header + stat block, link blue */
   --color-bright-blue: #0470cc;   /* Nursery & Primary accent */
   /* Retired as the Alpha Girls accent — see --color-girls-teal below.

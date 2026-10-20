@@ -34,7 +34,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-deep-blue)] to-[#08305a] px-4 py-12">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-[var(--color-deep-blue)] via-[var(--color-deep-blue)] to-[var(--color-deep-blue-dark)] px-4 py-12">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-2xl">
         <div className="mb-6 flex flex-col items-center text-center">
           <img src={logo} alt="Alpha Schools" className="h-14 w-14 rounded-full ring-2 ring-[var(--color-gold)]" />

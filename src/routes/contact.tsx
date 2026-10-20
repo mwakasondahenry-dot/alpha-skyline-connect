@@ -64,7 +64,7 @@ function ContactPage() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-[var(--space-section-y)] text-white">
+      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[var(--color-deep-blue-dark)] py-[var(--space-section-y)] text-white">
         <div className={SHELL}>
           <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>Get in touch</p>
           <h1 className="mt-2 font-display" style={T.section}>We'd love to hear from you</h1>

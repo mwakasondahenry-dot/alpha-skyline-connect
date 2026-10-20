@@ -54,7 +54,7 @@ function FacilitiesPage() {
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
       <SiteHeader />
 
-      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[#08305a] py-[var(--space-section-y)] text-white">
+      <section className="bg-gradient-to-b from-[var(--color-deep-blue)] to-[var(--color-deep-blue-dark)] py-[var(--space-section-y)] text-white">
         <div className={SHELL}>
           <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>Campus tour</p>
           <h1 className="mt-2 font-display" style={T.section}>Facilities across Alpha Schools</h1>

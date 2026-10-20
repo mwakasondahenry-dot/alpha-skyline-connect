@@ -797,7 +797,7 @@ function AviationPage() {
           </div>
           <Link
             to="/contact"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-6 py-3.5 font-semibold text-white shadow-lg shadow-black/15 transition hover:scale-[1.03] hover:bg-[#08365f]" style={T.body}
+            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-6 py-3.5 font-semibold text-white shadow-lg shadow-black/15 transition hover:scale-[1.03] hover:bg-[var(--color-deep-blue-dark)]" style={T.body}
           >
             Book a Visit →
           </Link>
