@@ -1,4 +1,4 @@
-import { createStart, createMiddleware } from "@tanstack/react-start";
+import { createStart, createMiddleware, createCsrfMiddleware } from "@tanstack/react-start";
 
 import { renderErrorPage } from "./lib/error-page";
 
@@ -17,6 +17,14 @@ const errorMiddleware = createMiddleware().server(async ({ next }) => {
   }
 });
 
+/* Server functions are same-origin RPC endpoints, and the admin ones act
+   with a staff member's session. Defining requestMiddleware here replaces
+   the framework's default list, so its CSRF check has to be added back:
+   requests a browser marks as cross-site are refused with a 403. */
+const csrfMiddleware = createCsrfMiddleware({
+  filter: (ctx) => ctx.handlerType === "serverFn",
+});
+
 export const startInstance = createStart(() => ({
-  requestMiddleware: [errorMiddleware],
+  requestMiddleware: [csrfMiddleware, errorMiddleware],
 }));
