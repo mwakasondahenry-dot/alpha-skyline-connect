@@ -79,7 +79,10 @@ Do not build it, do not stub it, do not leave a placeholder button.
 
 ### 6. "Watch Our Story" video button
 
-No video exists. Omit this button until told otherwise.
+Do not build the mockup's button. The home page instead has a full-screen
+video section (`src/components/home-video.tsx`) playing "Alpha Advert"
+from the school's YouTube channel — see the video exception under Build
+constraints.
 
 ### 7. Social platforms
 
@@ -104,8 +107,21 @@ mobile data in Dar es Salaam. Verify every change at 375px. The previous round
 shipped with no mobile navigation at all — that is how easy this is to miss.
 
 **Performance over polish.** Minimal animation. No large images. No video
-autoplay. A section that looks 10% better and loads 2 seconds slower is a
-net loss.
+autoplay, with one agreed exception below. A section that looks 10% better
+and loads 2 seconds slower is a net loss.
+
+**The one video exception.** The home-page video section autoplays, on the
+user's instruction (2026-09-24). It is bounded, and each limit is part of the
+rule — do not loosen them:
+
+- Only the video still (~46 KB) loads with the page. The YouTube player
+  loads when the section is about one screen away.
+- It plays only while at least half of it is on screen and pauses when
+  scrolled past.
+- It tries sound first. Browsers block sound until the reader has tapped
+  the page, so it then falls back to muted with a "Tap for sound" button.
+- Reduced motion or Data Saver: no autoplay and no player until tapped.
+- Home page only. No autoplaying video anywhere else.
 
 **Colour lives in tokens.** Every colour goes in `src/styles.css` as a CSS
 variable. No hardcoded hex in routes or components. Red `#E22321` and green

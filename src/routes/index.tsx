@@ -20,6 +20,7 @@ import {
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
+import { HomeVideo } from "@/components/home-video";
 import { CinematicHero, Marked, Backdrop } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
@@ -227,6 +228,7 @@ function Home() {
       <SiteHeader overlay />
       <Hero />
       <FindTheRightSchool />
+      <HomeVideo />
       <AviationBanner />
       <Testimonials items={testimonials} />
       <NewsAndEvents news={data.news} events={upcomingEvents} />

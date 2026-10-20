@@ -1391,3 +1391,41 @@ html.rv-on [data-reveal][data-rv-in] {
   .ac-callout__cta:hover,
   .ac-callout__cta:hover svg { transform: none; }
 }
+
+/* ===================================================================
+   HOME VIDEO — src/components/home-video.tsx
+
+   The section is a size container, so the frame can be sized to cover
+   it the way object-fit: cover sizes an image: whichever of the two
+   16:9 boxes is larger wins, and the overflow is clipped. An iframe has
+   no object-fit of its own.
+
+   The player cross-fades in over the still once it is actually playing,
+   so the reader never sees YouTube's black loading frame.
+   =================================================================== */
+:root {
+  --video-bg: var(--color-deep-blue);
+  --video-scrim: linear-gradient(
+    to top,
+    color-mix(in srgb, var(--color-deep-blue) 88%, transparent) 0%,
+    color-mix(in srgb, var(--color-deep-blue) 40%, transparent) 30%,
+    transparent 55%
+  );
+  --video-control-bg: color-mix(in srgb, var(--color-deep-blue) 60%, transparent);
+  --video-fade: 400ms;
+}
+
+.home-video-frame {
+  width: max(100cqw, calc(100cqh * 16 / 9));
+  height: max(100cqh, calc(100cqw * 9 / 16));
+  opacity: 0;
+  transition: opacity var(--video-fade) var(--ease-out);
+}
+.home-video-frame.is-shown {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .home-video-frame {
+    transition: none;
+  }
+}
