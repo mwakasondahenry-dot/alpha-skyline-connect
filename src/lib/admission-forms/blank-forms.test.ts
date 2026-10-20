@@ -12,7 +12,9 @@ describe("blank form PDFs", () => {
         Buffer.from(fresh).equals(onDisk),
         "public/forms is stale — run npm run forms:blank",
       ).toBe(true);
-      expect(onDisk.length).toBeLessThan(150 * 1024);
+      expect(onDisk.length, "blank PDF too large — check the crest image size").toBeLessThan(
+        60 * 1024,
+      );
     });
   }
 });

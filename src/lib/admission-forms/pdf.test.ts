@@ -21,12 +21,12 @@ describe("renderFormPdf", () => {
     expect(doc.getTitle()).toBe("ALPHA HIGH SCHOOL — APPLICATION FORM FOR ADMISSION");
   });
 
-  it("draws the Alpha Schools png crest too", async () => {
-    const png = {
-      bytes: readFileSync("public/forms/crests/alpha-schools.png"),
-      type: "png" as const,
+  it("draws the Alpha Schools crest too", async () => {
+    const girlsCrest = {
+      bytes: readFileSync("public/forms/crests/alpha-schools.jpg"),
+      type: "jpg" as const,
     };
-    const bytes = await renderFormPdf(getForm("alpha-girls-transfer")!, {}, png);
+    const bytes = await renderFormPdf(getForm("alpha-girls-transfer")!, {}, girlsCrest);
     expect((await PDFDocument.load(bytes)).getPageCount()).toBe(2);
   });
 

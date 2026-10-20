@@ -94,7 +94,7 @@ describe("FORMS", () => {
 
   it("points each form at its crest and blank PDF", () => {
     expect(getForm("alpha-high-transfer")!.crest).toBe("alpha-high.jpg");
-    expect(getForm("alpha-girls-form-1")!.crest).toBe("alpha-schools.png");
+    expect(getForm("alpha-girls-form-1")!.crest).toBe("alpha-schools.jpg");
     expect(getForm("alpha-girls-form-1")!.blankPdfPath).toBe("/forms/alpha-girls-form-1.pdf");
   });
 });

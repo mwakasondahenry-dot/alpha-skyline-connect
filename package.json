@@ -13,7 +13,7 @@
     "test": "vitest run",
     "deploy": "npm run build && node scripts/wrangler-routes.mjs && wrangler deploy --config .output/server/wrangler.json --name alpha-schools",
     "format": "prettier --write .",
-    "forms:blank": "vite-node scripts/generate-blank-forms.ts"
+    "forms:blank": "vite-node scripts/run-generate-blank-forms.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -24,7 +24,7 @@ export type FormDef = {
   entryClass: string | null;
   entryFields: Field[];
   headerLines: string[];
-  crest: "alpha-high.jpg" | "alpha-schools.png";
+  crest: "alpha-high.jpg" | "alpha-schools.jpg";
   partA: Part;
   partB: Part;
   steps: Record<WizardStep, string[]>;
@@ -238,7 +238,7 @@ function buildForm(school: School, kind: Kind): FormDef {
     entryClass: kind === "form-1" ? "FORM I 2027" : null,
     entryFields,
     headerLines: [...HEADER_LINES[id], WEBSITE_LINE],
-    crest: girls ? "alpha-schools.png" : "alpha-high.jpg",
+    crest: girls ? "alpha-schools.jpg" : "alpha-high.jpg",
     partA,
     partB,
     steps: buildSteps(entryFields, partA, partB, girls && kind === "form-1" ? 6 : 7),
