@@ -13,24 +13,38 @@ export function draftKey(id: FormId): string {
   return `alpha-admission-draft:${id}`;
 }
 
-/** The saved answers for this form, or {} if the draft is missing, corrupt, stale or for another form. */
-export function readDraft(raw: string | null, id: FormId, now: number): Answers {
-  if (!raw) return {};
+/** The answers of a usable draft for this form, or null if it is missing, corrupt, stale or for another form. */
+function parseDraft(raw: string | null, id: FormId, now: number): Answers | null {
+  if (!raw) return null;
   try {
     const draft: unknown = JSON.parse(raw);
-    if (typeof draft !== "object" || draft === null) return {};
+    if (typeof draft !== "object" || draft === null) return null;
     const { formId, savedAt, answers } = draft as Record<string, unknown>;
-    if (formId !== id || typeof savedAt !== "number") return {};
-    if (now - savedAt > DRAFT_TTL_MS) return {};
-    if (typeof answers !== "object" || answers === null) return {};
+    if (formId !== id || typeof savedAt !== "number") return null;
+    if (now - savedAt > DRAFT_TTL_MS) return null;
+    if (typeof answers !== "object" || answers === null) return null;
     const clean: Answers = {};
     for (const [key, value] of Object.entries(answers)) {
       if (typeof value === "string") clean[key] = value;
     }
     return clean;
   } catch {
-    return {};
+    return null;
   }
+}
+
+/** The saved answers for this form, or {} if the draft is missing, corrupt, stale or for another form. */
+export function readDraft(raw: string | null, id: FormId, now: number): Answers {
+  return parseDraft(raw, id, now) ?? {};
+}
+
+/**
+ * True when something is stored but readDraft would not use it (expired,
+ * corrupt, or for another form), so it should be removed. A valid draft with
+ * no answers is not stale; nothing stored is not stale.
+ */
+export function isStaleDraft(raw: string | null, id: FormId, now: number): boolean {
+  return raw !== null && parseDraft(raw, id, now) === null;
 }
 
 /** Only the pupil's names are required to download. */

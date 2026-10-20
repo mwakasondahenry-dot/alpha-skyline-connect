@@ -3,6 +3,7 @@ import {
   DRAFT_TTL_MS,
   downloadProblem,
   draftKey,
+  isStaleDraft,
   pdfFileName,
   readDraft,
   sanitizeForPdf,
@@ -99,5 +100,22 @@ describe("pdfFileName", () => {
     expect(pdfFileName(high1, { firstName: "Mary Anne", familyName: "a/b" })).toBe(
       "Alpha-High-Form-I-2027-Mary-Anne-a-b.pdf",
     );
+  });
+});
+
+describe("isStaleDraft", () => {
+  const id = "alpha-high-form-1";
+  it("is true for expired, corrupt, wrong-form and malformed drafts", () => {
+    expect(isStaleDraft(draft({ savedAt: NOW - DRAFT_TTL_MS - 1 }), id, NOW)).toBe(true);
+    expect(isStaleDraft("{bad", id, NOW)).toBe(true);
+    expect(isStaleDraft(draft({ formId: "alpha-girls-form-1" }), id, NOW)).toBe(true);
+    expect(isStaleDraft("42", id, NOW)).toBe(true);
+    expect(isStaleDraft(draft({ answers: null }), id, NOW)).toBe(true);
+  });
+  it("is false for nothing stored, a fresh draft, a draft at the limit, or valid empty answers", () => {
+    expect(isStaleDraft(null, id, NOW)).toBe(false);
+    expect(isStaleDraft(draft(), id, NOW)).toBe(false);
+    expect(isStaleDraft(draft({ savedAt: NOW - DRAFT_TTL_MS }), id, NOW)).toBe(false);
+    expect(isStaleDraft(draft({ answers: {} }), id, NOW)).toBe(false);
   });
 });

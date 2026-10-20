@@ -7,10 +7,12 @@
  * /admission page's layout (that page has no <Outlet />); the URL is still
  * /admission/apply/$form.
  */
+import { useEffect } from "react";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { StoryShell } from "@/components/alumni/story-wizard/story-shell";
 import { BTN_PRIMARY, BTN_PRIMARY_STYLE } from "@/components/alumni/story-wizard/field-ui";
 import { ApplicationWizard } from "@/components/admission-forms/application-wizard";
+import { sweepStaleDrafts } from "@/components/admission-forms/use-form-draft";
 import { useIsDesktop } from "@/components/admission-forms/use-is-desktop";
 import { T } from "@/components/type-roles";
 import { getForm, type FormDef } from "@/lib/admission-forms/forms";
@@ -48,8 +50,29 @@ function ApplyPage() {
   const form = getForm(formId) as FormDef;
   const desktop = useIsDesktop();
 
+  /* Drafts expire after a week; clear any that have, on any device's visit. */
+  useEffect(() => {
+    sweepStaleDrafts();
+  }, []);
+
   return (
     <StoryShell heading={headingFor(form)}>
+      {desktop === null && (
+        <noscript>
+          <p className="max-w-[60ch] text-[var(--color-ink-soft)]" style={T.body}>
+            The online form needs JavaScript. Download the blank form, print it and fill it in by
+            hand.
+          </p>
+          <a
+            href={form.blankPdfPath}
+            download
+            className={`mt-5 ${BTN_PRIMARY}`}
+            style={BTN_PRIMARY_STYLE}
+          >
+            Download the blank form
+          </a>
+        </noscript>
+      )}
       {desktop === true && <ApplicationWizard form={form} />}
       {desktop === false && (
         <>

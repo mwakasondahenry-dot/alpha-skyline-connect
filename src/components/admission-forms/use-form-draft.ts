@@ -8,8 +8,27 @@
  * is wrapped: storage can be blocked, full or missing.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { FormDef } from "@/lib/admission-forms/forms";
-import { draftKey, readDraft, type Answers, type Draft } from "@/lib/admission-forms/answers";
+import { FORMS, type FormDef } from "@/lib/admission-forms/forms";
+import {
+  draftKey,
+  isStaleDraft,
+  readDraft,
+  type Answers,
+  type Draft,
+} from "@/lib/admission-forms/answers";
+
+/** Removes every expired or corrupt saved draft, for all four forms. Safe to call anywhere on the client. */
+export function sweepStaleDrafts(): void {
+  const now = Date.now();
+  for (const f of FORMS) {
+    try {
+      const key = draftKey(f.id);
+      if (isStaleDraft(localStorage.getItem(key), f.id, now)) localStorage.removeItem(key);
+    } catch {
+      /* Storage blocked: nothing to sweep. */
+    }
+  }
+}
 
 export function useFormDraft(form: FormDef): {
   answers: Answers;
@@ -27,7 +46,10 @@ export function useFormDraft(form: FormDef): {
     dirty.current = false;
     let saved: Answers = {};
     try {
-      saved = readDraft(localStorage.getItem(key), form.id, Date.now());
+      const raw = localStorage.getItem(key);
+      const now = Date.now();
+      saved = readDraft(raw, form.id, now);
+      if (isStaleDraft(raw, form.id, now)) localStorage.removeItem(key);
     } catch {
       /* Storage blocked: start fresh. */
     }
