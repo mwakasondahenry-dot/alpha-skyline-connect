@@ -86,6 +86,7 @@ function FieldInput({
       label={field.label}
       value={value}
       onChange={onChange}
+      required={field.key === "firstName" || field.key === "familyName"}
       autoComplete={field.kind === "email" ? "email" : field.kind === "phone" ? "tel" : "off"}
     />
   );

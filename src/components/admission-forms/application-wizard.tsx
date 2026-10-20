@@ -105,23 +105,28 @@ export function ApplicationWizard({ form }: { form: FormDef }) {
     );
   }
 
+  const hasAnswers = Object.values(answers).some((v) => v.trim() !== "");
   const current = WIZARD_STEPS[step];
   const last = step === WIZARD_STEPS.length - 1;
 
   return (
     <>
-      {restored && (
-        <div className="flex flex-wrap items-center justify-between gap-3" role="status">
-          <p className={BODY} style={T.body}>
-            We kept your answers from last time on this computer.
-          </p>
+      {(restored || hasAnswers) && (
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          {restored ? (
+            <p className={BODY} style={T.body} role="status">
+              We kept your answers from last time on this computer.
+            </p>
+          ) : (
+            <span />
+          )}
           <button type="button" onClick={startAgain} className={BTN_SECONDARY} style={T.body}>
             Start again
           </button>
         </div>
       )}
 
-      <div className={`${CARD} ${restored ? "mt-5" : ""}`}>
+      <div className={`${CARD} ${restored || hasAnswers ? "mt-5" : ""}`}>
         <StepIndicator steps={WIZARD_STEPS} step={step} />
 
         <h2
