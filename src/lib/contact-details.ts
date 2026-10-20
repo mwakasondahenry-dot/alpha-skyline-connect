@@ -18,7 +18,7 @@ export const PHONE_DISPLAY = "+255 (0)22 277 5046";
 /** E.164, for tel: links and for schema.org. Same number, no punctuation. */
 export const PHONE_E164 = "+255222775046";
 
-export const EMAIL = "info@alphaschools.ac.tz";
+export const EMAIL = "info@alpha.co.tz";
 
 export const OFFICE_HOURS = "Mon – Fri · 7:30 – 16:30";
 

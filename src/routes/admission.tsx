@@ -305,7 +305,7 @@ function AdmissionPage() {
                 <Phone className="h-4 w-4" /> Call admissions
               </a>
               <a
-                href="mailto:alphaschoolsdsm@gmail.com"
+                href="mailto:alphaschoolsdsm@alpha.co.tz"
                 className="inline-flex items-center gap-2 rounded-md border border-[var(--color-deep-blue)]/20 bg-white px-4 py-2.5 font-semibold text-[var(--color-deep-blue)] transition-colors hover:bg-[var(--color-deep-blue)]/5" style={T.body}
               >
                 <Mail className="h-4 w-4" /> Email admissions
@@ -331,10 +331,10 @@ function AdmissionPage() {
                 certificate and passport-size photos — in person at the campus or by email
                 to{" "}
                 <a
-                  href="mailto:alphaschoolsdsm@gmail.com"
+                  href="mailto:alphaschoolsdsm@alpha.co.tz"
                   className="font-semibold text-[var(--color-gold)] hover:underline"
                 >
-                  alphaschoolsdsm@gmail.com
+                  alphaschoolsdsm@alpha.co.tz
                 </a>
                 .
               </p>
@@ -381,10 +381,10 @@ function AdmissionPage() {
                     </p>
                     <p className="mt-1 font-display" style={T.cardTitle}>
                       <a
-                        href="mailto:alphaschoolsdsm@gmail.com"
+                        href="mailto:alphaschoolsdsm@alpha.co.tz"
                         className="hover:text-[var(--color-gold)]"
                       >
-                        alphaschoolsdsm@gmail.com
+                        alphaschoolsdsm@alpha.co.tz
                       </a>
                     </p>
                   </div>
