@@ -64,7 +64,7 @@ export function DoneCard() {
  * Where the reader is. Named steps on wider screens, where they fit and
  * show what is still to come; a single line on phones.
  */
-function StepIndicator({ steps, step }: { steps: FrameStep[]; step: number }) {
+export function StepIndicator({ steps, step }: { steps: FrameStep[]; step: number }) {
   return (
     <>
       <p className="text-[var(--color-ink-soft)] sm:hidden" style={T.body}>

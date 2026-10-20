@@ -39,6 +39,7 @@ import { Route as AlumniSubmitRouteImport } from './routes/alumni.submit'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
+import { Route as AdmissionApplyFormRouteImport } from './routes/admission_.apply.$form'
 import { Route as AlumniStoryIndexRouteImport } from './routes/alumni.story.index'
 import { Route as AlumniStoryCodeRouteImport } from './routes/alumni.story.$code'
 import { Route as ParentsStoryIndexRouteImport } from './routes/parents.story.index'
@@ -194,6 +195,11 @@ const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
   path: '/schools/nursery-primary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdmissionApplyFormRoute = AdmissionApplyFormRouteImport.update({
+  id: '/admission_/apply/$form',
+  path: '/admission/apply/$form',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AlumniStoryIndexRoute = AlumniStoryIndexRouteImport.update({
   id: '/alumni/story/',
   path: '/alumni/story/',
@@ -246,6 +252,7 @@ export interface FileRoutesByFullPath {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/admission/apply/$form': typeof AdmissionApplyFormRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
   '/parents/story/$code': typeof ParentsStoryCodeRoute
   '/alumni/story/': typeof AlumniStoryIndexRoute
@@ -281,6 +288,7 @@ export interface FileRoutesByTo {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin': typeof AdminIndexRoute
   '/alumni': typeof AlumniIndexRoute
+  '/admission/apply/$form': typeof AdmissionApplyFormRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
   '/parents/story/$code': typeof ParentsStoryCodeRoute
   '/alumni/story': typeof AlumniStoryIndexRoute
@@ -318,6 +326,7 @@ export interface FileRoutesById {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/admission_/apply/$form': typeof AdmissionApplyFormRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
   '/parents/story/$code': typeof ParentsStoryCodeRoute
   '/alumni/story/': typeof AlumniStoryIndexRoute
@@ -356,6 +365,7 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/admission/apply/$form'
     | '/alumni/story/$code'
     | '/parents/story/$code'
     | '/alumni/story/'
@@ -391,6 +401,7 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin'
     | '/alumni'
+    | '/admission/apply/$form'
     | '/alumni/story/$code'
     | '/parents/story/$code'
     | '/alumni/story'
@@ -427,6 +438,7 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/admission_/apply/$form'
     | '/alumni/story/$code'
     | '/parents/story/$code'
     | '/alumni/story/'
@@ -452,6 +464,7 @@ export interface RootRouteChildren {
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
   AlumniIndexRoute: typeof AlumniIndexRoute
+  AdmissionApplyFormRoute: typeof AdmissionApplyFormRoute
   AlumniStoryCodeRoute: typeof AlumniStoryCodeRoute
   ParentsStoryCodeRoute: typeof ParentsStoryCodeRoute
   AlumniStoryIndexRoute: typeof AlumniStoryIndexRoute
@@ -670,6 +683,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admission_/apply/$form': {
+      id: '/admission_/apply/$form'
+      path: '/admission/apply/$form'
+      fullPath: '/admission/apply/$form'
+      preLoaderRoute: typeof AdmissionApplyFormRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/alumni/story/': {
       id: '/alumni/story/'
       path: '/alumni/story'
@@ -752,6 +772,7 @@ const rootRouteChildren: RootRouteChildren = {
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
   AlumniIndexRoute: AlumniIndexRoute,
+  AdmissionApplyFormRoute: AdmissionApplyFormRoute,
   AlumniStoryCodeRoute: AlumniStoryCodeRoute,
   ParentsStoryCodeRoute: ParentsStoryCodeRoute,
   AlumniStoryIndexRoute: AlumniStoryIndexRoute,
