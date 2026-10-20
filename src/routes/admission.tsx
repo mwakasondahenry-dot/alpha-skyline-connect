@@ -6,6 +6,7 @@ import { HeroSlideshow } from "@/components/hero-slideshow";
 import { ArrowRight, Download, Mail, MapPin, Phone, Check } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
+import { FormPicker } from "@/components/admission-forms/form-picker";
 
 import { T, SHELL } from "@/components/type-roles";
 
@@ -21,11 +22,6 @@ export const Route = createFileRoute("/admission")({
   }),
   component: AdmissionPage,
 });
-
-// [Application form PDF — upload to Supabase Storage and link here before launch]
-// Replace the value below with the public URL of the application form PDF from
-// the `media` bucket once it has been uploaded.
-const APPLICATION_FORM_URL = "/application-form-placeholder.pdf";
 
 const STEPS = [
   { n: "01", title: "Pay application fees", body: "Pay the application fee at the campus or by bank transfer, and keep the receipt for your file." },
@@ -104,13 +100,11 @@ function AdmissionPage() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a
-                href={APPLICATION_FORM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="#forms"
                 className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02] hover:shadow-md" style={T.body}
               >
                 <Download className="h-4 w-4" />
-                Download Application Form
+                Get the application form
               </a>
               <Link
                 to="/contact"
@@ -119,12 +113,11 @@ function AdmissionPage() {
                 Book a Visit
               </Link>
             </div>
-            <p className="mt-4 text-xs text-white/60">
-              [Application form PDF — upload to Supabase Storage and link here before launch]
-            </p>
           </Reveal>
         </div>
       </section>
+
+      <FormPicker />
 
       {/* 2. Admission process — 6 steps */}
       <section className={`${SHELL} py-[var(--space-section-y)]`}>
@@ -347,12 +340,10 @@ function AdmissionPage() {
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <a
-                  href={APPLICATION_FORM_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#forms"
                   className="inline-flex items-center gap-2 rounded-md bg-[var(--color-gold)] px-5 py-3 font-semibold text-[var(--color-accent-foreground)] shadow-sm transition-transform hover:scale-[1.02]" style={T.body}
                 >
-                  <Download className="h-4 w-4" /> Download Application Form
+                  <Download className="h-4 w-4" /> Get the application form
                 </a>
               </div>
             </Reveal>
