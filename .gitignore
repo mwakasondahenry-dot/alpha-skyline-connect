@@ -33,3 +33,4 @@ dist-ssr
 
 # brainstorm mockups
 .superpowers/
+.claude/worktrees/
