@@ -137,6 +137,7 @@ function AboutPage() {
 
       {/* 1. HERO — the group in one screen. */}
       <CinematicHero
+        srLead="About Alpha Schools, Dar es Salaam:"
         lineOne="Your child's education,"
         lineTwo="our priority."
         blurb={`Three schools on two campuses in Dar es Salaam, from the first day of nursery to Form Six. One family since 2007, with aviation and coding on the timetable.`}

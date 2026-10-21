@@ -16,9 +16,9 @@ import { UrgentAnnouncements } from "../components/urgent-announcements";
 import { RevealWatcher } from "../components/reveal";
 import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
 
-const DEFAULT_TITLE = "Alpha Schools — Nursery to A-Level, Dar es Salaam";
+const DEFAULT_TITLE = "Alpha Schools: Private Schools in Dar es Salaam, Nursery to A-Level";
 const DEFAULT_DESCRIPTION =
-  "Alpha Schools teaches in Dar es Salaam from nursery through A-Level: a nursery and primary, a co-education secondary in Mikocheni and a girls' secondary in Kunduchi.";
+  "Three private schools in Dar es Salaam: a nursery and primary school from age 2, a co-education secondary school in Mikocheni and a girls' secondary school in Kunduchi, all teaching to NECTA.";
 
 function NotFoundComponent() {
   return (

@@ -18,7 +18,7 @@ import { T, SHELL } from "@/components/type-roles";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     ...seo({
-      title: "Contact — Alpha Schools, Dar es Salaam",
+      title: "Contact Alpha Schools in Dar es Salaam: Mikocheni and Kunduchi",
       description:
         "Call, email or visit Alpha Schools in Dar es Salaam. Alpha High is in Mikocheni; Alpha Girls and Alpha Nursery & Primary are both in Kunduchi.",
       path: "/contact",

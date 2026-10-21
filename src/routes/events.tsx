@@ -9,7 +9,7 @@ import { T, SHELL } from "@/components/type-roles";
 export const Route = createFileRoute("/events")({
   head: (ctx) => ({
     ...seo({
-      title: "Events — Alpha Schools, Dar es Salaam",
+      title: "School Events in Dar es Salaam: Alpha Schools Calendar",
       description:
         "Open days, parents' meetings, sports days and graduations across the three Alpha schools in Dar es Salaam, with dates as the school confirms them.",
       path: "/events",

@@ -13,9 +13,9 @@ import { T, SHELL } from "@/components/type-roles";
 export const Route = createFileRoute("/admission")({
   head: () => ({
     ...seo({
-      title: "Admissions — Alpha Schools, Dar es Salaam",
+      title: "Admissions: How to Apply to Alpha Schools in Dar es Salaam",
       description:
-        "How to apply to Alpha Nursery & Primary, Alpha High or Alpha Girls in Dar es Salaam: the application fee, the entrance exam and what follows.",
+        "How to apply for a nursery, primary or secondary school place in Dar es Salaam at Alpha Nursery & Primary, Alpha High or Alpha Girls: the application fee, the entrance exam and what follows.",
       path: "/admission",
       ld: [breadcrumbLd([{ name: "Admissions", path: "/admission" }])],
     }),

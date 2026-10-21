@@ -94,9 +94,9 @@ const bundleQuery = queryOptions({
 export const Route = createFileRoute("/schools/alpha-high")({
   head: () => ({
     ...seo({
-      title: "Alpha High, Mikocheni — Alpha Schools, Dar es Salaam",
+      title: "Alpha High School, Mikocheni: Secondary School in Dar es Salaam",
       description:
-        "Alpha High School in Mikocheni, Dar es Salaam: a co-education secondary teaching Form 1 to Form 6. In NECTA's 2025 Form Four results, 60 of 92 students reached Division I.",
+        "A co-education secondary school in Mikocheni, Dar es Salaam, Form 1 to Form 6: 17 NECTA O-Level subjects, 12 A-Level combinations, aviation and coding. 60 of 92 in Division I in the 2025 Form Four results.",
       path: "/schools/alpha-high",
       ld: [
         schoolLd(
@@ -316,6 +316,7 @@ function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
 function Hero() {
   return (
     <CinematicHero
+      srLead="Alpha High School, Mikocheni, Dar es Salaam:"
       lineOne="Excellence through challenge."
       lineTwo="Built for the long climb."
       blurb="Our flagship secondary in Mikocheni, Dar es Salaam: boys and girls, Form 1 to Form 6, the Tanzanian national curriculum to NECTA, with aviation and coding on the timetable."

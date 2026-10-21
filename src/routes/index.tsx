@@ -67,9 +67,9 @@ const testimonialsQuery = queryOptions({
 export const Route = createFileRoute("/")({
   head: () => {
     const base = seo({
-      title: "Alpha Schools — Nursery to A-Level, Dar es Salaam",
+      title: "Alpha Schools: Private Schools in Dar es Salaam, Nursery to A-Level",
       description:
-        "Three Alpha schools in Dar es Salaam: a nursery and primary from age 2, a co-education secondary in Mikocheni and a girls' secondary in Kunduchi.",
+        "Three private schools in Dar es Salaam: a nursery and primary school from age 2, a co-education secondary school in Mikocheni and a girls' secondary school in Kunduchi, all teaching to NECTA, with aviation and coding.",
       path: "/",
       ld: [organizationLd(), websiteLd()],
     });
@@ -275,6 +275,7 @@ function Hero() {
     <>
       <CinematicHero
         eyebrow="Dar es Salaam, Tanzania · Since 2007"
+        srLead="Alpha Schools, Dar es Salaam:"
         lineOne="Your potential,"
         lineTwo="unlocked."
         blurb="Three schools. One family. Limitless futures."

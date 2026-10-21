@@ -398,6 +398,7 @@ export function StatBar({
 
 export function CinematicHero({
   eyebrow,
+  srLead,
   lineOne,
   lineTwo,
   blurb,
@@ -410,6 +411,13 @@ export function CinematicHero({
   cueLabel = "Scroll to the next section",
 }: {
   eyebrow?: string;
+  /**
+   * Read by screen readers and search engines as the start of the h1, never
+   * drawn: the page's proper name and place ("Alpha High School, Mikocheni,
+   * Dar es Salaam:") ahead of the display headline, so the one h1 on the
+   * page names what the page is about.
+   */
+  srLead?: string;
   lineOne: string;
   lineTwo: string;
   blurb: string;
@@ -471,6 +479,7 @@ export function CinematicHero({
               )}
 
               <h1 className="mt-4 font-display tracking-tight text-balance" style={T.hero}>
+                {srLead && <span className="sr-only">{srLead} </span>}
                 <span
                   className="hero-rise block text-[var(--hero-line-1-color)]"
                   style={heroStep("var(--hero-t-line-1)", "420ms")}

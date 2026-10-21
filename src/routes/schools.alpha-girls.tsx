@@ -73,9 +73,9 @@ const bundleQuery = queryOptions({
 export const Route = createFileRoute("/schools/alpha-girls")({
   head: () => ({
     ...seo({
-      title: "Alpha Girls, Kunduchi — Alpha Schools, Dar es Salaam",
+      title: "Alpha Girls: Girls' Secondary School in Kunduchi, Dar es Salaam",
       description:
-        "Alpha Girls High School in Kunduchi, Dar es Salaam: a girls' secondary from Form 1 to Form 6. In NECTA's 2025 Form Four results, 30 of 45 girls reached Division I.",
+        "A girls' secondary school in Kunduchi, Dar es Salaam, Form 1 to Form 6 (O-Level and A-Level). 30 of 45 girls in Division I in NECTA's 2025 Form Four results, with aviation and coding on the timetable.",
       path: "/schools/alpha-girls",
       ld: [
         schoolLd(
@@ -148,6 +148,7 @@ function Hero() {
       >
         <div>
           <h1 className="font-display tracking-tight text-balance" style={T.hero}>
+            <span className="sr-only">Alpha Girls High School, Kunduchi, Dar es Salaam: </span>
             <span className="hero-rise block" style={heroStep("var(--hero-t-line-1)", "420ms")}>
               Where girls learn
             </span>

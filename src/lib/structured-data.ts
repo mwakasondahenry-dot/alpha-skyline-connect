@@ -85,6 +85,18 @@ export function organizationLd() {
     },
     areaServed: { "@type": "City", name: "Dar es Salaam" },
     sameAs: SAME_AS,
+    description:
+      "Three private schools in Dar es Salaam: a nursery and primary school, a co-education secondary school in Mikocheni and a girls' secondary school in Kunduchi, teaching to NECTA.",
+    /* The three schools, so a search for "schools in Dar es Salaam" can
+       resolve the group to its members. Each is the same node its own page
+       emits in full. */
+    subOrganization: Object.values(CAMPUSES).map((c) => ({
+      "@type": "School",
+      "@id": `${absoluteUrl(c.path)}#school`,
+      name: c.name,
+      url: absoluteUrl(c.path),
+      address: address(c.locality),
+    })),
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "admissions",

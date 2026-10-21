@@ -20,7 +20,7 @@ type LoaderData = {
 export const Route = createFileRoute("/facilities")({
   head: () => ({
     ...seo({
-      title: "Facilities — Alpha Schools, Dar es Salaam",
+      title: "School Facilities in Dar es Salaam: Alpha Schools, Mikocheni and Kunduchi",
       description:
         "Classrooms, laboratories, libraries, sports grounds and aviation facilities across the Alpha campuses in Mikocheni and Kunduchi, Dar es Salaam.",
       path: "/facilities",

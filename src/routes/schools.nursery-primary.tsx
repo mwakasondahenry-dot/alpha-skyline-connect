@@ -72,9 +72,9 @@ const photosQuery = queryOptions({
 export const Route = createFileRoute("/schools/nursery-primary")({
   head: () => ({
     ...seo({
-      title: "Nursery & Primary, Kunduchi — Alpha Schools",
+      title: "Alpha Nursery & Primary: Nursery and Primary School in Kunduchi, Dar es Salaam",
       description:
-        "Alpha Nursery & Primary in Kunduchi, Dar es Salaam: Day Care and Nursery from age 2, then Grade 1 to 7, with door-to-door school transport.",
+        "A nursery and primary school in Kunduchi, Dar es Salaam: Day Care and Nursery from age 2, then Grade 1 to 7, with coding from primary and door-to-door school transport.",
       path: "/schools/nursery-primary",
       ld: [
         schoolLd(
@@ -313,6 +313,7 @@ function Hero() {
             className="font-display tracking-tight text-balance text-[var(--color-deep-blue)]"
             style={{ ...T.hero, lineHeight: 1.02 }}
           >
+            <span className="sr-only">Alpha Nursery &amp; Primary School, Kunduchi, Dar es Salaam: </span>
             <span className="hero-rise block" style={heroStep("var(--hero-t-line-1)", "420ms")}>
               Unlock your child&rsquo;s
             </span>

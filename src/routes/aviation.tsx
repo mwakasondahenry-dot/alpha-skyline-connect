@@ -107,9 +107,9 @@ const JOIN_STEPS = [
 export const Route = createFileRoute("/aviation")({
   head: () => ({
     ...seo({
-      title: "Aviation Programme — Alpha Schools, Dar es Salaam",
+      title: "Aviation Programme for Secondary Students in Tanzania | Alpha Schools",
       description:
-        "Alpha secondary students study ground school and aircraft engineering, train in hangars with qualified instructors, and can progress to solo flights and a Private Pilot Licence.",
+        "Alpha Schools are the pioneer institutions in Tanzania to introduce aviation and flying as an extracurricular activity: ground school, aircraft engineering and flying for secondary students in Dar es Salaam, to a Private Pilot Licence.",
       path: "/aviation",
       ld: [breadcrumbLd([{ name: "Aviation", path: "/aviation" }])],
     }),
@@ -251,6 +251,7 @@ function AviationPage() {
       <SiteHeader overlay />
 
       <CinematicHero
+        srLead="The Alpha Schools aviation programme, Dar es Salaam, Tanzania:"
         lineOne="Learning that"
         lineTwo="takes off."
         blurb="Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce aviation and flying as part of our extracurricular activities."
