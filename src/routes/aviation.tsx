@@ -29,8 +29,10 @@ import avTailInspection from "@/assets/av-tail-inspection.webp";
    pioneer sentence and the coordinator's number were approved for
    publication on 2026-10-21. Nothing here is paraphrased into a new claim. */
 
+/* The coordinator is named by role only, at the site owner's instruction
+   (2026-10-22). */
 const COORDINATOR = {
-  name: "Mr. Johnson",
+  name: "Programme coordinator",
   display: "0717 742 248",
   tel: "tel:+255717742248",
 };
@@ -278,7 +280,7 @@ function AviationPage() {
             <GoldButton href="#join">How to join</GoldButton>
             <GhostButton href={COORDINATOR.tel} onNavy>
               <Phone className="h-4 w-4" aria-hidden />
-              Call {COORDINATOR.name}
+              Call the programme coordinator
             </GhostButton>
           </>
         }
@@ -532,7 +534,7 @@ function AviationPage() {
             className="self-start rounded-[var(--radius-card,1rem)] bg-[var(--color-deep-blue)] p-7 text-white shadow-[0_18px_40px_-18px_rgba(0,26,60,0.55)] sm:p-9 lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]"
           >
             <p className="text-white/75" style={T.body}>
-              For further information, please contact our programme coordinator:
+              For further information, please contact our
             </p>
             <h3 id="coordinator-title" className="mt-3 font-display" style={T.section}>
               {COORDINATOR.name}
