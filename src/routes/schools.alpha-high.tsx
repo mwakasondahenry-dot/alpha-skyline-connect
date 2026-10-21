@@ -74,7 +74,6 @@ import foodLunch from "@/assets/ah-food-lunch.webp";
 import debatePlaque from "@/assets/ah-debate-plaque.webp";
 import debateTrophy from "@/assets/ah-debate-trophy.webp";
 import debateTeam from "@/assets/ah-debate-team.webp";
-import debateSpeaker from "@/assets/ah-debate-speaker.webp";
 import avCadets from "@/assets/av-boys-cessna.webp";
 
 const slug = "alpha-high" as const;
@@ -573,7 +572,7 @@ function About() {
 
           {/* The campus from the air, with the classroom and the library
               tucked over its corner: the place before the paperwork. */}
-          <Reveal direction="up" className="relative pb-16 sm:pb-20 lg:pb-24">
+          <Reveal direction="up" className="relative pb-16 sm:pb-20 lg:self-start lg:pb-24">
             <img
               src={campusAerial}
               alt="The Alpha High campus in Mikocheni from the air: three blocks around a planted courtyard"
@@ -1003,7 +1002,9 @@ function LifeGroup({
           </p>
         )}
       </Reveal>
-      <div className={`grid gap-8 ${cols === 2 ? "md:grid-cols-2 md:gap-10" : ""}`}>{children}</div>
+      <div className={`grid min-w-0 gap-8 ${cols === 2 ? "md:grid-cols-2 md:gap-10" : ""}`}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -1033,9 +1034,13 @@ function StudentLife() {
             lead="Every club has its own photograph; staff can replace any of them."
             cols={1}
           >
-            <div>
+            <div className="min-w-0">
               <ul
                 className="-mx-[var(--container-gutter)] flex snap-x gap-3 overflow-x-auto px-[var(--container-gutter)] pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mx-0 lg:px-0"
+                style={{
+                  maskImage: "linear-gradient(to right, black 92%, transparent)",
+                  WebkitMaskImage: "linear-gradient(to right, black 92%, transparent)",
+                }}
               >
                 {CLUBS.map((c) => {
                   const p = slotPhoto(photos, c.key)!;
@@ -1145,7 +1150,7 @@ function StudentLife() {
               ]}
             />
             <PhotoStory
-              layout="wide"
+              layout="pair"
               title="Out at TIMEXPO."
               body="Alpha students at the Tanzania International Manufacturers Expo at Diamond Jubilee."
               source="Alpha Schools on Instagram, 21 October 2023"
@@ -1161,12 +1166,6 @@ function StudentLife() {
                   alt: "A student examining a machine at an exhibition stand",
                   w: 897,
                   h: 502,
-                },
-                {
-                  src: debateSpeaker,
-                  alt: "A student in a white headscarf speaking during a debate round",
-                  w: 1000,
-                  h: 1196,
                 },
               ]}
             />
@@ -1209,7 +1208,7 @@ function StudentLife() {
           </LifeGroup>
 
           {/* Giving back */}
-          <LifeGroup title="Giving back." cols={1}>
+          <LifeGroup title="Giving back.">
             <PhotoStory
               layout="tall"
               title="Alpha Aid."

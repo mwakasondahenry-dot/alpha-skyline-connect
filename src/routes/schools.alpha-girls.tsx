@@ -243,7 +243,7 @@ function Hero() {
           {[
             { label: "Form 1 to 6", sub: "O-Level and A-Level", Icon: GraduationCap },
             { label: "Kunduchi", sub: "Dar es Salaam", Icon: MapPin },
-            { label: "Girls only", sub: "Day and boarding", Icon: Users },
+            { label: "Girls only", sub: "A girls' secondary", Icon: Users },
             { label: "Since 2020", sub: "Part of Alpha since 2007", Icon: Calendar },
           ].map((c) => (
             <li key={c.label} className="flex shrink-0 items-center gap-3 sm:shrink">
