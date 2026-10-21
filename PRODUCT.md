@@ -82,7 +82,7 @@ irreversible in practice, and made largely on trust.
 ## Still owed by the school
 
 Fee structure per school · entry requirements for Nursery & Primary and Alpha
-High O-Level · approved aviation positioning wording · Alpha Girls' founding
+High O-Level · Alpha Girls' founding
 year (the timeline says 2020; their own document implies a 5th Form VI
 graduation in 2026) · whether Form Three and Form Four options are genuinely
 identical · testimonial quotes with consent · the Director's **photograph**
@@ -93,7 +93,7 @@ confirmed social handles · Google Maps links per campus.
 
 The aviation **module lists** are no longer owed: ground school and aircraft
 engineering modules arrived September 2026 and are live on /aviation. The
-aviation **positioning claim** is still blocked — see
+aviation **positioning claim** was approved on 2026-10-21 and is live — see
 design/CONTENT-FROM-SCHOOL.md.
 
 ## Technical

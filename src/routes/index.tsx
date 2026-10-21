@@ -84,7 +84,6 @@ export const Route = createFileRoute("/")({
   component: Home,
 });
 
-
 const BTN_PRIMARY: React.CSSProperties = {
   background: "var(--btn-primary-bg)",
   color: "var(--btn-primary-fg)",
@@ -172,7 +171,12 @@ const STATS: ReadonlyArray<{
   label: [string, string];
   Icon: typeof Award;
 }> = [
-  { value: YEARS_OPERATIONAL, suffix: "+", label: ["years shaping", "leaders since 2007"], Icon: Award },
+  {
+    value: YEARS_OPERATIONAL,
+    suffix: "+",
+    label: ["years shaping", "leaders since 2007"],
+    Icon: Award,
+  },
   { value: 3, label: ["schools across", "Dar es Salaam"], Icon: Building2 },
   { value: 1, label: ["aviation programme", "across our schools"], Icon: Plane },
   { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"], Icon: MapPin },
@@ -196,10 +200,7 @@ function SectionHeading({
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
-        <h2
-          className="font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
+        <h2 className="font-display tracking-tight text-[var(--color-ink)]" style={T.section}>
           {children}
         </h2>
         <span
@@ -306,35 +307,20 @@ function StatRail({ variant }: { variant: "rail" | "band" }) {
           : "bg-[var(--stat-row-bg)] lg:hidden"
       }
     >
-      <ul
-        className={
-          isRail
-            ? "flex h-full flex-col justify-center"
-            : "grid grid-cols-2"
-        }
-      >
+      <ul className={isRail ? "flex h-full flex-col justify-center" : "grid grid-cols-2"}>
         {STATS.map((s, i) => (
           <li
             key={i}
             className="flex items-center gap-3 p-[var(--stat-pad)]"
             style={{ borderTop: i === 0 ? undefined : "var(--stat-divider)" }}
           >
-            <s.Icon
-              className="h-5 w-5 shrink-0 text-[var(--stat-icon-color)]"
-              aria-hidden
-            />
+            <s.Icon className="h-5 w-5 shrink-0 text-[var(--stat-icon-color)]" aria-hidden />
             <div className="min-w-0">
-              <div
-                className="font-display text-[var(--stat-figure-color)]"
-                style={T.stat}
-              >
+              <div className="font-display text-[var(--stat-figure-color)]" style={T.stat}>
                 {s.value}
                 {s.suffix ?? ""}
               </div>
-              <div
-                className="text-[var(--stat-label-color)]"
-                style={T.statLabel}
-              >
+              <div className="text-[var(--stat-label-color)]" style={T.statLabel}>
                 {s.label[0]} {s.label[1]}
               </div>
             </div>
@@ -482,18 +468,15 @@ function AviationBanner() {
             <p className="text-[var(--color-gold)]" style={T.label}>
               The Alpha difference
             </p>
-            <h2
-              className="mt-2 font-display text-[var(--color-surface)]"
-              style={T.section}
-            >
+            <h2 className="mt-2 font-display text-[var(--color-surface)]" style={T.section}>
               Soar Higher with Alpha Aviation
             </h2>
-            <p
-              className="mt-3 text-[var(--color-surface)]/90"
-              style={T.body}
-            >
-              Ground school, simulator hours and first principles of flight.
-              [Aviation positioning statement — wording to be confirmed]
+            <p className="mt-3 text-[var(--color-surface)]/90" style={T.body}>
+              {/* The school's approved wording, from AVIATION IN ALPHA SCHOOLS
+                  (approved 2026-10-21; also on /aviation). */}
+              Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce
+              aviation and flying as part of our extracurricular activities. Ground school,
+              simulator hours and first principles of flight.
             </p>
             <Link
               to="/aviation"
@@ -534,7 +517,11 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
 
   return (
     <section className={`${SHELL} pb-[var(--space-section-y)]`}>
-      <div suppressHydrationWarning data-reveal className="grid gap-[var(--space-card-gap)] md:grid-cols-2">
+      <div
+        suppressHydrationWarning
+        data-reveal
+        className="grid gap-[var(--space-card-gap)] md:grid-cols-2"
+      >
         {parents.length > 0 && (
           <TestimonialCard
             title="Parent Testimonials"
@@ -577,21 +564,12 @@ function TestimonialCard({
       className="flex gap-4 rounded-[var(--radius-card)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
       style={{ background: tint }}
     >
-      <Quote
-        className="h-6 w-6 shrink-0 text-[var(--color-brand-blue)]"
-        aria-hidden
-      />
+      <Quote className="h-6 w-6 shrink-0 text-[var(--color-brand-blue)]" aria-hidden />
       <div className="min-w-0 flex-1">
-        <h2
-          className="font-display text-[var(--color-brand-blue)]"
-          style={T.cardTitle}
-        >
+        <h2 className="font-display text-[var(--color-brand-blue)]" style={T.cardTitle}>
           {title}
         </h2>
-        <blockquote
-          className="mt-3 text-[var(--color-ink)]"
-          style={T.body}
-        >
+        <blockquote className="mt-3 text-[var(--color-ink)]" style={T.body}>
           “{item.quote}”
         </blockquote>
         <p className="mt-3 text-[var(--color-ink-soft)]" style={T.label}>
@@ -681,13 +659,7 @@ function toFeed(news: HomeWhatsNew["news"], events: HomeEventItem[]): FeedCard[]
   return [...e, ...n].slice(0, 3);
 }
 
-function NewsAndEvents({
-  news,
-  events,
-}: {
-  news: HomeWhatsNew["news"];
-  events: HomeEventItem[];
-}) {
+function NewsAndEvents({ news, events }: { news: HomeWhatsNew["news"]; events: HomeEventItem[] }) {
   const cards = toFeed(news, events);
 
   return (
@@ -713,12 +685,13 @@ function NewsAndEvents({
           className="mt-[var(--space-block-y)] rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] text-[var(--color-ink-soft)] shadow-[var(--card-shadow)]"
           style={T.body}
         >
-          Nothing published yet. News and upcoming events will appear here as
-          soon as the school posts them.
+          Nothing published yet. News and upcoming events will appear here as soon as the school
+          posts them.
         </p>
       ) : (
         <ul
-          suppressHydrationWarning data-reveal
+          suppressHydrationWarning
+          data-reveal
           data-reveal-delay="120"
           className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3"
         >
@@ -742,23 +715,14 @@ function NewsAndEvents({
                 <div className="flex flex-1 gap-4 p-[var(--space-card-pad-sm)]">
                   <DateChip iso={c.date} />
                   <div className="min-w-0 flex-1">
-                    <h3
-                      className="font-display text-[var(--color-ink)]"
-                      style={T.cardTitle}
-                    >
+                    <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
                       {c.title}
                     </h3>
-                    <p
-                      className="mt-1 text-[var(--color-ink-soft)]"
-                      style={T.label}
-                    >
+                    <p className="mt-1 text-[var(--color-ink-soft)]" style={T.label}>
                       {SCHOOL_LABELS[c.school] ?? c.school}
                     </p>
                     {c.blurb && (
-                      <p
-                        className="mt-2 line-clamp-2 text-[var(--color-ink-soft)]"
-                        style={T.body}
-                      >
+                      <p className="mt-2 line-clamp-2 text-[var(--color-ink-soft)]" style={T.body}>
                         {c.blurb}
                       </p>
                     )}

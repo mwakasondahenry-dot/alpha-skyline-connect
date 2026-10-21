@@ -24,16 +24,15 @@
  * instead of being swallowed by the player.
  */
 import { useEffect, useRef, useState } from "react";
+import poster from "@/assets/home-video-poster.webp";
+
 import { Pause, Play, Volume2, VolumeX } from "lucide-react";
-import {
-  HOME_VIDEO_ID,
-  embedSrc,
-  shouldPlay,
-  startMode,
-  thumbnailSrc,
-  type StartMode,
-} from "@/lib/home-video";
+import { HOME_VIDEO_ID, embedSrc, shouldPlay, startMode, type StartMode } from "@/lib/home-video";
 import { T } from "@/components/type-roles";
+
+/** home-video-poster.webp at 24×14, for the instant blurred placeholder. */
+const POSTER_PLACEHOLDER =
+  "data:image/webp;base64,UklGRgIBAABXRUJQVlA4IPYAAABwBQCdASoYAA4APtFUo0uoJKMhsAgBABoJbACdFQAo5L9gPhErABslixzDvHt/GAgpsmGAAP5Mfvjl1Jp8/AOM0G+Is2YJDRsG+juEX63sohUlCtLkZLTTFptjirvhZTsaiqLKwy2pdVhB3zk8CMbK2smaRNUbgvzZfI6e9SVQjP850k9kWf9JI2q6qwngJ9THfAR3Z/yDzzXvHxSnZzslysWZen4DADf8pGTzsHl3rxMLefKJi7yCKNeExcJmrgjqGuENu52TbC+mPw9tvv5aeZe+MhO10cLs+Ra6f3uAeGoqrLvfhYhyOvbzq9n2i6WVnx6gAAA=";
 
 /* The slice of the IFrame API this component uses. */
 interface YTPlayer {
@@ -228,8 +227,17 @@ export function HomeVideo() {
       className="relative isolate mb-[var(--space-section-y)] h-[100svh] min-h-[28rem] overflow-hidden bg-[var(--video-bg)]"
       style={{ containerType: "size" }}
     >
+      {/* The video's poster, served from this site rather than YouTube's
+          image host, over a tiny blurred copy inlined in the page. On slow
+          mobile data the section showed as a full screen of dark navy until
+          the poster arrived; the blurred copy is there from the first paint. */}
+      <div
+        aria-hidden
+        className="absolute inset-0 -z-30 scale-110 bg-cover bg-center blur-xl"
+        style={{ backgroundImage: `url(${POSTER_PLACEHOLDER})` }}
+      />
       <img
-        src={thumbnailSrc(HOME_VIDEO_ID)}
+        src={poster}
         alt=""
         width={1280}
         height={720}

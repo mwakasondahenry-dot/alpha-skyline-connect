@@ -1,5 +1,6 @@
 // Server functions that read PUBLISHED public content from Alpha's Supabase.
 import { createServerFn } from "@tanstack/react-start";
+import { cached, TTL_SECONDS } from "@/lib/edge-cache";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseBaseUrl } from "@/lib/server/supabase-url";
 import type {
@@ -47,46 +48,52 @@ export type HomeWhatsNew = { news: HomeNewsItem[]; events: HomeEventItem[] };
 
 export const getHomeUpcomingEvents = createServerFn({ method: "GET" }).handler(
   async (): Promise<HomeEventItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data, error } = await sb
-        .from("events")
-        .select("id,title,description,event_date,location,school_slug")
-        .eq("published", true)
-        .order("event_date", { ascending: false })
-        .limit(5);
-      if (error) throw error;
-      return data ?? [];
-    } catch (err) {
-      console.error("[getHomeUpcomingEvents]", err);
-      return [];
-    }
+    return cached(
+      "home-upcoming-events",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("events")
+          .select("id,title,description,event_date,location,school_slug")
+          .eq("published", true)
+          .order("event_date", { ascending: false })
+          .limit(5);
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   },
 );
 
 export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
   async (): Promise<HomeWhatsNew> => {
-    try {
-      const sb = serverClient();
-      const [newsRes, eventsRes] = await Promise.all([
-        sb
-          .from("news")
-          .select("id,title,body,cover_url,published_at,school_slug")
-          .eq("published", true)
-          .order("published_at", { ascending: false, nullsFirst: false })
-          .limit(8),
-        sb
-          .from("events")
-          .select("id,title,description,event_date,location,school_slug")
-          .eq("published", true)
-          .order("event_date", { ascending: false })
-          .limit(5),
-      ]);
-      return { news: newsRes.data ?? [], events: eventsRes.data ?? [] };
-    } catch (err) {
-      console.error("[getHomeWhatsNew]", err);
-      return { news: [], events: [] };
-    }
+    return cached(
+      "home-whats-new",
+      async () => {
+        const sb = serverClient();
+        const [newsRes, eventsRes] = await Promise.all([
+          sb
+            .from("news")
+            .select("id,title,body,cover_url,published_at,school_slug")
+            .eq("published", true)
+            .order("published_at", { ascending: false, nullsFirst: false })
+            .limit(8),
+          sb
+            .from("events")
+            .select("id,title,description,event_date,location,school_slug")
+            .eq("published", true)
+            .order("event_date", { ascending: false })
+            .limit(5),
+        ]);
+        if (newsRes.error) throw newsRes.error;
+        if (eventsRes.error) throw eventsRes.error;
+        return { news: newsRes.data ?? [], events: eventsRes.data ?? [] };
+      },
+      TTL_SECONDS,
+      () => ({ news: [], events: [] }),
+    );
   },
 );
 
@@ -97,21 +104,23 @@ export type UrgentNewsItem = Pick<
 
 export const getUrgentNews = createServerFn({ method: "GET" }).handler(
   async (): Promise<UrgentNewsItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data, error } = await sb
-        .from("news")
-        .select("id,title,body,cover_url,published_at,school_slug")
-        .eq("published", true)
-        .eq("urgent", true)
-        .order("published_at", { ascending: false, nullsFirst: false })
-        .limit(3);
-      if (error) throw error;
-      return data ?? [];
-    } catch (err) {
-      console.error("[getUrgentNews]", err);
-      return [];
-    }
+    return cached(
+      "urgent-news",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("news")
+          .select("id,title,body,cover_url,published_at,school_slug")
+          .eq("published", true)
+          .eq("urgent", true)
+          .order("published_at", { ascending: false, nullsFirst: false })
+          .limit(3);
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   },
 );
 
@@ -123,19 +132,21 @@ export type PublicEventItem = Pick<
 
 export const getAllEvents = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicEventItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data, error } = await sb
-        .from("events")
-        .select("id,title,description,event_date,location,cover_url,school_slug")
-        .eq("published", true)
-        .order("event_date", { ascending: true });
-      if (error) throw error;
-      return data ?? [];
-    } catch (err) {
-      console.error("[getAllEvents]", err);
-      return [];
-    }
+    return cached(
+      "all-events",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("events")
+          .select("id,title,description,event_date,location,cover_url,school_slug")
+          .eq("published", true)
+          .order("event_date", { ascending: true });
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   },
 );
 
@@ -147,40 +158,44 @@ export type PublicFacilityItem = Pick<
 
 export const getAllFacilities = createServerFn({ method: "GET" }).handler(
   async (): Promise<PublicFacilityItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data, error } = await sb
-        .from("facilities")
-        .select("id,name,description,image_url,category,school_slug,sort_order")
-        .eq("published", true)
-        .order("school_slug", { ascending: true })
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return data ?? [];
-    } catch (err) {
-      console.error("[getAllFacilities]", err);
-      return [];
-    }
+    return cached(
+      "all-facilities",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("facilities")
+          .select("id,name,description,image_url,category,school_slug,sort_order")
+          .eq("published", true)
+          .order("school_slug", { ascending: true })
+          .order("sort_order", { ascending: true });
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   },
 );
 
 export const getFacilitiesBySchool = createServerFn({ method: "GET" })
   .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<PublicFacilityItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data: rows, error } = await sb
-        .from("facilities")
-        .select("id,name,description,image_url,category,school_slug,sort_order")
-        .eq("published", true)
-        .eq("school_slug", data.slug)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return rows ?? [];
-    } catch (err) {
-      console.error("[getFacilitiesBySchool]", err);
-      return [];
-    }
+    return cached(
+      `facilities:${data.slug}`,
+      async () => {
+        const sb = serverClient();
+        const { data: rows, error } = await sb
+          .from("facilities")
+          .select("id,name,description,image_url,category,school_slug,sort_order")
+          .eq("published", true)
+          .eq("school_slug", data.slug)
+          .order("sort_order", { ascending: true });
+        if (error) throw error;
+        return rows ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   });
 
 // ---- Facility photos (multiple per facility) -----------------------------
@@ -192,41 +207,45 @@ export type PublicFacilityPhoto = Pick<
 export const getFacilityPhotosByFacility = createServerFn({ method: "GET" })
   .validator((data: { facilityId: string }) => data)
   .handler(async ({ data }): Promise<PublicFacilityPhoto[]> => {
-    try {
-      const sb = serverClient();
-      const { data: rows, error } = await sb
-        .from("facility_photos")
-        .select("id,facility_id,school_slug,image_url,caption,sort_order")
-        .eq("published", true)
-        .eq("facility_id", data.facilityId)
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return rows ?? [];
-    } catch (err) {
-      console.error("[getFacilityPhotosByFacility]", err);
-      return [];
-    }
+    return cached(
+      `facility-photos:${data.facilityId}`,
+      async () => {
+        const sb = serverClient();
+        const { data: rows, error } = await sb
+          .from("facility_photos")
+          .select("id,facility_id,school_slug,image_url,caption,sort_order")
+          .eq("published", true)
+          .eq("facility_id", data.facilityId)
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return rows ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   });
 
 export const getFacilityPhotosBySchool = createServerFn({ method: "GET" })
   .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<PublicFacilityPhoto[]> => {
-    try {
-      const sb = serverClient();
-      const { data: rows, error } = await sb
-        .from("facility_photos")
-        .select("id,facility_id,school_slug,image_url,caption,sort_order")
-        .eq("published", true)
-        .eq("school_slug", data.slug)
-        .order("sort_order", { ascending: true })
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return rows ?? [];
-    } catch (err) {
-      console.error("[getFacilityPhotosBySchool]", err);
-      return [];
-    }
+    return cached(
+      `facility-photos-school:${data.slug}`,
+      async () => {
+        const sb = serverClient();
+        const { data: rows, error } = await sb
+          .from("facility_photos")
+          .select("id,facility_id,school_slug,image_url,caption,sort_order")
+          .eq("published", true)
+          .eq("school_slug", data.slug)
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return rows ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   });
 
 // ---- Contact form --------------------------------------------------------
@@ -309,57 +328,62 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
       staff: [],
       facilities: [],
     };
-    try {
-      const sb = serverClient();
-      const slugFilter: SchoolSlug[] = [data.slug, "group-wide"];
-      const [schoolRes, newsRes, eventsRes, galleryRes, staffRes, facilitiesRes] =
-        await Promise.all([
-          sb.from("schools").select("*").eq("slug", data.slug).maybeSingle(),
-          sb
-            .from("news")
-            .select("id,title,body,cover_url,published_at,school_slug")
-            .in("school_slug", slugFilter)
-            .eq("published", true)
-            .order("published_at", { ascending: false, nullsFirst: false })
-            .limit(3),
-          sb
-            .from("events")
-            .select("id,title,description,event_date,location,school_slug")
-            .in("school_slug", slugFilter)
-            .eq("published", true)
-            .order("event_date", { ascending: true })
-            .limit(4),
-          sb
-            .from("gallery")
-            .select("id,image_url,caption")
-            .eq("school_slug", data.slug)
-            .order("sort_order", { ascending: true })
-            .limit(8),
-          sb
-            .from("staff")
-            .select("id,name,title,photo_url")
-            .eq("school_slug", data.slug)
-            .order("sort_order", { ascending: true })
-            .limit(12),
-          sb
-            .from("facilities")
-            .select("id,name,description,image_url,category,school_slug,sort_order")
-            .eq("school_slug", data.slug)
-            .eq("published", true)
-            .order("sort_order", { ascending: true }),
-        ]);
-      return {
-        school: schoolRes.data ?? null,
-        news: newsRes.data ?? [],
-        events: eventsRes.data ?? [],
-        gallery: galleryRes.data ?? [],
-        staff: staffRes.data ?? [],
-        facilities: facilitiesRes.data ?? [],
-      };
-    } catch (err) {
-      console.error("[getSchoolBundle]", err);
-      return empty;
-    }
+    return cached(
+      `school-bundle:${data.slug}`,
+      async () => {
+        const sb = serverClient();
+        const slugFilter: SchoolSlug[] = [data.slug, "group-wide"];
+        const [schoolRes, newsRes, eventsRes, galleryRes, staffRes, facilitiesRes] =
+          await Promise.all([
+            sb.from("schools").select("*").eq("slug", data.slug).maybeSingle(),
+            sb
+              .from("news")
+              .select("id,title,body,cover_url,published_at,school_slug")
+              .in("school_slug", slugFilter)
+              .eq("published", true)
+              .order("published_at", { ascending: false, nullsFirst: false })
+              .limit(3),
+            sb
+              .from("events")
+              .select("id,title,description,event_date,location,school_slug")
+              .in("school_slug", slugFilter)
+              .eq("published", true)
+              .order("event_date", { ascending: true })
+              .limit(4),
+            sb
+              .from("gallery")
+              .select("id,image_url,caption")
+              .eq("school_slug", data.slug)
+              .order("sort_order", { ascending: true })
+              .limit(8),
+            sb
+              .from("staff")
+              .select("id,name,title,photo_url")
+              .eq("school_slug", data.slug)
+              .order("sort_order", { ascending: true })
+              .limit(12),
+            sb
+              .from("facilities")
+              .select("id,name,description,image_url,category,school_slug,sort_order")
+              .eq("school_slug", data.slug)
+              .eq("published", true)
+              .order("sort_order", { ascending: true }),
+          ]);
+        for (const r of [schoolRes, newsRes, eventsRes, galleryRes, staffRes, facilitiesRes]) {
+          if (r.error) throw r.error;
+        }
+        return {
+          school: schoolRes.data ?? null,
+          news: newsRes.data ?? [],
+          events: eventsRes.data ?? [],
+          gallery: galleryRes.data ?? [],
+          staff: staffRes.data ?? [],
+          facilities: facilitiesRes.data ?? [],
+        };
+      },
+      TTL_SECONDS,
+      () => empty,
+    );
   });
 
 // ---- School photos (named page positions) --------------------------------
@@ -374,28 +398,28 @@ export const getSchoolBundle = createServerFn({ method: "GET" })
 export const getSchoolPhotos = createServerFn({ method: "GET" })
   .validator((data: { slug: SchoolSlug }) => data)
   .handler(async ({ data }): Promise<SchoolPhotoMap> => {
-    try {
-      const sb = serverClient();
-      const { data: rows, error } = await sb
-        .from("photo_slots")
-        .select("slot_key,image_url,alt_text,credit")
-        .eq("school_slug", data.slug);
-      if (error) throw error;
-      const photos: SchoolPhotoMap = {};
-      for (const row of rows ?? []) {
-        photos[row.slot_key] = {
-          image_url: row.image_url,
-          alt_text: row.alt_text,
-          credit: row.credit,
-        };
-      }
-      return photos;
-    } catch (err) {
-      // An empty map is the fallback path: every page renders the
-      // photographs it shipped with.
-      console.error("[getSchoolPhotos]", err);
-      return {};
-    }
+    return cached(
+      `school-photos:${data.slug}`,
+      async () => {
+        const sb = serverClient();
+        const { data: rows, error } = await sb
+          .from("photo_slots")
+          .select("slot_key,image_url,alt_text,credit")
+          .eq("school_slug", data.slug);
+        if (error) throw error;
+        const photos: SchoolPhotoMap = {};
+        for (const row of rows ?? []) {
+          photos[row.slot_key] = {
+            image_url: row.image_url,
+            alt_text: row.alt_text,
+            credit: row.credit,
+          };
+        }
+        return photos;
+      },
+      TTL_SECONDS,
+      () => ({}),
+    );
   });
 
 // ---- Hero slides ---------------------------------------------------------
@@ -407,20 +431,22 @@ export type HeroSlideItem = Pick<
 export const getHeroSlides = createServerFn({ method: "GET" })
   .validator((data: { page: string }) => data)
   .handler(async ({ data }): Promise<HeroSlideItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data: rows, error } = await sb
-        .from("hero_slides")
-        .select("id,image_url,alt_text,caption,sort_order")
-        .eq("published", true)
-        .eq("page_key", data.page)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return rows ?? [];
-    } catch (err) {
-      console.error("[getHeroSlides]", err);
-      return [];
-    }
+    return cached(
+      `hero-slides:${data.page}`,
+      async () => {
+        const sb = serverClient();
+        const { data: rows, error } = await sb
+          .from("hero_slides")
+          .select("id,image_url,alt_text,caption,sort_order")
+          .eq("published", true)
+          .eq("page_key", data.page)
+          .order("sort_order", { ascending: true });
+        if (error) throw error;
+        return rows ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   });
 
 // ---- Testimonials --------------------------------------------------------
@@ -451,7 +477,8 @@ export function parentQuotes(items: TestimonialItem[], slug?: SchoolSlug): Testi
   return items
     .filter((t) => !isAlumniStory(t))
     .filter(
-      (t) => !slug || t.school_slug === slug || t.school_slug === null || t.school_slug === "group-wide",
+      (t) =>
+        !slug || t.school_slug === slug || t.school_slug === null || t.school_slug === "group-wide",
     )
     .sort((a, b) => b.created_at.localeCompare(a.created_at));
 }
@@ -463,19 +490,23 @@ export function isAlumniStory(t: Pick<TestimonialItem, "grad_year">) {
 
 export const getTestimonials = createServerFn({ method: "GET" }).handler(
   async (): Promise<TestimonialItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data, error } = await sb
-        .from("testimonials")
-        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at")
-        .eq("published", true)
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return data ?? [];
-    } catch (err) {
-      console.error("[getTestimonials]", err);
-      return [];
-    }
+    return cached(
+      "testimonials",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("testimonials")
+          .select(
+            "id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at",
+          )
+          .eq("published", true)
+          .order("sort_order", { ascending: true });
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   },
 );
 
@@ -490,20 +521,24 @@ export const getTestimonials = createServerFn({ method: "GET" }).handler(
  */
 export const getAlumniStories = createServerFn({ method: "GET" }).handler(
   async (): Promise<TestimonialItem[]> => {
-    try {
-      const sb = serverClient();
-      const { data, error } = await sb
-        .from("testimonials")
-        .select("id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at")
-        .eq("published", true)
-        .not("grad_year", "is", null)
-        .order("grad_year", { ascending: false })
-        .order("sort_order", { ascending: true });
-      if (error) throw error;
-      return data ?? [];
-    } catch (err) {
-      console.error("[getAlumniStories]", err);
-      return [];
-    }
+    return cached(
+      "alumni-stories",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("testimonials")
+          .select(
+            "id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at",
+          )
+          .eq("published", true)
+          .not("grad_year", "is", null)
+          .order("grad_year", { ascending: false })
+          .order("sort_order", { ascending: true });
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
   },
 );

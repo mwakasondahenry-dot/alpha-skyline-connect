@@ -27,7 +27,10 @@ export const Route = createFileRoute("/about")({
 const VALUES = [
   { name: "Integrity", blurb: "Doing the right thing — especially when no one is watching." },
   { name: "Excellence", blurb: "A standard we hold to ourselves before we ask it of pupils." },
-  { name: "Innovation", blurb: "From aviation to coding, leading where Tanzanian schools have not gone." },
+  {
+    name: "Innovation",
+    blurb: "From aviation to coding, leading where Tanzanian schools have not gone.",
+  },
   { name: "Discipline", blurb: "The quiet habit behind every result worth having." },
   { name: "Service", blurb: "Education that gives back to family, community and country." },
 ] as const;
@@ -59,7 +62,7 @@ const RECORD = [
   {
     icon: Plane,
     title: "Aviation Program in Alpha Schools",
-    body: "[Aviation positioning statement — wording to be confirmed] Ground school, modules and flying hours through KSOF.",
+    body: "Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce aviation and flying as part of our extracurricular activities. Ground school, modules and flying hours through KSOF.",
     href: "/aviation" as const,
     cta: "Inside the aviation programme",
   },
@@ -97,16 +100,25 @@ function AboutPage() {
             <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
               About Alpha Schools
             </p>
-            <h1 className="mt-4 font-display leading-[1.04] tracking-tight lg:text-7xl" style={T.section}>
-              Your education<br />is our <span className="italic text-[var(--color-gold)]">priority.</span>
+            <h1
+              className="mt-4 font-display leading-[1.04] tracking-tight lg:text-7xl"
+              style={T.section}
+            >
+              Your education
+              <br />
+              is our <span className="italic text-[var(--color-gold)]">priority.</span>
             </h1>
             <p className="mt-6 max-w-xl text-white/85" style={T.body}>
-              From a single school in 2007 to three schools across Dar es Salaam — founded on one belief: your education is our priority.
+              From a single school in 2007 to three schools across Dar es Salaam — founded on one
+              belief: your education is our priority.
             </p>
           </Reveal>
           <Reveal direction="right" className="flex justify-center">
             <div className="relative">
-              <div aria-hidden className="absolute inset-0 -m-8 rounded-full bg-[var(--color-gold)]/15 blur-2xl" />
+              <div
+                aria-hidden
+                className="absolute inset-0 -m-8 rounded-full bg-[var(--color-gold)]/15 blur-2xl"
+              />
               <img
                 width={800}
                 height={800}
@@ -128,20 +140,26 @@ function AboutPage() {
             <p className="text-[var(--color-brand-blue)]" style={T.label}>
               Who we are
             </p>
-            <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+            <h2
+              className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]"
+              style={T.section}
+            >
               One Alpha. Three schools.
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
-              Alpha Schools comprises <strong>Alpha High</strong> (Mikocheni), <strong>Alpha Girls</strong> (Kunduchi),
-              and <strong>Nursery & Primary</strong> (Kunduchi) — operating under ALFA EDUCATION CENTRE,
-              P.O. Box 35136, Dar es Salaam.
+              Alpha Schools comprises <strong>Alpha High</strong> (Mikocheni),{" "}
+              <strong>Alpha Girls</strong> (Kunduchi), and <strong>Nursery & Primary</strong>{" "}
+              (Kunduchi) — operating under ALFA EDUCATION CENTRE, P.O. Box 35136, Dar es Salaam.
             </p>
             <p className="mt-4 text-[var(--color-ink)]/80" style={T.body}>
-              We were founded to enable students to achieve their best — intellectually and physically —
-              and to grow into responsible citizens of their society.
+              We were founded to enable students to achieve their best — intellectually and
+              physically — and to grow into responsible citizens of their society.
             </p>
           </Reveal>
-          <Reveal direction="right" className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10">
+          <Reveal
+            direction="right"
+            className="rounded-2xl bg-[var(--color-off-white)] p-8 ring-1 ring-[var(--color-deep-blue)]/10"
+          >
             <p className="text-[11px] text-[var(--color-brand-blue)]" style={T.label}>
               At a glance
             </p>
@@ -153,7 +171,10 @@ function AboutPage() {
                 ["Operator", "ALFA EDUCATION CENTRE"],
                 ["Postal", "P.O. Box 35136, Dar es Salaam"],
               ].map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-6 border-b border-[var(--color-deep-blue)]/10 pb-3 last:border-0 last:pb-0">
+                <div
+                  key={k}
+                  className="flex justify-between gap-6 border-b border-[var(--color-deep-blue)]/10 pb-3 last:border-0 last:pb-0"
+                >
                   <dt className="font-semibold text-[var(--color-deep-blue)]">{k}</dt>
                   <dd className="text-right text-[var(--color-ink)]/80">{v}</dd>
                 </div>
@@ -168,7 +189,10 @@ function AboutPage() {
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-[var(--space-section-y)] lg:grid-cols-[1fr_1.4fr] lg:px-10">
           <Reveal direction="left" className="flex justify-center">
             <div className="relative w-full max-w-sm">
-              <div aria-hidden className="absolute -inset-3 rounded-2xl bg-[var(--color-gold)]/20 blur-xl" />
+              <div
+                aria-hidden
+                className="absolute -inset-3 rounded-2xl bg-[var(--color-gold)]/20 blur-xl"
+              />
               <div className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/90 ring-1 ring-[var(--color-deep-blue)]/20">
                 <img
                   width={1100}
@@ -186,19 +210,29 @@ function AboutPage() {
             <p className="text-[var(--color-brand-blue)]" style={T.label}>
               Our founder
             </p>
-            <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-              In honour of the late<br />Professor Aloysius Mayo.
+            <h2
+              className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]"
+              style={T.section}
+            >
+              In honour of the late
+              <br />
+              Professor Aloysius Mayo.
             </h2>
             <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
-              Alpha Schools was founded in 2007 by the late Professor Aloysius Mayo —
-              a man whose conviction that education should serve both intellect and character
-              still anchors everything we do.
+              Alpha Schools was founded in 2007 by the late Professor Aloysius Mayo — a man whose
+              conviction that education should serve both intellect and character still anchors
+              everything we do.
             </p>
-            <div className="mt-6 rounded-xl border border-dashed border-[var(--color-deep-blue)]/30 bg-white/60 p-5 text-[var(--color-ink)]/70" style={T.body}>
+            <div
+              className="mt-6 rounded-xl border border-dashed border-[var(--color-deep-blue)]/30 bg-white/60 p-5 text-[var(--color-ink)]/70"
+              style={T.body}
+            >
               <span className="font-semibold uppercase tracking-[0.18em] text-[10px] text-[var(--color-brand-blue)]">
                 Awaiting copy
               </span>
-              <p className="mt-2 leading-relaxed">[Founder biography — to be provided by the family / school office.]</p>
+              <p className="mt-2 leading-relaxed">
+                [Founder biography — to be provided by the family / school office.]
+              </p>
             </div>
           </Reveal>
         </div>
@@ -237,7 +271,9 @@ function AboutPage() {
               className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]"
               style={T.section}
             >
-              A Word from the Director<br />of Alpha High School.
+              A Word from the Director
+              <br />
+              of Alpha High School.
             </h2>
 
             <div className="relative mt-8 rounded-2xl bg-[var(--color-deep-blue)] p-8 text-white shadow-xl sm:p-10">
@@ -249,8 +285,8 @@ function AboutPage() {
                   unattributed, and with a named Director on the page it would
                   have read as hers. */}
               <p className="font-display leading-snug" style={T.section}>
-                “Together, we can empower the next generation to thrive and make
-                a meaningful impact in their communities and beyond.”
+                “Together, we can empower the next generation to thrive and make a meaningful impact
+                in their communities and beyond.”
               </p>
               <p
                 className="mt-6 font-semibold uppercase tracking-[0.18em] text-[var(--color-gold)]"
@@ -265,33 +301,26 @@ function AboutPage() {
 
             <div className="mt-8 space-y-5 text-[var(--color-ink)]/85" style={T.body}>
               <p>
-                As the Managing Director of Alpha High School, I am honoured to
-                pay tribute to our esteemed founder, Professor Aloysius Mayo.
-                His visionary leadership laid the foundation for Alpha Schools,
-                which include Alpha Nursery and Primary School, Alpha Girls High
-                School, and Alpha High School. Professor Mayo's commitment to
-                preparing young Tanzanians for success in the competitive realms
-                of technology, entrepreneurship, and the evolving challenges of
-                our global landscape continues to inspire us all.
+                As the Managing Director of Alpha High School, I am honoured to pay tribute to our
+                esteemed founder, Professor Aloysius Mayo. His visionary leadership laid the
+                foundation for Alpha Schools, which include Alpha Nursery and Primary School, Alpha
+                Girls High School, and Alpha High School. Professor Mayo's commitment to preparing
+                young Tanzanians for success in the competitive realms of technology,
+                entrepreneurship, and the evolving challenges of our global landscape continues to
+                inspire us all.
               </p>
               <p>
-                At Alpha, we take pride in the remarkable achievements of our
-                alumni, who represent a diverse range of professions both locally
-                and internationally. Our graduates have excelled as accountants,
-                medical doctors, lawyers, engineers, pilots, and in many other
-                fields, demonstrating the effectiveness of our comprehensive
-                educational approach. I warmly invite all parents and guardians
-                to consider registering their sons and daughters at Alpha
-                Schools. Here, we offer a well-rounded curriculum that fosters
-                not only academic excellence but also personal growth and
-                character development. Together, we can empower the next
-                generation to thrive and make a meaningful impact in their
-                communities and beyond.
+                At Alpha, we take pride in the remarkable achievements of our alumni, who represent
+                a diverse range of professions both locally and internationally. Our graduates have
+                excelled as accountants, medical doctors, lawyers, engineers, pilots, and in many
+                other fields, demonstrating the effectiveness of our comprehensive educational
+                approach. I warmly invite all parents and guardians to consider registering their
+                sons and daughters at Alpha Schools. Here, we offer a well-rounded curriculum that
+                fosters not only academic excellence but also personal growth and character
+                development. Together, we can empower the next generation to thrive and make a
+                meaningful impact in their communities and beyond.
               </p>
-              <p>
-                Thank you for your continued support in shaping the future of our
-                youth.
-              </p>
+              <p>Thank you for your continued support in shaping the future of our youth.</p>
               <p className="text-[var(--color-ink)]/70">
                 Warm regards,
                 <br />
@@ -330,8 +359,13 @@ function AboutPage() {
             <p className="text-[var(--color-brand-blue)]" style={T.label}>
               Our journey
             </p>
-            <h2 className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-              From one classroom<br />to three schools.
+            <h2
+              className="mt-3 font-display tracking-tight text-[var(--color-deep-blue)]"
+              style={T.section}
+            >
+              From one classroom
+              <br />
+              to three schools.
             </h2>
           </Reveal>
           <ol className="mt-14 grid gap-10 md:grid-cols-4 md:gap-6">
@@ -350,8 +384,12 @@ function AboutPage() {
                   <p className="font-display text-[var(--color-deep-blue)]" style={T.section}>
                     {t.year}
                   </p>
-                  <p className="mt-2 font-display font-bold text-[var(--color-ink)]" style={T.body}>{t.title}</p>
-                  <p className="mt-2 text-[var(--color-ink)]/75" style={T.body}>{t.body}</p>
+                  <p className="mt-2 font-display font-bold text-[var(--color-ink)]" style={T.body}>
+                    {t.title}
+                  </p>
+                  <p className="mt-2 text-[var(--color-ink)]/75" style={T.body}>
+                    {t.body}
+                  </p>
                 </li>
               </Reveal>
             ))}
@@ -363,15 +401,25 @@ function AboutPage() {
       <section className="bg-white">
         <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <div className="grid gap-8 lg:grid-cols-2">
-            <Reveal direction="left" className="rounded-2xl bg-[var(--color-deep-blue)] p-10 text-white">
-              <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>Our mission</p>
+            <Reveal
+              direction="left"
+              className="rounded-2xl bg-[var(--color-deep-blue)] p-10 text-white"
+            >
+              <p className="text-[11px] text-[var(--color-gold)]" style={T.label}>
+                Our mission
+              </p>
               <p className="mt-4 font-display leading-snug" style={T.section}>
-                To enable pupils to prosper academically by solving their intellectual and environmental challenges,
-                to become good citizens, responsible to their society.
+                To enable pupils to prosper academically by solving their intellectual and
+                environmental challenges, to become good citizens, responsible to their society.
               </p>
             </Reveal>
-            <Reveal direction="right" className="rounded-2xl bg-[var(--color-gold)] p-10 text-[var(--color-deep-blue)]">
-              <p className="text-[11px]" style={T.label}>Our vision</p>
+            <Reveal
+              direction="right"
+              className="rounded-2xl bg-[var(--color-gold)] p-10 text-[var(--color-deep-blue)]"
+            >
+              <p className="text-[11px]" style={T.label}>
+                Our vision
+              </p>
               <p className="mt-4 font-display leading-tight" style={T.section}>
                 To strive for excellence.
               </p>
@@ -380,7 +428,9 @@ function AboutPage() {
 
           <div className="mt-14">
             <Reveal direction="up">
-              <p className="text-[var(--color-brand-blue)]" style={T.label}>Our values</p>
+              <p className="text-[var(--color-brand-blue)]" style={T.label}>
+                Our values
+              </p>
               <h3 className="mt-3 font-display text-[var(--color-deep-blue)]" style={T.section}>
                 Five things we won't compromise.
               </h3>
@@ -390,8 +440,15 @@ function AboutPage() {
                 <Reveal key={v.name} direction="up" delay={i * 80}>
                   <div className="group h-full rounded-xl border border-[var(--color-deep-blue)]/10 bg-[var(--color-off-white)] p-6 transition-all hover:-translate-y-1 hover:border-[var(--color-gold)] hover:shadow-lg">
                     <div className="h-1 w-10 rounded-full bg-[var(--color-gold)] transition-all group-hover:w-16" />
-                    <p className="mt-4 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>{v.name}</p>
-                    <p className="mt-2 text-[var(--color-ink)]/75" style={T.body}>{v.blurb}</p>
+                    <p
+                      className="mt-4 font-display text-[var(--color-deep-blue)]"
+                      style={T.cardTitle}
+                    >
+                      {v.name}
+                    </p>
+                    <p className="mt-2 text-[var(--color-ink)]/75" style={T.body}>
+                      {v.blurb}
+                    </p>
                   </div>
                 </Reveal>
               ))}
@@ -407,7 +464,10 @@ function AboutPage() {
             <p className="text-[var(--color-brand-blue)]" style={T.label}>
               A record of excellence
             </p>
-            <h2 className="mt-3 max-w-3xl font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+            <h2
+              className="mt-3 max-w-3xl font-display tracking-tight text-[var(--color-deep-blue)]"
+              style={T.section}
+            >
               Two decades. Real results.
             </h2>
             <p className="mt-4 max-w-2xl italic text-[var(--color-ink)]/60" style={T.body}>
@@ -421,14 +481,20 @@ function AboutPage() {
                   <div className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-gold)]/15 text-[var(--color-deep-blue)]">
                     <r.icon className="h-6 w-6" />
                   </div>
-                  <h3 className="mt-5 font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
+                  <h3
+                    className="mt-5 font-display text-[var(--color-deep-blue)]"
+                    style={T.cardTitle}
+                  >
                     {r.title}
                   </h3>
-                  <p className="mt-3 flex-1 text-[var(--color-ink)]/80" style={T.body}>{r.body}</p>
+                  <p className="mt-3 flex-1 text-[var(--color-ink)]/80" style={T.body}>
+                    {r.body}
+                  </p>
                   {r.href ? (
                     <Link
                       to={r.href}
-                      className="mt-5 inline-flex items-center gap-1.5 font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5" style={T.body}
+                      className="mt-5 inline-flex items-center gap-1.5 font-semibold text-[var(--color-brand-blue)] hover:translate-x-0.5"
+                      style={T.body}
                     >
                       {r.cta} <ArrowRight className="h-4 w-4" />
                     </Link>
@@ -454,7 +520,8 @@ function AboutPage() {
           <Reveal direction="right">
             <Link
               to="/contact"
-              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]" style={T.body}
+              className="inline-flex items-center gap-2 rounded-md bg-[var(--color-deep-blue)] px-6 py-3 font-semibold text-white shadow-sm transition-transform hover:scale-[1.02]"
+              style={T.body}
             >
               Book a Visit <ArrowRight className="h-4 w-4" />
             </Link>

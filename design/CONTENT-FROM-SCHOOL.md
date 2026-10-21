@@ -18,7 +18,16 @@ remaining item is held behind a visible placeholder, which is what AGENTS.md
 requires of content the school still owes. What must never happen is building
 approved-sounding copy around it.
 
-### The aviation positioning claim — STILL BLOCKED
+### The aviation positioning claim — RESOLVED 2026-10-21
+
+The site owner approved the school's own sentence from the October 2026
+AVIATION IN ALPHA SCHOOLS document: "Alpha Schools proudly stand as the
+pioneer institutions in Tanzania to introduce aviation and flying as part of
+our extracurricular activities." It is now live on /aviation, the home page
+aviation card and /about, replacing the placeholder. The history below is
+kept for the record.
+
+#### Previously: STILL BLOCKED
 
 The school's aviation document states that Alpha Schools are the **pioneer
 institutions in Tanzania** to introduce aviation and flying as part of their
