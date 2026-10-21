@@ -71,7 +71,24 @@
 - [ ] **Step 2:** Add `ResultsBand` (both schools' headline NECTA figures from the two data modules, linking to `/schools/alpha-high#results` and `/schools/alpha-girls#results`) and turn `AviationBanner` into a full-bleed chapter.
 - [ ] **Step 3:** `npx tsc --noEmit`, `npx vitest run` pass. Commit.
 
-### Task 5: Inspect, review, document
+### Task 5: About Us page redesign (added 2026-10-22 mid-run)
+
+**Files:**
+- Modify: `src/routes/about.tsx`
+
+- [ ] **Step 1:** Rebuild /about in the same bold register: hero, the story since 2007 (timeline), mission and vision in the school's words, values, the Managing Director's message with its photo placeholder, the founder, the three schools, contact. Keep every fact and placeholder.
+- [ ] **Step 2:** `npx tsc --noEmit`, `npx vitest run` pass. Commit.
+
+### Task 6: Search optimisation (added 2026-10-22 mid-run)
+
+**Files:**
+- Modify: `src/lib/seo.ts`, route `head()` blocks, `src/lib/structured-data.ts`, `public/robots.txt`, sitemap generation as needed.
+
+- [ ] **Step 1:** Audit titles, descriptions, headings, structured data, canonical/OG tags, sitemap and robots for the phrases a Dar es Salaam parent types: "schools in Dar es Salaam", "secondary schools in Dar es Salaam", "girls secondary school Dar es Salaam", "private school Mikocheni", "Kunduchi school", "nursery school Dar es Salaam", "A-Level combinations Tanzania", "aviation programme school Tanzania". No invented claims; phrases come from real facts.
+- [ ] **Step 2:** Rewrite titles and descriptions per route to lead with the phrase; add FAQ/School structured data where the facts exist; one H1 per page containing the school name and city.
+- [ ] **Step 3:** Tests pass. Commit.
+
+### Task 7: Inspect, review, document
 
 - [ ] **Step 1:** Build, serve, capture desktop (1440) and mobile (390) of all three pages into `.impeccable/review/`; check scrollWidth; fix in one batch; recapture once.
 - [ ] **Step 2:** `impeccable detect --json` on the three routes; fix mechanical findings.
