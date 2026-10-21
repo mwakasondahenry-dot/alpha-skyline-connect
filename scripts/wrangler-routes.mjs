@@ -23,14 +23,23 @@
  * check. "none" serves assets at the paths they are stored under; anything
  * with no matching file still falls through to the Worker and renders as
  * usual.
+ *
+ * compatibility_date: nitro writes the machine's local date at build time.
+ * Cloudflare rejects a date it considers in the future, which happens for any
+ * build between midnight in Dar es Salaam and midnight UTC. A pinned date is
+ * also what Cloudflare recommends, so the runtime behaviour does not shift
+ * underneath the site from one deploy to the next. Move it forward
+ * deliberately, after reading the compatibility notes for the new date.
  */
 import { readFileSync, writeFileSync } from "node:fs";
 
 const CONFIG = ".output/server/wrangler.json";
 const DOMAINS = ["alphaschools.co.tz", "www.alphaschools.co.tz"];
 const ACCOUNT = "7cae3099961a38549e44743437d474c0"; // Alpha Schools
+const COMPATIBILITY_DATE = "2026-10-21"; // last date deployed and verified live
 
 const config = JSON.parse(readFileSync(CONFIG, "utf8"));
+config.compatibility_date = COMPATIBILITY_DATE;
 config.routes = DOMAINS.map((pattern) => ({ pattern, custom_domain: true }));
 config.assets = { ...config.assets, html_handling: "none" };
 config.account_id = ACCOUNT;
@@ -39,3 +48,4 @@ writeFileSync(CONFIG, `${JSON.stringify(config, null, 2)}\n`);
 console.log(`Custom domains in ${CONFIG}: ${DOMAINS.join(", ")}`);
 console.log(`Asset html_handling: ${config.assets.html_handling}`);
 console.log(`Account: ${ACCOUNT}`);
+console.log(`Compatibility date: ${COMPATIBILITY_DATE}`);
