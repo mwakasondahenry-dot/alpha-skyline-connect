@@ -22,7 +22,7 @@ import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { HomeVideo } from "@/components/home-video";
 import { VIDEO_HOSTS } from "@/lib/home-video";
-import { CinematicHero, Marked, Backdrop } from "@/components/alpha-ui";
+import { CinematicHero, Marked, Backdrop, GhostButton } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
@@ -33,11 +33,15 @@ import {
   type TestimonialItem,
 } from "@/lib/alpha-content.functions";
 import heroCollage from "@/assets/hero-collage-v2.webp";
-import aviationUniformAsset from "@/assets/aviation-uniform.webp";
 import campusNurseryImage from "@/assets/campus-nursery.webp";
 import campusHighImage from "@/assets/campus-high.webp";
 import campusGirlsImage from "@/assets/campus-girls.webp";
+import avCockpitGirl from "@/assets/av-hero-cockpit-girl.webp";
+import avFlightline from "@/assets/av-flightline-group.webp";
 import { T } from "@/components/type-roles";
+import { ResultsChart } from "@/components/school/results-chart";
+import { CSEE_2025 as HIGH_CSEE_2025, ACSEE_2026 as HIGH_ACSEE_2026 } from "@/lib/high-results";
+import { CSEE_2025 as GIRLS_CSEE_2025, ACSEE_2026 as GIRLS_ACSEE_2026 } from "@/lib/girls-results";
 
 const FOUNDED_YEAR = 2007;
 const YEARS_OPERATIONAL = new Date().getFullYear() - FOUNDED_YEAR;
@@ -236,8 +240,9 @@ function Home() {
       <SiteHeader overlay />
       <Hero />
       <FindTheRightSchool />
+      <ResultsBand />
       <HomeVideo />
-      <AviationBanner />
+      <AviationChapter />
       <Testimonials items={testimonials} />
       <NewsAndEvents news={data.news} events={upcomingEvents} />
       <SiteFooter />
@@ -285,14 +290,15 @@ function Hero() {
           />
         }
         actions={
-          <a
-            href="#find-the-right-school"
-            className={`${BTN_BASE} w-full sm:w-auto`}
-            style={BTN_PRIMARY}
-          >
-            Find the Right School
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </a>
+          <>
+            <Link to="/admission" className={`${BTN_BASE} w-full sm:w-auto`} style={BTN_PRIMARY}>
+              Enroll Now
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+            <GhostButton href="#find-the-right-school" onNavy>
+              Find the Right School
+            </GhostButton>
+          </>
         }
         rail={<StatRail variant="rail" />}
         cueHref="#find-the-right-school"
@@ -450,52 +456,160 @@ function FindTheRightSchool() {
 }
 
 /* ------------------------------------------------------------------ *
- * 3. AVIATION BANNER
+ * 3. RESULTS BAND
+ * Both secondary schools' NECTA results, one square per candidate, from
+ * the same data modules the school pages draw. Nothing is rounded; each
+ * chart links to the full results chapter on its school page.
  * ------------------------------------------------------------------ */
-function AviationBanner() {
+function ResultsBand() {
+  const schools = [
+    {
+      name: "Alpha High",
+      to: "/schools/alpha-high",
+      csee: HIGH_CSEE_2025,
+      acsee: HIGH_ACSEE_2026,
+      columns: 23,
+      who: "students",
+    },
+    {
+      name: "Alpha Girls",
+      to: "/schools/alpha-girls",
+      csee: GIRLS_CSEE_2025,
+      acsee: GIRLS_ACSEE_2026,
+      columns: 15,
+      who: "girls",
+    },
+  ] as const;
   return (
-    <section className={`${SHELL} pb-[var(--space-section-y)]`}>
-      <Reveal direction="up">
-        <div className="relative isolate overflow-hidden rounded-[var(--radius-card)] shadow-[var(--shadow-banner)]">
-          <img
-            width={1080}
-            height={810}
-            src={aviationUniformAsset}
-            alt="Alpha Schools aviation cadet in uniform at the airport"
-            loading="lazy"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div
-            aria-hidden
-            className="absolute inset-0"
-            style={{ backgroundImage: "var(--hero-scrim)" }}
-          />
-          <div className="relative max-w-lg p-[var(--space-card-pad)]">
-            <p className="text-[var(--color-gold)]" style={T.label}>
-              The Alpha difference
-            </p>
-            <h2 className="mt-2 font-display text-[var(--color-surface)]" style={T.section}>
-              Soar Higher with Alpha Aviation
-            </h2>
-            <p className="mt-3 text-[var(--color-surface)]/90" style={T.body}>
-              {/* The school's approved wording, from AVIATION IN ALPHA SCHOOLS
-                  (approved 2026-10-21; also on /aviation). */}
-              Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce
-              aviation and flying as part of our extracurricular activities. Ground school,
-              simulator hours and first principles of flight.
-            </p>
-            <Link
-              to="/aviation"
-              className={`${BTN_BASE} mt-5 w-full sm:w-auto`}
-              style={BTN_PRIMARY}
-            >
-              Discover Aviation Programme
+    <section
+      id="results"
+      aria-labelledby="home-results"
+      className="relative overflow-hidden bg-[var(--color-deep-blue)] py-[var(--space-section-y)] text-[var(--color-surface)]"
+    >
+      <div className={SHELL}>
+        <Reveal direction="up" className="max-w-3xl">
+          <h2 id="home-results" className="font-display tracking-tight text-balance" style={T.hero}>
+            The results, as{" "}
+            <Marked kind="underline" color="var(--color-gold)">
+              NECTA
+            </Marked>{" "}
+            published them.
+          </h2>
+          <p className="mt-5 max-w-2xl text-[var(--color-surface)]/85" style={T.body}>
+            Form Four {HIGH_CSEE_2025.year} at both secondary schools: one square for every
+            candidate, coloured by the division they reached.
+          </p>
+        </Reveal>
+        <div className="mt-12 grid gap-12 lg:grid-cols-2 lg:gap-16">
+          {schools.map((s) => (
+            <Reveal key={s.name} direction="up">
+              <h3 className="font-display" style={{ ...T.section, fontWeight: 900 }}>
+                {s.name}:{" "}
+                <span className="text-[var(--color-gold)]">
+                  {s.csee.divisions.I} of {s.csee.candidates} {s.who} in Division I.
+                </span>
+              </h3>
+              <div className="mt-6">
+                <ResultsChart sitting={s.csee} columns={s.columns} />
+              </div>
+              <p className="mt-6 text-[var(--color-surface)]/85" style={T.body}>
+                Form Six {s.acsee.year}: {s.acsee.divisions.I + s.acsee.divisions.II} of{" "}
+                {s.acsee.candidates} in Division I or II.
+              </p>
+              <Link
+                to={s.to}
+                hash="results"
+                className="mt-3 inline-flex items-center gap-1.5 font-display text-[var(--color-gold)] underline-offset-4 hover:underline"
+                style={{ ...T.body, fontWeight: 800 }}
+              >
+                Every year, square by square
+                <ArrowRight className="h-4 w-4" aria-hidden />
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+        <p className="mt-10 text-[var(--color-surface)]/70" style={T.body}>
+          Source: NECTA&rsquo;s published results for centres S2549 and S5889. Lower GPA is better
+          on NECTA&rsquo;s scale.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * 4. AVIATION CHAPTER
+ * The one thing no other school in Dar es Salaam can copy from its
+ * prospectus, given a whole band rather than a card. The sentence is the
+ * school's approved wording (AVIATION IN ALPHA SCHOOLS, 2026-10-21) and
+ * the module names are the school's own list, live on /aviation.
+ * ------------------------------------------------------------------ */
+const AVIATION_TASTER = [
+  "Aircraft General Knowledge",
+  "Meteorology",
+  "Navigation",
+  "Principles of Flight",
+  "Airframe Design",
+  "Aircraft Hydraulic Systems",
+] as const;
+
+function AviationChapter() {
+  return (
+    <section className="relative overflow-hidden bg-[var(--color-deep-blue-dark)] text-[var(--color-surface)]">
+      <div
+        className={`${SHELL} grid items-center gap-10 py-[var(--space-section-y)] lg:grid-cols-[1fr_1.1fr] lg:gap-16`}
+      >
+        <Reveal direction="up">
+          <h2 className="font-display tracking-tight text-balance" style={T.hero}>
+            Pilots and engineers,{" "}
+            <span className="text-[var(--color-gold)]">from Form One.</span>
+          </h2>
+          <p className="mt-5 max-w-xl text-[var(--color-surface)]/90" style={T.body}>
+            Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce
+            aviation and flying as part of our extracurricular activities. Ground school, aircraft
+            engineering and practical work in hangars under qualified instructors, progressing to
+            solo flights and a Private Pilot Licence.
+          </p>
+          <ul className="mt-6 flex flex-wrap gap-2">
+            {AVIATION_TASTER.map((m) => (
+              <li
+                key={m}
+                className="rounded-[var(--radius-pill)] border border-[var(--color-surface)]/25 px-3.5 py-1.5 text-[var(--color-surface)]/90"
+                style={{ ...T.body, fontWeight: 600 }}
+              >
+                {m}
+              </li>
+            ))}
+          </ul>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link to="/aviation" className={`${BTN_BASE} w-full sm:w-auto`} style={BTN_PRIMARY}>
+              Discover the aviation programme
               <ArrowRight className="h-4 w-4" aria-hidden />
             </Link>
           </div>
-        </div>
-      </Reveal>
+        </Reveal>
+        <Reveal direction="up" className="relative pb-14 pr-6 sm:pb-20 sm:pr-10">
+          <img
+            width={1080}
+            height={1350}
+            src={avCockpitGirl}
+            alt="An Alpha aviation student in the cockpit wearing a headset"
+            loading="lazy"
+            decoding="async"
+            className="aspect-[4/5] w-full rounded-[1.75rem] object-cover shadow-[var(--shadow-banner)] sm:aspect-[4/3] lg:aspect-[4/5]"
+          />
+          <img
+            width={853}
+            height={568}
+            src={avFlightline}
+            alt="Alpha aviation students lined up on the flight line beside the aircraft"
+            loading="lazy"
+            decoding="async"
+            className="absolute bottom-0 right-0 w-[52%] rotate-2 rounded-[1.25rem] border-4 object-cover shadow-[var(--shadow-card-hover)]"
+            style={{ aspectRatio: "3 / 2", borderColor: "var(--color-gold)" }}
+          />
+        </Reveal>
+      </div>
     </section>
   );
 }

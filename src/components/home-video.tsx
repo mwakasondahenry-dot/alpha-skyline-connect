@@ -19,11 +19,11 @@
  * So the first play asks for sound, and if the browser has not let the video
  * start within a moment it retries muted and offers "Tap for sound".
  *
- * The video is cropped to cover the screen, like the hero photograph. On a
- * portrait phone that shows roughly the middle third of each frame — chosen
- * deliberately over letterboxing. YouTube's own controls are hidden and the
- * iframe ignores pointer events, so a swipe over the video scrolls the page
- * instead of being swallowed by the player.
+ * The video sits in a plain 16:9 frame on every viewport, so the whole
+ * picture is always visible (it used to be cropped to cover the screen,
+ * which showed a phone the middle third of each frame). YouTube's own
+ * controls are hidden and the iframe ignores pointer events, so a swipe over
+ * the video scrolls the page instead of being swallowed by the player.
  */
 import { useEffect, useRef, useState } from "react";
 import poster from "@/assets/home-video-poster.webp";
@@ -93,7 +93,7 @@ function loadYouTubeApi(): Promise<YTNamespace> {
 }
 
 export function HomeVideo() {
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const playerRef = useRef<YTPlayer | null>(null);
   const triedSound = useRef(false);
@@ -253,121 +253,123 @@ export function HomeVideo() {
 
   return (
     /* The attribute form of Reveal (src/components/reveal.tsx), because the
-       observers need a ref on this element: a fade with no travel. */
+       observers need a ref on the frame: a fade with no travel. The frame is
+       a plain 16:9 box on every viewport, so nothing of the picture is ever
+       cropped away; the heading and controls sit beside it, not over it. */
     <section
-      ref={sectionRef}
       suppressHydrationWarning
       data-reveal="none"
       aria-label="Alpha Schools video"
-      className="relative isolate mb-[var(--space-section-y)] h-[100svh] min-h-[28rem] overflow-hidden bg-[var(--video-bg)]"
-      style={{ containerType: "size" }}
+      className="mb-[var(--space-section-y)] bg-[var(--video-bg)] py-[var(--space-section-y)]"
     >
-      {/* The video's poster, served from this site rather than YouTube's
-          image host, over a tiny blurred copy inlined in the page. On slow
-          mobile data the section showed as a full screen of dark navy until
-          the poster arrived; the blurred copy is there from the first paint. */}
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-30 scale-110 bg-cover bg-center blur-xl"
-        style={{ backgroundImage: `url(${POSTER_PLACEHOLDER})` }}
-      />
-      <img
-        src={poster}
-        alt=""
-        width={1280}
-        height={720}
-        loading="lazy"
-        decoding="async"
-        className="absolute inset-0 -z-20 h-full w-full object-cover"
-      />
-
-      {loadPlayer && origin && (
-        <div
-          aria-hidden
-          className={`home-video-frame pointer-events-none absolute left-1/2 top-1/2 -z-10 -translate-x-1/2 -translate-y-1/2 ${shown ? "is-shown" : ""}`}
-        >
-          <iframe
-            ref={iframeRef}
-            src={embedSrc(HOME_VIDEO_ID, origin)}
-            title="Alpha Advert"
-            tabIndex={-1}
-            allow="autoplay; encrypted-media; picture-in-picture"
-            referrerPolicy="strict-origin-when-cross-origin"
-            className="h-full w-full border-0"
-          />
-        </div>
-      )}
-
-      <div
-        aria-hidden
-        className="absolute inset-0 -z-10"
-        style={{ background: "var(--video-scrim)" }}
-      />
-
-      {awaitingTap && (
-        <button
-          type="button"
-          onClick={togglePlay}
-          className={`${controlClass} absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 bg-[var(--btn-primary-bg)] text-[var(--btn-primary-fg)]`}
-          aria-label="Play video with sound"
-        >
-          <Play className="ml-1 h-8 w-8" aria-hidden />
-        </button>
-      )}
-
-      <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-between gap-4 px-[var(--container-gutter)] pb-[var(--space-section-y)]">
-        <div>
-          <h2 className="font-display tracking-tight text-[var(--color-surface)]" style={T.section}>
-            See Alpha in action
-          </h2>
-          <a
-            href={`https://www.youtube.com/watch?v=${HOME_VIDEO_ID}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-2 inline-block text-[var(--color-surface)] underline underline-offset-4 opacity-90 hover:opacity-100"
-            style={T.body}
-          >
-            Watch on YouTube
-          </a>
-        </div>
-
-        {ready && !awaitingTap && (
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={toggleSound}
-              aria-pressed={!muted}
-              className={`${controlClass} ${
-                muted
-                  ? "bg-[var(--btn-primary-bg)] px-5 py-3 text-[var(--btn-primary-fg)]"
-                  : "h-12 w-12 bg-[var(--video-control-bg)] text-[var(--color-surface)]"
-              }`}
-              style={muted ? T.body : undefined}
-              aria-label={muted ? "Turn sound on" : "Mute video"}
+      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <h2 className="font-display tracking-tight text-[var(--color-surface)]" style={T.section}>
+              See Alpha in action
+            </h2>
+            <a
+              href={`https://www.youtube.com/watch?v=${HOME_VIDEO_ID}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block text-[var(--color-surface)] underline underline-offset-4 opacity-90 hover:opacity-100"
+              style={T.body}
             >
-              {muted ? (
-                <>
-                  <VolumeX className="h-5 w-5" aria-hidden />
-                  Tap for sound
-                </>
-              ) : (
-                <Volume2 className="h-5 w-5" aria-hidden />
-              )}
-            </button>
+              Watch on YouTube
+            </a>
+          </div>
+
+          {ready && !awaitingTap && (
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={toggleSound}
+                aria-pressed={!muted}
+                className={`${controlClass} ${
+                  muted
+                    ? "bg-[var(--btn-primary-bg)] px-5 py-3 text-[var(--btn-primary-fg)]"
+                    : "h-12 w-12 bg-[var(--video-control-bg)] text-[var(--color-surface)]"
+                }`}
+                style={muted ? T.body : undefined}
+                aria-label={muted ? "Turn sound on" : "Mute video"}
+              >
+                {muted ? (
+                  <>
+                    <VolumeX className="h-5 w-5" aria-hidden />
+                    Tap for sound
+                  </>
+                ) : (
+                  <Volume2 className="h-5 w-5" aria-hidden />
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={togglePlay}
+                className={`${controlClass} h-12 w-12 bg-[var(--video-control-bg)] text-[var(--color-surface)]`}
+                aria-label={playing ? "Pause video" : "Play video"}
+              >
+                {playing ? (
+                  <Pause className="h-5 w-5" aria-hidden />
+                ) : (
+                  <Play className="h-5 w-5" aria-hidden />
+                )}
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div
+          ref={sectionRef}
+          className="relative mt-6 aspect-video w-full overflow-hidden rounded-[1.25rem] bg-[var(--color-deep-blue-dark)] shadow-[var(--shadow-banner)] sm:rounded-[1.75rem]"
+        >
+          {/* The video's poster, served from this site rather than YouTube's
+              image host, over a tiny blurred copy inlined in the page. On slow
+              mobile data the frame showed as dark navy until the poster
+              arrived; the blurred copy is there from the first paint. The
+              poster is 16:9 like the frame, so nothing is cropped. */}
+          <div
+            aria-hidden
+            className="absolute inset-0 scale-110 bg-cover bg-center blur-xl"
+            style={{ backgroundImage: `url(${POSTER_PLACEHOLDER})` }}
+          />
+          <img
+            src={poster}
+            alt=""
+            width={1280}
+            height={720}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+
+          {loadPlayer && origin && (
+            <div
+              aria-hidden
+              className={`home-video-player pointer-events-none ${shown ? "is-shown" : ""}`}
+            >
+              <iframe
+                ref={iframeRef}
+                src={embedSrc(HOME_VIDEO_ID, origin)}
+                title="Alpha Advert"
+                tabIndex={-1}
+                allow="autoplay; encrypted-media; picture-in-picture"
+                referrerPolicy="strict-origin-when-cross-origin"
+                className="h-full w-full border-0"
+              />
+            </div>
+          )}
+
+          {awaitingTap && (
             <button
               type="button"
               onClick={togglePlay}
-              className={`${controlClass} h-12 w-12 bg-[var(--video-control-bg)] text-[var(--color-surface)]`}
-              aria-label={playing ? "Pause video" : "Play video"}
+              className={`${controlClass} absolute left-1/2 top-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 bg-[var(--btn-primary-bg)] text-[var(--btn-primary-fg)]`}
+              aria-label="Play video with sound"
             >
-              {playing ? (
-                <Pause className="h-5 w-5" aria-hidden />
-              ) : (
-                <Play className="h-5 w-5" aria-hidden />
-              )}
+              <Play className="ml-1 h-8 w-8" aria-hidden />
             </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </section>
   );

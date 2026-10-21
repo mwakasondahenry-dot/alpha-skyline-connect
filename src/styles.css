@@ -1416,17 +1416,17 @@ html.rv-on [data-reveal][data-rv-in] {
   --video-fade: 400ms;
 }
 
-.home-video-frame {
-  width: max(100cqw, calc(100cqh * 16 / 9));
-  height: max(100cqh, calc(100cqw * 9 / 16));
+.home-video-player {
+  position: absolute;
+  inset: 0;
   opacity: 0;
   transition: opacity var(--video-fade) var(--ease-out);
 }
-.home-video-frame.is-shown {
+.home-video-player.is-shown {
   opacity: 1;
 }
 @media (prefers-reduced-motion: reduce) {
-  .home-video-frame {
+  .home-video-player {
     transition: none;
   }
 }
