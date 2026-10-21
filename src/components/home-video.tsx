@@ -260,7 +260,7 @@ export function HomeVideo() {
       suppressHydrationWarning
       data-reveal="none"
       aria-label="Alpha Schools video"
-      className="mb-[var(--space-section-y)] bg-[var(--video-bg)] py-[var(--space-section-y)]"
+      className="bg-[var(--video-bg)] py-[var(--space-section-y)]"
     >
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)]">
         <div className="flex flex-wrap items-end justify-between gap-4">

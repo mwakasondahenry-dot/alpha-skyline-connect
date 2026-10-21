@@ -367,18 +367,22 @@ function AboutPage() {
               <h2 className="font-display" style={{ ...T.section, color: GOLD }}>
                 Our mission
               </h2>
-              <p className="mt-4 font-display tracking-tight text-balance" style={T.hero}>
+              <p className="mt-4 font-display tracking-tight text-balance" style={T.section}>
                 To enable pupils to prosper academically by solving their intellectual and
                 environmental challenges, to become good citizens, responsible to their society.
               </p>
             </Reveal>
-            <Reveal direction="up" className="rounded-[1.75rem] p-8 sm:p-10" style={{ background: GOLD }}>
+            <Reveal
+              direction="up"
+              className="self-start rounded-[1.75rem] p-8 sm:p-10"
+              style={{ background: GOLD }}
+            >
               <h2 className="font-display" style={{ ...T.section, color: NAVY }}>
                 Our vision
               </h2>
               <p
                 className="mt-4 font-display tracking-tight text-[var(--color-accent-foreground)]"
-                style={T.hero}
+                style={T.section}
               >
                 To strive for excellence.
               </p>
