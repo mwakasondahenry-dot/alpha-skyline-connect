@@ -1,26 +1,8 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
-import { FacilityTile } from "@/components/school/facility-tile";
-import {
-  CinematicHero,
-  HeroCredentials,
-  GoldButton,
-  GhostButton,
-  SectionHead,
-  FeatureCard,
-  StatBar,
-  Marked,
-  Backdrop,
-  SHELL,
-} from "@/components/alpha-ui";
-import {
-  CombinationList,
-  SubjectTileList,
-  FormOptionsList,
-  type CombinationGroup,
-} from "@/components/school/subject-lists";
-import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
-import labBench from "@/assets/subjects/lab-bench.webp";
+import { CinematicHero, GoldButton, GhostButton } from "@/components/alpha-ui";
+import { SubjectExplorer } from "@/components/school/subject-explorer";
+import type { CombinationGroup } from "@/components/school/subject-lists";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { createFileRoute, Link } from "@tanstack/react-router";
@@ -30,26 +12,59 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, getSchoolPhotos, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { ParentVoices } from "@/components/school/parent-voices";
 import { testimonialsQuery } from "@/lib/testimonials-query";
-import { slotPhoto, type SlotPhotoMap } from "@/lib/photo-slots";
+import { slotPhoto } from "@/lib/photo-slots";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import { TornEdge } from "@/components/torn-edge";
 import { Reveal } from "@/components/reveal";
-import {
-  ArrowRight,
-  Laptop,
-  Users,
-  GraduationCap,
-  Plane,
-  Compass,
-  Trophy,
-  MapPin,
-  Award,
-} from "lucide-react";
-import graduate from "@/assets/alpha-high-graduate.webp";
-import campusAerial from "@/assets/alpha-high-campus-aerial.webp";
-import clubAviation from "@/assets/club-aviation.webp";
+import { T, SHELL } from "@/components/type-roles";
+import { ArrowRight, Pin, Plane, Laptop, type LucideIcon } from "lucide-react";
+import type { ReactNode } from "react";
 
-import { T } from "@/components/type-roles";
+import labPractical from "@/assets/ah-lab-practical.webp";
+import libraryShelves from "@/assets/ah-library-shelves.webp";
+import libraryBoy from "@/assets/ah-library-boy.webp";
+import libraryGirl from "@/assets/ah-library-girl.webp";
+import classroom from "@/assets/ah-classroom.webp";
+import gradPortrait1 from "@/assets/ah-grad-portrait-1.webp";
+import gradPortrait2 from "@/assets/ah-grad-portrait-2.webp";
+import gradPortrait3 from "@/assets/ah-grad-portrait-3.webp";
+import gradsTree from "@/assets/ah-grads-tree.webp";
+import gradSashBoy from "@/assets/ah-grad-sash-boy.webp";
+import gradSashGirl from "@/assets/ah-grad-sash-girl.webp";
+import f4GradStage from "@/assets/ah-f4-grad-stage.webp";
+import f4GradTrio from "@/assets/ah-f4-grad-trio.webp";
+import f4GradBoys from "@/assets/ah-f4-grad-boys.webp";
+import f4GradGirl1 from "@/assets/ah-f4-grad-girl-1.webp";
+import charityVisit from "@/assets/ah-charity-visit.webp";
+import beachCleanup1 from "@/assets/ah-beach-cleanup-1.webp";
+import beachCleanup2 from "@/assets/ah-beach-cleanup-2.webp";
+import taweceTeam from "@/assets/ah-tawece-team.webp";
+import taweceDemo from "@/assets/ah-tawece-demo.webp";
+import taweceAward from "@/assets/ah-tawece-award.webp";
+import taweceTrophy from "@/assets/ah-tawece-trophy.webp";
+import tbcDesk from "@/assets/ah-tbc-desk.webp";
+import tbcCamera from "@/assets/ah-tbc-camera.webp";
+import tbcControl from "@/assets/ah-tbc-control.webp";
+import tbcOutside from "@/assets/ah-tbc-outside.webp";
+import timexpoStand from "@/assets/ah-timexpo-stand.webp";
+import timexpoTeam from "@/assets/ah-timexpo-team.webp";
+import tablets from "@/assets/ah-tablets.webp";
+import chemBeakers from "@/assets/ah-chem-beakers.webp";
+import chemLab from "@/assets/ah-chem-lab.webp";
+import studyGirl from "@/assets/ah-study-girl.webp";
+import studyClass from "@/assets/ah-study-class.webp";
+import djClub1 from "@/assets/ah-dj-club-1.webp";
+import djClub2 from "@/assets/ah-dj-club-2.webp";
+import foodServing from "@/assets/ah-food-serving.webp";
+import foodTray from "@/assets/ah-food-tray.webp";
+import foodFruit from "@/assets/ah-food-fruit.webp";
+import foodLunch from "@/assets/ah-food-lunch.webp";
+import debatePlaque from "@/assets/ah-debate-plaque.webp";
+import debateTrophy from "@/assets/ah-debate-trophy.webp";
+import debateTeam from "@/assets/ah-debate-team.webp";
+import debateAward from "@/assets/ah-debate-award.webp";
+import debateSpeaker from "@/assets/ah-debate-speaker.webp";
+import debateBoy from "@/assets/ah-debate-boy.webp";
+import debateGirl from "@/assets/ah-debate-girl.webp";
 
 const slug = "alpha-high" as const;
 const ACCENT = "var(--color-deep-blue)";
@@ -95,230 +110,6 @@ function AlphaHighRoute() {
   const { data } = useSuspenseQuery(bundleQuery);
   return <AlphaHighPage bundle={data} />;
 }
-
-// ---------- Page ----------
-
-function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
-  return (
-    <div className="min-h-screen bg-white text-[var(--color-ink)]">
-      <SiteHeader overlay />
-      <Hero />
-      <SchoolSubNav items={SUB_NAV} />
-      <AtAGlance />
-      <About />
-      <Academics />
-      <AdmissionProcess />
-      <LifeAtMikocheni />
-      <BeyondClassroom />
-      <Distinctive />
-      <ParentVoices school="alpha-high" accent="var(--color-deep-blue)" />
-      <ApplyBanner />
-      <AlphaHighFooter />
-    </div>
-  );
-}
-
-// ---------- Entry requirements ----------
-
-function EntryRequirements() {
-  return (
-    <section id="requirements" className="bg-white py-16">
-      <div className="mx-auto max-w-4xl px-6 lg:px-10">
-        <p className="text-[var(--color-bright-blue)]" style={T.label}>
-          Admissions
-        </p>
-        <h2 className="mt-2 font-display text-3xl font-black tracking-tight text-[var(--color-deep-blue)] sm:text-4xl">
-          Requirements
-        </h2>
-        <div className="mt-6 rounded-2xl border border-dashed border-[var(--color-gold)]/70 bg-[var(--color-off-white)] p-7">
-          <p className="font-display text-base font-semibold text-[var(--color-deep-blue)]">
-            [Entry requirements — to be confirmed with academic offices]
-          </p>
-          <p className="mt-2 text-sm leading-relaxed text-[var(--color-ink)]/70">
-            Placeholder — the confirmed entry requirements for this school will be published here.
-          </p>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ---------- Hero ----------
-
-/**
- * The opening screen. Where ShapedHero put the first viewport inside a
- * rounded card on a white page, this fills the screen with the campus
- * itself and stages the copy over it.
- *
- * The photographs that were pinned to the old mosaic become the slides,
- * on the `alpha-high` hero_slides key the schema already reserves — so
- * the school can change this hero from the admin tool exactly as it can
- * change the homepage's.
- */
-function Hero() {
-  return (
-    <CinematicHero
-      eyebrow="Mikocheni · Form 1–6 · Co-education"
-      lineOne="Excellence through challenge."
-      lineTwo="Built for the long climb."
-      blurb="Our flagship secondary in Mikocheni. NECTA rigour, with aviation and coding at the core."
-      media={
-        <HeroSlideshow
-          pageKey="alpha-high"
-          fallback={[
-            { src: campusAerial, alt: "The Mikocheni campus from the air" },
-            { src: graduate, alt: "An Alpha High graduate in cap and gown" },
-            { src: clubAviation, alt: "Alpha High aviation club students" },
-          ]}
-        />
-      }
-      actions={
-        <>
-          <GoldButton href="#academics">
-            Explore our school
-            <ArrowRight className="h-4 w-4" aria-hidden />
-          </GoldButton>
-          <GhostButton to="/contact" onNavy>
-            Book a school tour
-          </GhostButton>
-        </>
-      }
-      foot={
-        <HeroCredentials
-          items={[
-            {
-              label: "Co-education",
-              sub: "Boys and girls, Form 1–6",
-              icon: <Users className="h-5 w-5" />,
-            },
-            {
-              label: "NECTA curriculum",
-              sub: "CSEE and ACSEE",
-              icon: <GraduationCap className="h-5 w-5" />,
-            },
-            {
-              label: "Aviation programme",
-              sub: "Ground school to PPL",
-              icon: <Plane className="h-5 w-5" />,
-            },
-            {
-              label: "Coding",
-              sub: "From primary up",
-              icon: <Laptop className="h-5 w-5" />,
-            },
-          ]}
-        />
-      }
-    />
-  );
-}
-
-function About() {
-  return (
-    <section id="about" className="relative overflow-hidden bg-[var(--color-off-white)]">
-      <Backdrop
-        kind="arrow"
-        className="right-[4%] top-12 hidden md:block"
-        width="4.5rem"
-        rotate={-8}
-      />
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
-          <Reveal direction="left">
-            <p style={{ ...T.label, color: ACCENT }}>About Alpha High</p>
-            <h2
-              className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl"
-              style={{ color: ACCENT }}
-            >
-              Excellence through challenge —{" "}
-              <Marked kind="underline" color="var(--color-gold)">
-                <span style={{ color: "var(--color-bright-blue)" }}>since 2007.</span>
-              </Marked>
-            </h2>
-            <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
-              Established <strong>19 March 2007</strong>, Alpha High was founded to enable students
-              to achieve academic excellence through intellectual and physical challenge, and to
-              become responsible citizens of a dynamic society.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
-              A nurturing ground for accomplished professionals and leaders — locally and globally.
-            </p>
-
-            <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-5">
-              <Stat value="2007" label="Founded" />
-              <Stat value="Form 1–6" label="O & A-Level" />
-              <Stat value="11" label="A-Level combos" />
-            </div>
-          </Reveal>
-
-          <Reveal direction="right">
-            <div
-              className="relative overflow-hidden rounded-2xl p-7 text-white shadow-xl"
-              style={{ background: ACCENT }}
-            >
-              <div
-                aria-hidden
-                className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-25 blur-2xl"
-                style={{ background: GOLD }}
-              />
-              <p
-                className="text-[11px] font-bold uppercase tracking-[0.22em]"
-                style={{ color: GOLD }}
-              >
-                Our Mission
-              </p>
-              <h3 className="mt-2 font-display" style={T.cardTitle}>
-                Education that grows the whole student.
-              </h3>
-              <ul className="mt-5 space-y-3 text-white/90" style={T.body}>
-                {[
-                  "A source of intellectual, spiritual and cultural growth.",
-                  "Knowledge that meets individual needs.",
-                  "Critical and divergent thinking.",
-                  "All-rounded students.",
-                  "Attitudes that make students social, mobile, interactive, ambitious and self-directed.",
-                ].map((m) => (
-                  <li key={m} className="flex gap-3">
-                    <span
-                      aria-hidden
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: GOLD }}
-                    />
-                    <span>{m}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="rounded-xl bg-white p-4 ring-1 ring-black/5">
-      <div className="font-display text-2xl font-black leading-none" style={{ color: ACCENT }}>
-        {value}
-      </div>
-      <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-ink)]/60">
-        {label}
-      </div>
-    </div>
-  );
-}
-
-// ---------- Academics ----------
-
-/** Section anchors for the shared sub-nav. Alpha High's own order. */
-const SUB_NAV = [
-  { label: "About", href: "#about" },
-  { label: "Academics", href: "#academics" },
-  { label: "Admission", href: "#admission" },
-  { label: "Life at Mikocheni", href: "#life" },
-  { label: "Clubs & sport", href: "#clubs" },
-] as const;
 
 /* ------------------------------------------------------------------ *
  * ACADEMIC DATA — confirmed by the school 2026-09-02.
@@ -449,230 +240,6 @@ const ADMISSION_STEPS = [
   "Receive joining instructions after paying TSh 500,000 as part of the first tuition instalment",
 ] as const;
 
-/* design/README.md: the years figure is calculated from the 2007 founding
-   date and must never be hardcoded. Every figure below is derivable from
-   confirmed data — the subject and combination counts come from the lists
-   on this page. No invented statistics. */
-const FOUNDED = 2007;
-
-function AtAGlance() {
-  const years = new Date().getFullYear() - FOUNDED;
-  return (
-    <section className={`${SHELL} pb-[var(--space-section-y)]`}>
-      <StatBar
-        items={[
-          { figure: `${years}+`, label: "Years since 2007", icon: <Award className="h-5 w-5" /> },
-          {
-            figure: String(O_LEVEL_SUBJECTS.length),
-            label: "O-Level subjects",
-            icon: <GraduationCap className="h-5 w-5" />,
-          },
-          {
-            figure: String(A_COMBOS.reduce((n, g) => n + g.items.length, 0)),
-            label: "A-Level combinations",
-            icon: <Compass className="h-5 w-5" />,
-          },
-          { figure: "1", label: "Aviation programme", icon: <Plane className="h-5 w-5" /> },
-        ]}
-      />
-    </section>
-  );
-}
-
-function Academics() {
-  return (
-    <section id="academics" className="bg-[var(--color-surface)]">
-      <CurriculumBand
-        image={labBench}
-        title="Seventeen subjects at O-Level, twelve combinations at A-Level."
-        intro="Every subject examinable across Forms One to Four, what a pupil in each form may choose between, and all twelve A-Level combinations with their subjects written out."
-      />
-
-      <div className={`${SHELL} py-[var(--space-section-y)]`}>
-        <div>
-          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-            Subjects offered
-          </h3>
-          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            Every subject examinable at O-Level across Forms One to Four.
-          </p>
-          <div className="mt-5">
-            <SubjectTileList items={O_LEVEL_SUBJECTS} />
-          </div>
-          {/* The comp splits this list into "Core Subjects (for all students)"
-              and a set of option categories. The school has never said which
-              of the seventeen are core, and the one grouping invented here
-              before had to be removed — so the question is marked, not
-              answered. See design/CONTENT-FROM-SCHOOL.md. */}
-          <UnconfirmedNote>
-            [Which of these seventeen are core for every pupil, and which are offered as options —
-            to be provided by the school.]
-          </UnconfirmedNote>
-        </div>
-
-        <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-            Option subjects by form
-          </h3>
-          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            What a pupil in each form may choose between — a different thing from the full subject
-            list above.
-          </p>
-          <div className="mt-5">
-            <FormOptionsList forms={FORM_OPTIONS} />
-          </div>
-        </div>
-
-        <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
-            A-Level combinations
-          </h3>
-          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            All twelve, with their subjects written out. Form 5&ndash;6, ACSEE.
-          </p>
-          <div className="mt-5">
-            <CombinationList groups={A_COMBOS} />
-          </div>
-        </div>
-
-        <div className="mt-[var(--space-block-y)]">
-          <GuidanceCallout
-            title="Not sure which combination fits?"
-            body="The academic team can talk a pupil through the options before Form Five."
-            cta="Talk to our team"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function AdmissionProcess() {
-  return (
-    <section id="admission" className="bg-[var(--color-off-white)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p className="text-[var(--color-deep-blue)]" style={T.label}>
-          Admission
-        </p>
-        <h2
-          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
-          How a place at Alpha High is offered.
-        </h2>
-        <span
-          aria-hidden
-          className="mt-[var(--heading-rule-gap)] block"
-          style={{
-            width: "var(--heading-rule-w)",
-            height: "var(--heading-rule-h)",
-            background: "var(--heading-rule-color)",
-            borderRadius: "var(--heading-rule-radius)",
-          }}
-        />
-
-        <ol className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-4">
-          {ADMISSION_STEPS.map((step, i) => (
-            <li
-              key={step}
-              className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
-            >
-              <span className="font-display text-[var(--color-deep-blue)]" style={T.stat}>
-                {i + 1}
-              </span>
-              <p className="mt-2 text-[var(--color-ink)]" style={T.body}>
-                {step}
-              </p>
-            </li>
-          ))}
-        </ol>
-
-        <p className="mt-6 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-          These two figures are part of the admission process, not the cost of attending. [Fee
-          structure per school &mdash; to be provided]
-        </p>
-      </div>
-    </section>
-  );
-}
-
-function Distinctive() {
-  return (
-    <section className="bg-[var(--color-off-white)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT }}>Distinctive at Alpha High</p>
-          <h2
-            className="mt-2 font-display text-2xl font-black sm:text-3xl"
-            style={{ color: ACCENT }}
-          >
-            Two things you'll only find here.
-          </h2>
-        </Reveal>
-
-        <div className="mt-8 grid gap-5 md:grid-cols-2">
-          <SignpostCard
-            eyebrow="Aviation"
-            title="Aviation Program in Alpha Schools"
-            body="Ground school, PPL pathway and simulator training — built into the timetable, not bolted on."
-            href="/aviation"
-            cta="Inside the aviation programme"
-          />
-          <SignpostCard
-            eyebrow="Coding & digital skills"
-            title="Real programming, from the classroom."
-            body="Computer literacy for every student, with coding pathways that take serious learners much further."
-            href="/coding"
-            cta="See the curriculum"
-          />
-        </div>
-      </div>
-    </section>
-  );
-}
-
-function SignpostCard({
-  eyebrow,
-  title,
-  body,
-  href,
-  cta,
-}: {
-  eyebrow: string;
-  title: string;
-  body: string;
-  href: "/aviation" | "/coding";
-  cta: string;
-}) {
-  return (
-    <Reveal direction="up">
-      <article className="group relative h-full overflow-hidden rounded-2xl bg-white p-7 ring-1 ring-black/5 transition-all duration-500 hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
-        <div
-          aria-hidden
-          className="absolute right-0 top-0 h-1 w-full origin-left scale-x-0 transition-transform duration-150 group-hover:scale-x-100"
-          style={{ background: GOLD }}
-        />
-        <p className="text-[11px] font-bold uppercase tracking-[0.2em]" style={{ color: ACCENT }}>
-          {eyebrow}
-        </p>
-        <h3 className="mt-2 font-display" style={{ ...T.cardTitle, color: ACCENT }}>
-          {title}
-        </h3>
-        <p className="mt-3 text-sm leading-relaxed text-[var(--color-ink)]/75">{body}</p>
-        <Link
-          to={href}
-          className="mt-5 inline-flex items-center gap-1 text-sm font-bold transition-transform group-hover:translate-x-1"
-          style={{ color: ACCENT }}
-        >
-          {cta} →
-        </Link>
-      </article>
-    </Reveal>
-  );
-}
-
-// ---------- Beyond the classroom ----------
-
 const CLUBS = [
   { name: "Aviation", key: "alpha-high.clubs.aviation" },
   { name: "Drama", key: "alpha-high.clubs.drama" },
@@ -685,237 +252,921 @@ const CLUBS = [
   { name: "Model UN", key: "alpha-high.clubs.model-un" },
   { name: "Environment", key: "alpha-high.clubs.environment" },
 ];
-const SPORTS = [
-  { name: "Football", key: "alpha-high.sport.football" },
-  { name: "Basketball", key: "alpha-high.sport.basketball" },
-  { name: "Volleyball", key: "alpha-high.sport.volleyball" },
-  { name: "Netball", key: "alpha-high.sport.netball" },
-  { name: "Athletics", key: "alpha-high.sport.athletics" },
+const SPORTS = ["Football", "Basketball", "Volleyball", "Netball", "Athletics"] as const;
+
+/** Section anchors for the shared sub-nav, in the order the reader meets them. */
+const SUB_NAV = [
+  { label: "Subjects", href: "#academics" },
+  { label: "Moments", href: "#feed" },
+  { label: "Clubs & sport", href: "#clubs" },
+  { label: "Admission", href: "#admission" },
+] as const;
+
+const ANCHOR = { scrollMarginTop: "calc(var(--header-h) + 3.75rem)" };
+
+/* ------------------------------------------------------------------ *
+ * The feed
+ *
+ * Every photograph is the school's own: the Alpha High folder supplied for
+ * this page, and the school's Instagram (@alphaschoolstz), whose captions
+ * are the source for every fact in a card. Nothing is described that the
+ * photograph or the caption does not show. Students are unnamed.
+ * ------------------------------------------------------------------ */
+
+type Photo = { src: string; alt: string; w: number; h: number };
+
+const HIGHLIGHTS: ReadonlyArray<{ label: string; href: string; src: string }> = [
+  { label: "Lab", href: "#lab", src: chemBeakers },
+  { label: "TBC", href: "#tbc", src: tbcCamera },
+  { label: "Engineers", href: "#tawece", src: taweceTrophy },
+  { label: "Debate", href: "#debate", src: debateTrophy },
+  { label: "Library", href: "#library", src: libraryShelves },
+  { label: "Graduation", href: "#graduation", src: f4GradStage },
 ];
 
-function ClubsRibbon({ photos }: { photos: SlotPhotoMap }) {
-  // Duplicate the list so the marquee loops seamlessly.
-  const loop = [...CLUBS, ...CLUBS];
+function AlphaHighPage({ bundle }: { bundle: SchoolBundle }) {
   return (
-    <Reveal direction="up" className="mt-10">
-      <div className="flex items-end justify-between gap-4">
-        <h3 className="font-display text-2xl font-black" style={{ color: ACCENT }}>
-          Clubs & societies
-        </h3>
-        <span style={{ ...T.label, color: ACCENT }}>{CLUBS.length}+ student-led clubs</span>
-      </div>
+    <div className="min-h-screen bg-white text-[var(--color-ink)]">
+      <SiteHeader overlay />
+      <Hero />
+      <SchoolSubNav items={SUB_NAV} />
 
       <div
-        className="group relative mt-5 overflow-x-auto overflow-y-hidden rounded-2xl border border-black/5 bg-[var(--color-off-white)] py-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        style={{
-          maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
-        }}
+        className={`${SHELL} grid gap-10 py-[var(--space-section-y)] lg:grid-cols-[minmax(0,44rem)_1fr] lg:gap-16`}
       >
-        <div className="flex w-max gap-5 px-5 animate-[clubsMarquee_38s_linear_infinite] [animation-play-state:paused] motion-safe:[animation-play-state:running] group-hover:[animation-play-state:paused] group-focus-within:[animation-play-state:paused]">
-          {loop.map((c, i) => (
-            <figure
-              key={`${c.name}-${i}`}
-              className="relative h-56 w-72 shrink-0 overflow-hidden rounded-xl shadow-md ring-1 ring-black/10 transition-transform duration-150 hover:scale-[1.03] active:scale-[0.97] hover:shadow-xl"
-            >
-              <img
-                src={slotPhoto(photos, c.key)!.src}
-                alt={photos[c.key]?.alt_text ?? `${c.name} club at Alpha High`}
-                className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
-                loading="lazy"
-                decoding="async"
-                width={800}
-                height={1024}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background:
-                    "linear-gradient(to top, rgba(12,68,124,0.85) 0%, rgba(12,68,124,0.15) 45%, transparent 65%)",
-                }}
-              />
-              <figcaption className="absolute inset-x-0 bottom-0 flex items-center gap-2 px-4 pb-3 text-white">
-                <span
-                  aria-hidden
-                  className="h-1.5 w-1.5 rounded-full"
-                  style={{ background: GOLD }}
-                />
-                <span className="font-display text-sm font-bold tracking-wide">{c.name}</span>
-              </figcaption>
-            </figure>
-          ))}
-        </div>
+        <main id="feed" className="min-w-0 space-y-8 sm:space-y-10" style={ANCHOR}>
+          <AcademicsPost />
+
+          <Moment
+            id="lab"
+            title="Where curiosity meets chemistry."
+            body="The school's laboratories are where its young scientists explore, experiment and find what they love. Practicals run across Physics, Chemistry and Biology."
+            source="Alpha Schools on Instagram, August 2023"
+            photos={[
+              {
+                src: labPractical,
+                alt: "Three Alpha High students in green uniform running a practical at a laboratory bench",
+                w: 1800,
+                h: 1200,
+              },
+              {
+                src: chemBeakers,
+                alt: "Two beakers of blue and yellow solutions labelled S1 and S4 on a laboratory bench",
+                w: 1200,
+                h: 1200,
+              },
+              {
+                src: chemLab,
+                alt: "Alpha High students in blue tracksuits at work during a laboratory practical",
+                w: 1200,
+                h: 1200,
+              },
+            ]}
+          />
+
+          <MissionPost />
+
+          <Moment
+            id="tawece"
+            title="2nd overall out of 24 schools."
+            body="At the 9th Tanzania Women Engineers Convention Exhibition (TAWECE 2024) at the JNICC in Dar es Salaam, Alpha High and Alpha Girls students presented five projects: a Smart Reading Table, Smart Blind Glasses, a Radar and a Smart Blind Stick from Alpha High, and Greenhouse Effects from Alpha Girls."
+            source="Alpha Schools on Instagram, 22 August 2024"
+            photos={[
+              {
+                src: taweceTrophy,
+                alt: "The TAWECE 2024 second runner-up award plaque, engraved on a glass trophy",
+                w: 720,
+                h: 481,
+              },
+              {
+                src: taweceTeam,
+                alt: "Alpha students in uniform standing in front of the TAWECE 2024 banner",
+                w: 719,
+                h: 479,
+              },
+              {
+                src: taweceDemo,
+                alt: "A student demonstrating a project model to visitors at the exhibition stand",
+                w: 720,
+                h: 481,
+              },
+              {
+                src: taweceAward,
+                alt: "A student receiving a certificate on stage at the convention",
+                w: 720,
+                h: 481,
+              },
+            ]}
+            layout="trophy"
+          />
+
+          <Moment
+            id="tbc"
+            title="On air at TBC."
+            body="A visit to the Tanzania Broadcasting Corporation: the news desk, the studio cameras, the control room. In the school's words, an oasis for unearthing students' potential in media."
+            source="Alpha Schools on Instagram, 6 August 2024"
+            photos={[
+              {
+                src: tbcDesk,
+                alt: "Alpha High students standing behind the TBC news desk in the studio",
+                w: 1200,
+                h: 1472,
+              },
+              {
+                src: tbcCamera,
+                alt: "A student operating a broadcast camera in the TBC studio",
+                w: 1200,
+                h: 1468,
+              },
+              {
+                src: tbcControl,
+                alt: "Students watching the monitors in the TBC control room",
+                w: 1200,
+                h: 1467,
+              },
+              {
+                src: tbcOutside,
+                alt: "The visiting group gathered outside the TBC building",
+                w: 1200,
+                h: 1467,
+              },
+            ]}
+            layout="pair"
+          />
+
+          <Moment
+            id="debate"
+            title="Best Institution from East Africa."
+            body="At the Tanzania National World Schools Debate Championship 2026, Alpha took two awards: Best Institution from East Africa, and Junior Plate winners."
+            source="Alpha Schools on Instagram, 17 August 2026"
+            photos={[
+              {
+                src: debateTeam,
+                alt: "Alpha debaters in blue tracksuits holding their medals together",
+                w: 1000,
+                h: 1196,
+              },
+              {
+                src: debatePlaque,
+                alt: "The TCRO award plaque for Best Institution from East Africa",
+                w: 900,
+                h: 1080,
+              },
+              { src: debateTrophy, alt: "The Junior Plate winners' gold trophy", w: 809, h: 970 },
+              {
+                src: debateSpeaker,
+                alt: "A student in a white headscarf speaking during a debate round",
+                w: 1000,
+                h: 1196,
+              },
+              {
+                src: debateBoy,
+                alt: "A student in a green shirt reading his notes while speaking",
+                w: 1000,
+                h: 1196,
+              },
+              { src: debateAward, alt: "A student receiving her medal on stage", w: 1000, h: 1196 },
+            ]}
+            layout="wall"
+          />
+
+          <Moment
+            id="library"
+            title="The library, Mikocheni."
+            body="Shelves of set books and references, and quiet desks to work at. Reading is part of the timetable, not an extra."
+            source="Alpha High, school photographs"
+            photos={[
+              {
+                src: libraryShelves,
+                alt: "Two students reaching for books on the tall library shelves",
+                w: 1600,
+                h: 1067,
+              },
+              {
+                src: libraryBoy,
+                alt: "A student reading between the library shelves",
+                w: 1000,
+                h: 1500,
+              },
+              {
+                src: libraryGirl,
+                alt: "A student holding a textbook in the library aisle",
+                w: 1000,
+                h: 1500,
+              },
+            ]}
+          />
+
+          <Moment
+            id="tablets"
+            title="Beyond textbooks."
+            body="Tablets in class alongside the books: the school's way of merging traditional teaching with digital tools. Coding runs through the timetable, and the aviation programme is on it too."
+            source="Alpha Schools on Instagram, 18 August 2023"
+            photos={[
+              {
+                src: tablets,
+                alt: "Two Alpha students in blue tracksuits working on a tablet together",
+                w: 1200,
+                h: 1500,
+              },
+              {
+                src: studyGirl,
+                alt: "A student in a blue polo shirt studying at a desk",
+                w: 1200,
+                h: 1200,
+              },
+              {
+                src: studyClass,
+                alt: "A class of students writing at their desks",
+                w: 1200,
+                h: 1200,
+              },
+            ]}
+            layout="pair"
+            links={[
+              { to: "/coding", label: "Coding at Alpha", Icon: Laptop },
+              { to: "/aviation", label: "The aviation programme", Icon: Plane },
+            ]}
+          />
+
+          <Moment
+            id="timexpo"
+            title="Out at TIMEXPO."
+            body="Alpha students at the Tanzania International Manufacturers Expo at Diamond Jubilee, at the Czech Republic company stand."
+            source="Alpha Schools on Instagram, 21 October 2023"
+            photos={[
+              {
+                src: timexpoTeam,
+                alt: "Alpha students lined up in white shirts at the TIMEXPO exhibition",
+                w: 897,
+                h: 503,
+              },
+              {
+                src: timexpoStand,
+                alt: "A student examining a machine at an exhibition stand",
+                w: 897,
+                h: 502,
+              },
+            ]}
+            layout="pair"
+          />
+
+          <ClubsPost />
+
+          <Moment
+            id="food"
+            title="Four meals a day."
+            body="Good food, properly served: four meals every day, with fruit and vegetables daily, and the right safety at the serving line."
+            source="Alpha Schools on Instagram, 5 October 2021"
+            photos={[
+              {
+                src: foodLunch,
+                alt: "Students in blue tracksuits eating together at a dining table",
+                w: 720,
+                h: 481,
+              },
+              {
+                src: foodServing,
+                alt: "Students collecting their meals at the serving line",
+                w: 720,
+                h: 480,
+              },
+              {
+                src: foodTray,
+                alt: "Trays of rice and chicken in the serving counter",
+                w: 720,
+                h: 481,
+              },
+              { src: foodFruit, alt: "A tray of cut watermelon and fruit", w: 720, h: 481 },
+            ]}
+            layout="trophy"
+          />
+
+          <Moment
+            id="charity"
+            title="Alpha Aid."
+            body="The school's charity event: students giving time to a community visit."
+            source="Alpha High, school photographs"
+            photos={[
+              {
+                src: charityVisit,
+                alt: "An Alpha student in a blue uniform carrying a small child at the charity visit",
+                w: 720,
+                h: 1280,
+              },
+            ]}
+            layout="portrait"
+          />
+
+          <Moment
+            id="graduation"
+            title="Form Four graduation day."
+            body="Gowns, sashes, and the whole year together on the stage. Then Form Six, two years on: the climb finished."
+            source="Alpha High, school photographs"
+            photos={[
+              {
+                src: f4GradStage,
+                alt: "The Form Four graduating class on stage in black gowns in front of the Alpha Schools banner",
+                w: 1800,
+                h: 1200,
+              },
+              {
+                src: f4GradTrio,
+                alt: "Three graduates in black outfits posing together",
+                w: 1400,
+                h: 933,
+              },
+              { src: f4GradBoys, alt: "Graduates in suits seated in the hall", w: 1400, h: 1066 },
+              {
+                src: f4GradGirl1,
+                alt: "A graduate in a pink dress wearing her Class of 2026 sash",
+                w: 900,
+                h: 1176,
+              },
+            ]}
+            layout="trophy"
+          />
+
+          <Moment
+            id="form-six"
+            title="Form Six, done."
+            body="Alpha High's A-Level graduates in their gowns and hoods."
+            source="Alpha High, school photographs"
+            photos={[
+              {
+                src: gradsTree,
+                alt: "Two Form Six graduates in gowns and caps under a tree",
+                w: 1000,
+                h: 1500,
+              },
+              { src: gradPortrait1, alt: "A Form Six graduate in cap and gown", w: 800, h: 1120 },
+              { src: gradPortrait2, alt: "A Form Six graduate in cap and gown", w: 800, h: 1120 },
+              { src: gradPortrait3, alt: "A Form Six graduate in cap and gown", w: 800, h: 1121 },
+              {
+                src: gradSashBoy,
+                alt: "A graduate in a suit with a Form Six HGE sash",
+                w: 800,
+                h: 1200,
+              },
+              {
+                src: gradSashGirl,
+                alt: "A graduate wearing her Class of 2026 sash",
+                w: 800,
+                h: 1200,
+              },
+            ]}
+            layout="wall"
+          />
+
+          <AdmissionPost />
+        </main>
+
+        <Rail />
       </div>
 
-      <style>{`
-        @media (prefers-reduced-motion: no-preference) {
-          @keyframes clubsMarquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-        }
-      `}</style>
+      <Staff staff={bundle.staff} />
+      <ParentVoices school="alpha-high" accent="var(--color-deep-blue)" />
+      <ApplyBanner />
+      <AlphaHighFooter />
+    </div>
+  );
+}
+
+// ---------- Hero ----------
+
+function Hero() {
+  return (
+    <CinematicHero
+      lineOne="Excellence through challenge."
+      lineTwo="Built for the long climb."
+      blurb="Our flagship secondary in Mikocheni. NECTA rigour, with aviation and coding at the core. Boys and girls, Form 1 to Form 6."
+      media={
+        <HeroSlideshow
+          pageKey="alpha-high"
+          fallback={[
+            { src: labPractical, alt: "Alpha High students running a practical in the laboratory" },
+            { src: f4GradStage, alt: "The Form Four graduating class on stage" },
+            { src: classroom, alt: "A teacher with students in an Alpha High classroom" },
+          ]}
+        />
+      }
+      actions={
+        <>
+          <GoldButton href="#academics">
+            Subjects and combinations
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </GoldButton>
+          <GhostButton to="/contact" onNavy>
+            Book a school tour
+          </GhostButton>
+        </>
+      }
+      foot={<Highlights />}
+    />
+  );
+}
+
+/** Round photo shortcuts into the feed, the way a profile pins its stories. */
+function Highlights() {
+  return (
+    <div className="relative border-t border-white/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm">
+      <ul
+        className={`${SHELL} flex snap-x gap-5 overflow-x-auto py-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:gap-7`}
+      >
+        {HIGHLIGHTS.map((h) => (
+          <li key={h.href} className="shrink-0 snap-start">
+            <a href={h.href} className="group flex flex-col items-center gap-1.5 text-white">
+              <span
+                className="grid h-16 w-16 place-items-center rounded-full p-[3px] transition-transform duration-200 group-hover:scale-105 motion-reduce:transition-none"
+                style={{ background: GOLD }}
+              >
+                <img
+                  src={h.src}
+                  alt=""
+                  width={64}
+                  height={64}
+                  loading="eager"
+                  className="h-full w-full rounded-full border-2 border-[var(--color-deep-blue)] object-cover"
+                />
+              </span>
+              <span style={{ ...T.body, fontWeight: 700 }}>{h.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      {/* On phones the strip runs past the edge; a fade says "more". */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 right-0 w-14 sm:hidden"
+        style={{ background: "linear-gradient(to right, transparent, rgba(0,26,60,0.85))" }}
+      />
+    </div>
+  );
+}
+
+// ---------- Feed cards ----------
+
+function Card({
+  id,
+  children,
+  pinned = false,
+}: {
+  id?: string;
+  children: ReactNode;
+  pinned?: boolean;
+}) {
+  return (
+    <Reveal>
+      <article
+        id={id}
+        style={ANCHOR}
+        className={`overflow-hidden rounded-[1.25rem] bg-white ring-1 ring-[var(--color-hairline)] shadow-[0_18px_40px_-28px_rgba(0,46,106,0.5)] ${
+          pinned ? "border-t-[6px] border-[var(--color-gold)]" : ""
+        }`}
+      >
+        {children}
+      </article>
     </Reveal>
   );
 }
 
-function BeyondClassroom() {
-  const photos = useSuspenseQuery(photosQuery).data;
-  // Two states rather than a half-filled grid: the pills below are the
-  // current design and stay until a sport photograph actually exists.
-  const anySport = SPORTS.some((s) => photos[s.key]);
+function CardHead({
+  title,
+  body,
+  source,
+  pinned,
+}: {
+  title: string;
+  body?: string;
+  source?: string;
+  pinned?: boolean;
+}) {
   return (
-    <section id="clubs" className="bg-white">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT }}>Beyond the classroom</p>
-          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
-            The other half of an Alpha education.
-          </h2>
-        </Reveal>
-
-        <ClubsRibbon photos={photos} />
-
-        <div className="mt-10 grid gap-6 lg:grid-cols-2">
-          <Reveal direction="up" delay={80}>
-            <div className="h-full rounded-2xl border border-black/5 bg-[var(--color-off-white)] p-6">
-              <h3 className="font-display text-lg font-bold" style={{ color: ACCENT }}>
-                Sports
-              </h3>
-              {anySport ? (
-                <ul className="mt-4 grid grid-cols-2 gap-3">
-                  {SPORTS.map((s) => {
-                    const photo = slotPhoto(photos, s.key);
-                    return (
-                      <li
-                        key={s.key}
-                        className="relative aspect-[4/5] overflow-hidden rounded-lg ring-1 ring-black/5"
-                      >
-                        {photo ? (
-                          <>
-                            <img
-                              width={800}
-                              height={600}
-                              src={photo.src}
-                              alt={photos[s.key]?.alt_text ?? `${s.name} at Alpha High`}
-                              loading="lazy"
-                              decoding="async"
-                              className="absolute inset-0 h-full w-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                          </>
-                        ) : (
-                          <div
-                            aria-hidden
-                            className="absolute inset-0"
-                            style={{ background: ACCENT }}
-                          />
-                        )}
-                        <span className="absolute inset-x-0 bottom-0 p-2 text-xs font-semibold text-white">
-                          {s.name}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              ) : (
-                <ul className="mt-4 space-y-2">
-                  {SPORTS.map((s) => (
-                    <li
-                      key={s.key}
-                      className="flex items-center gap-3 rounded-lg bg-white px-4 py-2.5 text-sm font-semibold ring-1 ring-black/5"
-                      style={{ color: ACCENT }}
-                    >
-                      <span
-                        aria-hidden
-                        className="h-2 w-2 rounded-full"
-                        style={{ background: GOLD }}
-                      />
-                      {s.name}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          </Reveal>
-
-          <Reveal direction="up" delay={160}>
-            <div
-              className="relative h-full overflow-hidden rounded-2xl p-7 text-white shadow-xl"
-              style={{ background: ACCENT }}
-            >
-              <div
-                aria-hidden
-                className="absolute -bottom-10 -right-10 h-36 w-36 rounded-full opacity-25 blur-2xl"
-                style={{ background: GOLD }}
-              />
-              <p
-                className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                style={{ color: GOLD }}
-              >
-                Counselling
-              </p>
-              <h3 className="mt-2 font-display" style={T.cardTitle}>
-                A confidential ear, always available.
-              </h3>
-              <p className="mt-4 text-sm leading-relaxed text-white/85">
-                Alpha High runs a school counselling department, accessible to every student —
-                confidential, professional, and built into school life.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </div>
-    </section>
+    <div className="px-5 pt-5 sm:px-7 sm:pt-7">
+      <h2 className="font-display text-[var(--color-deep-blue)]" style={T.section}>
+        {pinned && (
+          <span
+            className="mr-2 inline-grid h-8 w-8 translate-y-[-2px] place-items-center rounded-full align-middle"
+            style={{ background: GOLD }}
+            aria-label="Pinned post"
+          >
+            <Pin className="h-4 w-4 text-[var(--color-deep-blue)]" aria-hidden />
+          </span>
+        )}
+        {title}
+      </h2>
+      {body && (
+        <p className="mt-2 text-[var(--color-ink)]/85" style={T.body}>
+          {body}
+        </p>
+      )}
+      {source && (
+        <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+          {source}
+        </p>
+      )}
+    </div>
   );
 }
 
-// ---------- Life at Mikocheni ----------
+const Img = ({
+  p,
+  className = "",
+  eager = false,
+}: {
+  p: Photo;
+  className?: string;
+  eager?: boolean;
+}) => (
+  <img
+    src={p.src}
+    alt={p.alt}
+    width={p.w}
+    height={p.h}
+    loading={eager ? "eager" : "lazy"}
+    decoding="async"
+    className={`h-full w-full object-cover ${className}`}
+  />
+);
 
-const FACILITIES = [
-  { key: "alpha-high.facilities.science-labs", label: "Science labs" },
-  { key: "alpha-high.facilities.library", label: "Library" },
-  { key: "alpha-high.facilities.sports-field", label: "Sports field" },
-  { key: "alpha-high.facilities.boarding", label: "Boarding" },
-];
-
-function LifeAtMikocheni() {
-  const photos = useSuspenseQuery(photosQuery).data;
+/**
+ * One moment: a photo set with the school's own words beneath it.
+ * Layouts: single (one wide photo, small ones under), pair (two tall),
+ * trophy (one wide, three small), wall (a grid of portraits), portrait.
+ */
+function Moment({
+  id,
+  title,
+  body,
+  source,
+  photos,
+  layout = "single",
+  links,
+}: {
+  id: string;
+  title: string;
+  body: string;
+  source: string;
+  photos: ReadonlyArray<Photo>;
+  layout?: "single" | "pair" | "trophy" | "wall" | "portrait";
+  links?: ReadonlyArray<{ to: "/coding" | "/aviation"; label: string; Icon: LucideIcon }>;
+}) {
+  const [first, ...rest] = photos;
   return (
-    <section id="life" className="bg-[var(--color-off-white)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
-          <div className="max-w-2xl">
-            <p style={{ ...T.label, color: ACCENT }}>Campus</p>
-            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
-              Life at Mikocheni.
-            </h2>
+    <Card id={id}>
+      <div className="p-2 sm:p-3">
+        {layout === "single" && (
+          <div className="grid gap-2 sm:gap-3">
+            <div className="aspect-[3/2] overflow-hidden rounded-[0.9rem]">
+              <Img p={first} />
+            </div>
+            {rest.length > 0 && (
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                {rest.slice(0, 2).map((p) => (
+                  <div key={p.src} className="aspect-square overflow-hidden rounded-[0.9rem]">
+                    <Img p={p} />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
-          <Link
-            to="/facilities"
-            className="font-bold hover:underline"
-            style={{ ...T.body, color: ACCENT }}
-          >
-            See facilities →
-          </Link>
-        </Reveal>
-
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {FACILITIES.map((f, i) => (
-            <FacilityTile
-              key={f.key}
-              slotKey={f.key}
-              label={f.label}
-              photos={photos}
-              accent={ACCENT}
-              delay={i * 70}
-            />
+        )}
+        {layout === "pair" && (
+          <div className="grid gap-2 sm:gap-3">
+            <div className="grid grid-cols-2 gap-2 sm:gap-3">
+              {photos.slice(0, 2).map((p) => (
+                <div key={p.src} className="aspect-[4/5] overflow-hidden rounded-[0.9rem]">
+                  <Img p={p} />
+                </div>
+              ))}
+            </div>
+            {photos.length > 2 && (
+              <div className="grid grid-cols-2 gap-2 sm:gap-3">
+                {photos.slice(2, 4).map((p) => (
+                  <div key={p.src} className="aspect-[4/3] overflow-hidden rounded-[0.9rem]">
+                    <Img p={p} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+        {layout === "trophy" && (
+          <div className="grid gap-2 sm:gap-3">
+            <div className="aspect-[3/2] overflow-hidden rounded-[0.9rem]">
+              <Img p={first} />
+            </div>
+            <div className="grid grid-cols-3 gap-2 sm:gap-3">
+              {rest.slice(0, 3).map((p) => (
+                <div key={p.src} className="aspect-square overflow-hidden rounded-[0.9rem]">
+                  <Img p={p} />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {layout === "wall" && (
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            {photos.map((p, i) => (
+              <div
+                key={p.src}
+                className={`${i === 0 ? "col-span-2 row-span-2" : ""} aspect-[4/5] overflow-hidden rounded-[0.9rem]`}
+              >
+                <Img p={p} />
+              </div>
+            ))}
+          </div>
+        )}
+        {layout === "portrait" && (
+          <div className="aspect-[4/5] overflow-hidden rounded-[0.9rem] sm:aspect-[3/2]">
+            <Img p={first} className="object-top" />
+          </div>
+        )}
+      </div>
+      <CardHead title={title} body={body} source={source} />
+      {links && (
+        <div className="flex flex-wrap gap-2 px-5 pt-4 sm:px-7">
+          {links.map(({ to, label, Icon }) => (
+            <Link
+              key={to}
+              to={to}
+              className="inline-flex items-center gap-2 rounded-[var(--radius-pill)] px-4 py-2 text-white transition-transform hover:-translate-y-[1px] motion-reduce:transition-none"
+              style={{ ...T.body, fontWeight: 700, background: ACCENT }}
+            >
+              <Icon className="h-4 w-4" aria-hidden />
+              {label}
+            </Link>
           ))}
         </div>
+      )}
+      <div className="h-5 sm:h-7" />
+    </Card>
+  );
+}
+
+/** The school's own mission, as a text post, on every viewport. */
+function MissionPost() {
+  return (
+    <Card id="mission">
+      <CardHead
+        title="Education that grows the whole student."
+        body="Established 19 March 2007, Alpha High was founded to enable students to achieve academic excellence through intellectual and physical challenge, and to become responsible citizens of a dynamic society."
+      />
+      <ul className="px-5 pb-6 pt-4 sm:px-7 sm:pb-7">
+        {[
+          "A source of intellectual, spiritual and cultural growth.",
+          "Knowledge that meets individual needs.",
+          "Critical and divergent thinking.",
+          "All-rounded students.",
+          "Attitudes that make students social, mobile, interactive, ambitious and self-directed.",
+        ].map((m) => (
+          <li
+            key={m}
+            className="flex gap-3 border-t border-[var(--color-hairline)] py-2.5 text-[var(--color-ink)]/85 last:border-b"
+            style={T.body}
+          >
+            <span
+              aria-hidden
+              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{ background: GOLD }}
+            />
+            <span>{m}</span>
+          </li>
+        ))}
+      </ul>
+    </Card>
+  );
+}
+
+/** The academics, pinned to the top of the feed, with working filters. */
+function AcademicsPost() {
+  return (
+    <Card id="academics" pinned>
+      <CardHead
+        pinned
+        title="Seventeen subjects at O-Level, twelve combinations at A-Level."
+        body="Pick a form or a stream, or search a subject, and the lists narrow to what fits you."
+      />
+      <div className="px-5 py-5 sm:px-7 sm:py-7">
+        <SubjectExplorer
+          subjects={O_LEVEL_SUBJECTS}
+          forms={FORM_OPTIONS}
+          combos={A_COMBOS}
+          accent={ACCENT}
+          subjectsNote={
+            /* The school has never said which of the seventeen are core; the
+               one grouping invented here before had to be removed. See
+               design/CONTENT-FROM-SCHOOL.md. */
+            <UnconfirmedNote>
+              [Which of these seventeen are core for every pupil, and which are offered as options —
+              to be provided by the school.]
+            </UnconfirmedNote>
+          }
+        />
+        <p className="mt-5 text-[var(--color-ink-soft)]" style={T.body}>
+          Not sure which combination fits? The academic team can talk a pupil through the options
+          before Form Five.{" "}
+          <Link
+            to="/contact"
+            className="font-bold text-[var(--color-deep-blue)] underline underline-offset-4"
+          >
+            Talk to our team
+          </Link>
+        </p>
       </div>
-    </section>
+    </Card>
+  );
+}
+
+/** Clubs, sport and the DJ decks, with the club photographs staff can replace. */
+function ClubsPost() {
+  const photos = useSuspenseQuery(photosQuery).data;
+  return (
+    <Card id="clubs">
+      <div className="grid grid-cols-2 gap-2 p-2 sm:gap-3 sm:p-3">
+        <div className="col-span-2 aspect-[16/9] overflow-hidden rounded-[0.9rem]">
+          <Img
+            p={{
+              src: djClub2,
+              alt: "An Alpha student in a blue tracksuit on the DJ decks with a laptop",
+              w: 1080,
+              h: 609,
+            }}
+          />
+        </div>
+        <div className="aspect-square overflow-hidden rounded-[0.9rem]">
+          <Img
+            p={{
+              src: beachCleanup1,
+              alt: "Environment club members collecting litter on the beach",
+              w: 1080,
+              h: 1080,
+            }}
+          />
+        </div>
+        <div className="aspect-square overflow-hidden rounded-[0.9rem]">
+          <Img
+            p={{
+              src: beachCleanup2,
+              alt: "The environment club in blue and teal tracksuits on the beach after the clean-up",
+              w: 1080,
+              h: 1080,
+            }}
+          />
+        </div>
+      </div>
+      <CardHead
+        title="The other half of an Alpha education."
+        body="Ten student-led clubs, five sports, and the decks. The environment club's beach clean-up and the DJ club are above; every club has its own photograph below."
+        source="Alpha Schools on Instagram, June 2024, and school photographs"
+      />
+      <ul
+        className="mt-4 flex snap-x gap-3 overflow-x-auto px-5 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:px-7"
+        style={{
+          maskImage: "linear-gradient(to right, black 90%, transparent)",
+          WebkitMaskImage: "linear-gradient(to right, black 90%, transparent)",
+        }}
+      >
+        {CLUBS.map((c) => {
+          const p = slotPhoto(photos, c.key)!;
+          return (
+            <li key={c.key} className="w-36 shrink-0 snap-start">
+              <div className="aspect-[4/5] overflow-hidden rounded-[0.9rem]">
+                <img
+                  src={p.src}
+                  alt={photos[c.key]?.alt_text ?? `${c.name} club at Alpha High`}
+                  width={800}
+                  height={1024}
+                  loading="lazy"
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <p
+                className="mt-1.5 font-display text-[var(--color-deep-blue)]"
+                style={{ ...T.body, fontWeight: 700 }}
+              >
+                {c.name}
+              </p>
+            </li>
+          );
+        })}
+      </ul>
+      <div className="px-5 pb-6 pt-4 sm:px-7 sm:pb-7">
+        <p
+          className="font-display text-[var(--color-deep-blue)]"
+          style={{ ...T.body, fontWeight: 800 }}
+        >
+          Sport
+        </p>
+        <ul className="mt-2 flex flex-wrap gap-2">
+          {SPORTS.map((s) => (
+            <li
+              key={s}
+              className="rounded-[var(--radius-pill)] bg-[var(--color-off-white)] px-3 py-1 text-[var(--color-ink)] ring-1 ring-[var(--color-hairline)]"
+              style={{ ...T.body, fontWeight: 600 }}
+            >
+              {s}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-5 text-[var(--color-ink)]/85" style={T.body}>
+          <strong className="text-[var(--color-deep-blue)]">Counselling.</strong> Alpha High runs a
+          school counselling department, accessible to every student: confidential, professional,
+          and built into school life.
+        </p>
+      </div>
+    </Card>
+  );
+}
+
+/** How a place is offered: the documented process, and what is still owed. */
+function AdmissionPost() {
+  return (
+    <Card id="admission">
+      <CardHead title="How a place at Alpha High is offered." />
+      <div className="px-5 pb-6 pt-4 sm:px-7 sm:pb-7">
+        <ol className="border-t border-[var(--color-hairline)]">
+          {ADMISSION_STEPS.map((step, i) => (
+            <li
+              key={step}
+              className="grid grid-cols-[2.25rem_1fr] items-baseline gap-3 border-b border-[var(--color-hairline)] py-3.5"
+            >
+              <span
+                className="font-display text-[var(--color-deep-blue)] tabular-nums"
+                style={{ ...T.section, lineHeight: 1 }}
+              >
+                {i + 1}
+              </span>
+              <p className="text-[var(--color-ink)]" style={T.body}>
+                {step}
+              </p>
+            </li>
+          ))}
+        </ol>
+        <p className="mt-4 text-[var(--color-ink-soft)]" style={T.body}>
+          These two figures are part of the admission process, not the cost of attending. [Fee
+          structure per school &mdash; to be provided]
+        </p>
+        <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+          [Entry requirements &mdash; to be confirmed with academic offices]
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <GoldButton to="/admission">
+            Get the application form
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </GoldButton>
+          <GhostButton to="/contact">Book a school tour</GhostButton>
+        </div>
+      </div>
+    </Card>
+  );
+}
+
+/** Wide screens only: the highlights again, pinned beside the feed, and the apply button. */
+function Rail() {
+  return (
+    <aside className="hidden min-w-0 lg:block">
+      <div className="sticky top-[calc(var(--header-h)+4.5rem)] space-y-6">
+        <div className="rounded-[1.25rem] bg-[var(--color-deep-blue)] p-6 text-white">
+          <p className="font-display" style={T.cardTitle}>
+            Alpha High, Mikocheni
+          </p>
+          <p className="mt-1 text-white/85" style={T.body}>
+            Co-education, Form 1 to Form 6. Established 19 March 2007.
+          </p>
+          <ul className="mt-5 space-y-2">
+            {HIGHLIGHTS.map((h) => (
+              <li key={h.href}>
+                <a
+                  href={h.href}
+                  className="flex items-center gap-3 rounded-lg p-1 transition-colors hover:bg-white/10"
+                >
+                  <img
+                    src={h.src}
+                    alt=""
+                    width={40}
+                    height={40}
+                    loading="lazy"
+                    className="h-10 w-10 rounded-full object-cover ring-2"
+                    style={{ ["--tw-ring-color" as string]: GOLD }}
+                  />
+                  <span style={{ ...T.body, fontWeight: 700 }}>{h.label}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+          <Link
+            to="/admission"
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-[var(--radius-pill)] py-3 text-[var(--color-accent-foreground)] transition-transform hover:-translate-y-[1px] motion-reduce:transition-none"
+            style={{ ...T.body, fontWeight: 800, background: GOLD }}
+          >
+            Enroll Now
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+        </div>
+      </div>
+    </aside>
   );
 }
 
@@ -929,21 +1180,22 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
       : [{ id: "seed-head", name: "Richard Gatere Maina", title: "Head Teacher", photo_url: null }];
 
   return (
-    <section className="bg-white">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
+    <section className="bg-[var(--color-off-white)]">
+      <div className={`${SHELL} py-[var(--space-section-y)]`}>
         <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT }}>Leadership & teaching</p>
-          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
+          <h2 className="font-display" style={{ ...T.section, color: ACCENT }}>
             The people behind the climb.
           </h2>
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {list.map((p) => (
-            <Reveal key={p.id} direction="up">
-              <article className="group h-full overflow-hidden rounded-2xl bg-[var(--color-off-white)] ring-1 ring-black/5 transition hover:-translate-y-1 active:translate-y-0 hover:shadow-xl">
-                <div className="relative aspect-[4/5] overflow-hidden">
-                  {p.photo_url ? (
+            <li key={p.id}>
+              <Reveal direction="up">
+                {/* With a photograph: a portrait card. Without one: a short
+                    row that says so, rather than a tall empty panel. */}
+                <article className="h-full overflow-hidden rounded-[1.25rem] bg-white ring-1 ring-[var(--color-hairline)]">
+                  {p.photo_url && (
                     <img
                       width={600}
                       height={800}
@@ -951,41 +1203,29 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                       alt={p.name}
                       loading="lazy"
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="aspect-[4/5] w-full object-cover"
                     />
-                  ) : (
-                    <div
-                      aria-hidden
-                      className="absolute inset-0 grid place-items-center"
-                      style={{
-                        background: `linear-gradient(135deg, ${ACCENT}, var(--color-bright-blue))`,
-                      }}
-                    >
-                      <span className="font-display text-6xl font-black text-white/30">
-                        {p.name
-                          .split(" ")
-                          .map((w) => w[0])
-                          .slice(0, 2)
-                          .join("")}
-                      </span>
-                    </div>
                   )}
-                  <div className="absolute inset-x-0 bottom-0 h-1" style={{ background: GOLD }} />
-                </div>
-                <div className="p-5">
-                  <h3 className="font-display text-base font-bold" style={{ color: ACCENT }}>
-                    {p.name}
-                  </h3>
-                  {p.title && (
-                    <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-[var(--color-ink)]/60">
-                      {p.title}
-                    </p>
-                  )}
-                </div>
-              </article>
-            </Reveal>
+                  <div className="p-5">
+                    <h3 className="font-display" style={{ ...T.cardTitle, color: ACCENT }}>
+                      {p.name}
+                    </h3>
+                    {p.title && (
+                      <p className="mt-1 text-[var(--color-ink-soft)]" style={T.body}>
+                        {p.title}
+                      </p>
+                    )}
+                    {!p.photo_url && (
+                      <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+                        [Photograph to be provided by the school]
+                      </p>
+                    )}
+                  </div>
+                </article>
+              </Reveal>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
@@ -996,31 +1236,34 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
 function ApplyBanner() {
   return (
     <section style={{ background: GOLD }}>
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
-        <Reveal direction="left">
-          <h2 className="font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
+      <div
+        className={`${SHELL} flex flex-col items-start justify-between gap-6 py-12 sm:flex-row sm:items-center`}
+      >
+        <div>
+          <h2 className="font-display tracking-tight" style={{ ...T.section, color: ACCENT }}>
             Applications for the next intake are open.
           </h2>
-          <p className="mt-2 max-w-xl text-sm font-semibold text-[var(--color-accent-foreground)]/80">
+          <p className="mt-2 max-w-xl text-[var(--color-accent-foreground)]" style={T.body}>
             Visit Mikocheni, sit the assessment, join the climb.
           </p>
-        </Reveal>
-        <Reveal direction="right" className="flex flex-wrap gap-3">
+        </div>
+        <div className="flex flex-wrap gap-3">
           <Link
             to="/admission"
-            className="inline-flex items-center rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97]"
-            style={{ background: ACCENT }}
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center gap-2 rounded-[var(--radius-pill)] px-7 text-white transition-transform hover:-translate-y-[1px] motion-reduce:transition-none"
+            style={{ ...T.body, fontWeight: 800, background: ACCENT }}
           >
-            Enroll Now →
+            Enroll Now
+            <ArrowRight className="h-4 w-4" aria-hidden />
           </Link>
           <Link
             to="/contact"
-            className="inline-flex items-center rounded-md border-2 px-6 py-3 text-sm font-bold transition hover:bg-white/40"
-            style={{ borderColor: ACCENT, color: ACCENT }}
+            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border-2 px-7 transition-colors hover:bg-white/40"
+            style={{ ...T.body, fontWeight: 800, borderColor: ACCENT, color: ACCENT }}
           >
             Book a Visit
           </Link>
-        </Reveal>
+        </div>
       </div>
     </section>
   );
@@ -1031,12 +1274,6 @@ function ApplyBanner() {
 function AlphaHighFooter() {
   return (
     <>
-      <div className="bg-[var(--color-deep-blue)] py-5 text-center text-xs font-bold uppercase tracking-[0.22em] text-white/80">
-        ALPHA SCHOOLS · <span style={{ color: GOLD }}>Alpha High</span>
-        <div className="mt-1 text-[11px] font-semibold tracking-[0.18em] text-white/55">
-          Mikocheni campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
-        </div>
-      </div>
       <SchoolFacilitiesSection slug="alpha-high" accent="var(--color-deep-blue)" />
       <SiteFooter />
     </>
