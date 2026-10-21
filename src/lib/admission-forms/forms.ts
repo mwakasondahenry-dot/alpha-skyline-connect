@@ -37,7 +37,7 @@ export type FormDef = {
 type School = FormDef["school"];
 type Kind = FormDef["kind"];
 
-const WEBSITE_LINE = "Website: www.alphaschools.co.tz   E-mail: alphaschoolsdsm@alpha.co.tz";
+const WEBSITE_LINE = "Website: www.alphaschools.co.tz   E-mail: alphaschoolsdsm@alphaschools.co.tz";
 
 function f(key: string, label: string, width: Field["width"], kind: FieldKind = "text"): Field {
   return { key, label, kind, width };

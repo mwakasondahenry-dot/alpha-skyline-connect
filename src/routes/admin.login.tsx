@@ -57,7 +57,7 @@ function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full rounded-lg border border-[var(--color-deep-blue)]/20 bg-white px-3 py-2.5 text-sm text-[var(--color-ink)] outline-none transition focus:border-[var(--color-gold)] focus:ring-2 focus:ring-[var(--color-gold)]/30"
-              placeholder="you@alpha.co.tz"
+              placeholder="you@alphaschools.co.tz"
             />
           </div>
 
