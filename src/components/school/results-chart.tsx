@@ -24,7 +24,10 @@ const EXAM_NAME: Record<Sitting["exam"], string> = {
  */
 export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; columns?: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [shown, setShown] = useState(false);
+  // Visible by default: server HTML, a failed bundle and reduced motion all
+  // show the squares. Only once the page has loaded, and only when the chart
+  // is still below the fold, are they hidden to be filled in on arrival.
+  const [armed, setArmed] = useState(false);
   const [focus, setFocus] = useState<Division | null>(null);
 
   useEffect(() => {
@@ -32,15 +35,16 @@ export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; colu
     if (!el) return;
     if (
       !("IntersectionObserver" in window) ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      el.getBoundingClientRect().top < window.innerHeight
     ) {
-      setShown(true);
       return;
     }
+    setArmed(true);
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
-          setShown(true);
+          setArmed(false);
           io.disconnect();
         }
       },
@@ -49,6 +53,7 @@ export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; colu
     io.observe(el);
     return () => io.disconnect();
   }, []);
+  const shown = !armed;
 
   const sq = squares(sitting);
   const present = DIVISIONS.filter((d) => sitting.divisions[d] > 0);

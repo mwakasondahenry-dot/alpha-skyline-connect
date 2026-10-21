@@ -1,14 +1,12 @@
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
-import { FacilityTile } from "@/components/school/facility-tile";
 import { UnconfirmedNote } from "@/components/school/unconfirmed-note";
 import {
   CombinationList,
-  SubjectTileList,
   FormOptionsList,
   type CombinationGroup,
 } from "@/components/school/subject-lists";
-import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
+import { GuidanceCallout } from "@/components/school/academics-frame";
 import { ResultsChart } from "@/components/school/results-chart";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
@@ -142,13 +140,6 @@ function AlphaGirlsRoute() {
 function Hero() {
   return (
     <section className="relative overflow-hidden text-white" style={{ background: DEEP }}>
-      <Backdrop
-        kind="orbit"
-        onDark
-        className="-left-10 top-[30%] hidden lg:block"
-        width="9rem"
-        rotate={-10}
-      />
       <div
         className={`${SHELL} grid items-center gap-10 pb-10 pt-[calc(var(--header-h)+2.5rem)] lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pb-14`}
       >
@@ -196,7 +187,7 @@ function Hero() {
           className="hero-rise relative pb-8 pl-8 sm:pb-10 sm:pl-14"
           style={heroStep("var(--hero-t-tail)", "420ms")}
         >
-          <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)]">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)] lg:aspect-[4/5] lg:max-h-[min(36rem,calc(100svh-12rem))] lg:w-auto">
             <HeroSlideshow
               pageKey="alpha-girls"
               showDots={false}
@@ -292,67 +283,70 @@ function Results() {
 
         <div className="mt-12 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
           <div>
-            <h3 className="font-display" style={{ ...T.cardTitle, color: GOLD }}>
-              Form Four · CSEE {CSEE_2025.year}
+            <h3 className="font-display" style={{ ...T.section, fontWeight: 900 }}>
+              Form Four {CSEE_2025.year}:{" "}
+              <span style={{ color: GOLD }}>
+                {CSEE_2025.divisions.I} of {CSEE_2025.candidates} girls in Division I.
+              </span>{" "}
+              All {CSEE_2025.passed} passed.
             </h3>
-            <p className="mt-2 font-display" style={{ ...T.section, fontWeight: 900 }}>
-              {CSEE_2025.divisions.I} of {CSEE_2025.candidates} girls in Division I. All{" "}
-              {CSEE_2025.passed} passed.
-            </p>
             <div className="mt-6">
               <ResultsChart sitting={CSEE_2025} columns={15} />
             </div>
           </div>
           <div>
-            <h3 className="font-display" style={{ ...T.cardTitle, color: GOLD }}>
-              Form Six · ACSEE {ACSEE_2026.year}
+            <h3 className="font-display" style={{ ...T.section, fontWeight: 900 }}>
+              Form Six {ACSEE_2026.year}:{" "}
+              <span style={{ color: GOLD }}>all {ACSEE_2026.candidates} in Division I or II.</span>
             </h3>
-            <p className="mt-2 font-display" style={{ ...T.section, fontWeight: 900 }}>
-              All {ACSEE_2026.candidates} in Division I or II.
-            </p>
             <div className="mt-6">
               <ResultsChart sitting={ACSEE_2026} columns={10} />
             </div>
           </div>
         </div>
 
-        <dl className="mt-14 grid border-t border-white/20 sm:grid-cols-3">
-          {[
-            {
-              k: "Division I, Form Four",
-              v: `${CSEE_2024.divisions.I} → ${CSEE_2025.divisions.I}`,
-              note: `Up from ${CSEE_2024.year} to ${CSEE_2025.year}, with ${CSEE_2025.candidates} candidates both years.`,
-            },
-            {
-              k: "Centre GPA, Form Four",
-              v: CSEE_2025.gpa,
-              note: `Down from ${CSEE_2024.gpa} in ${CSEE_2024.year}, and lower is better on NECTA's scale. ${CSEE_2025.gpaGrade}.`,
-            },
-            {
-              k: "English Language, Form Four 2025",
-              v: CSEE_2025_ENGLISH.gpa,
-              note: `${CSEE_2025_ENGLISH.grade}, across all ${CSEE_2025_ENGLISH.candidates} girls.`,
-            },
-          ].map((s) => (
-            <div
-              key={s.k}
-              className="border-b border-white/20 py-6 sm:border-b-0 sm:pr-8 [&+&]:sm:border-l [&+&]:sm:pl-8"
-            >
-              <dt className="text-white/80" style={{ ...T.body, fontWeight: 700 }}>
-                {s.k}
-              </dt>
-              <dd
-                className="mt-1 whitespace-nowrap font-display tabular-nums"
-                style={{ ...T.hero, color: GOLD, lineHeight: 1.1 }}
-              >
-                {s.v}
-              </dd>
-              <dd className="mt-2 text-white/80" style={T.body}>
-                {s.note}
-              </dd>
+        {/* The year before, square for square, so the rise is seen not told. */}
+        <div className="mt-14 grid gap-12 border-t border-white/20 pt-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
+          <div>
+            <h3 className="font-display" style={{ ...T.section, fontWeight: 900 }}>
+              The year before: {CSEE_2024.divisions.I} in Division I.{" "}
+              <span style={{ color: GOLD }}>
+                In {CSEE_2025.year}, {CSEE_2025.divisions.I}.
+              </span>
+            </h3>
+            <p className="mt-2 text-white/85" style={T.body}>
+              Form Four {CSEE_2024.year}, also {CSEE_2024.candidates} girls.
+            </p>
+            <div className="mt-6">
+              <ResultsChart sitting={CSEE_2024} columns={15} />
             </div>
-          ))}
-        </dl>
+          </div>
+          <dl className="self-end border-t border-white/20">
+            {[
+              {
+                k: "Form Four centre GPA",
+                v: `${CSEE_2025.gpaGrade}: ${CSEE_2025.gpa} in ${CSEE_2025.year}, from ${CSEE_2024.gpa} in ${CSEE_2024.year}. Lower is better on NECTA's scale.`,
+              },
+              {
+                k: "English Language",
+                v: `${CSEE_2025_ENGLISH.grade}: GPA ${CSEE_2025_ENGLISH.gpa} across all ${CSEE_2025_ENGLISH.candidates} Form Four girls in ${CSEE_2025.year}.`,
+              },
+              {
+                k: "Form Six centre GPA",
+                v: `${ACSEE_2026.gpaGrade}: ${ACSEE_2026.gpa} in ${ACSEE_2026.year}.`,
+              },
+            ].map((r) => (
+              <div key={r.k} className="border-b border-white/20 py-4">
+                <dt className="font-display" style={{ ...T.body, fontWeight: 800, color: GOLD }}>
+                  {r.k}
+                </dt>
+                <dd className="mt-1 text-white/90" style={T.body}>
+                  {r.v}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
 
         <p className="mt-8 text-white/75" style={T.body}>
           Source: NECTA&rsquo;s published results for Alpha Girls&rsquo; Secondary School, centre
@@ -990,12 +984,31 @@ const COMPETITIONS = [
 function Academics() {
   return (
     <section id="academics" className="bg-[var(--color-off-white)]" style={ANCHOR}>
-      <CurriculumBand
-        image={labBench}
-        title="Seventeen subjects at O-Level, twelve combinations at A-Level."
-        intro="Every subject examinable across Forms One to Four, what a girl in each form may choose between, and all twelve A-Level combinations with their subjects written out."
-        accent={ACCENT}
-      />
+      <div className="text-white" style={{ background: DEEP }}>
+        <div
+          className={`${SHELL} grid items-center gap-10 py-[var(--space-section-y)] lg:grid-cols-[1.1fr_1fr] lg:gap-14`}
+        >
+          <div>
+            <h2 className="font-display tracking-tight text-balance" style={T.hero}>
+              Seventeen subjects at O-Level,{" "}
+              <span style={{ color: GOLD }}>twelve combinations at A-Level.</span>
+            </h2>
+            <p className="mt-5 max-w-xl text-white/90" style={T.body}>
+              Every subject examinable across Forms One to Four, what a girl in each form may choose
+              between, and all twelve A-Level combinations with their subjects written out.
+            </p>
+          </div>
+          <img
+            src={labBench}
+            alt="Alpha Girls students at a laboratory bench during a science practical"
+            width={1200}
+            height={1273}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[4/3] w-full rounded-[1.75rem] object-cover"
+          />
+        </div>
+      </div>
 
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <div>
@@ -1003,7 +1016,22 @@ function Academics() {
             Subjects offered
           </h3>
           <div className="mt-5">
-            <SubjectTileList items={O_LEVEL_SUBJECTS} accent={ACCENT} />
+            <ul className="grid border-t border-[var(--color-hairline)] sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-3">
+              {O_LEVEL_SUBJECTS.map((sub) => (
+                <li
+                  key={sub}
+                  className="flex items-center gap-3 border-b border-[var(--color-hairline)] py-3 font-display text-[var(--color-ink)]"
+                  style={{ ...T.body, fontWeight: 700 }}
+                >
+                  <span
+                    aria-hidden
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ background: GOLD }}
+                  />
+                  {sub}
+                </li>
+              ))}
+            </ul>
           </div>
           {/* The comp splits this list into "Core Subjects (for all students)"
               and a set of option categories. The school has never said which
@@ -1045,19 +1073,21 @@ function Academics() {
           <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
             Entry criteria
           </h3>
-          <ul className="mt-5 grid gap-[var(--space-card-gap)] md:grid-cols-3">
+          <dl className="mt-5 border-t border-[var(--color-hairline)]">
             {ENTRY_CRITERIA.map((e) => (
-              <li
+              <div
                 key={e.group}
-                className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
+                className="grid gap-1 border-b border-[var(--color-hairline)] py-4 sm:grid-cols-[9rem_1fr] sm:gap-6"
               >
-                <span style={{ ...T.label, color: ACCENT }}>{e.group}</span>
-                <p className="mt-2 text-[var(--color-ink)]" style={T.body}>
+                <dt className="font-display" style={{ ...T.body, fontWeight: 800, color: ACCENT }}>
+                  {e.group}
+                </dt>
+                <dd className="text-[var(--color-ink)]" style={T.body}>
                   {e.rule}
-                </p>
-              </li>
+                </dd>
+              </div>
             ))}
-          </ul>
+          </dl>
           <UnconfirmedNote>
             Entry criteria come from the Alpha Girls document and are not yet confirmed in writing.
           </UnconfirmedNote>
@@ -1087,27 +1117,10 @@ function LifeAtKunduchi() {
   const photos = useSuspenseQuery(photosQuery).data;
   return (
     <section id="life" className="relative overflow-hidden bg-white" style={ANCHOR}>
-      {/* Marks around the campus plate rather than on it: the photograph is
-          the subject here, and a doodle over a face is graffiti. */}
-      <Backdrop
-        kind="scribble"
-        className="left-[3%] top-24 hidden md:block"
-        width="6rem"
-        rotate={-8}
-      />
-      <Backdrop kind="star" className="right-[6%] top-40" width="2.75rem" rotate={14} />
-      <Backdrop
-        kind="orbit"
-        className="bottom-24 right-[2%] hidden lg:block"
-        width="8rem"
-        rotate={6}
-      />
-
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="flex flex-wrap items-end justify-between gap-4">
           <div className="max-w-2xl">
-            <p style={{ ...T.label, color: ACCENT }}>Campus</p>
-            <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
+            <h2 className="font-display" style={{ ...T.section, color: ACCENT }}>
               Life at{" "}
               <Marked kind="underline" color="var(--color-gold)">
                 Kunduchi.
@@ -1150,18 +1163,46 @@ function LifeAtKunduchi() {
           </figure>
         </Reveal>
 
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {FACILITIES.map((f, i) => (
-            <FacilityTile
-              key={f.key}
-              slotKey={f.key}
-              label={f.label}
-              photos={photos}
-              accent={ACCENT}
-              delay={i * 70}
-            />
-          ))}
-        </div>
+        <ul className="mt-10 grid border-t border-[var(--color-hairline)] sm:grid-cols-2 sm:gap-x-10">
+          {FACILITIES.map((f) => {
+            const uploaded = slotPhoto(photos, f.key);
+            const src = uploaded?.src ?? (f.key.endsWith("science-labs") ? labBench : null);
+            return (
+              <li
+                key={f.key}
+                className="flex items-center gap-4 border-b border-[var(--color-hairline)] py-4"
+              >
+                {src ? (
+                  <img
+                    src={src}
+                    alt={photos[f.key]?.alt_text ?? `${f.label} at Alpha Girls`}
+                    width={1200}
+                    height={900}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-20 w-28 shrink-0 rounded-xl object-cover"
+                  />
+                ) : (
+                  <span
+                    aria-hidden
+                    className="h-20 w-28 shrink-0 rounded-xl border border-dashed"
+                    style={{ borderColor: ACCENT, background: "var(--color-girls-teal-tint)" }}
+                  />
+                )}
+                <div>
+                  <p className="font-display text-[var(--color-ink)]" style={{ ...T.cardTitle }}>
+                    {f.label}
+                  </p>
+                  {!src && (
+                    <p className="mt-0.5 text-[var(--color-ink-soft)]" style={T.body}>
+                      [Photograph to be provided by the school]
+                    </p>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ul>
       </div>
     </section>
   );
@@ -1175,8 +1216,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
     <section style={{ background: "var(--color-girls-teal-tint)" }}>
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
-          <p style={{ ...T.label, color: ACCENT }}>Leadership & teaching</p>
-          <h2 className="mt-2 font-display" style={{ ...T.section, color: ACCENT }}>
+          <h2 className="font-display" style={{ ...T.section, color: ACCENT }}>
             The women and men behind the climb.
           </h2>
         </Reveal>
