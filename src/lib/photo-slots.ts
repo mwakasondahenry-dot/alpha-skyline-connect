@@ -24,19 +24,20 @@ import clubSpeaking from "@/assets/club-public-speaking.webp";
 import clubUn from "@/assets/club-un.webp";
 import clubEnvironment from "@/assets/club-environment.webp";
 import campusGirls from "@/assets/campus-girls.webp";
-import photoHippoRide from "@/assets/np-hippo-ride.webp";
-import photoGirlPortrait from "@/assets/np-girl-portrait.webp";
-import photoTeacher from "@/assets/np-teacher-pupils.webp";
-import girlCutout from "@/assets/alpha-girl-uniform.webp";
-import photoBallPit from "@/assets/np-ball-pit.webp";
-import photoShapesClass from "@/assets/np-shapes-class.webp";
-import photoToyCar from "@/assets/np-toy-car.webp";
-import photoPlayground from "@/assets/np-playground.webp";
-import photoSpeakersTeam from "@/assets/np-junior-speakers-team.webp";
-import photoSpeakersGroup from "@/assets/np-junior-speakers-group.webp";
-import photoTelescope from "@/assets/np-telescope.webp";
-import photoTeam from "@/assets/np-team-thumbs.webp";
-import photoMusicalChairs from "@/assets/np-musical-chairs.webp";
+import photoHeroMain from "@/assets/np-hippo-ride-courtyard.webp";
+import photoHeroInset from "@/assets/np-pupil-desk-smile.webp";
+import photoTeacherDesk from "@/assets/np-teacher-desk-help.webp";
+import photoTwoPupils from "@/assets/np-two-pupils-garden.webp";
+import photoSlide from "@/assets/np-slide.webp";
+import photoNurseryClassroom from "@/assets/np-nursery-classroom.webp";
+import photoRideOnCars from "@/assets/np-ride-on-cars.webp";
+import photoClimbingArch from "@/assets/np-climbing-arch.webp";
+import photoCultureDay from "@/assets/np-culture-day.webp";
+import photoGraduationDance from "@/assets/np-graduation-dance.webp";
+import photoReadingHelp from "@/assets/np-teacher-reading-help.webp";
+import photoPainting from "@/assets/np-painting-together.webp";
+import photoFieldGames from "@/assets/np-field-games.webp";
+import photoWaterPlay from "@/assets/np-water-play.webp";
 import photoDance from "@/assets/np-traditional-dance.webp";
 
 export type SlotDef = {
@@ -265,33 +266,35 @@ export const PHOTO_SLOTS: readonly SlotDef[] = [
     fallback: campusGirls,
   },
 
-  // ---- Nursery & Primary · Our days (tilted card cluster) ----
+  // ---- Nursery & Primary · Opening screen and the growth ladder ----
+  // Keys keep their original names so any photo staff upload stays attached
+  // to the same position; labels describe the position as it now renders.
   {
     key: "nursery-primary.days.hippo-ride",
     school: "nursery-primary",
-    section: "Our days",
-    label: "Courtyard play card",
-    aspect: CARD,
-    guidance: "Sits in a tilted lilac frame, top right of the cluster.",
-    fallback: photoHippoRide,
+    section: "Opening screen",
+    label: "Main opening photo",
+    aspect: WIDE,
+    guidance: "The large rounded photo beside the headline. One or two happy children, bright and close.",
+    fallback: photoHeroMain,
   },
   {
     key: "nursery-primary.days.girl-portrait",
     school: "nursery-primary",
-    section: "Our days",
-    label: "Gold-frame portrait card",
-    aspect: CARD,
-    guidance: "The largest card, tilted left in a gold frame. A single pupil reads best.",
-    fallback: photoGirlPortrait,
+    section: "Opening screen",
+    label: "Small gold-framed photo",
+    aspect: WIDE,
+    guidance: "Overlaps the main photo's lower corner in a gold frame. A single pupil reads best.",
+    fallback: photoHeroInset,
   },
   {
     key: "nursery-primary.days.teacher",
     school: "nursery-primary",
-    section: "Our days",
-    label: "Teaching card",
-    aspect: CARD,
-    guidance: "Tilted navy frame, bottom right. A teacher with pupils.",
-    fallback: photoTeacher,
+    section: "Primary",
+    label: "Primary: teacher with pupils",
+    aspect: WIDE,
+    guidance: "The large photo in the Primary step. A teacher working with pupils in class.",
+    fallback: photoTeacherDesk,
   },
 
   // ---- Nursery & Primary · Primary ----
@@ -299,11 +302,10 @@ export const PHOTO_SLOTS: readonly SlotDef[] = [
     key: "nursery-primary.primary.pupil-portrait",
     school: "nursery-primary",
     section: "Primary",
-    label: "Circular pupil portrait",
-    aspect: "1 / 1",
-    guidance:
-      "Masked to a circle and anchored to the top of the frame. Use a head-and-shoulders portrait with the face high and centred; anything else crops badly.",
-    fallback: girlCutout,
+    label: "Primary: pupils outdoors",
+    aspect: WIDE,
+    guidance: "The second photo in the Primary step. Pupils in uniform, faces clear.",
+    fallback: photoTwoPupils,
   },
 
   // ---- Nursery & Primary · Gallery (captions stay in the page) ----
@@ -311,18 +313,18 @@ export const PHOTO_SLOTS: readonly SlotDef[] = [
     key: "nursery-primary.gallery.play-discovery",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Play & discovery",
+    label: "Down the slide",
     aspect: "3 / 4",
     guidance: "The tall tile — spans two rows. Use an upright photo.",
-    fallback: photoBallPit,
+    fallback: photoSlide,
   },
   {
     key: "nursery-primary.gallery.shapes",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Learning shapes",
+    label: "Our nursery classroom",
     aspect: WIDE,
-    fallback: photoShapesClass,
+    fallback: photoNurseryClassroom,
   },
   {
     key: "nursery-primary.gallery.toy-car",
@@ -330,71 +332,71 @@ export const PHOTO_SLOTS: readonly SlotDef[] = [
     section: "Gallery",
     label: "Little drivers",
     aspect: WIDE,
-    fallback: photoToyCar,
+    fallback: photoRideOnCars,
   },
   {
     key: "nursery-primary.gallery.playground",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Outdoor adventures",
+    label: "The playground",
     aspect: "2 / 1",
     guidance: "Spans two columns — use a wide photo.",
-    fallback: photoPlayground,
+    fallback: photoClimbingArch,
   },
   {
     key: "nursery-primary.gallery.speakers-team",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Junior Speakers team",
+    label: "Culture day",
     aspect: WIDE,
-    fallback: photoSpeakersTeam,
+    fallback: photoCultureDay,
   },
   {
     key: "nursery-primary.gallery.speakers-challenge",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Speakers Challenge 2025",
+    label: "Graduation performance",
     aspect: WIDE,
-    fallback: photoSpeakersGroup,
+    fallback: photoGraduationDance,
   },
   {
     key: "nursery-primary.gallery.one-to-one",
     school: "nursery-primary",
     section: "Gallery",
-    label: "One-on-one learning",
+    label: "One-on-one help",
     aspect: WIDE,
-    fallback: photoTeacher,
+    fallback: photoReadingHelp,
   },
   {
     key: "nursery-primary.gallery.telescope",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Curious minds",
+    label: "Painting together",
     aspect: WIDE,
-    fallback: photoTelescope,
+    fallback: photoPainting,
   },
   {
     key: "nursery-primary.gallery.sports-teamwork",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Sports & teamwork",
+    label: "Games on the field",
     aspect: "2 / 1",
     guidance: "Spans two columns — use a wide photo.",
-    fallback: photoTeam,
+    fallback: photoFieldGames,
   },
   {
     key: "nursery-primary.gallery.musical-chairs",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Active play",
+    label: "Outdoor play",
     aspect: WIDE,
-    fallback: photoMusicalChairs,
+    fallback: photoWaterPlay,
   },
   {
     key: "nursery-primary.gallery.dance",
     school: "nursery-primary",
     section: "Gallery",
-    label: "Culture & dance",
+    label: "Traditional dance",
     aspect: WIDE,
     fallback: photoDance,
   },

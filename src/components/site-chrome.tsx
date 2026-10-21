@@ -212,8 +212,10 @@ function MobileNav() {
       {/* Panel */}
       <div
         id="mobile-nav-panel"
-        className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col bg-[var(--color-deep-blue)] text-white shadow-2xl transition-transform duration-300 ease-out motion-reduce:transition-none lg:hidden ${
-          open ? "translate-x-0" : "translate-x-full"
+        className={`fixed inset-y-0 right-0 z-50 flex w-[86%] max-w-sm flex-col bg-[var(--color-deep-blue)] text-white transition-transform duration-300 ease-out motion-reduce:transition-none lg:hidden ${
+          // The shadow only while open: on a closed drawer it bled into the
+          // right edge of every phone screen.
+          open ? "translate-x-0 shadow-2xl" : "translate-x-full shadow-none"
         }`}
       >
         <div className="flex items-center justify-between border-b border-white/15 px-5 py-4">
