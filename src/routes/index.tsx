@@ -21,6 +21,7 @@ import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { HomeVideo } from "@/components/home-video";
+import { VIDEO_HOSTS } from "@/lib/home-video";
 import { CinematicHero, Marked, Backdrop } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
@@ -60,15 +61,21 @@ const testimonialsQuery = queryOptions({
 });
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    ...seo({
+  head: () => {
+    const base = seo({
       title: "Alpha Schools — Nursery to A-Level, Dar es Salaam",
       description:
         "Three Alpha schools in Dar es Salaam: a nursery and primary from age 2, a co-education secondary in Mikocheni and a girls' secondary in Kunduchi.",
       path: "/",
       ld: [organizationLd(), websiteLd()],
-    }),
-  }),
+    });
+    return {
+      ...base,
+      /* Open the connections the home video needs while the page is still
+         loading; see VIDEO_HOSTS. */
+      links: [...base.links, ...VIDEO_HOSTS.map((href) => ({ rel: "preconnect", href }))],
+    };
+  },
   loader: ({ context }) =>
     Promise.all([
       context.queryClient.ensureQueryData(whatsNewQuery),

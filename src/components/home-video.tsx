@@ -5,8 +5,10 @@
  * exception, and every limit on it exists for the same audience — parents on
  * mid-range Android phones on mobile data:
  *
- *   - Only the 46 KB still loads with the page. The YouTube player (~1 MB of
- *     script) is created when the section is a screen away, never earlier.
+ *   - Only the poster loads with the page itself. The YouTube player (~1 MB
+ *     of script) is built once the page is interactive and the browser has a
+ *     quiet moment, or when the section comes within a screen, whichever is
+ *     first, so it is ready before the reader scrolls down (preloadsPlayer).
  *   - It plays only while at least half of it is on screen, and pauses when
  *     scrolled past.
  *   - Reduced motion or Data Saver: no autoplay and no player until the
@@ -27,7 +29,15 @@ import { useEffect, useRef, useState } from "react";
 import poster from "@/assets/home-video-poster.webp";
 
 import { Pause, Play, Volume2, VolumeX } from "lucide-react";
-import { HOME_VIDEO_ID, embedSrc, shouldPlay, startMode, type StartMode } from "@/lib/home-video";
+import {
+  HOME_VIDEO_ID,
+  embedSrc,
+  firstPlay,
+  preloadsPlayer,
+  shouldPlay,
+  startMode,
+  type StartMode,
+} from "@/lib/home-video";
 import { T } from "@/components/type-roles";
 
 /** home-video-poster.webp at 24×14, for the instant blurred placeholder. */
@@ -135,6 +145,22 @@ export function HomeVideo() {
     };
   }, []);
 
+  /* Build the player early, as soon as the page is interactive and the
+     browser has a quiet moment, so it is ready by the time the reader
+     scrolls down to it. Not after the load event: on a slow connection that
+     fires only once every image is in, which is too late to help. The
+     observer above still covers a reader who gets there first. */
+  useEffect(() => {
+    if (mode === null || !preloadsPlayer(mode)) return;
+    const start = () => setNear(true);
+    if (typeof window.requestIdleCallback === "function") {
+      const idle = window.requestIdleCallback(start, { timeout: 2000 });
+      return () => window.cancelIdleCallback(idle);
+    }
+    const timer = window.setTimeout(start, 1000);
+    return () => window.clearTimeout(timer);
+  }, [mode]);
+
   const loadPlayer = mode === "autoplay" ? near : userStarted;
 
   useEffect(() => {
@@ -179,6 +205,15 @@ export function HomeVideo() {
       return;
     }
     triedSound.current = true;
+    const activation = (navigator as Navigator & { userActivation?: { hasBeenActive: boolean } })
+      .userActivation;
+    if (firstPlay(activation?.hasBeenActive) === "muted") {
+      /* No tap yet, so the browser would refuse sound: start muted at once
+         instead of finding that out over the grace period. */
+      p.mute();
+      p.playVideo();
+      return;
+    }
     p.unMute();
     p.playVideo();
     /* Not cleared when wantPlay flips: if the reader scrolls away inside the

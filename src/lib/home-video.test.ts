@@ -1,5 +1,43 @@
 import { describe, expect, it } from "vitest";
-import { embedSrc, shouldPlay, startMode, thumbnailSrc } from "./home-video";
+import {
+  VIDEO_HOSTS,
+  embedSrc,
+  firstPlay,
+  preloadsPlayer,
+  shouldPlay,
+  startMode,
+  thumbnailSrc,
+} from "./home-video";
+
+describe("preloadsPlayer", () => {
+  it("builds the player early for a reader who will get autoplay", () => {
+    expect(preloadsPlayer("autoplay")).toBe(true);
+  });
+  it("loads nothing in advance for a reader who must tap play", () => {
+    expect(preloadsPlayer("tap-to-play")).toBe(false);
+  });
+});
+
+describe("firstPlay", () => {
+  it("starts muted at once when the browser says the reader has not tapped yet", () => {
+    expect(firstPlay(false)).toBe("muted");
+  });
+  it("asks for sound once the reader has tapped the page", () => {
+    expect(firstPlay(true)).toBe("sound");
+  });
+  it("asks for sound in a browser that cannot say", () => {
+    expect(firstPlay(undefined)).toBe("sound");
+  });
+});
+
+describe("VIDEO_HOSTS", () => {
+  it("names the embed host and the API host, once each", () => {
+    expect(VIDEO_HOSTS).toContain("https://www.youtube-nocookie.com");
+    expect(VIDEO_HOSTS).toContain("https://www.youtube.com");
+    expect(new Set(VIDEO_HOSTS).size).toBe(VIDEO_HOSTS.length);
+    for (const h of VIDEO_HOSTS) expect(h).toMatch(/^https:\/\/[a-z.-]+$/);
+  });
+});
 
 describe("startMode", () => {
   it("autoplays for a reader with no preferences set", () => {
