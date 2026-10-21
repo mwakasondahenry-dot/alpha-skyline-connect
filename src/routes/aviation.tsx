@@ -1,55 +1,40 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 import { seo } from "@/lib/seo";
 import { breadcrumbLd } from "@/lib/structured-data";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
-import heroFloatplane from "@/assets/hero-floatplane.webp";
-import avPreFlight from "@/assets/av-pre-flight-check.webp";
-import avCessnaBriefing from "@/assets/av-cessna-briefing.webp";
-import avTailInspection from "@/assets/av-tail-inspection.webp";
-import avGroundSchool1 from "@/assets/av-ground-school-1.webp";
-import avFlightline from "@/assets/av-flightline-group.webp";
-import avGroundSchool2 from "@/assets/av-ground-school-2.webp";
-import avInstrumentDemo from "@/assets/av-instrument-demo.webp";
-import avEngineering from "@/assets/av-engineering-hands-on.webp";
-import heroSolo from "@/assets/av-hero-solo.webp";
-import heroDronePair from "@/assets/av-hero-drone-pair.webp";
-import heroDroneGirls from "@/assets/av-hero-drone-girls.webp";
-import heroCockpit from "@/assets/av-hero-cockpit-girl.webp";
-import avCockpitStudents from "@/assets/av-cockpit-students.webp";
+import { CinematicHero, GoldButton, GhostButton, Marked } from "@/components/alpha-ui";
+import { ChapterRail, RAIL_H, type Chapter } from "@/components/aviation/chapter-rail";
+import { Reveal } from "@/components/reveal";
 import { T, SHELL } from "@/components/type-roles";
-import {
-  Marked,
-  Backdrop,
-  FlightPath,
-  CompassRose,
-  AltitudeTicks,
-  IconDisc,
-} from "@/components/alpha-ui";
-import { Plane, Wrench } from "lucide-react";
+import { Phone, ArrowRight } from "lucide-react";
+import avCockpitYoke from "@/assets/av-cockpit-yoke.webp";
+import avCockpitPair from "@/assets/av-cockpit-pair.webp";
+import avTalkModelPlane from "@/assets/av-talk-model-plane.webp";
+import avHangarAirWing from "@/assets/av-hangar-air-wing.webp";
+import avCockpitCaptain from "@/assets/av-cockpit-captain.webp";
+import avGirlsCessna from "@/assets/av-girls-cessna.webp";
+import avCockpitInstruments from "@/assets/av-cockpit-instruments.webp";
+import avApronCadet from "@/assets/av-apron-cadet.webp";
+import avBoysCessna from "@/assets/av-boys-cessna.webp";
+import avApronCessna from "@/assets/av-apron-cessna.webp";
+import avCockpitHeadset from "@/assets/av-cockpit-headset.webp";
+import avAssemblyStudents from "@/assets/av-assembly-students.webp";
+import avFlightline from "@/assets/av-flightline-group.webp";
+import avTailInspection from "@/assets/av-tail-inspection.webp";
 
-// Real Alpha aviation student photos — KSOF holiday program.
-// NOTE: names below remain placeholders until written media-release
-// consent is on file for each named student.
-const FLYING_STUDENTS = [
-  { src: avFlightline, caption: "Pre-flight briefing on the flightline · KSOF, Nairobi" },
-  { src: avCessnaBriefing, caption: "Walk-around checks before take-off" },
-  { src: avPreFlight, caption: "Equipment review with KSOF instructors" },
-  { src: avTailInspection, caption: "Control-surface inspection — empennage" },
-  { src: avEngineering, caption: "Hands-on aircraft engineering practical" },
-  { src: avInstrumentDemo, caption: "Instrument demonstration during ground school" },
-  { src: avGroundSchool1, caption: "Ground school — Kenya School of Flying" },
-  { src: avGroundSchool2, caption: "Theory class — Aviation Technology module" },
-];
+/* All programme copy on this page is the school's own, from AVIATION IN
+   ALPHA SCHOOLS (October 2026), set in the site's British spelling. The
+   pioneer sentence and the coordinator's number were approved for
+   publication on 2026-10-21. Nothing here is paraphrased into a new claim. */
 
+const COORDINATOR = {
+  name: "Mr. Johnson",
+  display: "0717 742 248",
+  tel: "tel:+255717742248",
+};
 
-/* Ground school and aircraft engineering modules, supplied by the school in
-   September 2026. These replaced the "[Aviation modules — to be provided by
-   school]" placeholder.
-
-   Transcribed exactly as given. Nothing is added, reordered or expanded: the
-   invented A-Level codes KLF and ECA reached two live pages once already, and
-   a subject list is precisely the shape of content that goes wrong that way. */
 const GROUND_SCHOOL_MODULES = [
   "Aircraft General Knowledge",
   "Flight Performance and Planning",
@@ -68,58 +53,61 @@ const ENGINEERING_MODULES = [
   "Aircraft Interiors, Equipment, and Furnishings",
   "Aircraft Hydraulic Systems",
   "Landing Gear Systems",
-  "Air Conditioning and Pressurization",
+  "Air Conditioning and Pressurisation",
   "Fuel Systems",
   "Aircraft Pneumatic Systems and Maintenance",
 ] as const;
 
-/** One module list on the tarmac ground. */
-function ModuleCard({
-  eyebrow,
-  title,
-  items,
-  icon,
-}: {
-  eyebrow: string;
-  title: string;
-  items: ReadonlyArray<string>;
-  icon: React.ReactNode;
-}) {
-  return (
-    <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-sm">
-      {/* Altimeter ticks down the card's edge. The instrument a student is
-          taught to read, used as the card's own rule. */}
-      <AltitudeTicks
-        className="alpha-backdrop alpha-backdrop--onDark -right-2 top-6 h-40 w-10"
-      />
-      <IconDisc tone="gold">{icon}</IconDisc>
-      <p className="mt-5 text-[var(--color-gold)]" style={T.label}>
-        {eyebrow}
-      </p>
-      <h3 className="mt-2 font-display text-white" style={T.cardTitle}>
-        {title}
-      </h3>
-      <ul className="mt-6 space-y-3">
-        {items.map((m) => (
-          <li key={m} className="flex items-start gap-3 text-white/85" style={T.body}>
-            <span
-              aria-hidden
-              className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-gold)]"
-            />
-            <span>{m}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
+const CHAPTERS: ReadonlyArray<Chapter> = [
+  { id: "classroom", place: "Classroom" },
+  { id: "hangar", place: "Hangar" },
+  { id: "cockpit", place: "Cockpit" },
+];
+
+/* Real Alpha aviation students: airfield and cockpit visits, and the KSOF
+   holiday programme. Names stay withheld until written media-release consent
+   is on file for each student. */
+const GALLERY = [
+  { src: avGirlsCessna, w: 1200, h: 800, caption: "Alpha Girls aviation students beside a Cessna on the apron" },
+  { src: avCockpitInstruments, w: 1000, h: 667, caption: "Learning the instrument panel" },
+  { src: avApronCadet, w: 1000, h: 667, caption: "On the apron in aviation uniform" },
+  { src: avBoysCessna, w: 1000, h: 667, caption: "Alpha aviation students with a training aircraft" },
+  { src: avCockpitHeadset, w: 1000, h: 667, caption: "Headsets on in the cockpit" },
+  { src: avApronCessna, w: 1000, h: 667, caption: "A walk-round of a Cessna on the airfield" },
+  { src: avAssemblyStudents, w: 1000, h: 667, caption: "Students at an aviation talk at school" },
+  { src: avFlightline, w: 853, h: 568, caption: "Pre-flight briefing on the flightline, KSOF Nairobi" },
+  { src: avTailInspection, w: 720, h: 480, caption: "Control-surface inspection at KSOF" },
+] as const;
+
+const JOIN_STEPS = [
+  {
+    t: "Enrol at Alpha High or Alpha Girls",
+    b: "Aviation is open to secondary students at both campuses. Complete the standard Alpha admission first.",
+  },
+  {
+    t: "Register interest in the aviation programme",
+    b: "Tell admissions you'd like to join. They'll add your child to the aviation roster and the KSOF intake list.",
+  },
+  {
+    t: "Ground school and simulator hours during term",
+    b: "Ground school is taught alongside the NECTA curriculum, with simulator practice scheduled into the academic week.",
+  },
+  {
+    t: "Holiday flying at KSOF, Nairobi",
+    b: "Students travel to the Kenya School of Flying during school holidays to build their 40+ flying hours.",
+  },
+  {
+    t: "PPL on completion",
+    b: "After Form Four, or Form Six for A-Level joiners, and the required hours, students sit the PPL.",
+  },
+] as const;
 
 export const Route = createFileRoute("/aviation")({
   head: () => ({
     ...seo({
       title: "Aviation Programme — Alpha Schools, Dar es Salaam",
       description:
-        "Alpha secondary students study ground school and aircraft engineering, train in hangars with qualified instructors, and can progress toward a PPL.",
+        "Alpha secondary students study ground school and aircraft engineering, train in hangars with qualified instructors, and can progress to solo flights and a Private Pilot Licence.",
       path: "/aviation",
       ld: [breadcrumbLd([{ name: "Aviation", path: "/aviation" }])],
     }),
@@ -127,680 +115,474 @@ export const Route = createFileRoute("/aviation")({
   component: AviationPage,
 });
 
+/** Offset that clears the header and the chapter rail. */
+const BELOW_RAIL = `calc(var(--header-h) + ${RAIL_H})`;
 
-const PATHWAY = [
-  {
-    step: "01",
-    title: "Partner",
-    body:
-      "Kenya School of Flying (KSOF) in Nairobi conducts the pilot courses and ground school — a fully certified training partner.",
-  },
-  {
-    step: "02",
-    title: "Qualification",
-    body:
-      "A real Private Pilot Licence (PPL) — offered to Form Four and Form Six leavers who complete the programme.",
-  },
-  {
-    step: "03",
-    title: "Requirement",
-    body:
-      "A minimum of 40 flying hours, built up steadily through holiday flying programs at KSOF.",
-  },
-  {
-    step: "04",
-    title: "Two entry paths",
-    body:
-      "O-Level students start at Form One and complete their hours before CSEE. A-Level students joining at Form Five follow an accelerated programme with more flying and ground school.",
-  },
-];
+/**
+ * One of the three places. On desktop the photograph bleeds to the viewport
+ * edge and holds still while the chapter's text scrolls past it; on a phone
+ * it sits above the text.
+ */
+function PlaceChapter({
+  index,
+  chapter,
+  photo,
+  navy = false,
+  photoSide = "left",
+  title,
+  children,
+}: {
+  index: number;
+  chapter: Chapter;
+  photo: { src: string; w: number; h: number; alt: string; caption: string };
+  navy?: boolean;
+  photoSide?: "left" | "right";
+  title: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section
+      id={chapter.id}
+      aria-labelledby={`${chapter.id}-title`}
+      className={navy ? "bg-[var(--color-deep-blue)] text-white" : "bg-[var(--color-off-white)] text-[var(--color-ink)]"}
+      style={{ scrollMarginTop: BELOW_RAIL }}
+    >
+      <div className="grid lg:grid-cols-2">
+        <figure
+          className={`relative lg:sticky lg:top-[calc(var(--header-h)+3.5rem)] lg:self-start ${photoSide === "right" ? "lg:order-2" : ""}`}
+        >
+          <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:h-[min(calc(100svh-var(--header-h)-3.5rem),46rem)]">
+            <img
+              src={photo.src}
+              width={photo.w}
+              height={photo.h}
+              alt={photo.alt}
+              loading="lazy"
+              decoding="async"
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            <div
+              aria-hidden
+              className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-[rgba(0,26,60,0.82)] to-transparent"
+            />
+            <div className="absolute inset-x-0 bottom-0 flex items-end gap-4 p-5 sm:p-8">
+              <span
+                aria-hidden
+                className="font-display leading-none text-[var(--color-gold)] tabular-nums"
+                style={{ fontSize: "clamp(4rem, 3rem + 5vw, 7.5rem)", fontWeight: 900 }}
+              >
+                {index + 1}
+              </span>
+              <figcaption className="pb-2 text-white/90 sm:pb-3" style={T.body}>
+                {photo.caption}
+              </figcaption>
+            </div>
+          </div>
+        </figure>
 
-// (Real student photos imported above as FLYING_STUDENTS.)
+        <div
+          className={`px-[var(--container-gutter)] py-[var(--space-section-y)] lg:py-[clamp(4rem,2rem+5vw,7rem)] ${
+            photoSide === "right"
+              ? "lg:pl-[calc(max(0px,(100vw-var(--container-max))/2)+var(--container-gutter))] lg:pr-[clamp(2rem,0.5rem+2vw,3.5rem)]"
+              : "lg:pl-[clamp(2rem,0.5rem+2vw,3.5rem)] lg:pr-[calc(max(0px,(100vw-var(--container-max))/2)+var(--container-gutter))]"
+          }`}
+        >
+          <div className="max-w-[36rem]">
+            <h2
+              id={`${chapter.id}-title`}
+              className={`font-display tracking-tight text-balance ${navy ? "text-white" : "text-[var(--color-deep-blue)]"}`}
+              style={{ ...T.hero, fontSize: "clamp(2.25rem, 1.5rem + 3vw, 3.5rem)" }}
+            >
+              {title}
+            </h2>
+            {children}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
+/** A module list as ruled rows: the subjects are the content, not cards. */
+function ModuleList({
+  heading,
+  lead,
+  items,
+  navy = false,
+}: {
+  heading: string;
+  lead: string;
+  items: ReadonlyArray<string>;
+  navy?: boolean;
+}) {
+  const rule = navy ? "border-white/15" : "border-[var(--color-deep-blue)]/12";
+  return (
+    <div className="mt-12">
+      <h3
+        className={`font-display ${navy ? "text-[var(--color-gold)]" : "text-[var(--color-deep-blue)]"}`}
+        style={T.cardTitle}
+      >
+        {heading}
+      </h3>
+      <p className={`mt-2 ${navy ? "text-white/75" : "text-[var(--color-ink-soft)]"}`} style={T.body}>
+        {lead}
+      </p>
+      <ul className={`mt-5 border-t ${rule}`}>
+        {items.map((m) => (
+          <li
+            key={m}
+            className={`flex items-baseline gap-4 border-b py-3.5 ${rule} ${navy ? "text-white" : "text-[var(--color-ink)]"}`}
+            style={{ ...T.body, fontWeight: 600 }}
+          >
+            <span aria-hidden className="h-[2px] w-4 shrink-0 translate-y-[-0.3em] bg-[var(--color-gold)]" />
+            {m}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 function AviationPage() {
   return (
     <div className="min-h-screen bg-[var(--color-off-white)]">
-      <SiteHeader />
+      <SiteHeader overlay />
 
-      {/* 1. HERO — sky gradient with drifting CSS clouds */}
-      <section className="alpha-sky relative overflow-hidden text-white">
-        {/* Soft horizon glow */}
-        <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-40"
-          style={{ background: "linear-gradient(to top, rgba(255,255,255,0.18), transparent)" }}
-          aria-hidden
-        />
-
-        {/* Drifting clouds — CSS only, prefers-reduced-motion handled in styles.css */}
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      <CinematicHero
+        lineOne="Learning that"
+        lineTwo="takes off."
+        blurb="Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce aviation and flying as part of our extracurricular activities."
+        overlays={
+          // The cockpit photographs are bright behind the headline: the
+          // instrument panel sits exactly where the copy does on desktop.
           <div
-            className="alpha-cloud"
+            aria-hidden
+            className="absolute inset-0 -z-10 hidden lg:block"
             style={{
-              top: "14%", width: "180px", height: "44px",
-              ["--cloud-duration" as never]: "62s",
-              ["--cloud-delay" as never]: "-8s",
-              ["--cloud-opacity" as never]: "0.5",
-              ["--cloud-static-x" as never]: "20vw",
+              background:
+                "linear-gradient(90deg, rgba(0,26,60,0.7) 0%, rgba(0,26,60,0.5) 46%, rgba(0,26,60,0) 76%)",
             }}
           />
-          <div
-            className="alpha-cloud"
-            style={{
-              top: "32%", width: "240px", height: "56px",
-              ["--cloud-duration" as never]: "85s",
-              ["--cloud-delay" as never]: "-30s",
-              ["--cloud-opacity" as never]: "0.45",
-              ["--cloud-static-x" as never]: "55vw",
-            }}
+        }
+        media={
+          <HeroSlideshow
+            pageKey="aviation"
+            fallback={[
+              { src: avCockpitYoke, alt: "An Alpha student at the controls of a Cessna" },
+              { src: avCockpitPair, alt: "Two Alpha student pilots in the cockpit of a Cessna" },
+            ]}
           />
-          <div
-            className="alpha-cloud"
-            style={{
-              top: "58%", width: "140px", height: "36px",
-              ["--cloud-duration" as never]: "50s",
-              ["--cloud-delay" as never]: "-18s",
-              ["--cloud-opacity" as never]: "0.4",
-              ["--cloud-static-x" as never]: "75vw",
-            }}
-          />
-          <div
-            className="alpha-cloud"
-            style={{
-              top: "72%", width: "200px", height: "48px",
-              ["--cloud-duration" as never]: "95s",
-              ["--cloud-delay" as never]: "-45s",
-              ["--cloud-opacity" as never]: "0.35",
-              ["--cloud-static-x" as never]: "10vw",
-            }}
-          />
-        </div>
+        }
+        actions={
+          <>
+            <GoldButton href="#join">How to join</GoldButton>
+            <GhostButton href={COORDINATOR.tel} onNavy>
+              <Phone className="h-4 w-4" aria-hidden />
+              Call {COORDINATOR.name}
+            </GhostButton>
+          </>
+        }
+      />
 
-        {/* Subtle aircraft silhouette via photo, kept very low so text stays readable */}
-        <HeroSlideshow
-          pageKey="aviation"
-          fallback={[{ src: heroFloatplane, alt: "" }]}
-          className="pointer-events-none opacity-[0.18] mix-blend-luminosity"
-          showDots={false}
-        />
-        {/* Left-side darken so headline contrast is bulletproof */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(115deg, rgba(12,68,124,0.55) 0%, rgba(12,68,124,0.25) 50%, transparent 100%)",
-          }}
-          aria-hidden
-        />
+      {/* The rail sticks only inside this wrapper, so it leaves with the
+          third chapter instead of following the reader to the footer. */}
+      <div>
+        <ChapterRail chapters={CHAPTERS} />
 
-
-        <div className="relative mx-auto max-w-7xl px-4 pb-24 pt-24 sm:px-6 sm:pt-32 lg:pb-32 lg:pt-36">
-          <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-            {/* LEFT — copy */}
-            <div className="relative z-10">
-              <p className="text-[var(--color-gold)]" style={T.label}>
-                The Alpha difference
+        <section className="bg-white py-[var(--space-section-y)]">
+          <div className={SHELL}>
+            <Reveal>
+              <p
+                className="max-w-[48rem] font-display text-[var(--color-deep-blue)] text-balance"
+                style={{ fontSize: "clamp(1.375rem, 1.05rem + 1.4vw, 2.125rem)", lineHeight: 1.3, fontWeight: 700 }}
+              >
+                Our aim is to expose students to various fields of interest, foster growth in aviation
+                technology, enhance self-confidence, and improve career skills.
               </p>
-              <h1 className="mt-5 max-w-3xl font-display leading-[1.02] tracking-tight lg:text-7xl" style={T.section}>
-                Learning that <span className="text-[var(--color-gold)]">takes off.</span>
-              </h1>
-              <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/85 sm:text-xl">
-                [Aviation positioning statement — wording to be confirmed] In partnership with the
-                Kenya School of Flying, our students train toward a real Private Pilot Licence —
-                ground school, simulator hours, and time in the air.
+              <p className="mt-6 max-w-[40rem] text-[var(--color-ink-soft)]" style={T.body}>
+                We prioritise providing a high-quality academic experience that transforms students into
+                valuable resources for our community and the world.
               </p>
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link
-                  to="/admission"
-                  className="inline-flex items-center gap-2 rounded-full bg-[var(--color-gold)] px-6 py-3.5 font-semibold text-[var(--color-accent-foreground)] shadow-lg shadow-black/20 transition hover:scale-[1.03] hover:shadow-xl" style={T.body}
-                >
-                  How to join →
-                </Link>
-                <a
-                  href="#pathway"
-                  className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/5 px-6 py-3.5 font-semibold text-white backdrop-blur transition hover:bg-white/10" style={T.body}
-                >
-                  See the pathway
-                </a>
-              </div>
-
-              {/* mini stat strip */}
-              <div className="mt-12 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/15 pt-8">
-                <div>
-                  <div className="font-display text-[var(--color-gold)]" style={T.section}>PPL</div>
-                  <div className="mt-1 text-white/70" style={T.label}>Pathway with KSOF</div>
-                </div>
-                <div>
-                  <div className="font-display text-[var(--color-gold)]" style={T.section}>40h+</div>
-                  <div className="mt-1 text-white/70" style={T.label}>Minimum flying hours</div>
-                </div>
-                <div>
-                  <div className="font-display text-[var(--color-gold)]" style={T.section}>KSOF</div>
-                  <div className="mt-1 text-white/70" style={T.label}>Training partner</div>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT — layered photo collage */}
-            <div className="relative mx-auto h-[460px] w-full max-w-[560px] sm:h-[540px] lg:h-[600px]">
-              {/* Soft gold halo */}
-              <div
-                className="pointer-events-none absolute inset-0 -z-10"
-                style={{
-                  background:
-                    "radial-gradient(60% 55% at 55% 45%, rgba(232,160,32,0.35), transparent 70%)",
-                  filter: "blur(20px)",
-                }}
-                aria-hidden
-              />
-
-              {/* Card 1 — solo pilot on wing (anchor, large) */}
-              <figure
-                className="alpha-hero-card absolute left-[6%] top-[4%] h-[58%] w-[54%] overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-white/20"
-                style={{ ["--float-delay" as never]: "0s" }}
-              >
-                <img
-                  width={563}
-                  height={703}
-                  src={heroSolo}
-                  alt="Alpha student pilot after his first solo flight"
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-                <figcaption className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 text-[11px] font-medium uppercase tracking-wider text-white/90">
-                  First solo · KSOF
-                </figcaption>
-              </figure>
-
-              {/* Card 2 — cockpit girl (top right) */}
-              <figure
-                className="alpha-hero-card absolute right-[2%] top-0 h-[40%] w-[44%] overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-[var(--color-gold)]/40"
-                style={{ ["--float-delay" as never]: "-2.5s" }}
-              >
-                <img
-                  width={720}
-                  height={480}
-                  src={heroCockpit}
-                  alt="Alpha aviation student at the controls of a training aircraft"
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-              </figure>
-
-              {/* Card 3 — drone training pair (bottom right) */}
-              <figure
-                className="alpha-hero-card absolute bottom-[2%] right-[4%] h-[44%] w-[52%] overflow-hidden rounded-3xl shadow-2xl shadow-black/40 ring-1 ring-white/20"
-                style={{ ["--float-delay" as never]: "-5s" }}
-              >
-                <img
-                  width={1080}
-                  height={1132}
-                  src={heroDronePair}
-                  alt="Alpha aviation students during practical drone training"
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-              </figure>
-
-              {/* Card 4 — drone girls (bottom left, smaller accent) */}
-              <figure
-                className="alpha-hero-card absolute bottom-[8%] left-0 h-[34%] w-[38%] overflow-hidden rounded-3xl shadow-xl shadow-black/40 ring-1 ring-white/20"
-                style={{ ["--float-delay" as never]: "-1.2s" }}
-              >
-                <img
-                  width={1080}
-                  height={1132}
-                  src={heroDroneGirls}
-                  alt="Alpha girls operating drones during aviation practical"
-                  className="h-full w-full object-cover"
-                  loading="eager"
-                />
-              </figure>
-
-              {/* Floating badge */}
-              <div className="absolute -left-3 top-[36%] hidden rounded-2xl border border-white/15 bg-[var(--color-deep-blue)]/85 px-3 py-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-gold)] shadow-lg backdrop-blur sm:block">
-                ✈ Class of 2024
-              </div>
-            </div>
+            </Reveal>
           </div>
-        </div>
-      </section>
+        </section>
 
-
-      {/* 2. WHY IT MATTERS */}
-      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
-        <div className="mx-auto max-w-5xl px-4 text-center sm:px-6">
-          <p className="text-[var(--color-gold)]" style={T.label}>
-            Why it matters
-          </p>
-          <p className="mx-auto mt-6 max-w-4xl font-display leading-snug text-[var(--color-deep-blue)] lg:text-[2.75rem]" style={T.section}>
-            Alpha schools introduce aviation
-            and flying through extra-curricular activities — giving students the chance to explore
-            aviation technology, build confidence, and open a genuine career pathway.
-          </p>
-        </div>
-      </section>
-
-      {/* 3. PATHWAY */}
-      <section id="pathway" className="relative overflow-hidden bg-[var(--color-deep-blue)] py-[var(--space-section-y)] text-white sm:py-28">
-        <div
-          className="pointer-events-none absolute -left-32 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(232,160,32,0.4), transparent 70%)" }}
-          aria-hidden
-        />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <p className="text-[var(--color-gold)]" style={T.label}>
-              The pathway
-            </p>
-            <h2 className="mt-4 font-display tracking-tight" style={T.section}>
-              From Form One to the cockpit.
-            </h2>
-            <p className="mt-4 text-white/75">
-              A clear, structured route from secondary school into a real pilot licence —
-              built around the academic calendar and KSOF's training schedule.
-            </p>
-          </div>
-
-          <ol className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
-            {PATHWAY.map((p) => (
-              <li
-                key={p.step}
-                className="group relative rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur transition hover:scale-[1.02] hover:border-[var(--color-gold)]/40 hover:bg-white/[0.07]"
-              >
-                <div className="font-display text-[var(--color-gold)]/80" style={T.section}>
-                  {p.step}
-                </div>
-                <h3 className="mt-3 font-display" style={T.cardTitle}>{p.title}</h3>
-                <p className="mt-2 text-white/75" style={T.body}>{p.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-      </section>
-
-      {/* 4. MODULES — tarmac */}
-      <section className="alpha-tarmac relative overflow-hidden py-[var(--space-section-y)] text-white sm:py-28">
-        {/* The instrument, used as the section's watermark. Faint enough that
-            it changes no contrast reading; present enough that the tarmac
-            stops being a flat black band. */}
-        <CompassRose className="alpha-backdrop alpha-backdrop--onDark -right-16 top-16 hidden h-72 w-72 lg:block" />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="alpha-runway-divider mx-auto mb-14 w-40" aria-hidden />
-
-          {/* Prose beside the two things it describes: the theory class and
-              the hangar. The photographs earn their place by being the
-              evidence for the paragraph next to them — PRODUCT.md's second
-              success condition is a parent believing the aviation programme
-              is real rather than a marketing line. */}
-          <div className="grid gap-12 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-          <div className="max-w-3xl">
-            <p className="text-[var(--color-gold)]" style={T.label}>
-              What students learn
-            </p>
-            <h2 className="mt-4 font-display tracking-tight" style={T.section}>
+        <PlaceChapter
+          index={0}
+          chapter={CHAPTERS[0]}
+          title={
+            <>
               Aviation Technology at{" "}
               <Marked kind="sweep" color="var(--color-gold)">
                 Alpha Schools
               </Marked>
+            </>
+          }
+          photo={{
+            src: avTalkModelPlane,
+            w: 1400,
+            h: 933,
+            alt: "A pilot uses a model aircraft to explain flight to Alpha students",
+            caption: "The classroom: learning how aircraft fly",
+          }}
+        >
+          <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
+            Our secondary school students are provided with a foundational understanding of
+            aeronautics, covering essential topics such as regulations, safety, meteorology, and flight
+            operations. Through our innovative aviation programme, students learn how weather and
+            various factors influence flying and flight operations. The curriculum guides students in
+            understanding aircraft engines, electrical systems, and structural components.
+          </p>
+          <ModuleList
+            heading="Modules and lessons in ground school"
+            lead="Students will primarily focus on the following areas of specialisation in ground school:"
+            items={GROUND_SCHOOL_MODULES}
+          />
+          <p className="mt-6 text-[var(--color-ink-soft)]" style={T.body}>
+            Where ground school is taught: [To be confirmed]
+          </p>
+        </PlaceChapter>
+
+        <PlaceChapter
+          index={1}
+          chapter={CHAPTERS[1]}
+          navy
+          photoSide="right"
+          title="Hands-on in the hangar."
+          photo={{
+            src: avHangarAirWing,
+            w: 1200,
+            h: 800,
+            alt: "Alpha aviation students inside the Police Air Wing hangar beside its aircraft",
+            caption: "The hangar: a visit to the Police Air Wing",
+          }}
+        >
+          <p className="mt-6 text-white/85" style={T.body}>
+            Students gain practical experience through hands-on activities in hangars, where they learn
+            to operate aircraft under the guidance of qualified instructors.
+          </p>
+          <ModuleList
+            navy
+            heading="Aircraft engineering"
+            lead="In addition, students studying Aircraft Engineering will cover the fundamentals of aviation technology, focusing on:"
+            items={ENGINEERING_MODULES}
+          />
+        </PlaceChapter>
+
+        <PlaceChapter
+          index={2}
+          chapter={CHAPTERS[2]}
+          title="Solo flights and a pilot licence."
+          photo={{
+            src: avCockpitCaptain,
+            w: 1400,
+            h: 933,
+            alt: "Alpha student pilots at the controls of a Cessna",
+            caption: "The cockpit: at the controls",
+          }}
+        >
+          <p className="mt-6 text-[var(--color-ink)]/85" style={T.body}>
+            As students progress, they ultimately achieve solo flights and can acquire Private Pilot
+            Licence (PPL) certifications.
+          </p>
+          <dl className="mt-10 border-t border-[var(--color-deep-blue)]/12">
+            {[
+              ["Training partner", "Kenya School of Flying (KSOF), Nairobi, runs the pilot courses."],
+              ["Qualification", "A Private Pilot Licence, offered to Form Four and Form Six leavers who complete the programme."],
+              ["Flying hours", "A minimum of 40, built up through holiday flying at KSOF."],
+              ["Simulator", "Full-flight training on the CAE 7000XR Series Level D."],
+              ["Two ways in", "O-Level students start at Form One. A-Level students joining at Form Five follow an accelerated programme with more flying and ground school."],
+            ].map(([k, v]) => (
+              <div
+                key={k}
+                className="grid gap-1 border-b border-[var(--color-deep-blue)]/12 py-4 sm:grid-cols-[10rem_1fr] sm:gap-6"
+              >
+                <dt className="font-display text-[var(--color-deep-blue)]" style={{ ...T.body, fontWeight: 800 }}>
+                  {k}
+                </dt>
+                <dd className="text-[var(--color-ink)]/85" style={T.body}>
+                  {v}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </PlaceChapter>
+      </div>
+
+      {/* The club, in the school's words. The students are unnamed and this
+          is the school's prose, not a quoted testimonial. Hunt is attributed. */}
+      <section className="bg-[var(--color-deep-blue-dark)] py-[var(--space-section-y)] text-white">
+        <div className={`${SHELL} grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-center lg:gap-20`}>
+          <Reveal>
+            <h2 className="font-display tracking-tight" style={T.section}>
+              Students&rsquo; passion to{" "}
+              <Marked kind="ring" color="var(--color-gold)">
+                fly.
+              </Marked>
             </h2>
-            {/* School-supplied, September 2026. Describes the programme; makes
-                no claim about being first or only, so it is not covered by the
-                positioning ruling in design/CONTENT-FROM-SCHOOL.md. */}
-            <p className="mt-6 text-lg leading-relaxed text-white/80">
-              Our secondary school students are provided with a foundational
-              understanding of aeronautics, covering essential topics such as
-              regulations, safety, meteorology, and flight operations. Through
-              our aviation programme, students learn how weather and various
-              factors influence flying and flight operations. The curriculum
-              guides students in understanding aircraft engines, electrical
-              systems, and structural components.
+            <p className="mt-6 text-white/80" style={T.body}>
+              Speaking to members of the Alpha Aviation Club, students express how fulfilling it is to
+              pursue their dreams through flying. They find joy and fulfilment in taking flight, all while
+              advancing their careers from an early age.
             </p>
-            <p className="mt-5 text-lg leading-relaxed text-white/80">
-              Additionally, students gain practical experience through hands-on
-              activities in hangars, where they learn to operate aircraft under
-              the guidance of qualified instructors. As students progress, they
-              ultimately achieve solo flights and can acquire Private Pilot
-              Licence (PPL) certifications.
+            <p className="mt-5 text-white/80" style={T.body}>
+              The aviation programme at Alpha nurtures students&rsquo; aspirations, allowing them to reach
+              their dreams of defying gravity. We offer opportunities for students who are passionate
+              about aviation technology and aspire to fly.
             </p>
-          </div>
-
-            <figure className="relative">
-              <FlightPath className="absolute -top-10 left-0 hidden h-16 w-full lg:block" />
-              <div className="alpha-photo overflow-hidden rounded-2xl border-4 border-white/90 shadow-2xl" style={{ ["--tilt" as string]: "-2deg", transform: "rotate(-2deg)" }}>
-                <img
-                  width={752}
-                  height={501}
-                  src={avGroundSchool2}
-                  alt="Alpha students in an Aviation Technology theory class"
-                  loading="lazy"
-                  decoding="async"
-                  className="block aspect-[4/3] w-full object-cover"
-                />
-              </div>
-              <div className="alpha-photo -mt-6 ml-10 overflow-hidden rounded-2xl border-4 border-white/90 shadow-2xl" style={{ ["--tilt" as string]: "3deg", transform: "rotate(3deg)" }}>
-                <img
-                  width={853}
-                  height={568}
-                  src={avEngineering}
-                  alt="Alpha students working on an aircraft during a hangar practical"
-                  loading="lazy"
-                  decoding="async"
-                  className="block aspect-[4/3] w-full object-cover"
-                />
-              </div>
-              <figcaption className="mt-8 text-white/60" style={T.label}>
-                Ground school and hangar practicals · Kenya School of Flying
-              </figcaption>
-            </figure>
-          </div>
-
-          {/* The confirmed module lists. These replace
-              "[Aviation modules — to be provided by school]" — the school
-              supplied them in September 2026. */}
-          <div className="mt-14 grid gap-6 lg:grid-cols-2">
-            <ModuleCard
-              eyebrow="Ground school"
-              title="Areas of specialisation"
-              items={GROUND_SCHOOL_MODULES}
-              icon={<Plane className="h-6 w-6" />}
-            />
-            <ModuleCard
-              eyebrow="Aircraft engineering"
-              title="Fundamentals of aviation technology"
-              items={ENGINEERING_MODULES}
-              icon={<Wrench className="h-6 w-6" />}
-            />
-          </div>
-        </div>
-      </section>
-
-      {/* PASSION TO FLY — school-supplied, September 2026.
-          The students here are unnamed and this is the school's own prose
-          about its club, not a quoted testimonial: AGENTS.md forbids invented
-          named quotes, and there are none. The Hunt line is attributed. */}
-      <section className="relative overflow-hidden bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
-        {/* Three paper planes climbing across the section, the same gesture
-            the club is about. Sparse and faint — a wash behind the copy, not
-            a pattern competing with it. */}
-        <Backdrop kind="plane" className="left-[4%] top-16" width="3.5rem" rotate={-12} />
-        <Backdrop kind="plane" className="right-[8%] top-40 hidden sm:block" width="5rem" rotate={8} />
-        <Backdrop kind="plane" className="bottom-16 left-[38%] hidden lg:block" width="4rem" rotate={-4} />
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="grid gap-12 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-            <div>
-              <p className="text-[var(--color-brand-blue)]" style={T.label}>
-                The Alpha Aviation Club
-              </p>
-              <h2
-                className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]"
-                style={T.section}
+          </Reveal>
+          <Reveal direction="left">
+            <figure>
+              <span aria-hidden className="mb-6 block h-[3px] w-12 rounded-full bg-[var(--color-gold)]" />
+              <blockquote
+                className="font-display text-balance"
+                style={{ fontSize: "clamp(1.625rem, 1.1rem + 2.2vw, 2.75rem)", lineHeight: 1.18, fontWeight: 800 }}
               >
-                A passion to{" "}
-                <Marked kind="ring" color="var(--color-bright-blue)">
-                  fly.
-                </Marked>
-              </h2>
-              <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
-                Speaking to members of the Alpha Aviation Club, students express
-                how fulfilling it is to pursue their dreams through flying. They
-                find joy and fulfilment in taking flight, all while advancing
-                their careers from an early age.
-              </p>
-              <p className="mt-5 text-[var(--color-ink)]/80" style={T.body}>
-                The aviation programme at Alpha nurtures students' aspirations,
-                allowing them to reach their dreams of defying gravity. We offer
-                opportunities for students who are passionate about aviation
-                technology and aspire to fly.
-              </p>
-            </div>
-
-            <figure className="relative rounded-2xl bg-[var(--color-deep-blue)] p-8 text-white shadow-xl sm:p-10">
-              <span
-                aria-hidden
-                className="absolute -top-3 left-8 font-display text-6xl leading-none text-[var(--color-gold)]"
-              >
-                &ldquo;
-              </span>
-              <blockquote className="font-display leading-snug" style={T.section}>
-                For most people, the sky is the limit. For those who love
-                aviation, the sky is home.
+                &ldquo;For most people, the sky is the limit. For those who love aviation, the sky is
+                home.&rdquo;
               </blockquote>
-              <figcaption
-                className="mt-6 text-[var(--color-gold)]"
-                style={T.label}
-              >
+              <figcaption className="mt-6 text-[var(--color-gold)]" style={T.body}>
                 Jack R. Hunt, naval aviator
               </figcaption>
             </figure>
-          </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* 5. TRAINING & TECHNOLOGY — tarmac continued */}
-      <section className="alpha-tarmac relative py-[var(--space-section-y)] text-white sm:py-28">
-        {/* runway divider between the two tarmac sections */}
-        <div
-          className="alpha-runway-divider absolute left-1/2 top-0 w-64 -translate-x-1/2 -translate-y-1/2"
-          aria-hidden
-        />
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[1.1fr_1fr] lg:items-center">
-
-          <div>
-            <p className="text-[var(--color-gold)]" style={T.label}>
-              Training & technology
-            </p>
-            <h2 className="mt-4 font-display tracking-tight" style={T.section}>
-              Real cockpits. Professional simulators.
+      {/* Photo gallery. */}
+      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)]">
+        <div className={SHELL}>
+          <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <h2 className="font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+              Photo gallery
             </h2>
-            <p className="mt-5 text-lg leading-relaxed text-white/80">
-              Students train on full-flight simulators including the{" "}
-              <span className="font-semibold text-[var(--color-gold)]">CAE 7000XR Series Level D</span>
-              {" "}— professional-grade simulation that improves training efficiency and real
-              understanding — alongside actual flying lessons at KSOF in Nairobi.
+            <p className="max-w-md text-[var(--color-ink-soft)]" style={T.body}>
+              Alpha aviation students on the airfield, in the cockpit and at the Kenya School of Flying.
             </p>
-
-            <dl className="mt-8 grid grid-cols-2 gap-6 border-t border-white/15 pt-8">
-              <div>
-                <dt className="text-white/60" style={T.label}>Simulator</dt>
-                <dd className="mt-1 font-display" style={T.cardTitle}>CAE 7000XR · Level D</dd>
-              </div>
-              <div>
-                <dt className="text-white/60" style={T.label}>Live flying</dt>
-                <dd className="mt-1 font-display" style={T.cardTitle}>KSOF · Nairobi</dd>
-              </div>
-              <div>
-                <dt className="text-white/60" style={T.label}>Ground school</dt>
-                <dd className="mt-1 font-display" style={T.cardTitle}>[To be confirmed]</dd>
-              </div>
-              <div>
-                <dt className="text-white/60" style={T.label}>Outcome</dt>
-                <dd className="mt-1 font-display" style={T.cardTitle}>PPL qualification</dd>
-              </div>
-            </dl>
           </div>
-
-          <div className="relative overflow-hidden">
-            <div
-              className="absolute -inset-6 rounded-[2rem] opacity-60 blur-2xl"
-              style={{ background: "radial-gradient(circle, rgba(232,160,32,0.45), transparent 70%)" }}
-              aria-hidden
-            />
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl">
-              <img
-                width={1100}
-                height={734}
-                src={avCockpitStudents}
-                alt="Alpha student pilots training inside a Cessna cockpit"
-
-                loading="lazy"
-                decoding="async"
-                className="aspect-[4/3] w-full object-cover"
-              />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-5">
-                <div className="text-[var(--color-gold)]" style={T.label}>
-                  Simulator + live flight
-                </div>
-                <div className="font-display" style={T.cardTitle}>
-                  Hours that count toward the licence.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. OUR FLYING STUDENTS — real photos from the KSOF holiday program */}
-      {/* NOTE: photos are published with school approval. Individual student
-          NAMES remain withheld until written media-release consent is on
-          file for each student. Add names to the FLYING_STUDENTS array
-          once consents are confirmed. */}
-      <section className="bg-[var(--color-off-white)] py-[var(--space-section-y)] sm:py-28">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
-          <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="text-[var(--color-gold)]" style={T.label}>
-                Our flying students
-              </p>
-              <h2 className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
-                From classroom to flightline.
-              </h2>
-              <p className="mt-4 text-[var(--color-ink)]/75">
-                Real Alpha students on the June holiday program at the Kenya School of
-                Flying — ground school in Nairobi, pre-flight checks on the apron,
-                hands-on engineering with KSOF instructors.
-              </p>
-            </div>
-            <div className="rounded-full border border-[var(--color-gold)]/40 bg-[var(--color-gold)]/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--color-deep-blue)]">
-              June Holiday Program · KSOF
-            </div>
-          </div>
-
-          {/* Mosaic: first tile is taller, rest fill the grid */}
-          <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-4 md:grid-rows-2">
-            {FLYING_STUDENTS.map((s, i) => (
-              <figure
-                key={i}
-                className={`group relative overflow-hidden rounded-2xl bg-[var(--color-deep-blue)]/5 shadow-sm transition hover:-translate-y-1 hover:shadow-xl ${
+          <ul className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
+            {GALLERY.map((g, i) => (
+              <li
+                key={g.caption}
+                className={`group relative overflow-hidden rounded-[var(--radius-card,1rem)] bg-[var(--color-deep-blue)]/5 ${
                   i === 0 ? "col-span-2 row-span-2 aspect-square md:aspect-auto" : "aspect-[4/5]"
                 }`}
               >
-                <img
-                  width={800}
-                  height={600}
-                  src={s.src}
-                  alt={s.caption}
-                  loading="lazy"
-                  decoding="async"
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/10 to-transparent opacity-90" />
-                <figcaption className="absolute inset-x-0 bottom-0 p-4">
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-[var(--color-gold)]">
-                    KSOF · Nairobi
-                  </div>
-                  <div className="mt-1 font-display font-bold leading-tight text-white" style={T.body}>
-                    {s.caption}
-                  </div>
-                </figcaption>
-              </figure>
+                <figure className="h-full">
+                  <img
+                    src={g.src}
+                    width={g.w}
+                    height={g.h}
+                    alt={g.caption}
+                    loading="lazy"
+                    decoding="async"
+                    className="h-full w-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04] motion-reduce:transition-none"
+                  />
+                  <figcaption
+                    className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[rgba(0,26,60,0.85)] to-transparent p-3 pt-10 text-white sm:p-4 sm:pt-12"
+                    style={{ fontSize: "0.8125rem", lineHeight: 1.35, fontWeight: 600 }}
+                  >
+                    {g.caption}
+                  </figcaption>
+                </figure>
+              </li>
             ))}
-          </div>
-
-          <p className="mt-6 text-xs italic text-[var(--color-ink)]/55">
+          </ul>
+          <p className="mt-5 text-[var(--color-ink-soft)]" style={{ fontSize: "0.8125rem" }}>
             Individual student names are withheld pending written media-release consent.
+          </p>
+          <p className="mt-3 text-[var(--color-ink-soft)]" style={T.body}>
+            [Programme videos — to be provided by school]
           </p>
         </div>
       </section>
 
-
-      {/* 7. HOW TO JOIN */}
-      <section className="bg-white py-[var(--space-section-y)] sm:py-28">
-        <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="max-w-2xl">
-            <p className="text-[var(--color-gold)]" style={T.label}>
-              How to join
-            </p>
-            <h2 className="mt-4 font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
+      {/* How to join, and the person to call. */}
+      <section id="join" className="bg-white py-[var(--space-section-y)]" style={{ scrollMarginTop: "var(--header-h)" }}>
+        <div className={`${SHELL} grid gap-12 lg:grid-cols-[1.25fr_1fr] lg:gap-16`}>
+          <div>
+            <h2 className="font-display tracking-tight text-[var(--color-deep-blue)]" style={T.section}>
               Joining the aviation programme.
             </h2>
-          </div>
-
-          <div className="mt-12">
-            <ol className="space-y-5">
-              {[
-                {
-                  t: "Enrol at Alpha High or Alpha Girls",
-                  b: "Aviation is open to secondary students at both campuses. Complete the standard Alpha admission first.",
-                },
-                {
-                  t: "Register interest in the aviation programme",
-                  b: "Tell admissions you'd like to join — they'll add your child to the aviation roster and KSOF intake list.",
-                },
-                {
-                  t: "Ground school + simulator hours during term",
-                  b: "Ground school taught alongside the NECTA curriculum, with simulator practice scheduled into the academic week.",
-                },
-                {
-                  t: "Holiday flying programs at KSOF (Nairobi)",
-                  b: "Students travel to Kenya School of Flying during school holidays to build their 40+ flying hours.",
-                },
-                {
-                  t: "PPL on completion",
-                  b: "After Form Four (or Form Six for A-Level joiners) and the required hours, students sit the PPL.",
-                },
-              ].map((s, i) => (
-                <li
-                  key={i}
-                  className="flex gap-5 rounded-2xl border border-[var(--color-deep-blue)]/10 bg-[var(--color-off-white)] p-5"
-                >
-                  <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[var(--color-deep-blue)] font-display font-black text-[var(--color-gold)]" style={T.body}>
-                    {String(i + 1).padStart(2, "0")}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
+            <ol className="mt-8">
+              {JOIN_STEPS.map((s, i) => (
+                <li key={s.t} className="grid grid-cols-[2.75rem_1fr] gap-4 border-t border-[var(--color-deep-blue)]/12 py-5">
+                  <span
+                    aria-hidden
+                    className="font-display leading-none text-[var(--color-deep-blue)] tabular-nums"
+                    style={{ fontSize: "2rem", fontWeight: 900 }}
+                  >
+                    {i + 1}
+                  </span>
+                  <div>
+                    <h3 className="font-display text-[var(--color-deep-blue)]" style={T.cardTitle}>
                       {s.t}
-                    </div>
-                    <div className="mt-1 text-[var(--color-ink)]/75" style={T.body}>{s.b}</div>
+                    </h3>
+                    <p className="mt-1 text-[var(--color-ink-soft)]" style={T.body}>
+                      {s.b}
+                    </p>
                   </div>
                 </li>
               ))}
             </ol>
           </div>
+
+          <aside
+            aria-labelledby="coordinator-title"
+            className="self-start rounded-[var(--radius-card,1rem)] bg-[var(--color-deep-blue)] p-7 text-white shadow-[0_18px_40px_-18px_rgba(0,26,60,0.55)] sm:p-9 lg:sticky lg:top-[calc(var(--header-h)+1.5rem)]"
+          >
+            <p className="text-white/75" style={T.body}>
+              For further information, please contact our programme coordinator:
+            </p>
+            <h3 id="coordinator-title" className="mt-3 font-display" style={T.section}>
+              {COORDINATOR.name}
+            </h3>
+            <a
+              href={COORDINATOR.tel}
+              className="mt-6 flex items-center justify-between gap-4 rounded-[var(--radius-pill,999px)] bg-[var(--color-gold)] px-6 py-4 font-display text-[var(--color-accent-foreground)] transition-transform duration-200 hover:-translate-y-[2px] active:scale-[0.98] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+              style={{ fontSize: "1.25rem", fontWeight: 800 }}
+            >
+              <span className="tabular-nums">{COORDINATOR.display}</span>
+              <Phone className="h-5 w-5" aria-hidden />
+            </a>
+            <div className="mt-8 border-t border-white/15 pt-6">
+              <p className="text-white/75" style={T.body}>
+                Ready to apply? Every aviation student starts with the standard Alpha admission.
+              </p>
+              <div className="mt-5 flex flex-wrap gap-3">
+                <GhostButton to="/admission" onNavy>
+                  Application forms
+                  <ArrowRight className="h-4 w-4" aria-hidden />
+                </GhostButton>
+                <GhostButton to="/contact" onNavy>
+                  Book a visit
+                </GhostButton>
+              </div>
+            </div>
+          </aside>
         </div>
       </section>
 
-      {/* 8. GOLD CTA BANNER */}
-      <section
-        className="relative overflow-hidden"
-        style={{
-          background:
-            "linear-gradient(135deg, var(--color-gold) 0%, var(--color-gold-light) 60%, var(--color-gold-dark) 100%)",
-        }}
-      >
-        <div
-          className="pointer-events-none absolute -right-10 -top-10 h-64 w-64 rounded-full bg-white/15 blur-2xl"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute -bottom-16 left-10 h-72 w-72 rounded-full bg-[var(--color-deep-blue)]/15 blur-3xl"
-          aria-hidden
-        />
-        <div className="relative mx-auto flex max-w-6xl flex-col items-start gap-6 px-4 py-14 sm:px-6 md:flex-row md:items-center md:justify-between md:py-[var(--space-section-y)]">
-          <div className="max-w-2xl">
-            <h2 className="font-display leading-tight text-[var(--color-accent-foreground)]" style={T.section}>
-              Ready to give your child a head start in the sky?
-            </h2>
-            <p className="mt-3 text-[var(--color-accent-foreground)]/80">
-              Visit a campus and ask about the aviation programme.
-            </p>
-          </div>
-          <Link
-            to="/contact"
-            className="inline-flex items-center gap-2 rounded-full bg-[var(--color-deep-blue)] px-6 py-3.5 font-semibold text-white shadow-lg shadow-black/15 transition hover:scale-[1.03] hover:bg-[var(--color-deep-blue-dark)]" style={T.body}
+      {/* The school's closing line. */}
+      <section className="border-t border-[var(--color-deep-blue)]/10 bg-[var(--color-off-white)] py-[var(--space-section-y)]">
+        <div className={SHELL}>
+          <p
+            className="mx-auto max-w-[44rem] text-center font-display text-[var(--color-deep-blue)] text-balance"
+            style={{ fontSize: "clamp(1.375rem, 1.05rem + 1.4vw, 2.125rem)", lineHeight: 1.3, fontWeight: 800 }}
           >
-            Book a Visit →
-          </Link>
+            We look forward to helping shape the future of aviation through our dedicated programmes at
+            Alpha Schools.
+          </p>
+          <div className="mt-8 flex justify-center">
+            <Link
+              to="/admission"
+              className="inline-flex items-center gap-2 font-display text-[var(--color-deep-blue)] underline decoration-[var(--color-gold)] decoration-2 underline-offset-[6px] transition-colors hover:text-[var(--color-brand-blue)]"
+              style={{ ...T.body, fontWeight: 800 }}
+            >
+              Get the application form
+              <ArrowRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
         </div>
       </section>
 
