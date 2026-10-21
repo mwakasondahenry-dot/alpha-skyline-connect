@@ -9,7 +9,7 @@ import {
   type CombinationGroup,
 } from "@/components/school/subject-lists";
 import { CurriculumBand, GuidanceCallout } from "@/components/school/academics-frame";
-import labBench from "@/assets/subjects/lab-bench.webp";
+import { ResultsChart } from "@/components/school/results-chart";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
 import { schoolLd, breadcrumbLd } from "@/lib/structured-data";
@@ -21,32 +21,42 @@ import { ParentVoices } from "@/components/school/parent-voices";
 import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto } from "@/lib/photo-slots";
 import { Reveal } from "@/components/reveal";
-import girlsHero from "@/assets/school-alpha-girls.webp";
-import girlUniform from "@/assets/alpha-girl-uniform.webp";
-import campusGirls from "@/assets/campus-girls.webp";
-import { T, heroStep } from "@/components/type-roles";
-import { Marked, Backdrop, CinematicHero, HeroCredentials } from "@/components/alpha-ui";
 import { HeroSlideshow } from "@/components/hero-slideshow";
-import { Users, GraduationCap, MapPin } from "lucide-react";
+import { T, SHELL, heroStep } from "@/components/type-roles";
+import { Marked, Backdrop } from "@/components/alpha-ui";
+import { ACSEE_2026, CSEE_2024, CSEE_2025, CSEE_2025_ENGLISH } from "@/lib/girls-results";
+import {
+  ArrowRight,
+  ExternalLink,
+  Trophy,
+  ChefHat,
+  Car,
+  Briefcase,
+  Plane,
+  Mic,
+  Laptop,
+  Palette,
+  Leaf,
+} from "lucide-react";
+import labPractical from "@/assets/ag-lab-practical.webp";
+import labBench from "@/assets/ag-lab-bench.webp";
+import gradsGardenGroup from "@/assets/ag-grads-garden-group.webp";
+import gradsGardenPair from "@/assets/ag-grads-garden-pair.webp";
+import class2026Trio from "@/assets/ag-class-2026-trio.webp";
+import class2026Sash from "@/assets/ag-class-2026-sash.webp";
+import gradPortrait1 from "@/assets/ag-grad-portrait-1.webp";
+import gradPortrait2 from "@/assets/ag-grad-portrait-2.webp";
+import gradPortrait3 from "@/assets/ag-grad-portrait-3.webp";
+import gradPortrait4 from "@/assets/ag-grad-portrait-4.webp";
+import gradPortrait5 from "@/assets/ag-grad-portrait-5.webp";
+import gradPortrait6 from "@/assets/ag-grad-portrait-6.webp";
+import gradPortrait7 from "@/assets/ag-grad-portrait-7.webp";
+import gradPortrait8 from "@/assets/ag-grad-portrait-8.webp";
 
 const slug = "alpha-girls" as const;
 const ACCENT = "var(--color-girls-teal)";
+const DEEP = "var(--color-girls-teal-deep)";
 const GOLD = "var(--color-gold)";
-
-/**
- * Page-local ramp for Alpha Girls, built around --color-girls-teal.
- * Deliberately NOT in styles.css: used only on this page.
- *
- * Replaces the lilac ramp this page ran on. The washes were the "purple
- * shade" doing most of the work, so they are gone rather than recoloured —
- * the page now sits on the site's own white and off-white, with teal used as
- * a figure rather than as a bath.
- */
-const SEA = {
-  tint: "var(--color-girls-teal-tint)",
-  accent: "var(--color-girls-teal)",
-  deep: "var(--color-girls-teal-deep)",
-} as const;
 
 const photosQuery = queryOptions({
   queryKey: ["school-photos", "alpha-girls"],
@@ -64,7 +74,7 @@ export const Route = createFileRoute("/schools/alpha-girls")({
     ...seo({
       title: "Alpha Girls, Kunduchi — Alpha Schools, Dar es Salaam",
       description:
-        "Alpha Girls High School in Kunduchi, Dar es Salaam: a girls' secondary teaching Form 1 to Form 6, with 15 O-Level subjects and 12 A-Level combinations.",
+        "Alpha Girls High School in Kunduchi, Dar es Salaam: a girls' secondary from Form 1 to Form 6. In NECTA's 2025 Form Four results, 30 of 45 girls reached Division I.",
       path: "/schools/alpha-girls",
       ld: [
         schoolLd(
@@ -84,6 +94,22 @@ export const Route = createFileRoute("/schools/alpha-girls")({
   component: AlphaGirlsRoute,
 });
 
+/** Section anchors, in the order the reader meets them. */
+const SUB_NAV = [
+  { label: "Results", href: "#results" },
+  { label: "Our journey", href: "#journey" },
+  { label: "Leading", href: "#distinctive" },
+  { label: "Academics", href: "#academics" },
+  { label: "Campus", href: "#life" },
+  { label: "Coming up", href: "#year" },
+] as const;
+
+/** Clears the header and the sticky sub-nav when jumping to an anchor. */
+const ANCHOR = { scrollMarginTop: "calc(var(--header-h) + 3.75rem)" };
+
+const BTN =
+  "inline-flex min-h-[var(--btn-primary-min-h)] items-center gap-2 rounded-[var(--radius-pill)] px-7 transition-transform duration-150 hover:-translate-y-[1px] active:scale-[0.97] motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)]";
+
 function AlphaGirlsRoute() {
   const { data } = useSuspenseQuery(bundleQuery);
   return (
@@ -91,17 +117,12 @@ function AlphaGirlsRoute() {
       <SiteHeader overlay />
       <Hero />
       <SchoolSubNav items={SUB_NAV} />
-      {/* Claim, then proof, then the school behind it. The calendar used to
-          sit between the competitions and About, which put term dates in
-          front of a reader who did not yet know what the school was. It now
-          follows the campus, where someone already convinced is looking for
-          when things happen. */}
-      <WhatMakesAlphaGirls />
-      <WhereTheyCompete />
-      <About />
+      <Results />
+      <Journey />
+      <HowTheyLead />
       <Academics />
       <LifeAtKunduchi />
-      <TheSchoolYear />
+      <ComingUp />
       <Staff staff={data.staff} />
       <ParentVoices school="alpha-girls" accent="var(--color-girls-teal)" />
       <ApplyBanner />
@@ -110,204 +131,680 @@ function AlphaGirlsRoute() {
   );
 }
 
-// ---------- Entry requirements ----------
+// ---------- Hero ----------
+
 /**
- * The opening screen.
- *
- * A full-viewport photographic hero, with the navigation over it.
- *
- * This page used to open on a lilac gradient with drifting blooms. That
- * ramp was the "purple shade" doing most of the work, and it is gone
- * rather than recoloured.
- *
- * The scrim underneath is the shared navy one, because design/README.md
- * requires the headline to stay legible over ANY photograph and that
- * guarantee is not something to re-derive per page. The teal wash sits on
- * top of it: identity without touching legibility.
+ * Opens on a deep sea-green field rather than a scrimmed photo: the green of
+ * the Class of 2026 suits, with gold the colour of the gowns' trim. The
+ * graduates' photograph is the admin-managed slideshow, framed rather than
+ * full-bleed, so the headline never depends on how dark a slide is.
  */
 function Hero() {
   return (
-    <CinematicHero
-      eyebrow="Girls only · Form 1–6 · Kunduchi"
-      lineOne="Where girls learn"
-      lineTwo="to lead."
-      blurb="Leadership is practised daily here — house, prefect and club roles are all held by girls. NECTA sciences and arts, Form 1 to Form 6 on the Kunduchi campus."
-      media={
-        <HeroSlideshow
-          pageKey="alpha-girls"
-          fallback={[
-            { src: girlsHero, alt: "Alpha Girls students on the Kunduchi campus" },
-            { src: girlUniform, alt: "An Alpha Girls student in school uniform" },
-            { src: campusGirls, alt: "Alpha Girls debate team with their medals and certificates" },
-          ]}
-        />
-      }
-      overlays={
-        /* The page's own temperature, laid over the shared navy scrim rather
-           than replacing it — the scrim is what guarantees the headline reads
-           over any slide, and that is not a guarantee to re-derive per page.
+    <section className="relative overflow-hidden text-white" style={{ background: DEEP }}>
+      <Backdrop
+        kind="orbit"
+        onDark
+        className="-left-10 top-[30%] hidden lg:block"
+        width="9rem"
+        rotate={-10}
+      />
+      <div
+        className={`${SHELL} grid items-center gap-10 pb-10 pt-[calc(var(--header-h)+2.5rem)] lg:grid-cols-[1fr_1.05fr] lg:gap-14 lg:pb-14`}
+      >
+        <div>
+          <h1 className="font-display tracking-tight text-balance" style={T.hero}>
+            <span className="hero-rise block" style={heroStep("var(--hero-t-line-1)", "420ms")}>
+              Where girls learn
+            </span>
+            <span
+              className="hero-rise block"
+              style={{ ...heroStep("var(--hero-t-line-2)", "420ms"), color: GOLD }}
+            >
+              to lead.
+            </span>
+          </h1>
+          <p
+            className="hero-rise mt-5 max-w-lg text-white/90"
+            style={{ ...T.body, ...heroStep("var(--hero-t-blurb)") }}
+          >
+            Leadership is practised daily here — house, prefect and club roles are all held by
+            girls. NECTA sciences and arts, Form 1 to Form 6 on the Kunduchi campus.
+          </p>
+          <div
+            className="hero-rise mt-7 flex flex-wrap gap-3"
+            style={heroStep("var(--hero-t-cta)")}
+          >
+            <Link
+              to="/admission"
+              className={`${BTN} text-[var(--color-accent-foreground)]`}
+              style={{ ...T.body, fontWeight: 800, background: GOLD }}
+            >
+              Enroll Now
+            </Link>
+            <Link
+              to="/contact"
+              className={`${BTN} border border-white/45 text-white hover:bg-white/10`}
+              style={{ ...T.body, fontWeight: 800 }}
+            >
+              Book a Visit
+            </Link>
+          </div>
+        </div>
 
-           Held to the left, behind the copy, and fully clear by 62%. Carried
-           further across it mixed with the warm light of the classroom slide
-           and cast the right-hand side of the photograph green. A tint that
-           discolours the photograph is not identity, it is a fault. */
         <div
-          aria-hidden
-          className="hero-scrim absolute inset-0 -z-10"
-          style={{
-            background:
-              "linear-gradient(118deg, color-mix(in srgb, var(--color-girls-teal-deep) 68%, transparent) 0%, color-mix(in srgb, var(--color-girls-teal-deep) 26%, transparent) 38%, transparent 62%)",
-          }}
-        />
-      }
-      actions={
-        <>
-          <Link
-            to="/admission"
-            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] px-7 text-[var(--color-accent-foreground)] shadow-md transition-transform duration-150 hover:scale-[1.02] active:scale-[0.97] motion-reduce:transition-none"
-            style={{ ...T.body, fontWeight: "var(--btn-primary-weight)", background: GOLD }}
+          className="hero-rise relative pb-8 pl-8 sm:pb-10 sm:pl-14"
+          style={heroStep("var(--hero-t-tail)", "420ms")}
+        >
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] shadow-[0_30px_60px_-30px_rgba(0,0,0,0.6)]">
+            <HeroSlideshow
+              pageKey="alpha-girls"
+              showDots={false}
+              fallback={[
+                {
+                  src: gradsGardenGroup,
+                  alt: "Alpha Girls graduates in black and gold gowns in the school garden",
+                },
+                {
+                  src: class2026Trio,
+                  alt: "Three Alpha Girls students of the Class of 2026 in green suits",
+                },
+                {
+                  src: labPractical,
+                  alt: "Alpha Girls students at work in the science laboratory",
+                },
+              ]}
+              imgClassName="object-cover"
+            />
+          </div>
+          <img
+            src={gradPortrait1}
+            alt=""
+            width={700}
+            height={980}
+            className="absolute bottom-0 left-0 w-[24%] -rotate-3 rounded-2xl border-4 object-cover shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)]"
+            style={{ borderColor: GOLD, aspectRatio: "5 / 7" }}
+          />
+          <img
+            src={gradPortrait2}
+            alt=""
+            width={700}
+            height={980}
+            className="absolute bottom-6 left-[20%] hidden w-[20%] rotate-3 rounded-2xl border-4 border-white object-cover shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)] sm:block"
+            style={{ aspectRatio: "5 / 7" }}
+          />
+        </div>
+      </div>
+
+      {/* The results, at the hero's foot: the first proof a parent reads. */}
+      <a
+        href="#results"
+        className="hero-rise group block border-t border-black/10"
+        style={{ ...heroStep("var(--hero-t-tail)", "320ms"), background: GOLD }}
+      >
+        <div
+          className={`${SHELL} flex flex-col gap-2 py-4 text-[var(--color-deep-blue)] sm:flex-row sm:items-center sm:gap-8`}
+        >
+          <p className="font-display" style={{ ...T.body, fontWeight: 900 }}>
+            Form Four 2025: {CSEE_2025.divisions.I} of {CSEE_2025.candidates} in Division I
+          </p>
+          <p className="font-display" style={{ ...T.body, fontWeight: 900 }}>
+            Form Six 2026: all {ACSEE_2026.candidates} in Division I or II
+          </p>
+          <span
+            className="flex items-center gap-1.5 sm:ml-auto"
+            style={{ ...T.body, fontWeight: 700 }}
           >
-            Enroll Now
-          </Link>
-          <Link
-            to="/contact"
-            className="inline-flex min-h-[var(--btn-primary-min-h)] items-center rounded-[var(--radius-pill)] border border-[var(--color-surface)]/45 px-7 text-[var(--color-surface)] transition-colors duration-150 hover:bg-[var(--color-surface)]/10 active:scale-[0.97] motion-reduce:transition-none"
-            style={{ ...T.body, fontWeight: "var(--btn-primary-weight)" }}
-          >
-            Book a Visit
-          </Link>
-        </>
-      }
-      foot={
-        <HeroCredentials
-          items={[
-            {
-              label: "Girls only",
-              sub: "Form 1 to Form 6",
-              icon: <Users className="h-5 w-5" />,
-            },
-            {
-              label: "NECTA curriculum",
-              sub: "CSEE and ACSEE",
-              icon: <GraduationCap className="h-5 w-5" />,
-            },
-            {
-              label: "Kunduchi campus",
-              sub: "Dar es Salaam",
-              icon: <MapPin className="h-5 w-5" />,
-            },
-          ]}
-        />
-      }
-    />
+            See the results
+            <ArrowRight
+              className="h-4 w-4 transition-transform group-hover:translate-x-1"
+              aria-hidden
+            />
+          </span>
+        </div>
+      </a>
+    </section>
   );
 }
 
-/* ----------------- About ----------------- */
+// ---------- Results ----------
 
-function About() {
+function Results() {
   return (
-    <section className="relative overflow-hidden bg-white">
-      <Backdrop kind="orbit" className="-left-8 top-16 hidden lg:block" width="7rem" rotate={-8} />
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <div className="grid items-start gap-12 lg:grid-cols-[1.3fr_1fr]">
-          <Reveal direction="left">
-            <p style={{ ...T.label, color: ACCENT }}>About Alpha Girls</p>
-            <h2
-              className="mt-3 font-display text-3xl font-black tracking-tight sm:text-4xl"
-              style={{ color: ACCENT }}
-            >
-              Excellence,{" "}
-              <Marked kind="underline" color="var(--color-gold)">
-                <span style={{ color: "var(--color-bright-blue)" }}>no exceptions.</span>
-              </Marked>
-            </h2>
-            <p className="mt-6 text-[var(--color-ink)]/80" style={T.body}>
-              Alpha Girls High School sits at Kunduchi and teaches the Tanzanian national curriculum
-              from Form 1 to Form 6 — NECTA sciences and arts, with aviation, coding and enterprise
-              on the timetable rather than beside it.
-            </p>
-            <p className="mt-4 text-base leading-relaxed text-[var(--color-ink)]/80">
-              The school exists to enable its students to achieve their best intellectually and
-              physically, and to become responsible, self-directed citizens of a dynamic society.
-            </p>
+    <section
+      id="results"
+      className="relative overflow-hidden py-[var(--space-section-y)] text-white"
+      style={{ ...ANCHOR, background: DEEP }}
+    >
+      <div className={SHELL}>
+        <Reveal>
+          <h2 className="max-w-3xl font-display tracking-tight text-balance" style={T.hero}>
+            The results, as{" "}
+            <Marked kind="underline" color={GOLD}>
+              NECTA
+            </Marked>{" "}
+            published them.
+          </h2>
+          <p className="mt-4 max-w-2xl text-white/85" style={T.body}>
+            One square for every girl who sat the exam, coloured by the division she reached.
+          </p>
+        </Reveal>
 
-            <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-5">
-              <Stat value="Form 1–6" label="O & A-Level" />
-              <Stat value="11" label="A-Level combos" />
-              <Stat value="100%" label="Girls leadership" />
+        <div className="mt-12 grid gap-12 lg:grid-cols-[1.5fr_1fr] lg:gap-16">
+          <div>
+            <h3 className="font-display" style={{ ...T.cardTitle, color: GOLD }}>
+              Form Four · CSEE {CSEE_2025.year}
+            </h3>
+            <p className="mt-2 font-display" style={{ ...T.section, fontWeight: 900 }}>
+              {CSEE_2025.divisions.I} of {CSEE_2025.candidates} girls in Division I. All{" "}
+              {CSEE_2025.passed} passed.
+            </p>
+            <div className="mt-6">
+              <ResultsChart sitting={CSEE_2025} columns={15} />
             </div>
-          </Reveal>
+          </div>
+          <div>
+            <h3 className="font-display" style={{ ...T.cardTitle, color: GOLD }}>
+              Form Six · ACSEE {ACSEE_2026.year}
+            </h3>
+            <p className="mt-2 font-display" style={{ ...T.section, fontWeight: 900 }}>
+              All {ACSEE_2026.candidates} in Division I or II.
+            </p>
+            <div className="mt-6">
+              <ResultsChart sitting={ACSEE_2026} columns={10} />
+            </div>
+          </div>
+        </div>
 
-          <Reveal direction="right">
+        <dl className="mt-14 grid border-t border-white/20 sm:grid-cols-3">
+          {[
+            {
+              k: "Division I, Form Four",
+              v: `${CSEE_2024.divisions.I} → ${CSEE_2025.divisions.I}`,
+              note: `Up from ${CSEE_2024.year} to ${CSEE_2025.year}, with ${CSEE_2025.candidates} candidates both years.`,
+            },
+            {
+              k: "Centre GPA, Form Four",
+              v: CSEE_2025.gpa,
+              note: `Down from ${CSEE_2024.gpa} in ${CSEE_2024.year}, and lower is better on NECTA's scale. ${CSEE_2025.gpaGrade}.`,
+            },
+            {
+              k: "English Language, Form Four 2025",
+              v: CSEE_2025_ENGLISH.gpa,
+              note: `${CSEE_2025_ENGLISH.grade}, across all ${CSEE_2025_ENGLISH.candidates} girls.`,
+            },
+          ].map((s) => (
             <div
-              className="relative overflow-hidden rounded-2xl p-7 text-white shadow-xl"
-              style={{ background: ACCENT }}
+              key={s.k}
+              className="border-b border-white/20 py-6 sm:border-b-0 sm:pr-8 [&+&]:sm:border-l [&+&]:sm:pl-8"
             >
-              <div
-                aria-hidden
-                className="absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-30 blur-2xl"
-                style={{ background: GOLD }}
-              />
-              <p
-                className="text-[11px] font-bold uppercase tracking-[0.22em]"
-                style={{ color: GOLD }}
+              <dt className="text-white/80" style={{ ...T.body, fontWeight: 700 }}>
+                {s.k}
+              </dt>
+              <dd
+                className="mt-1 whitespace-nowrap font-display tabular-nums"
+                style={{ ...T.hero, color: GOLD, lineHeight: 1.1 }}
               >
-                Our Promise
-              </p>
-              <h3 className="mt-2 font-display" style={T.cardTitle}>
-                Leadership is practised, not promised.
-              </h3>
-              <ul className="mt-5 space-y-3 text-sm leading-relaxed text-white/90">
-                {[
-                  "A full NECTA syllabus, its own laboratories, and no ceiling on what is expected.",
-                  "Aviation and coding built into the timetable — not optional extras.",
-                  "Leadership practised daily — house, prefect and club roles led by girls.",
-                  "A campus where speaking up is ordinary, not brave.",
-                ].map((m) => (
-                  <li key={m} className="flex gap-3">
+                {s.v}
+              </dd>
+              <dd className="mt-2 text-white/80" style={T.body}>
+                {s.note}
+              </dd>
+            </div>
+          ))}
+        </dl>
+
+        <p className="mt-8 text-white/75" style={T.body}>
+          Source: NECTA&rsquo;s published results for Alpha Girls&rsquo; Secondary School, centre
+          S5889 —{" "}
+          {[
+            ["Form Four 2025", CSEE_2025.source],
+            ["Form Four 2024", CSEE_2024.source],
+            ["Form Six 2026", ACSEE_2026.source],
+          ].map(([label, href], i) => (
+            <span key={href}>
+              {i > 0 && " · "}
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-white underline underline-offset-4 hover:text-[var(--color-gold)]"
+              >
+                {label}
+                <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+              </a>
+            </span>
+          ))}
+          .
+        </p>
+      </div>
+    </section>
+  );
+}
+
+// ---------- Journey ----------
+
+/** The milestones the site already records, oldest first. */
+const MILESTONES = [
+  {
+    when: "2020",
+    what: "Alpha Girls opens at the Kunduchi campus",
+    body: "A girls-only secondary school, part of Alpha Schools since 2007.",
+  },
+  {
+    when: "18 April 2026",
+    what: "The 5th Form VI graduation",
+    body: "Five Form Six classes have now graduated from Kunduchi.",
+  },
+  {
+    when: "22 August 2026",
+    what: "The 4th Form IV graduation day",
+    body: "Form Four girls in their gowns, ahead of the CSEE in November.",
+  },
+  {
+    when: "2026",
+    what: "Every Form Six girl in Division I or II",
+    body: "Ten in Division I, ten in Division II, in NECTA's ACSEE.",
+  },
+] as const;
+
+const PORTRAITS = [
+  gradPortrait3,
+  gradPortrait4,
+  gradPortrait5,
+  gradPortrait6,
+  gradPortrait7,
+  gradPortrait8,
+  gradPortrait2,
+  gradPortrait1,
+];
+
+function Journey() {
+  return (
+    <section
+      id="journey"
+      className="relative overflow-hidden bg-white py-[var(--space-section-y)]"
+      style={ANCHOR}
+    >
+      <div className={`${SHELL} grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:gap-16`}>
+        <Reveal>
+          <h2
+            className="font-display tracking-tight text-balance"
+            style={{ ...T.hero, color: DEEP }}
+          >
+            Excellence,{" "}
+            <Marked kind="underline" color={GOLD}>
+              no exceptions.
+            </Marked>
+          </h2>
+          <p className="mt-6 max-w-xl text-[var(--color-ink)]/85" style={T.body}>
+            Alpha Girls High School sits at Kunduchi and teaches the Tanzanian national curriculum
+            from Form 1 to Form 6 — NECTA sciences and arts, with aviation, coding and enterprise on
+            the timetable rather than beside it.
+          </p>
+          <p className="mt-4 max-w-xl text-[var(--color-ink)]/85" style={T.body}>
+            The school exists to enable its students to achieve their best intellectually and
+            physically, and to become responsible, self-directed citizens of a dynamic society.
+          </p>
+
+          <ol className="mt-10 border-l-[3px] pl-7" style={{ borderColor: GOLD }}>
+            {MILESTONES.map((m) => (
+              <li key={m.what} className="relative pb-7 last:pb-0">
+                <span
+                  aria-hidden
+                  className="absolute -left-[2.2rem] top-1 h-4 w-4 rounded-full border-[3px] bg-white"
+                  style={{ borderColor: DEEP }}
+                />
+                <p className="font-display" style={{ ...T.body, fontWeight: 800, color: ACCENT }}>
+                  {m.when}
+                </p>
+                <p
+                  className="mt-0.5 font-display"
+                  style={{ ...T.cardTitle, color: "var(--color-ink)" }}
+                >
+                  {m.what}
+                </p>
+                <p className="mt-1 text-[var(--color-ink-soft)]" style={T.body}>
+                  {m.body}
+                </p>
+              </li>
+            ))}
+          </ol>
+          <UnconfirmedNote>
+            The graduation dates come from the 2026 calendar supplied by the school in August 2026,
+            not yet confirmed in writing. The 2026 Form Six results are NECTA&rsquo;s.
+          </UnconfirmedNote>
+        </Reveal>
+
+        <div className="grid grid-cols-2 gap-3 sm:gap-4">
+          <figure className="col-span-2">
+            <img
+              src={class2026Trio}
+              alt="Three Alpha Girls students of the Class of 2026 in green suits"
+              width={1400}
+              height={1887}
+              loading="lazy"
+              decoding="async"
+              className="aspect-[4/3] w-full rounded-[1.75rem] object-cover object-[50%_25%]"
+            />
+            <figcaption className="mt-2.5 text-[var(--color-ink-soft)]" style={T.body}>
+              The Class of 2026.
+            </figcaption>
+          </figure>
+          <img
+            src={class2026Sash}
+            alt="An Alpha Girls student wearing a Class of 2026 sash"
+            width={900}
+            height={1311}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[3/4] w-full rounded-[1.75rem] object-cover object-top"
+          />
+          <img
+            src={gradsGardenPair}
+            alt="Alpha Girls graduates in gowns in the school garden"
+            width={1000}
+            height={1500}
+            loading="lazy"
+            decoding="async"
+            className="aspect-[3/4] w-full rounded-[1.75rem] object-cover"
+          />
+        </div>
+      </div>
+
+      {/* Graduation day: a wall of portraits. */}
+      <div className={`${SHELL} mt-16`}>
+        <h3 className="font-display" style={{ ...T.section, color: DEEP }}>
+          Graduation day.
+        </h3>
+        <ul className="mt-6 grid grid-cols-4 gap-2 sm:gap-3 md:grid-cols-8">
+          {PORTRAITS.map((src, i) => (
+            <li key={src} className={i % 2 ? "md:translate-y-6" : ""}>
+              <img
+                src={src}
+                alt="An Alpha Girls graduate in a black and gold gown"
+                width={700}
+                height={980}
+                loading="lazy"
+                decoding="async"
+                className="aspect-[5/7] w-full rounded-2xl object-cover"
+              />
+            </li>
+          ))}
+        </ul>
+        <p className="mt-10 text-[var(--color-ink-soft)]" style={T.body}>
+          Students&rsquo; names are withheld pending written media-release consent.
+        </p>
+      </div>
+    </section>
+  );
+}
+
+// ---------- How they lead ----------
+
+const MONTHS = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const CLUB_ICONS: Record<string, typeof Trophy> = {
+  Driving: Car,
+  Entrepreneurship: Briefcase,
+  Aviation: Plane,
+  Debate: Mic,
+  "ICT / Computer": Laptop,
+  "Music / Arts": Palette,
+  Environmental: Leaf,
+};
+
+/** Alpha Girls leads with what only Alpha Girls has. */
+function HowTheyLead() {
+  const photos = useSuspenseQuery(photosQuery).data;
+  const plate = slotPhoto(photos, "alpha-girls.students.campus-plate")!;
+  return (
+    <section
+      id="distinctive"
+      className="relative overflow-hidden py-[var(--space-section-y)] text-white"
+      style={{ ...ANCHOR, background: ACCENT }}
+    >
+      <Backdrop kind="star" onDark className="right-[5%] top-12" width="2.75rem" rotate={12} />
+      <div className={SHELL}>
+        <Reveal>
+          <h2 className="max-w-3xl font-display tracking-tight text-balance" style={T.hero}>
+            Cookery that runs as a business, debate that travels, and girls who learn to drive.
+          </h2>
+        </Reveal>
+
+        <div className="mt-12 grid gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
+          <figure>
+            <img
+              src={plate.src}
+              alt={
+                photos["alpha-girls.students.campus-plate"]?.alt_text ??
+                "Alpha Girls students celebrating with medals and certificates"
+              }
+              width={1600}
+              height={1000}
+              loading="lazy"
+              decoding="async"
+              className="aspect-[3/2] w-full rounded-[1.75rem] object-cover"
+            />
+            <figcaption className="mt-3 text-white/90" style={T.body}>
+              Medals and certificates, brought back to Kunduchi.
+            </figcaption>
+          </figure>
+
+          <div>
+            <h3
+              className="flex items-center gap-2 font-display"
+              style={{ ...T.cardTitle, color: GOLD }}
+            >
+              <Trophy className="h-5 w-5" aria-hidden /> Where they compete
+            </h3>
+            <ul className="mt-4 border-t border-white/25">
+              {[...COMPETITIONS]
+                .sort((x, y) => MONTHS.indexOf(x.when) - MONTHS.indexOf(y.when))
+                .map((c) => (
+                  <li
+                    key={c.name}
+                    className="grid grid-cols-[5.5rem_1fr] gap-3 border-b border-white/25 py-3.5"
+                  >
                     <span
-                      aria-hidden
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full"
-                      style={{ background: GOLD }}
-                    />
-                    <span>{m}</span>
+                      className="font-display"
+                      style={{ ...T.body, fontWeight: 800, color: GOLD }}
+                    >
+                      {c.when}
+                    </span>
+                    <span>
+                      <span className="block font-display" style={{ ...T.body, fontWeight: 800 }}>
+                        {c.name}
+                      </span>
+                      <span className="text-white/80" style={T.body}>
+                        {c.where}
+                      </span>
+                    </span>
                   </li>
                 ))}
-              </ul>
-            </div>
-          </Reveal>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-14 grid gap-10 lg:grid-cols-2 lg:gap-14">
+          <div>
+            <h3
+              className="flex items-center gap-2 font-display"
+              style={{ ...T.cardTitle, color: GOLD }}
+            >
+              <ChefHat className="h-5 w-5" aria-hidden /> The cookery enterprise pathway
+            </h3>
+            <p className="mt-2 text-white/90" style={T.body}>
+              Girls do not just cook. They take a product the whole way.
+            </p>
+            <ol className="mt-5 flex flex-wrap gap-2">
+              {ENTERPRISE_PATHWAY.map((step, i) => (
+                <li
+                  key={step}
+                  className="flex items-center gap-2 rounded-[var(--radius-pill)] bg-white px-4 py-1.5 font-display"
+                  style={{ ...T.body, fontWeight: 800, color: DEEP }}
+                >
+                  <span className="tabular-nums" style={{ color: ACCENT }}>
+                    {i + 1}
+                  </span>
+                  {step}
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <h3 className="font-display" style={{ ...T.cardTitle, color: GOLD }}>
+              Clubs
+            </h3>
+            <ul className="mt-4 grid border-t border-white/25 sm:grid-cols-2 sm:gap-x-8">
+              {GIRLS_CLUBS.map((c) => {
+                const Icon = CLUB_ICONS[c.name] ?? Trophy;
+                return (
+                  <li
+                    key={c.name}
+                    className="flex items-center gap-3 border-b border-white/25 py-3"
+                  >
+                    <span
+                      className="grid h-8 w-8 place-items-center rounded-full"
+                      style={{ background: GOLD }}
+                    >
+                      <Icon className="h-4 w-4" style={{ color: DEEP }} aria-hidden />
+                    </span>
+                    <span className="font-display" style={{ ...T.body, fontWeight: 800 }}>
+                      {c.name}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+        <div className="mt-8 [&_*]:!text-white/85">
+          <UnconfirmedNote>
+            Competitions, the enterprise pathway and clubs were supplied by the school in August
+            2026 and are not yet confirmed in writing. Club photographs are still outstanding.
+          </UnconfirmedNote>
         </div>
       </div>
     </section>
   );
 }
 
-function Stat({ value, label }: { value: string; label: string }) {
+// ---------- Coming up ----------
+
+/** The school's 2026 calendar. Each entry ends on `until` (inclusive). */
+const CALENDAR_2026 = [
+  { when: "24 October", until: "2026-10-24", what: "Visiting Day & PTC" },
+  { when: "9–26 November", until: "2026-11-26", what: "CSEE Examination" },
+  { when: "4 December", until: "2026-12-04", what: "Annual Staff Meeting" },
+  { when: "5 December", until: "2026-12-05", what: "School Board Meeting" },
+  { when: "5–23 December", until: "2026-12-23", what: "Aviation Holiday Training / Study Tour" },
+] as const;
+
+/** Only dates still ahead. A list of past dates reads as abandoned, so the
+ *  section hides itself once the year's calendar has run out. */
+function ComingUp() {
+  const today = new Date().toISOString().slice(0, 10);
+  const next = CALENDAR_2026.filter((e) => e.until >= today).slice(0, 3);
+  if (next.length === 0) return null;
   return (
-    <div className="rounded-xl bg-[var(--color-off-white)] p-4 ring-1 ring-black/5">
-      <div className="font-display text-2xl font-black leading-none" style={{ color: ACCENT }}>
-        {value}
+    <section
+      id="year"
+      className="bg-[var(--color-girls-teal-tint)] py-[var(--space-section-y)]"
+      style={ANCHOR}
+    >
+      <div className={SHELL}>
+        <h2 className="font-display tracking-tight" style={{ ...T.section, color: DEEP }}>
+          Coming up on the Kunduchi calendar.
+        </h2>
+        <ul className="mt-8 grid gap-4 sm:grid-cols-3">
+          {next.map((e) => (
+            <li
+              key={e.what}
+              className="rounded-[1.25rem] bg-white p-6 shadow-[0_14px_30px_-22px_rgba(10,82,84,0.6)]"
+            >
+              <span
+                aria-hidden
+                className="mb-4 block h-1.5 w-10 rounded-full"
+                style={{ background: GOLD }}
+              />
+              <p className="font-display" style={{ ...T.body, fontWeight: 800, color: ACCENT }}>
+                {e.when}
+              </p>
+              <p className="mt-1 font-display text-[var(--color-ink)]" style={T.cardTitle}>
+                {e.what}
+              </p>
+            </li>
+          ))}
+        </ul>
+        <UnconfirmedNote>
+          From the 2026 calendar supplied by the school in August 2026, not yet confirmed in
+          writing.
+        </UnconfirmedNote>
       </div>
-      <div className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-ink)]/60">
-        {label}
-      </div>
-    </div>
+    </section>
   );
 }
 
-/** Section anchors. Alpha Girls leads with what is distinctly hers, not with
- *  the academics both schools share. Deliberately a different order from
- *  Alpha High. */
-/* Order follows the page. A sub-nav that lists sections in a different
-   order than the reader meets them is a map of a different building. */
-const SUB_NAV = [
-  { label: "What's distinctive", href: "#distinctive" },
-  { label: "Competing", href: "#compete" },
-  { label: "Academics", href: "#academics" },
-  { label: "Life at Kunduchi", href: "#life" },
-  { label: "The school year", href: "#year" },
-] as const;
+// ---------- Apply ----------
+
+function ApplyBanner() {
+  return (
+    <section style={{ background: GOLD }}>
+      <div
+        className={`${SHELL} flex flex-col items-start justify-between gap-6 py-12 sm:flex-row sm:items-center`}
+      >
+        <div>
+          <h2 className="font-display tracking-tight" style={{ ...T.section, color: DEEP }}>
+            Applications for the next intake are open.
+          </h2>
+          <p className="mt-2 max-w-xl text-[var(--color-accent-foreground)]" style={T.body}>
+            Visit Kunduchi, sit the assessment, claim your place.
+          </p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to="/admission"
+            className={`${BTN} text-white`}
+            style={{ ...T.body, fontWeight: 800, background: DEEP }}
+          >
+            Enroll Now
+            <ArrowRight className="h-4 w-4" aria-hidden />
+          </Link>
+          <Link
+            to="/contact"
+            className={`${BTN} border-2`}
+            style={{ ...T.body, fontWeight: 800, borderColor: DEEP, color: DEEP }}
+          >
+            Book a Visit
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function GirlsFooter() {
+  return (
+    <>
+      <SchoolFacilitiesSection slug="alpha-girls" accent="var(--color-girls-teal)" />
+      <SiteFooter />
+    </>
+  );
+}
 
 /* ------------------------------------------------------------------ *
  * ACADEMIC DATA — confirmed by the school 2026-09-02.
@@ -480,13 +977,6 @@ const GIRLS_CLUBS: ReadonlyArray<{ name: string; note?: string }> = [
   { name: "Environmental" },
 ] as const;
 
-/** Only dates still ahead. A list of past dates reads as abandoned. */
-const UPCOMING_2026 = [
-  { when: "7–11 September", what: "Field trip / study tour" },
-  { when: "3 October", what: "Annual Sports Day" },
-  { when: "5–9 October", what: "Alpha Girls High School Week" },
-] as const;
-
 const COMPETITIONS = [
   { name: "Pan African Schools Championship", where: "South Africa", when: "June" },
   {
@@ -497,184 +987,9 @@ const COMPETITIONS = [
   { name: "TCRO Dar Open Schools Debate Championship", where: "Dar es Salaam", when: "May" },
 ] as const;
 
-/** Alpha Girls leads with what only Alpha Girls has. */
-function WhatMakesAlphaGirls() {
-  return (
-    <section id="distinctive" className="bg-[var(--color-surface)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>How they learn to lead</p>
-        <h2
-          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
-          Cookery that runs as a business, debate that travels, and girls who learn to drive.
-        </h2>
-        <span
-          aria-hidden
-          className="mt-[var(--heading-rule-gap)] block"
-          style={{
-            width: "var(--heading-rule-w)",
-            height: "var(--heading-rule-h)",
-            background: "var(--heading-rule-color)",
-            borderRadius: "var(--heading-rule-radius)",
-          }}
-        />
-
-        <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
-            The cookery enterprise pathway
-          </h3>
-          <p className="mt-2 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
-            Girls do not just cook. They take a product the whole way.
-          </p>
-          <ol className="mt-5 flex flex-wrap items-center gap-2">
-            {ENTERPRISE_PATHWAY.map((step, i) => (
-              <li key={step} className="flex items-center gap-2">
-                <span
-                  className="rounded-[var(--radius-pill)] px-4 py-2 text-[var(--color-surface)]"
-                  style={{ ...T.body, background: ACCENT, fontWeight: "var(--btn-primary-weight)" }}
-                >
-                  {step}
-                </span>
-                {i < ENTERPRISE_PATHWAY.length - 1 && (
-                  <span aria-hidden className="text-[var(--color-gold)]">
-                    &rarr;
-                  </span>
-                )}
-              </li>
-            ))}
-          </ol>
-          <UnconfirmedNote>
-            Supplied by the school, August 2026. Not yet confirmed in writing.
-          </UnconfirmedNote>
-        </div>
-
-        <div className="mt-[var(--space-block-y)]">
-          <h3 className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
-            Clubs
-          </h3>
-          <ul className="mt-5 grid gap-[var(--space-card-gap)] sm:grid-cols-2 lg:grid-cols-3">
-            {GIRLS_CLUBS.map((c) => (
-              <li
-                key={c.name}
-                className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] p-[var(--space-card-pad)]"
-              >
-                <span className="font-display text-[var(--color-ink)]" style={T.cardTitle}>
-                  {c.name}
-                </span>
-                {c.note && (
-                  <span className="mt-1 block text-[var(--color-ink-soft)]" style={T.label}>
-                    {c.note}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-          <UnconfirmedNote>
-            Supplied by the school, August 2026. Not yet confirmed in writing. Club photographs are
-            still outstanding.
-          </UnconfirmedNote>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/** Where the girls compete - the second thing that is genuinely theirs. */
-function WhereTheyCompete() {
-  return (
-    <section id="compete" className="bg-[var(--color-off-white)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>Beyond Kunduchi</p>
-        <h2
-          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
-          They compete well past Dar es Salaam.
-        </h2>
-        <span
-          aria-hidden
-          className="mt-[var(--heading-rule-gap)] block"
-          style={{
-            width: "var(--heading-rule-w)",
-            height: "var(--heading-rule-h)",
-            background: "var(--heading-rule-color)",
-            borderRadius: "var(--heading-rule-radius)",
-          }}
-        />
-
-        <ul className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] md:grid-cols-3">
-          {COMPETITIONS.map((c) => (
-            <li
-              key={c.name}
-              className="rounded-[var(--radius-card)] bg-[var(--card-bg)] p-[var(--space-card-pad)] shadow-[var(--card-shadow)]"
-            >
-              <span style={{ ...T.label, color: ACCENT }}>{c.when}</span>
-              <h3 className="mt-2 font-display text-[var(--color-ink)]" style={T.cardTitle}>
-                {c.name}
-              </h3>
-              <p className="mt-1 text-[var(--color-ink-soft)]" style={T.body}>
-                {c.where}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <UnconfirmedNote>
-          Supplied by the school, August 2026. Not yet confirmed in writing.
-        </UnconfirmedNote>
-      </div>
-    </section>
-  );
-}
-
-/** Only dates still ahead. A list of past dates reads as abandoned. */
-function TheSchoolYear() {
-  return (
-    <section id="year" className="bg-[var(--color-surface)]">
-      <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
-        <p style={{ ...T.label, color: ACCENT }}>Still to come in 2026</p>
-        <h2
-          className="mt-2 max-w-3xl font-display tracking-tight text-[var(--color-ink)]"
-          style={T.section}
-        >
-          What is next on the Kunduchi calendar.
-        </h2>
-        <span
-          aria-hidden
-          className="mt-[var(--heading-rule-gap)] block"
-          style={{
-            width: "var(--heading-rule-w)",
-            height: "var(--heading-rule-h)",
-            background: "var(--heading-rule-color)",
-            borderRadius: "var(--heading-rule-radius)",
-          }}
-        />
-
-        <ul className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] sm:grid-cols-3">
-          {UPCOMING_2026.map((e) => (
-            <li
-              key={e.what}
-              className="rounded-[var(--radius-card)] border border-[var(--color-hairline)] p-[var(--space-card-pad)]"
-            >
-              <span style={{ ...T.label, color: ACCENT }}>{e.when}</span>
-              <p className="mt-2 font-display text-[var(--color-ink)]" style={T.cardTitle}>
-                {e.what}
-              </p>
-            </li>
-          ))}
-        </ul>
-        <UnconfirmedNote>
-          From the 2026 calendar supplied by the school in August 2026, not yet confirmed in
-          writing. Earlier dates in that calendar have passed and are not listed.
-        </UnconfirmedNote>
-      </div>
-    </section>
-  );
-}
-
 function Academics() {
   return (
-    <section id="academics" className="bg-[var(--color-off-white)]">
+    <section id="academics" className="bg-[var(--color-off-white)]" style={ANCHOR}>
       <CurriculumBand
         image={labBench}
         title="Seventeen subjects at O-Level, twelve combinations at A-Level."
@@ -770,9 +1085,8 @@ const FACILITIES = [
 
 function LifeAtKunduchi() {
   const photos = useSuspenseQuery(photosQuery).data;
-  const plate = slotPhoto(photos, "alpha-girls.students.campus-plate")!;
   return (
-    <section id="life" className="relative overflow-hidden bg-white">
+    <section id="life" className="relative overflow-hidden bg-white" style={ANCHOR}>
       {/* Marks around the campus plate rather than on it: the photograph is
           the subject here, and a doodle over a face is graffiti. */}
       <Backdrop
@@ -809,24 +1123,13 @@ function LifeAtKunduchi() {
           </Link>
         </Reveal>
 
-        {/* The campus at full width, ahead of the facility tiles. It was a
-            quarter-width thumbnail in a row of four; a parent deciding
-            whether their daughter will spend five years somewhere wants to
-            see the place, not a contact sheet. */}
         <Reveal direction="up" className="relative mt-[var(--space-block-y)]">
           <figure className="relative overflow-hidden rounded-[var(--panel-radius)] shadow-[var(--shadow-banner)]">
-            {/* campus-girls.webp is the debate team with their certificates,
-                not a view of the campus — the filename is misleading. Described
-                for what it actually shows: alt text that names the wrong
-                subject is a lie told to a screen reader. */}
             <img
               width={1600}
-              height={1000}
-              src={plate.src}
-              alt={
-                photos["alpha-girls.students.campus-plate"]?.alt_text ??
-                "Alpha Girls students celebrating with medals and certificates"
-              }
+              height={1511}
+              src={labPractical}
+              alt="Alpha Girls students in blue uniforms working through a practical in the science laboratory"
               loading="lazy"
               decoding="async"
               className="block aspect-[16/10] w-full object-cover sm:aspect-[2/1]"
@@ -841,17 +1144,10 @@ function LifeAtKunduchi() {
             />
             <figcaption className="absolute inset-x-0 bottom-0 p-6 sm:p-8">
               <p className="max-w-xl text-[var(--color-surface)]" style={T.body}>
-                Medals and certificates, brought back to Kunduchi.
+                A practical in the Kunduchi science laboratory.
               </p>
             </figcaption>
           </figure>
-          {/* A drawn arrow pointing into the plate, sitting half off it. */}
-          <Backdrop
-            kind="arrow"
-            className="-top-6 right-10 hidden sm:block"
-            width="4.5rem"
-            rotate={18}
-          />
         </Reveal>
 
         <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
@@ -876,7 +1172,7 @@ function LifeAtKunduchi() {
 function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
   if (staff.length === 0) return null;
   return (
-    <section style={{ background: SEA.tint }}>
+    <section style={{ background: "var(--color-girls-teal-tint)" }}>
       <div className="mx-auto w-full max-w-[var(--container-max)] px-[var(--container-gutter)] py-[var(--space-section-y)]">
         <Reveal direction="up" className="max-w-2xl">
           <p style={{ ...T.label, color: ACCENT }}>Leadership & teaching</p>
@@ -904,7 +1200,7 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
                     <div
                       aria-hidden
                       className="absolute inset-0 grid place-items-center"
-                      style={{ background: `linear-gradient(135deg, ${ACCENT}, ${SEA.deep})` }}
+                      style={{ background: `linear-gradient(135deg, ${ACCENT}, ${DEEP})` }}
                     >
                       <span className="font-display text-6xl font-black text-white/30">
                         {p.name
@@ -935,67 +1231,3 @@ function Staff({ staff }: { staff: SchoolBundle["staff"] }) {
     </section>
   );
 }
-
-/* ----------------- Apply banner ----------------- */
-
-function ApplyBanner() {
-  return (
-    <section style={{ background: GOLD }}>
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-5 px-6 py-12 sm:flex-row sm:items-center lg:px-10">
-        <Reveal direction="left">
-          <h2 className="font-display text-2xl font-black sm:text-3xl" style={{ color: ACCENT }}>
-            Applications for the next intake are open.
-          </h2>
-          <p className="mt-2 max-w-xl text-sm font-semibold text-[var(--color-accent-foreground)]/80">
-            Visit Kunduchi, sit the assessment, claim your place.
-          </p>
-        </Reveal>
-        <Reveal direction="right" className="flex flex-wrap gap-3">
-          <Link
-            to="/admission"
-            className="inline-flex items-center rounded-md px-6 py-3 text-sm font-bold text-white shadow-md transition-transform hover:scale-[1.03] active:scale-[0.97]"
-            style={{ background: ACCENT }}
-          >
-            Enroll Now →
-          </Link>
-          <Link
-            to="/contact"
-            className="inline-flex items-center rounded-md border-2 px-6 py-3 text-sm font-bold transition hover:bg-white/40"
-            style={{ borderColor: ACCENT, color: ACCENT }}
-          >
-            Book a Visit
-          </Link>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ----------------- Footer ----------------- */
-
-function GirlsFooter() {
-  return (
-    <>
-      <div
-        className="py-5 text-center text-xs font-bold uppercase tracking-[0.22em] text-white/85"
-        style={{ background: ACCENT }}
-      >
-        ALPHA SCHOOLS · <span style={{ color: GOLD }}>Alpha Girls</span>
-        <div className="mt-1 text-[11px] font-semibold tracking-[0.18em] text-white/60">
-          Kunduchi campus · Dar es Salaam · part of ALFA EDUCATION CENTRE
-        </div>
-      </div>
-      <SchoolFacilitiesSection slug="alpha-girls" accent="var(--color-blue-violet)" />
-      <SiteFooter />
-    </>
-  );
-}
-
-/* The page-local <style> block that lived here is gone.
-
-   It defined agDriftA, agDriftB and agHeroShift — three infinite loops
-   driving the lilac gradient and the two blurred blooms behind the old
-   hero. That hero no longer exists, so the animations had nothing left to
-   animate, and a looping background wash is the exact pattern
-   motion-audits/2026-09-02 was commissioned to remove. agComboIn went with
-   them: nothing referenced it. */
