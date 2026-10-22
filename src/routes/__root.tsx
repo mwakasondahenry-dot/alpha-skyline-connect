@@ -10,9 +10,9 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
-import alphaLogo from "@/assets/alpha-logo.webp";
-import mulishWoff2 from "@fontsource-variable/mulish/files/mulish-latin-wght-normal.woff2?url";
-import hankenWoff2 from "@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url";
+/* The 128px mark, 7 KB. The full logo is 74 KB and was the favicon on every
+   page load until 2026-10-22. */
+import alphaLogo from "@/assets/alpha-logo-mark.webp";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { UrgentAnnouncements } from "../components/urgent-announcements";
 import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
@@ -120,14 +120,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/webp", href: alphaLogo },
-      /* The two type faces, self-hosted (see styles.css). Preloading the
-         latin files means the text is drawn in its own face on first paint
-         instead of swapping in after the stylesheet is parsed. Mulish is
-         --font-display (every h1-h4, .font-display); Hanken Grotesk is
-         --font-sans, the body face. Both are variable fonts, so every weight
-         the site uses comes from the one file. */
-      { rel: "preload", as: "font", type: "font/woff2", href: hankenWoff2, crossOrigin: "anonymous" },
-      { rel: "preload", as: "font", type: "font/woff2", href: mulishWoff2, crossOrigin: "anonymous" },
+      /* The two type faces are self-hosted (styles.css) and NOT preloaded:
+         on a 1.6 Mbps connection their 64 KB raced the stylesheet for
+         bandwidth and pushed the first paint past two seconds. They now
+         load after the stylesheet, with font-display: swap, so the text
+         is on screen in a fallback face first. */
     ],
   }),
   shellComponent: RootShell,
