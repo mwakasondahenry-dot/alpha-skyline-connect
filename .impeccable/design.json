@@ -1,0 +1,195 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-22T00:00:00Z",
+  "title": "Design System: Alpha Schools",
+  "extensions": {
+    "colorMeta": {
+      "deep-blue": { "role": "primary", "displayName": "Alpha Deep Navy", "canonical": "oklch(31.4% 0.115 257.7)", "tonalRamp": ["#000333", "#002159", "#18417a", "#3d6297", "#6284b5", "#89a7d3", "#b1cbf1", "#daf0ff"] },
+      "deep-blue-dark": { "role": "primary", "displayName": "Night Navy", "canonical": "oklch(30.8% 0.087 253.6)", "tonalRamp": ["#000829", "#00254c", "#20436c", "#43638a", "#6885a8", "#8ea8c7", "#b5cbe7", "#def1ff"] },
+      "scrim-navy": { "role": "primary", "displayName": "Scrim Navy", "canonical": "oklch(22.2% 0.074 255.3)", "tonalRamp": ["#000927", "#092546", "#2a4363", "#4c6381", "#6f849f", "#94a7bf", "#bbcbdf", "#e4f0ff"] },
+      "gold": { "role": "secondary", "displayName": "Alpha Gold", "canonical": "oklch(79.8% 0.162 80.8)", "tonalRamp": ["#190600", "#391e00", "#5d3a00", "#835800", "#ab7800", "#d59900", "#fdbd38", "#ffe479"] },
+      "gold-dark": { "role": "secondary", "displayName": "Burnt Gold", "canonical": "oklch(70.5% 0.144 72.2)", "tonalRamp": ["#1c0300", "#3d1b00", "#623600", "#895400", "#b27300", "#db9529", "#fcbb66", "#ffe399"] },
+      "gold-light": { "role": "secondary", "displayName": "Honey Gold", "canonical": "oklch(80.2% 0.144 78.8)", "tonalRamp": ["#180600", "#381f00", "#5b3b00", "#815900", "#a87818", "#d29a30", "#fabd53", "#ffe58a"] },
+      "accent-foreground": { "role": "secondary", "displayName": "Ink on Gold", "canonical": "oklch(21.7% 0.004 106.7)", "tonalRamp": ["#0b0b0a", "#252523", "#424240", "#61615f", "#828281", "#a5a5a4", "#c9c9c8", "#eeeeed"] },
+      "brand-blue": { "role": "tertiary", "displayName": "Alpha Blue", "canonical": "oklch(41.9% 0.143 256.0)", "tonalRamp": ["#000137", "#001f5e", "#003f89", "#2661ab", "#5084c8", "#79a7e6", "#a3ccff", "#cef1ff"] },
+      "bright-blue": { "role": "tertiary", "displayName": "Sky Blue", "canonical": "oklch(54.5% 0.165 252.8)", "tonalRamp": ["#000336", "#00215e", "#004089", "#0061b7", "#3084dc", "#61a9f9", "#8eceff", "#bcf3ff"] },
+      "girls-teal": { "role": "tertiary", "displayName": "Kunduchi Sea-Green", "canonical": "oklch(49.0% 0.080 197.2)", "tonalRamp": ["#001113", "#002e30", "#004d4f", "#116f71", "#489091", "#74b2b3", "#9fd5d5", "#cbf9f9"] },
+      "girls-teal-deep": { "role": "tertiary", "displayName": "Kunduchi Sea-Green Deep", "canonical": "oklch(40.0% 0.065 197.9)", "tonalRamp": ["#001113", "#002d2f", "#034c4e", "#336c6d", "#5c8c8e", "#84aeaf", "#acd1d2", "#d6f6f6"] },
+      "girls-teal-tint": { "role": "tertiary", "displayName": "Kunduchi Sea-Green Tint", "canonical": "oklch(95.2% 0.013 196.9)", "tonalRamp": ["#090c0c", "#222626", "#3e4343", "#5d6363", "#7d8484", "#9ea7a7", "#c1cccc", "#e5f1f1"] },
+      "surface": { "role": "neutral", "displayName": "White", "canonical": "oklch(100% 0 0)", "tonalRamp": ["#0b0b0b", "#252525", "#424242", "#616161", "#828282", "#a5a5a5", "#c9c9c9", "#eeeeee"] },
+      "off-white": { "role": "neutral", "displayName": "Cool Off-White", "canonical": "oklch(98.5% 0 0)", "tonalRamp": ["#0b0b0b", "#252525", "#424242", "#616161", "#828282", "#a5a5a5", "#c9c9c9", "#eeeeee"] },
+      "surface-muted": { "role": "neutral", "displayName": "Mist Blue", "canonical": "oklch(95.7% 0.017 250.8)", "tonalRamp": ["#0a0b0d", "#232528", "#3f4246", "#5d6267", "#7d8389", "#9fa6ad", "#c2cad3", "#e7f0f9"] },
+      "surface-soft": { "role": "neutral", "displayName": "Pale Sky", "canonical": "oklch(92.4% 0.028 248.1)", "tonalRamp": ["#080c0f", "#21262a", "#3c4349", "#5a626b", "#79848e", "#9aa7b3", "#bdcbd9", "#e1f1ff"] },
+      "hairline": { "role": "neutral", "displayName": "Blue Hairline", "canonical": "oklch(90.2% 0.032 249.6)", "tonalRamp": ["#080c0f", "#20262c", "#3b434b", "#59626d", "#788490", "#99a7b6", "#bbcbdd", "#dff1ff"] },
+      "ink": { "role": "neutral", "displayName": "Navy Ink", "canonical": "oklch(28.1% 0.035 254.0)", "tonalRamp": ["#030b18", "#192635", "#364353", "#566271", "#788391", "#9ca6b2", "#c2cad5", "#e8eff8"] },
+      "foreground": { "role": "neutral", "displayName": "Navy Ink (body)", "canonical": "oklch(25.7% 0.047 261.2)", "tonalRamp": ["#030a1d", "#18253c", "#354259", "#556277", "#788396", "#9ca6b7", "#c1cad8", "#e8effb"] },
+      "ink-soft": { "role": "neutral", "displayName": "Slate Ink", "canonical": "oklch(44.5% 0.051 252.0)", "tonalRamp": ["#010c1a", "#152639", "#2f445b", "#4d637d", "#70859c", "#94a7bd", "#bacbdf", "#e1f0ff"] },
+      "danger": { "role": "neutral", "displayName": "Error Red", "canonical": "oklch(57.7% 0.215 27.3)", "tonalRamp": ["#300000", "#5b0000", "#880000", "#b80512", "#e53833", "#ff6d61", "#ff9b8d", "#ffc8ba"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headlines (two lines, white then gold); prospectus chapter heads in the school accent or white; the gold numeral leading an admission step." },
+      "headline": { "displayName": "Headline", "purpose": "Section headings; life-group heading column; results-chart sentences at 900 with the figure in gold." },
+      "title": { "displayName": "Title", "purpose": "Card titles, list headings, credential labels, the caption line under a photo story." },
+      "body": { "displayName": "Body", "purpose": "Running copy at 16px/1.6, 36-48rem measure; Mulish 800 for fact-row keys and text links, 700 for club pills." },
+      "label": { "displayName": "Label", "purpose": "Filter chips, stickers and tags, credential sub-lines, sub-nav links. Uppercase, 0.14em." },
+      "stat": { "displayName": "Stat", "purpose": "Gold figures on navy stat bars." },
+      "stat-label": { "displayName": "Stat label", "purpose": "White labels under stat figures." }
+    },
+    "shadows": [
+      { "name": "card", "value": "0 1px 2px rgba(0,46,106,0.06), 0 8px 24px -12px rgba(0,46,106,0.18)", "purpose": "Cards and gold buttons at rest." },
+      { "name": "card-hover", "value": "0 2px 4px rgba(0,46,106,0.08), 0 16px 32px -12px rgba(0,46,106,0.24)", "purpose": "Cards and gold buttons on hover; tilted insets at rest." },
+      { "name": "banner", "value": "0 12px 32px -16px rgba(0,46,106,0.35)", "purpose": "Large navy panels, lead photographs, the video frame." },
+      { "name": "accent-glow", "value": "0 8px 20px -8px color-mix(in srgb, var(--dl-accent) 35%, transparent)", "purpose": "Tiles and filter chips on hover or when active." }
+    ],
+    "motion": [
+      { "name": "ease-out", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default easing for lifts, reveals and the hero entrance." },
+      { "name": "hover-lift", "value": "translateY(-2px) 150ms", "purpose": "Button hover." },
+      { "name": "press", "value": "scale(0.97) 120ms", "purpose": "Button press." },
+      { "name": "reveal", "value": "420ms, stagger 80/160/240/320ms", "purpose": "One-shot section arrival, transform and opacity only." },
+      { "name": "hero-entrance", "value": "settle 1200ms; rise 380ms at 180/300/420/560/700/840ms", "purpose": "The opening screen assembles once on load." },
+      { "name": "result-fill", "value": "scale 0 to 1 over 300ms, 22ms stagger capped at 900ms", "purpose": "Result squares fill once when the chart scrolls in; static under reduced motion." },
+      { "name": "rail-plane", "value": "700ms cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Chapter-rail progress line and plane." },
+      { "name": "video-fade", "value": "opacity 400ms", "purpose": "Player cross-fades over its poster once playing." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Gold Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The page's one call to act: gold pill, Ink on Gold text, navy-tinted shadow, 2px lift and 0.97 press.",
+      "html": "<a class=\"ds-btn-gold\" href=\"#\">Enroll Now <svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></a>",
+      "css": ".ds-btn-gold { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 28px; border-radius: 999px; background: var(--color-gold, #f2b012); color: var(--color-accent-foreground, #1a1a18); font-family: Mulish, 'Hanken Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 16px; text-decoration: none; box-shadow: 0 1px 2px rgba(0,46,106,0.06), 0 8px 24px -12px rgba(0,46,106,0.18); transition: transform 150ms cubic-bezier(0.22,1,0.36,1), box-shadow 150ms ease; } .ds-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 2px 4px rgba(0,46,106,0.08), 0 16px 32px -12px rgba(0,46,106,0.24); } .ds-btn-gold:active { transform: scale(0.97); transition-duration: 120ms; } .ds-btn-gold:focus-visible { outline: 2px solid var(--color-gold, #f2b012); outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The secondary action beside a gold button: hairline pill, Deep Navy text, Mist Blue hover.",
+      "html": "<a class=\"ds-btn-ghost\" href=\"#\">Book a school tour</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; min-height: 44px; padding: 0 28px; border-radius: 999px; border: 1px solid var(--color-hairline, #cfe1f4); background: transparent; color: var(--color-deep-blue, #002e6a); font-family: Mulish, 'Hanken Grotesk', system-ui, sans-serif; font-weight: 700; font-size: 16px; text-decoration: none; transition: transform 150ms cubic-bezier(0.22,1,0.36,1), background-color 150ms ease; } .ds-btn-ghost:hover { background: var(--color-surface-muted, #e9f2fc); transform: translateY(-2px); } .ds-btn-ghost:active { transform: scale(0.97); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--color-brand-blue, #004a98); outline-offset: 3px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-filter",
+      "description": "Label-type filter in the subject explorer; active state fills with the accent and glows.",
+      "html": "<div style=\"display:flex;gap:8px\"><button class=\"ds-chip\" aria-pressed=\"true\">All <span class=\"ds-chip__n\">17</span></button><button class=\"ds-chip\" aria-pressed=\"false\">Science <span class=\"ds-chip__n\">5</span></button></div>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--color-hairline, #cfe1f4); background: #fff; color: var(--color-deep-blue, #002e6a); font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer; transition: transform 180ms cubic-bezier(0.22,1,0.36,1), border-color 180ms, background-color 180ms, color 180ms, box-shadow 180ms; } .ds-chip:hover { border-color: var(--color-brand-blue, #004a98); transform: translateY(-1px); } .ds-chip[aria-pressed=\"true\"] { background: var(--color-brand-blue, #004a98); border-color: var(--color-brand-blue, #004a98); color: #fff; box-shadow: 0 6px 16px -6px rgba(0,74,152,0.55); } .ds-chip__n { opacity: 0.65; font-variant-numeric: tabular-nums; } .ds-chip:focus-visible { outline: 2px solid var(--color-brand-blue, #004a98); outline-offset: 2px; }"
+    },
+    {
+      "name": "Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "White field with a navy 15% border; focus turns the border gold with a 30% gold ring.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field__label\">Parent's name</span><input class=\"ds-input\" type=\"text\" placeholder=\"Your name\"></label>",
+      "css": ".ds-field { display: grid; gap: 6px; max-width: 320px; font-family: 'Hanken Grotesk', system-ui, sans-serif; } .ds-field__label { font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--color-deep-blue, #002e6a); } .ds-input { padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(0,46,106,0.15); background: #fff; color: var(--color-ink, #1d2a3a); font-size: 16px; line-height: 1.6; transition: border-color 150ms, box-shadow 150ms; } .ds-input:focus { outline: none; border-color: var(--color-gold, #f2b012); box-shadow: 0 0 0 2px rgba(242,176,18,0.3); }"
+    },
+    {
+      "name": "School Sub-nav",
+      "kind": "nav",
+      "refersTo": "sub-nav-link",
+      "description": "The sticky in-page table of contents under a school hero: six chapter links in label type, Mist Blue hover, horizontally scrolling on phones.",
+      "html": "<nav class=\"ds-subnav\" aria-label=\"On this page\"><ul><li><a href=\"#about\">About</a></li><li><a href=\"#academics\">Academics</a></li><li><a href=\"#results\">Results</a></li><li><a href=\"#life\">Student life</a></li><li><a href=\"#people\">People</a></li><li><a href=\"#admission\">Admission</a></li></ul></nav>",
+      "css": ".ds-subnav { position: sticky; top: 0; z-index: 30; border-bottom: 1px solid var(--color-hairline, #cfe1f4); background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); } .ds-subnav ul { display: flex; gap: 4px; margin: 0 auto; max-width: 1200px; padding: 6px 20px; list-style: none; overflow-x: auto; scrollbar-width: none; } .ds-subnav ul::-webkit-scrollbar { display: none; } .ds-subnav li { flex-shrink: 0; } .ds-subnav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 8px; white-space: nowrap; color: var(--color-ink-soft, #3f5670); font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: background-color 150ms, color 150ms; } .ds-subnav a:hover { background: var(--color-surface-muted, #e9f2fc); color: var(--color-deep-blue, #002e6a); } .ds-subnav a:active { transform: scale(0.97); } .ds-subnav a:focus-visible { outline: 2px solid var(--color-brand-blue, #004a98); outline-offset: 2px; }"
+    },
+    {
+      "name": "Results Chart",
+      "kind": "custom",
+      "refersTo": "result-square",
+      "description": "NECTA results as a unit chart on the navy results chapter: one 4px square per candidate, Division I gold, II white, III white 45%, IV white 22%, with the sentence in Headline 900 and a legend row.",
+      "html": "<section class=\"ds-results\"><h3>Form Four 2025: <span>60 of 92 in Division I.</span> All 92 passed.</h3><div class=\"ds-results__grid\" aria-hidden=\"true\"><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d1\"></i><i class=\"d2\"></i><i class=\"d2\"></i><i class=\"d2\"></i><i class=\"d2\"></i><i class=\"d2\"></i><i class=\"d3\"></i><i class=\"d3\"></i><i class=\"d4\"></i></div><ul class=\"ds-results__legend\"><li><i class=\"d1\"></i>Division I <b>60</b></li><li><i class=\"d2\"></i>Division II <b>19</b></li><li><i class=\"d3\"></i>Division III <b>12</b></li><li><i class=\"d4\"></i>Division IV <b>1</b></li></ul></section>",
+      "css": ".ds-results { padding: 28px; border-radius: 28px; background: var(--color-deep-blue, #002e6a); color: #fff; font-family: 'Hanken Grotesk', system-ui, sans-serif; } .ds-results h3 { margin: 0 0 20px; font-family: Mulish, 'Hanken Grotesk', system-ui, sans-serif; font-size: clamp(1.5rem, 1.25rem + 1.07vw, 1.875rem); font-weight: 900; line-height: 1.2; letter-spacing: -0.01em; } .ds-results h3 span { color: var(--color-gold, #f2b012); } .ds-results__grid { display: grid; grid-template-columns: repeat(23, minmax(0, 1fr)); gap: 6px; } .ds-results__grid i, .ds-results__legend i { display: block; aspect-ratio: 1; border-radius: 4px; } .ds-results .d1 { background: var(--color-gold, #f2b012); } .ds-results .d2 { background: #fff; } .ds-results .d3 { background: rgba(255,255,255,0.45); } .ds-results .d4 { background: rgba(255,255,255,0.22); } .ds-results__legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 20px 0 0; padding: 0; list-style: none; font-size: 16px; font-weight: 700; } .ds-results__legend li { display: flex; align-items: center; gap: 8px; } .ds-results__legend i { width: 14px; height: 14px; border-radius: 3px; } .ds-results__legend b { font-weight: 600; color: rgba(255,255,255,0.75); font-variant-numeric: tabular-nums; }"
+    },
+    {
+      "name": "Photo Story (trio)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "The unit of a prospectus chapter: a photo set in 24px/20px frames, a Title caption, a Body sentence and a Slate Ink source line.",
+      "html": "<figure class=\"ds-story\"><div class=\"ds-story__trio\"><span class=\"ds-story__lead\"></span><span></span><span></span></div><figcaption><h4>2nd overall out of 24 schools.</h4><p>At TAWECE 2024 at the JNICC, Alpha High and Alpha Girls students presented five projects.</p><small>Alpha Schools on Instagram, 22 August 2024</small><span class=\"ds-tag\">Engineering · 2024</span></figcaption></figure>",
+      "css": ".ds-story { margin: 0; max-width: 480px; font-family: 'Hanken Grotesk', system-ui, sans-serif; color: var(--color-ink, #1d2a3a); } .ds-story__trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; } .ds-story__trio span { display: block; aspect-ratio: 4 / 5; border-radius: 20px; background: linear-gradient(135deg, var(--color-surface-soft, #d8e8f8), var(--color-surface-muted, #e9f2fc)); } .ds-story__lead { grid-column: span 2; grid-row: span 2; border-radius: 24px !important; background: linear-gradient(135deg, var(--color-deep-blue, #002e6a), var(--color-brand-blue, #004a98)) !important; } .ds-story h4 { margin: 16px 0 0; font-family: Mulish, 'Hanken Grotesk', system-ui, sans-serif; font-size: clamp(1.125rem, 1.05rem + 0.32vw, 1.25rem); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; } .ds-story p { margin: 4px 0 0; font-size: 16px; line-height: 1.6; opacity: 0.85; } .ds-story small { display: block; margin-top: 6px; font-size: 16px; line-height: 1.6; color: var(--color-ink-soft, #3f5670); } .ds-tag { display: inline-block; margin-top: 16px; padding: 6px 12px; border-radius: 999px; background: var(--color-gold, #f2b012); color: var(--color-accent-foreground, #1a1a18); font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Tilted Inset",
+      "kind": "custom",
+      "refersTo": "card",
+      "description": "A 16:10 lead photograph at 28px with two 3:2 insets at -2° and +2°, one white-bordered and one gold-bordered, laid over its foot.",
+      "html": "<div class=\"ds-tilt\"><span class=\"ds-tilt__lead\"></span><span class=\"ds-tilt__a\"></span><span class=\"ds-tilt__b\"></span></div>",
+      "css": ".ds-tilt { position: relative; max-width: 520px; padding-bottom: 64px; } .ds-tilt span { display: block; } .ds-tilt__lead { aspect-ratio: 16 / 10; border-radius: 28px; background: linear-gradient(160deg, var(--color-brand-blue, #004a98), var(--color-deep-blue, #002e6a)); box-shadow: 0 12px 32px -16px rgba(0,46,106,0.35); } .ds-tilt__a, .ds-tilt__b { position: absolute; bottom: 0; aspect-ratio: 3 / 2; border-radius: 20px; border: 4px solid #fff; background: var(--color-surface-soft, #d8e8f8); box-shadow: 0 2px 4px rgba(0,46,106,0.08), 0 16px 32px -12px rgba(0,46,106,0.24); } .ds-tilt__a { left: 16px; width: 46%; transform: rotate(-2deg); } .ds-tilt__b { right: 16px; bottom: 24px; width: 38%; border-color: var(--color-gold, #f2b012); background: var(--color-surface-muted, #e9f2fc); transform: rotate(2deg); }"
+    },
+    {
+      "name": "Club Pill",
+      "kind": "chip",
+      "refersTo": "club-pill",
+      "description": "A club or sport named as a pill while no photograph has been uploaded: accent fill for clubs, accent outline for sports.",
+      "html": "<ul class=\"ds-pills\"><li class=\"ds-pill\">Aviation</li><li class=\"ds-pill\">Debate</li><li class=\"ds-pill\">Model UN</li><li class=\"ds-pill ds-pill--outline\">Football</li><li class=\"ds-pill ds-pill--outline\">Netball</li></ul>",
+      "css": ".ds-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; } .ds-pill { display: inline-flex; padding: 8px 16px; border-radius: 999px; background: var(--color-deep-blue, #002e6a); color: #fff; font-family: Mulish, 'Hanken Grotesk', system-ui, sans-serif; font-size: 16px; font-weight: 700; line-height: 1.6; } .ds-pill--outline { background: transparent; border: 1px solid var(--color-deep-blue, #002e6a); color: var(--color-deep-blue, #002e6a); }"
+    },
+    {
+      "name": "Hero Credentials",
+      "kind": "nav",
+      "refersTo": "chapter-rail",
+      "description": "The fact strip pinned to a hero's foot: Scrim Navy at 72%, gold-tinted icon discs, Title labels and label sub-lines; on phones one scrolling row with a right-edge fade.",
+      "html": "<div class=\"ds-cred\"><ul><li><i></i><div><b>Form 1 to 6</b><small>O-Level and A-Level</small></div></li><li><i></i><div><b>Mikocheni</b><small>Dar es Salaam</small></div></li><li><i></i><div><b>Co-education</b><small>Boys and girls</small></div></li><li><i></i><div><b>Since 2007</b><small>Established 19 March</small></div></li></ul></div>",
+      "css": ".ds-cred { background: rgba(0,26,60,0.72); border-top: 1px solid rgba(242,176,18,0.3); backdrop-filter: blur(4px); color: #fff; font-family: 'Hanken Grotesk', system-ui, sans-serif; } .ds-cred ul { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 20px; list-style: none; } .ds-cred li { display: flex; align-items: center; gap: 12px; min-width: 0; } .ds-cred i { flex: none; width: 48px; height: 48px; border-radius: 999px; background: rgba(242,176,18,0.2); box-shadow: inset 0 0 0 1px rgba(242,176,18,0.3); } .ds-cred b { display: block; font-family: Mulish, 'Hanken Grotesk', system-ui, sans-serif; font-size: clamp(1.125rem, 1.05rem + 0.32vw, 1.25rem); font-weight: 700; line-height: 1.3; } .ds-cred small { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; } @media (max-width: 639px) { .ds-cred ul { display: flex; gap: 20px; padding: 12px 20px; overflow-x: auto; scrollbar-width: none; -webkit-mask-image: linear-gradient(to right, black 68%, transparent 97%); mask-image: linear-gradient(to right, black 68%, transparent 97%); } .ds-cred li { flex: none; } .ds-cred i { width: 40px; height: 40px; } .ds-cred small { display: none; } }"
+    },
+    {
+      "name": "Video Frame",
+      "kind": "custom",
+      "refersTo": "video-frame",
+      "description": "The home video's 16:9 frame: Night Navy ground, 28px corner, banner shadow, the full picture shown and never cropped; the player fades in over its poster.",
+      "html": "<div class=\"ds-video\"><span class=\"ds-video__poster\"></span><button class=\"ds-video__play\" aria-label=\"Play video\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"currentColor\" aria-hidden=\"true\"><path d=\"M6 4l14 8-14 8z\"/></svg></button></div>",
+      "css": ".ds-video { position: relative; aspect-ratio: 16 / 9; max-width: 560px; overflow: hidden; border-radius: 28px; background: var(--color-deep-blue-dark, #08305a); box-shadow: 0 12px 32px -16px rgba(0,46,106,0.35); } .ds-video__poster { position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 40%, rgba(242,176,18,0.25), transparent 60%), linear-gradient(160deg, #0c447c, #08305a); } .ds-video__play { position: absolute; right: 16px; bottom: 16px; display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 0; border-radius: 999px; background: rgba(0,46,106,0.6); color: #fff; cursor: pointer; transition: transform 200ms; } .ds-video__play:active { transform: scale(0.97); } .ds-video__play:focus-visible { outline: 2px solid var(--color-gold, #f2b012); outline-offset: 2px; } @media (max-width: 639px) { .ds-video { border-radius: 20px; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Navy Field and the Gold Line",
+    "overview": "Alpha's site is built from three materials: a deep navy field, a gold line drawn through it, and real photographs of the schools' own students held legible under a navy scrim. Navy carries the heavy surfaces (header, footer, stat bars, chapter rails, alternate chapters, the coordinator panel, the results chapter). Gold is never a background for reading; it is the line, the figure and the button fill: the rule under a heading, the second line of every hero headline, the stroke behind one chosen word, the progress line a plane flies along, the square that stands for one Division I candidate. Everything else is white or a cool off-white page with blue-tinted hairlines.\n\nThe register is a confident, warm prospectus for parents on a mid-range Android phone. Type is heavy (Mulish at 800 for display) over a quiet humanist body (Hanken Grotesk at 16px, 1.6 leading). Density is generous: sections breathe on an 8px-derived rhythm that grows from 48px to 80px between sections. Depth is mostly tonal (navy against white), with a small set of navy-tinted shadows for cards and buttons. Photography is the content, not the decoration: it is the school's own, set in large rounded frames with a bold caption and a source line, and a chapter is led by its pictures before its paragraphs.\n\nMotion is budgeted. Buttons press and lift, sections rise once as they arrive, the opening hero assembles itself in about 1.2 seconds, hand-drawn marks draw on once and result squares fill in once. Nothing loops, and everything collapses to its finished state under reduced motion. Two exemplars: the aviation page (`src/routes/aviation.tsx`) for a chapter sequence with a rail, and the two secondary school pages (`src/routes/schools.alpha-high.tsx`, `src/routes/schools.alpha-girls.tsx`) for the six-chapter prospectus under a sticky sub-nav. Alpha Girls runs the same prospectus in its sea-green register.",
+    "keyCharacteristics": [
+      "Deep navy fields, gold as line, figure and fill, white and cool off-white grounds.",
+      "Mulish 800 display over Hanken Grotesk body; two-tone hero headlines, white then gold.",
+      "Full-bleed real photography, always under a guaranteed navy scrim.",
+      "Photo stories: the school's own pictures in 24px frames with a bold caption and a source line.",
+      "Hairline borders in pale blue; shadows tinted navy, never neutral black.",
+      "Pill-shaped buttons with a 2px lift on hover and a 0.97 press; no looping motion."
+    ],
+    "rules": [
+      { "name": "The Gold Is a Fill Rule", "body": "Gold is a fill, a rule and a large figure. It measures 1.91:1 on white and is never small text on a light ground. Text on gold is always Ink on Gold. Gold text appears only on navy or under a scrim.", "section": "colors" },
+      { "name": "The Logo Colours Stay in the Logo Rule", "body": "Logo red #E22321 and logo green #00923F never appear as UI colour. Errors use Error Red.", "section": "colors" },
+      { "name": "The Tokens Only Rule", "body": "Every colour lives in src/styles.css as a custom property. Routes and components reference var(--color-*), never a new hex.", "section": "colors" },
+      { "name": "The Division Colours Rule", "body": "A NECTA result is drawn one square per candidate on a navy or deep sea-green field: Division I is Alpha Gold, Division II is White, Division III is white at 45%, Division IV is white at 22%, and a zero is transparent. The scale never changes between schools or years, so a parent reads two charts without a second legend.", "section": "colors" },
+      { "name": "The Two-Tone Headline Rule", "body": "Every CinematicHero headline is two spans: line one in white, line two in gold. The gold line is the payoff, so it carries the shorter phrase.", "section": "typography" },
+      { "name": "The One Marked Word Rule", "body": "A heading may carry one hand-drawn gold stroke (Marked: underline, ring, or sweep on dark grounds) behind one word. One per heading, never a whole line.", "section": "typography" },
+      { "name": "The Chapter Head Rule", "body": "A prospectus chapter opens with its heading alone: Display size in the school accent (white on a dark chapter), one Marked word or one gold span, a Body lead at 85% beneath it, max-w-3xl. Nothing sits above the heading; no label, no eyebrow, no rule. The heading carries the chapter.", "section": "typography" },
+      { "name": "The Guaranteed Scrim Rule", "body": "Text over a photograph always sits on a scrim that guarantees legibility over any frame: the hero's gold glow plus a navy wash (horizontal on desktop, vertical on mobile), or a bottom-up navy gradient for captions. Never rely on a photo being dark enough.", "section": "elevation" },
+      { "name": "The Navy Shadow Rule", "body": "Shadows are tinted with navy rgba(0,46,106,…). A black shadow on a light surface is off-system.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do put text on gold only in Ink on Gold (#1a1a18), and keep gold text to navy or scrimmed grounds.",
+      "Do put every photograph that carries text under a navy scrim built from Scrim Navy, and use the school's own real photography.",
+      "Do bind type through T.* roles and colours through var(--color-*) tokens.",
+      "Do set long lists of named things as hairline-ruled rows, led by a short gold dash or a heavy numeral.",
+      "Do pair one GoldButton with one GhostButton; on navy or photography use the ghost's onNavy tone.",
+      "Do keep motion to button press and hover, one-shot reveals (420ms, stagger capped at 320ms), the hero entrance and the one-shot result-square fill, all transform and opacity, all collapsing under prefers-reduced-motion.",
+      "Do keep square-bracket placeholders visible in Slate Ink body type, e.g. [To be confirmed].",
+      "Do keep a secondary school page in the six-chapter order (About, Academics, Results, Student life, People, Admission) under the sticky sub-nav, with ANCHOR scroll margins on every chapter.",
+      "Do give every photo story a caption line and a source line, and show a club as a name pill until the school has uploaded its photograph.",
+      "Do draw results with ResultsChart from src/lib/*-results.ts, newest Form Four first, Form Six beside it, the previous year below, GPA rows and NECTA source links after."
+    ],
+    "donts": [
+      "Don't use gold for small text on white or off-white.",
+      "Don't use logo red #E22321 or logo green #00923F anywhere in the UI.",
+      "Don't use black or neutral grey shadows on light surfaces; tint them navy.",
+      "Don't loop motion: no bobbing cues, pulsing badges, floating cards or drifting clouds. No parallax, scroll-jacking or autoplay video outside the home-page video section.",
+      "Don't fill a hero eyebrow slot or add an uppercase kicker above a heading; the heading and its gold rule or mark carry the section. A chapter head stands alone.",
+      "Don't add new hex values in routes or components.",
+      "Don't crop the 16:9 video frame to cover its section, and don't tilt more than two insets or tilt them past 2°.",
+      "Don't invent a division colour: Division I gold, II white, III white 45%, IV white 22%, on navy or deep sea-green only."
+    ]
+  }
+}
