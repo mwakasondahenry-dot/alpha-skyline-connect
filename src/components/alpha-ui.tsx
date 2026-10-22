@@ -16,6 +16,7 @@
  *    spent its whole motion budget on hover states a phone cannot trigger
  *    while giving touch no feedback at all; press is the fix.
  */
+import { Photo } from "@/components/photo";
 import { Link } from "@tanstack/react-router";
 import { ChevronDown } from "lucide-react";
 import type { CSSProperties, ReactNode } from "react";
@@ -251,10 +252,11 @@ export function PhotoMosaic({
             border: "4px solid var(--color-surface)",
           }}
         >
-          <img
+          <Photo
             width={ph.span ? 1600 : 800}
             height={ph.span ? 900 : 1000}
             src={ph.src}
+            sizes={ph.span ? "(min-width: 1024px) 50vw, 100vw" : "(min-width: 1024px) 25vw, 50vw"}
             alt={ph.alt}
             loading={eager ? "eager" : "lazy"}
             fetchPriority={eager && i === 0 ? "high" : undefined}

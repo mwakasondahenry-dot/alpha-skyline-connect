@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Photo } from "@/components/photo";
 import type { ReactNode } from "react";
 import { seo } from "@/lib/seo";
 import { breadcrumbLd } from "@/lib/structured-data";
@@ -154,8 +155,9 @@ function PlaceChapter({
           className={`relative lg:sticky lg:top-[calc(var(--header-h)+3.5rem)] lg:self-start ${photoSide === "right" ? "lg:order-2" : ""}`}
         >
           <div className="relative aspect-[4/3] overflow-hidden lg:aspect-auto lg:h-[min(calc(100svh-var(--header-h)-3.5rem),46rem)]">
-            <img
+            <Photo
               src={photo.src}
+              sizes="(min-width: 1024px) 50vw, 100vw"
               width={photo.w}
               height={photo.h}
               alt={photo.alt}
@@ -472,8 +474,9 @@ function AviationPage() {
                 }`}
               >
                 <figure className="h-full">
-                  <img
+                  <Photo
                     src={g.src}
+                    sizes={i === 0 ? "(min-width: 768px) 50vw, 100vw" : "(min-width: 768px) 25vw, 50vw"}
                     width={g.w}
                     height={g.h}
                     alt={g.caption}
@@ -491,9 +494,6 @@ function AviationPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-5 text-[var(--color-ink-soft)]" style={{ fontSize: "0.8125rem" }}>
-            Individual student names are withheld pending written media-release consent.
-          </p>
           <p className="mt-3 text-[var(--color-ink-soft)]" style={T.body}>
             [Programme videos — to be provided by school]
           </p>

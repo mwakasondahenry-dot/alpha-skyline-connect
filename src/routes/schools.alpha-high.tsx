@@ -22,11 +22,11 @@ import { testimonialsQuery } from "@/lib/testimonials-query";
 import { ACSEE_2026, CSEE_2024, CSEE_2025, CSEE_2025_ENGLISH } from "@/lib/high-results";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
+import { Photo as Pic } from "@/components/photo";
 import { T, SHELL } from "@/components/type-roles";
 import {
   ArrowRight,
   Calendar,
-  ExternalLink,
   GraduationCap,
   Laptop,
   MapPin,
@@ -378,16 +378,20 @@ const Img = ({
   p,
   className = "",
   eager = false,
+  sizes,
 }: {
   p: Photo;
   className?: string;
   eager?: boolean;
+  /** How wide the slot is drawn; see <Photo>. Defaults to a half-width tile. */
+  sizes?: string;
 }) => (
-  <img
+  <Pic
     src={p.src}
     alt={p.alt}
     width={p.w}
     height={p.h}
+    sizes={sizes ?? "(min-width: 1024px) 40vw, 100vw"}
     loading={eager ? "eager" : "lazy"}
     decoding="async"
     className={`h-full w-full object-cover ${className}`}
@@ -458,7 +462,7 @@ function PhotoStory({
             <div className="grid grid-cols-2 gap-2 sm:gap-3">
               {rest.slice(0, 2).map((p) => (
                 <div key={p.src} className="aspect-[4/3] overflow-hidden rounded-[1.25rem]">
-                  <Img p={p} />
+                  <Img p={p} sizes="(min-width: 1024px) 25vw, 50vw" />
                 </div>
               ))}
             </div>
@@ -469,7 +473,7 @@ function PhotoStory({
         <div className="grid grid-cols-2 gap-2 sm:gap-3">
           {photos.slice(0, 2).map((p) => (
             <div key={p.src} className="aspect-[4/5] overflow-hidden rounded-[1.5rem]">
-              <Img p={p} />
+              <Img p={p} sizes="(min-width: 1024px) 25vw, 50vw" />
             </div>
           ))}
         </div>
@@ -481,14 +485,14 @@ function PhotoStory({
           </div>
           {rest.slice(0, 2).map((p) => (
             <div key={p.src} className="aspect-[4/5] overflow-hidden rounded-[1.25rem]">
-              <Img p={p} />
+              <Img p={p} sizes="(min-width: 1024px) 20vw, 33vw" />
             </div>
           ))}
         </div>
       )}
       {layout === "tall" && (
         <div className="aspect-[4/5] overflow-hidden rounded-[1.5rem] sm:aspect-[3/4]">
-          <Img p={first} className="object-top" />
+          <Img p={first} className="object-top" sizes="(min-width: 1024px) 40vw, 100vw" />
         </div>
       )}
       <h3 className={`mt-4 font-display ${ink}`} style={T.cardTitle}>
@@ -573,7 +577,8 @@ function About() {
           {/* The campus from the air, with the classroom and the library
               tucked over its corner: the place before the paperwork. */}
           <Reveal direction="up" className="relative pb-16 sm:pb-20 lg:self-start lg:pb-24">
-            <img
+            <Pic
+              sizes="(min-width: 1024px) 50vw, 100vw"
               src={campusAerial}
               alt="The Alpha High campus in Mikocheni from the air: three blocks around a planted courtyard"
               width={1440}
@@ -582,7 +587,8 @@ function About() {
               decoding="async"
               className="aspect-[16/10] w-full rounded-[1.75rem] object-cover shadow-[var(--shadow-banner)]"
             />
-            <img
+            <Pic
+              sizes="(min-width: 1024px) 23vw, 46vw"
               src={classroom}
               alt="A teacher with students in an Alpha High classroom"
               width={1200}
@@ -592,7 +598,8 @@ function About() {
               className="absolute bottom-0 left-4 w-[46%] -rotate-2 rounded-[1.25rem] border-4 border-white object-cover shadow-[var(--shadow-card-hover)] sm:left-8"
               style={{ aspectRatio: "3 / 2" }}
             />
-            <img
+            <Pic
+              sizes="(min-width: 1024px) 19vw, 38vw"
               src={libraryShelves}
               alt="Two students reaching for books on the tall library shelves"
               width={1600}
@@ -632,7 +639,8 @@ function Academics() {
             </p>
           </div>
           <div className="grid grid-cols-[1.3fr_1fr] gap-3">
-            <img
+            <Pic
+              sizes="(min-width: 1024px) 33vw, 57vw"
               src={labPractical}
               alt="Three Alpha High students in green uniform running a practical at a laboratory bench"
               width={1800}
@@ -642,7 +650,8 @@ function Academics() {
               className="aspect-[4/5] w-full rounded-[1.75rem] object-cover"
             />
             <div className="grid gap-3">
-              <img
+              <Pic
+                sizes="(min-width: 1024px) 25vw, 43vw"
                 src={chemBeakers}
                 alt="Two beakers of blue and yellow solutions on a laboratory bench"
                 width={1200}
@@ -651,7 +660,8 @@ function Academics() {
                 decoding="async"
                 className="aspect-square w-full rounded-[1.25rem] object-cover"
               />
-              <img
+              <Pic
+                sizes="(min-width: 1024px) 25vw, 43vw"
                 src={chemLab}
                 alt="Alpha High students at work during a laboratory practical"
                 width={1200}
@@ -722,7 +732,8 @@ function Academics() {
                 to={x.to}
                 className="group relative isolate flex min-h-[18rem] flex-col justify-end overflow-hidden rounded-[1.75rem] text-white transition-transform duration-200 hover:-translate-y-[2px] motion-reduce:transition-none sm:min-h-[22rem]"
               >
-                <img
+                <Pic
+                  sizes="(min-width: 640px) 50vw, 100vw"
                   src={x.src}
                   alt={x.alt}
                   width={1200}
@@ -846,7 +857,7 @@ function Results() {
             {[
               {
                 k: "Form Four centre GPA",
-                v: `${CSEE_2025.gpaGrade}: ${CSEE_2025.gpa} in ${CSEE_2025.year}, from ${CSEE_2024.gpa} in ${CSEE_2024.year}. Lower is better on NECTA's scale.`,
+                v: `${CSEE_2025.gpaGrade}: ${CSEE_2025.gpa} in ${CSEE_2025.year}, from ${CSEE_2024.gpa} in ${CSEE_2024.year}.`,
               },
               {
                 k: "English Language",
@@ -868,30 +879,6 @@ function Results() {
             ))}
           </dl>
         </div>
-
-        <p className="mt-8 text-white/75" style={T.body}>
-          Source: NECTA&rsquo;s published results for Alpha Secondary School, Dar es Salaam, centre
-          S2549 —{" "}
-          {[
-            ["Form Four 2025", CSEE_2025.source],
-            ["Form Four 2024", CSEE_2024.source],
-            ["Form Six 2026", ACSEE_2026.source],
-          ].map(([label, href], i) => (
-            <span key={href}>
-              {i > 0 && " · "}
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-white underline underline-offset-4 hover:text-[var(--color-gold)]"
-              >
-                {label}
-                <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-              </a>
-            </span>
-          ))}
-          .
-        </p>
 
         {/* Beyond the exam hall: what the students have won, in their own
             school's words (Instagram captions), with the photographs. */}
@@ -1046,7 +1033,8 @@ function StudentLife() {
                       {uploaded ? (
                         <figure className="w-40 sm:w-44">
                           <div className="aspect-[4/5] overflow-hidden rounded-[1.25rem]">
-                            <img
+                            <Pic
+                              sizes="11rem"
                               src={uploaded.image_url}
                               alt={uploaded.alt_text || `${c.name} club at Alpha High`}
                               width={800}
@@ -1287,7 +1275,8 @@ function StudentLife() {
                   ] as const
                 ).map((p, i) => (
                   <li key={p.src} className={i % 2 ? "md:translate-y-4" : ""}>
-                    <img
+                    <Pic
+                      sizes="(min-width: 768px) 16vw, 33vw"
                       src={p.src}
                       alt={p.alt}
                       width={800}
@@ -1300,8 +1289,7 @@ function StudentLife() {
                 ))}
               </ul>
               <p className="mt-6 text-[var(--color-ink-soft)]" style={T.body}>
-                Form Six, done. Students&rsquo; names are withheld pending written media-release
-                consent.
+                Form Six, done.
               </p>
             </Reveal>
           </LifeGroup>
@@ -1337,7 +1325,8 @@ function People({ staff }: { staff: SchoolBundle["staff"] }) {
                       row that says so, rather than a tall empty panel. */}
                   <article className="h-full overflow-hidden rounded-[1.5rem] bg-white ring-1 ring-[var(--color-hairline)]">
                     {p.photo_url && (
-                      <img
+                      <Pic
+                        sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                         width={600}
                         height={800}
                         src={p.photo_url}

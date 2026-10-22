@@ -1,3 +1,4 @@
+import { Photo as Pic } from "@/components/photo";
 import { SchoolFacilitiesSection } from "@/components/school/facilities-section";
 import { SchoolSubNav } from "@/components/school/school-sub-nav";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -168,6 +169,7 @@ function Photo({
   className = "",
   imgClassName = "",
   eager = false,
+  sizes = "(min-width: 1024px) 50vw, 100vw",
 }: {
   src: string;
   alt: string;
@@ -179,14 +181,16 @@ function Photo({
   className?: string;
   imgClassName?: string;
   eager?: boolean;
+  sizes?: string;
 }) {
   return (
     <figure className={`relative ${className}`}>
       {/* A captioned photo keeps its own height so the caption stays inside
           its tile; an uncaptioned one stretches to fill a mosaic cell. */}
       <div className={`${caption ? "" : "h-full"} overflow-hidden rounded-[1.75rem] bg-[var(--color-deep-blue)]/5`}>
-        <img
+        <Pic
           src={src}
+          sizes={sizes}
           alt={alt}
           width={w}
           height={h}
@@ -358,6 +362,7 @@ function Hero() {
           <div aria-hidden className="absolute -right-2 -top-3 h-14 w-14 rounded-full bg-[var(--color-gold)] sm:h-20 sm:w-20" />
           <Photo
             src={main.src}
+            sizes="(min-width: 1024px) 58vw, 100vw"
             alt={photos["nursery-primary.days.hippo-ride"]?.alt_text ?? "A smiling nursery pupil on a play hippo in the courtyard"}
             w={1600}
             h={1067}
@@ -368,8 +373,9 @@ function Hero() {
             Ages 2 – 12
           </Sticker>
           <div className="absolute bottom-0 left-[-0.5rem] w-[42%] -rotate-[4deg] rounded-[1.6rem] bg-[var(--color-gold)] p-1.5 shadow-[0_18px_36px_-18px_rgba(0,46,106,0.55)] sm:left-[-1.5rem]">
-            <img
+            <Pic
               src={inset.src}
+              sizes="(min-width: 1024px) 25vw, 42vw"
               alt={photos["nursery-primary.days.girl-portrait"]?.alt_text ?? "A smiling primary pupil at her desk"}
               width={1000}
               height={667}
@@ -521,6 +527,7 @@ function Ladder() {
             <div className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-[1fr_1.4fr_1.4fr] md:grid-rows-2">
               <Photo
                 src={daycareTeacher}
+                sizes="(min-width: 768px) 25vw, 50vw"
                 alt="A teacher helping a toddler at a small table in a bright classroom"
                 w={1000}
                 h={1500}
@@ -529,6 +536,7 @@ function Ladder() {
               />
               <Photo
                 src={toddlersPlayroom}
+                sizes="(min-width: 768px) 38vw, 50vw"
                 alt="Two toddlers playing with toys in the nursery playroom"
                 w={1200}
                 h={800}
@@ -537,6 +545,7 @@ function Ladder() {
               />
               <Photo
                 src={ballPitCircle}
+                sizes="(min-width: 768px) 38vw, 50vw"
                 alt="Nursery pupils and teachers sitting in a circle around coloured balls"
                 w={1100}
                 h={733}
@@ -545,6 +554,7 @@ function Ladder() {
               />
               <Photo
                 src={preUnitGraduation}
+                sizes="(min-width: 768px) 38vw, 50vw"
                 alt="A Pre-Unit pupil speaking into a microphone at the graduation"
                 w={1200}
                 h={800}
@@ -597,6 +607,7 @@ function Ladder() {
             <div className="mt-10 grid gap-3 sm:gap-4 md:grid-cols-[1.5fr_1fr]">
               <Photo
                 src={teacher.src}
+                sizes="(min-width: 768px) 60vw, 100vw"
                 alt={photos["nursery-primary.days.teacher"]?.alt_text ?? "A teacher helping a pupil with his work in a primary classroom"}
                 w={1200}
                 h={800}
@@ -607,6 +618,7 @@ function Ladder() {
               <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-1">
                 <Photo
                   src={pupils.src}
+                  sizes="(min-width: 768px) 40vw, 50vw"
                   alt={photos["nursery-primary.primary.pupil-portrait"]?.alt_text ?? "Two primary pupils in uniform smiling in the school garden"}
                   w={1200}
                   h={800}
@@ -614,6 +626,7 @@ function Ladder() {
                 />
                 <Photo
                   src={pupilDeskBoy}
+                  sizes="(min-width: 768px) 40vw, 50vw"
                   alt="A primary pupil smiling at his desk in a bright classroom"
                   w={1200}
                   h={800}
@@ -653,6 +666,7 @@ function Ladder() {
                 </p>
                 <Photo
                   src={graduatePortrait}
+                  sizes="(min-width: 1024px) 20vw, 66vw"
                   alt="A smiling primary graduate in a blue and gold gown and cap"
                   w={800}
                   h={1192}
@@ -719,6 +733,7 @@ function Activities() {
           <div className="grid grid-cols-2 gap-3 sm:gap-4">
             <Photo
               src={footballMatch}
+              sizes="(min-width: 1024px) 60vw, 100vw"
               alt="Primary pupils in bibs running after the ball on the school field"
               w={1100}
               h={733}
@@ -729,6 +744,7 @@ function Activities() {
             />
             <Photo
               src={taekwondo}
+              sizes="(min-width: 1024px) 30vw, 50vw"
               alt="A primary pupil in a white taekwondo uniform practising a stance"
               w={900}
               h={1350}
@@ -738,6 +754,7 @@ function Activities() {
             />
             <Photo
               src={paddlingPool}
+              sizes="(min-width: 1024px) 30vw, 50vw"
               alt="Nursery children climbing on an inflatable in a paddling pool"
               w={1200}
               h={800}
@@ -1051,10 +1068,11 @@ function GalleryTile({
 }): ReactNode {
   return (
     <figure className={`group relative overflow-hidden rounded-[1.25rem] bg-[var(--color-deep-blue)]/5 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:z-10 hover:-rotate-1 hover:scale-[1.02] motion-reduce:transition-none ${className}`}>
-      <img
+      <Pic
         width={1200}
         height={800}
         src={src}
+        sizes="(min-width: 768px) 33vw, 100vw"
         alt={alt}
         loading="lazy"
         decoding="async"

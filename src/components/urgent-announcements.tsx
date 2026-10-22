@@ -81,7 +81,7 @@ export function UrgentAnnouncements() {
         <div className="px-6 py-5">
           <h2
             id="urgent-news-title"
-            className="font-[Mulish] text-2xl font-extrabold leading-tight text-[var(--color-deep-blue)]"
+            className="font-display text-2xl font-extrabold leading-tight text-[var(--color-deep-blue)]"
           >
             {current.title}
           </h2>

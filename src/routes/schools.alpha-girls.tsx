@@ -15,6 +15,7 @@ import { ParentVoices } from "@/components/school/parent-voices";
 import { testimonialsQuery } from "@/lib/testimonials-query";
 import { slotPhoto } from "@/lib/photo-slots";
 import { Reveal } from "@/components/reveal";
+import { Photo } from "@/components/photo";
 import { HeroSlideshow } from "@/components/hero-slideshow";
 import { T, SHELL, heroStep } from "@/components/type-roles";
 import { Marked } from "@/components/alpha-ui";
@@ -22,7 +23,6 @@ import { ACSEE_2026, CSEE_2024, CSEE_2025, CSEE_2025_ENGLISH } from "@/lib/girls
 import {
   ArrowRight,
   Calendar,
-  ExternalLink,
   GraduationCap,
   MapPin,
   Trophy,
@@ -214,7 +214,8 @@ function Hero() {
               imgClassName="object-cover"
             />
           </div>
-          <img
+          <Photo
+            sizes="(min-width: 1024px) 13vw, 24vw"
             src={gradPortrait1}
             alt=""
             width={700}
@@ -222,7 +223,8 @@ function Hero() {
             className="absolute bottom-0 left-0 w-[24%] -rotate-3 rounded-2xl border-4 object-cover shadow-[0_18px_36px_-16px_rgba(0,0,0,0.6)]"
             style={{ borderColor: GOLD, aspectRatio: "5 / 7" }}
           />
-          <img
+          <Photo
+            sizes="(min-width: 1024px) 11vw, 20vw"
             src={gradPortrait2}
             alt=""
             width={700}
@@ -383,7 +385,8 @@ function About() {
 
         <Reveal direction="up" className="grid grid-cols-2 gap-3 sm:gap-4">
           <figure className="col-span-2">
-            <img
+            <Photo
+              sizes="(min-width: 1024px) 55vw, 100vw"
               src={class2026Trio}
               alt="Three Alpha Girls students of the Class of 2026 in green suits"
               width={1400}
@@ -396,7 +399,8 @@ function About() {
               The Class of 2026.
             </figcaption>
           </figure>
-          <img
+          <Photo
+            sizes="(min-width: 1024px) 55vw, 100vw"
             src={class2026Sash}
             alt="An Alpha Girls student wearing a Class of 2026 sash"
             width={900}
@@ -405,7 +409,8 @@ function About() {
             decoding="async"
             className="aspect-[3/4] w-full rounded-[1.75rem] object-cover object-top"
           />
-          <img
+          <Photo
+            sizes="(min-width: 1024px) 28vw, 50vw"
             src={gradsGardenPair}
             alt="Alpha Girls graduates in gowns in the school garden"
             width={1000}
@@ -580,7 +585,8 @@ function Academics() {
               form or a stream, or search a subject.
             </p>
           </div>
-          <img
+          <Photo
+            sizes="(min-width: 1024px) 50vw, 100vw"
             src={labBench}
             alt="Alpha Girls students at a laboratory bench during a science practical"
             width={1200}
@@ -627,7 +633,8 @@ function Academics() {
               to="/aviation"
               className="group relative isolate flex min-h-[18rem] flex-col justify-end overflow-hidden rounded-[1.75rem] text-white transition-transform duration-200 hover:-translate-y-[2px] motion-reduce:transition-none sm:min-h-[22rem]"
             >
-              <img
+              <Photo
+                sizes="(min-width: 640px) 50vw, 100vw"
                 src={avGirlsCessna}
                 alt="Alpha aviation students in safety vests beside a Cessna"
                 width={1200}
@@ -792,7 +799,7 @@ function Results() {
             {[
               {
                 k: "Form Four centre GPA",
-                v: `${CSEE_2025.gpaGrade}: ${CSEE_2025.gpa} in ${CSEE_2025.year}, from ${CSEE_2024.gpa} in ${CSEE_2024.year}. Lower is better on NECTA's scale.`,
+                v: `${CSEE_2025.gpaGrade}: ${CSEE_2025.gpa} in ${CSEE_2025.year}, from ${CSEE_2024.gpa} in ${CSEE_2024.year}.`,
               },
               {
                 k: "English Language",
@@ -815,35 +822,12 @@ function Results() {
           </dl>
         </div>
 
-        <p className="mt-8 text-white/75" style={T.body}>
-          Source: NECTA&rsquo;s published results for Alpha Girls&rsquo; Secondary School, centre
-          S5889 —{" "}
-          {[
-            ["Form Four 2025", CSEE_2025.source],
-            ["Form Four 2024", CSEE_2024.source],
-            ["Form Six 2026", ACSEE_2026.source],
-          ].map(([label, href], i) => (
-            <span key={href}>
-              {i > 0 && " · "}
-              <a
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 text-white underline underline-offset-4 hover:text-[var(--color-gold)]"
-              >
-                {label}
-                <ExternalLink className="h-3.5 w-3.5" aria-hidden />
-              </a>
-            </span>
-          ))}
-          .
-        </p>
-
         {/* Beyond the exam hall: where the girls compete. */}
         <div className="mt-16 grid gap-10 border-t border-white/20 pt-12 lg:grid-cols-[1.15fr_1fr] lg:gap-14">
           <Reveal direction="up">
             <figure>
-              <img
+              <Photo
+                sizes="(min-width: 1024px) 55vw, 100vw"
                 src={plate.src}
                 alt={
                   photos["alpha-girls.students.campus-plate"]?.alt_text ??
@@ -1053,7 +1037,8 @@ function StudentLife() {
           <LifeGroup title="The campus." lead="Kunduchi, and the spaces the girls learn in.">
             <Reveal direction="up">
               <figure className="relative overflow-hidden rounded-[1.75rem] shadow-[var(--shadow-banner)]">
-                <img
+                <Photo
+                  sizes="(min-width: 1024px) 65vw, 100vw"
                   width={1600}
                   height={1511}
                   src={labPractical}
@@ -1084,7 +1069,8 @@ function StudentLife() {
                 return (
                   <li key={f.key} className="flex items-center gap-4 border-b border-[var(--color-hairline)] py-4">
                     {src ? (
-                      <img
+                      <Photo
+                        sizes="7rem"
                         src={src}
                         alt={photos[f.key]?.alt_text ?? `${f.label} at Alpha Girls`}
                         width={1200}
@@ -1130,7 +1116,8 @@ function StudentLife() {
               <ul className="grid grid-cols-4 gap-2 sm:gap-3 md:grid-cols-8">
                 {PORTRAITS.map((src, i) => (
                   <li key={src} className={i % 2 ? "md:translate-y-6" : ""}>
-                    <img
+                    <Photo
+                      sizes="(min-width: 768px) 12.5vw, 25vw"
                       src={src}
                       alt="An Alpha Girls graduate in a black and gold gown"
                       width={700}
@@ -1142,9 +1129,6 @@ function StudentLife() {
                   </li>
                 ))}
               </ul>
-              <p className="mt-10 text-[var(--color-ink-soft)]" style={T.body}>
-                Students&rsquo; names are withheld pending written media-release consent.
-              </p>
             </Reveal>
           </LifeGroup>
 
@@ -1200,7 +1184,8 @@ function People({ staff }: { staff: SchoolBundle["staff"] }) {
                   <Reveal direction="up">
                     <article className="h-full overflow-hidden rounded-[1.5rem] bg-white ring-1 ring-[var(--color-hairline)]">
                       {p.photo_url && (
-                        <img
+                        <Photo
+                          sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
                           width={600}
                           height={800}
                           src={p.photo_url}

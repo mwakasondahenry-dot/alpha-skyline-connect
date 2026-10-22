@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Photo } from "@/components/photo";
 import { seo } from "@/lib/seo";
 import { organizationLd, websiteLd } from "@/lib/structured-data";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -383,10 +384,11 @@ function FindTheRightSchool() {
               to={s.to}
               className="group relative isolate flex h-full min-h-[32rem] flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-[var(--band)] text-[var(--color-surface)] shadow-[var(--card-shadow)] transition-shadow duration-200 hover:shadow-[var(--card-shadow-hover)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--band)] md:min-h-[33rem]"
             >
-              <img
+              <Photo
                 width={800}
                 height={600}
                 src={s.image}
+                sizes="(min-width: 768px) 33vw, 100vw"
                 alt={s.alt}
                 loading="lazy"
                 decoding="async"
@@ -528,10 +530,6 @@ function ResultsBand() {
             </Reveal>
           ))}
         </div>
-        <p className="mt-10 text-[var(--color-surface)]/70" style={T.body}>
-          Source: NECTA&rsquo;s published results for centres S2549 and S5889. Lower GPA is better
-          on NECTA&rsquo;s scale.
-        </p>
       </div>
     </section>
   );
@@ -589,19 +587,21 @@ function AviationChapter() {
           </div>
         </Reveal>
         <Reveal direction="up" className="relative pb-14 pr-6 sm:pb-20 sm:pr-10">
-          <img
+          <Photo
             width={1080}
             height={1350}
             src={avCockpitGirl}
+            sizes="(min-width: 1024px) 50vw, 100vw"
             alt="An Alpha aviation student in the cockpit wearing a headset"
             loading="lazy"
             decoding="async"
             className="aspect-[4/5] w-full rounded-[1.75rem] object-cover shadow-[var(--shadow-banner)] sm:aspect-[4/3] lg:aspect-[4/5]"
           />
-          <img
+          <Photo
             width={853}
             height={568}
             src={avFlightline}
+            sizes="(min-width: 1024px) 26vw, 52vw"
             alt="Alpha aviation students lined up on the flight line beside the aircraft"
             loading="lazy"
             decoding="async"
@@ -823,10 +823,11 @@ function NewsAndEvents({ news, events }: { news: HomeWhatsNew["news"]; events: H
                 className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] transition-shadow hover:shadow-[var(--card-shadow-hover)] motion-reduce:transition-none"
               >
                 {c.image && (
-                  <img
+                  <Photo
                     width={1600}
                     height={1000}
                     src={c.image}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     alt=""
                     loading="lazy"
                     decoding="async"

@@ -1,3 +1,4 @@
+import { Photo } from "@/components/photo";
 import { useId, useMemo, useState, type CSSProperties, type ReactNode } from "react";
 import {
   Atom,
@@ -342,8 +343,9 @@ export function SubjectTileList({
         return (
           <li key={s} className="dl-subject">
             {image && (
-              <img
+              <Photo
                 src={image}
+                sizes="(min-width: 1280px) 17vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
                 alt=""
                 loading="lazy"
                 decoding="async"

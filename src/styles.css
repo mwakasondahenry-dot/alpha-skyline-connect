@@ -2,6 +2,15 @@
 @source "../src";
 @import "tw-animate-css";
 
+/* Self-hosted type. Until 2026-10-22 both faces came from Google Fonts: a
+   render-blocking stylesheet from one host and the files from another, so a
+   phone on mobile data drew nothing until that round trip came back. These
+   two variable files (one per family, latin subset ~30 KB each) ship from the
+   same origin as the page with an immutable cache header, and __root.tsx
+   preloads them. font-display: swap is in the package CSS. */
+@import "@fontsource-variable/mulish";
+@import "@fontsource-variable/hanken-grotesk";
+
 @custom-variant dark (&:is(.dark *));
 
 /* Alpha Schools — brand tokens (Part 4 of the master build doc). */
@@ -59,8 +68,8 @@
   --color-accent: var(--color-gold);
   --color-accent-foreground: #1a1a18;
 
-  --font-display: "Mulish", "Hanken Grotesk", system-ui, sans-serif;
-  --font-sans: "Hanken Grotesk", system-ui, -apple-system, sans-serif;
+  --font-display: "Mulish Variable", "Hanken Grotesk Variable", system-ui, sans-serif;
+  --font-sans: "Hanken Grotesk Variable", system-ui, -apple-system, sans-serif;
 }
 
 :root {

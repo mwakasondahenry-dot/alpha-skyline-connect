@@ -1,5 +1,6 @@
 // Lightweight hero slideshow: cross-fades through Supabase-managed slides,
 // falling back to the page's built-in hero image until real photos are added.
+import { Photo } from "@/components/photo";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getHeroSlides } from "@/lib/alpha-content.functions";
@@ -86,11 +87,12 @@ export function HeroSlideshow({
       }}
     >
       {images.map((img, i) => (
-        <img
+        <Photo
           width={1600}
           height={900}
           key={`${img.src}-${i}`}
           src={img.src}
+          sizes="100vw"
           alt={i === idx ? img.alt : ""}
           aria-hidden={i !== idx}
           loading={i === 0 ? "eager" : "lazy"}

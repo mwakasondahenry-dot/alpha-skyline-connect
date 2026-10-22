@@ -1,3 +1,4 @@
+import { Photo } from "@/components/photo";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
@@ -59,7 +60,7 @@ export function SchoolPage({ config, bundle }: { config: SchoolConfig; bundle: S
 
       {/* Hero */}
       <section className="relative isolate overflow-hidden">
-        <img width={1600} height={900} fetchPriority="high" src={heroImage} alt={heroAlt} className="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
+        <Photo width={1600} height={900} fetchPriority="high" sizes="100vw" src={heroImage} alt={heroAlt} className="absolute inset-0 h-full w-full object-cover" loading="eager" decoding="async" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/55 to-black/25" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/15 to-transparent" />
         <div className="relative mx-auto max-w-7xl px-6 py-24 sm:py-28 lg:px-10 lg:py-32">
@@ -129,7 +130,7 @@ export function SchoolPage({ config, bundle }: { config: SchoolConfig; bundle: S
       <section className="bg-white">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 lg:grid-cols-2 lg:px-10">
           <Reveal direction="left" className="relative overflow-hidden rounded-2xl">
-            <img width={1600} height={900} src={heroImage} alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
+            <Photo width={1600} height={900} src={heroImage} sizes="(min-width: 1024px) 50vw, 100vw" alt="" className="h-full w-full object-cover" loading="lazy" decoding="async" />
             <div className="absolute inset-0 bg-gradient-to-tr from-black/30 to-transparent" />
           </Reveal>
           <Reveal direction="right">
@@ -172,7 +173,7 @@ export function SchoolPage({ config, bundle }: { config: SchoolConfig; bundle: S
                   <article className="group flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-[var(--color-deep-blue)]/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl">
                     <div className="relative aspect-[16/10] overflow-hidden">
                       {n.cover_url ? (
-                        <img width={800} height={600} src={n.cover_url} alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                        <Photo width={800} height={600} src={n.cover_url} sizes="(min-width: 768px) 33vw, 100vw" alt="" loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                       ) : (
                         <div aria-hidden className="absolute inset-0" style={{ background: `linear-gradient(135deg, ${accent}, var(--color-gold))` }} />
                       )}
@@ -298,7 +299,7 @@ function GallerySection({ items, accent, schoolName }: { items: { id: string; im
                 onClick={() => setActive(g.image_url)}
                 className="group relative h-56 w-72 shrink-0 overflow-hidden rounded-2xl ring-1 ring-[var(--color-deep-blue)]/10 transition-all duration-500 hover:-translate-y-1 hover:shadow-xl"
               >
-                <img width={800} height={600} src={g.image_url} alt={g.caption ?? ""} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <Photo width={800} height={600} src={g.image_url} sizes="288px" alt={g.caption ?? ""} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
                 {g.caption && (
                   <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-left text-xs text-white">
                     {g.caption}
@@ -317,7 +318,7 @@ function GallerySection({ items, accent, schoolName }: { items: { id: string; im
           onClick={() => setActive(null)}
           className="fixed inset-0 z-50 grid place-items-center bg-black/85 p-6 backdrop-blur-sm"
         >
-          <img width={1600} height={1200} loading="lazy" src={active} alt="" className="max-h-[90vh] max-w-[95vw] rounded-2xl object-contain shadow-2xl" />
+          <Photo width={1600} height={1200} loading="lazy" src={active} sizes="95vw" alt="" className="max-h-[90vh] max-w-[95vw] rounded-2xl object-contain shadow-2xl" />
           <button
             aria-label="Close"
             onClick={() => setActive(null)}

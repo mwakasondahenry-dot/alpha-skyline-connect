@@ -16,6 +16,8 @@
     "forms:blank": "vite-node scripts/run-generate-blank-forms.ts"
   },
   "dependencies": {
+    "@fontsource-variable/hanken-grotesk": "^5.3.0",
+    "@fontsource-variable/mulish": "^5.3.0",
     "@hookform/resolvers": "^5.2.2",
     "@radix-ui/react-accordion": "^1.2.12",
     "@radix-ui/react-alert-dialog": "^1.1.15",
@@ -89,6 +91,7 @@
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.0.16",
+    "vite-imagetools": "^12.0.1",
     "vitest": "^3.2.7"
   }
 }

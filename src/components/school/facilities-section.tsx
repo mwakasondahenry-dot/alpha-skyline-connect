@@ -1,3 +1,4 @@
+import { Photo } from "@/components/photo";
 import { useEffect, useState } from "react";
 import {
   getFacilitiesBySchool,
@@ -64,10 +65,11 @@ export function SchoolFacilitiesSection({
               >
                 {f.image_url ? (
                   <div className="aspect-[4/3] overflow-hidden bg-black/5">
-                    <img
+                    <Photo
                       width={800}
                       height={600}
                       src={f.image_url}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       alt={f.name}
                       loading="lazy"
                       className="h-full w-full object-cover transition duration-500 group-hover:scale-105"

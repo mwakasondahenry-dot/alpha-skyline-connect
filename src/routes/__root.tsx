@@ -11,6 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import alphaLogo from "@/assets/alpha-logo.webp";
+import mulishWoff2 from "@fontsource-variable/mulish/files/mulish-latin-wght-normal.woff2?url";
+import hankenWoff2 from "@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { UrgentAnnouncements } from "../components/urgent-announcements";
 import { RevealWatcher } from "../components/reveal";
@@ -119,24 +121,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "icon", type: "image/webp", href: alphaLogo },
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      /* Twelve font files were requested, six per family, and four of them
-         were never used. Mulish is --font-display: it sets every h1-h4 and
-         anything with .font-display, and the lightest weight any of them ask
-         for is 600. Hanken Grotesk is --font-sans, the body face, and nothing
-         in it goes above 700 — the one font-extrabold outside a heading is
-         explicitly font-[Mulish].
-
-         Check before widening either list: `font-medium` on a heading or
-         `font-black` on body text would silently fall back to a synthesised
-         weight. display=swap stays — on a mid-range phone on mobile data,
-         text that arrives in a fallback face beats text that does not
-         arrive. */
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Mulish:wght@600;700;800;900&family=Hanken+Grotesk:wght@400;500;600;700&display=swap",
-      },
+      /* The two type faces, self-hosted (see styles.css). Preloading the
+         latin files means the text is drawn in its own face on first paint
+         instead of swapping in after the stylesheet is parsed. Mulish is
+         --font-display (every h1-h4, .font-display); Hanken Grotesk is
+         --font-sans, the body face. Both are variable fonts, so every weight
+         the site uses comes from the one file. */
+      { rel: "preload", as: "font", type: "font/woff2", href: hankenWoff2, crossOrigin: "anonymous" },
+      { rel: "preload", as: "font", type: "font/woff2", href: mulishWoff2, crossOrigin: "anonymous" },
     ],
   }),
   shellComponent: RootShell,

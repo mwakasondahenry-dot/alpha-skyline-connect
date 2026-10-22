@@ -10,6 +10,7 @@
  * tile renders as a light, labelled placeholder: visibly awaiting a
  * photograph rather than confidently showing the wrong one.
  */
+import { Photo } from "@/components/photo";
 import { Reveal } from "@/components/reveal";
 import { slotPhoto, type SlotPhotoMap } from "@/lib/photo-slots";
 
@@ -33,10 +34,11 @@ export function FacilityTile({
     <Reveal direction="up" delay={delay}>
       {photo ? (
         <div className="group relative aspect-[4/3] overflow-hidden rounded-2xl shadow-sm ring-1 ring-black/5 transition hover:-translate-y-1 hover:shadow-xl active:translate-y-0">
-          <img
+          <Photo
             width={800}
             height={600}
             src={photo.src}
+            sizes="(min-width: 640px) 33vw, 100vw"
             alt={alt}
             loading="lazy"
             decoding="async"
