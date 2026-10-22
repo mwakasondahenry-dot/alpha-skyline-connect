@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { cached, clearMemoryCache } from "./edge-cache";
+import { STALE_SECONDS, cached, clearMemoryCache } from "./edge-cache";
 
 describe("cached", () => {
   beforeEach(() => clearMemoryCache());
@@ -11,12 +11,44 @@ describe("cached", () => {
     expect(load).toHaveBeenCalledTimes(1);
   });
 
-  it("reloads after the TTL", async () => {
+  it("past the TTL, serves the old value at once and refreshes for the next visitor", async () => {
     vi.useFakeTimers();
     const load = vi.fn().mockResolvedValueOnce(1).mockResolvedValueOnce(2);
     expect(await cached("t", load, 1)).toBe(1);
     vi.advanceTimersByTime(1500);
-    expect(await cached("t", load, 1)).toBe(2);
+    expect(await cached("t", load, 1)).toBe(1); // stale, served without waiting
+    expect(load).toHaveBeenCalledTimes(2); // the refresh was started
+    await vi.runAllTimersAsync();
+    expect(await cached("t", load, 1)).toBe(2); // and the next visitor gets it
+    expect(load).toHaveBeenCalledTimes(2);
+    vi.useRealTimers();
+  });
+
+  it("starts one background refresh per key, not one per visitor", async () => {
+    vi.useFakeTimers();
+    let release!: (v: number) => void;
+    const load = vi
+      .fn()
+      .mockResolvedValueOnce(1)
+      .mockImplementationOnce(() => new Promise<number>((r) => (release = r)));
+    await cached("d", load, 1);
+    vi.advanceTimersByTime(1500);
+    expect(await cached("d", load, 1)).toBe(1);
+    expect(await cached("d", load, 1)).toBe(1);
+    expect(await cached("d", load, 1)).toBe(1);
+    expect(load).toHaveBeenCalledTimes(2);
+    release(2);
+    await vi.runAllTimersAsync();
+    expect(await cached("d", load, 1)).toBe(2);
+    vi.useRealTimers();
+  });
+
+  it("waits for a fresh read once the value has expired entirely", async () => {
+    vi.useFakeTimers();
+    const load = vi.fn().mockResolvedValueOnce(1).mockResolvedValueOnce(2);
+    expect(await cached("x1", load, 1)).toBe(1);
+    vi.advanceTimersByTime((1 + STALE_SECONDS) * 1000 + 500);
+    expect(await cached("x1", load, 1)).toBe(2);
     vi.useRealTimers();
   });
 
@@ -28,8 +60,8 @@ describe("cached", () => {
       .mockRejectedValueOnce(new Error("down"))
       .mockResolvedValueOnce("fresh");
     expect(await cached("f", load, 1)).toBe("good");
-    vi.advanceTimersByTime(1500);
-    expect(await cached("f", load, 1)).toBe("good"); // failed load, stale served
+    vi.advanceTimersByTime((1 + STALE_SECONDS) * 1000 + 500);
+    expect(await cached("f", load, 1)).toBe("good"); // failed load, old value served
     expect(await cached("f", load, 1)).toBe("fresh"); // failure was not cached
     vi.useRealTimers();
   });

@@ -35,9 +35,9 @@ export type RevealDirection = "up" | "left" | "right" | "none";
  *      anything still unrevealed 1.5s after it mounts.
  *
  *   3. It withheld copy the reader was already looking at for another 600ms.
- *      The transition is 420ms, the observer fires a block slightly before its
- *      top edge clears the fold, and delays are capped at 350ms so a staggered
- *      group can never make the last item wait.
+ *      The transition is 300ms, the observer fires a block while it is still
+ *      almost half a viewport below the fold, and delays are capped at 350ms
+ *      so a staggered group can never make the last item wait.
  *
  * Two ways to mark a block, both driving the same CSS and the same observer:
  *
@@ -91,11 +91,13 @@ function sharedObserver(): IntersectionObserver | null {
         }
       },
       {
-        /* Negative bottom inset: a block starts settling once it is a little
-           way into the viewport rather than the instant its first pixel
-           appears, which reads as deliberate instead of twitchy. Kept small so
-           copy is never withheld from someone already reading it. */
-        rootMargin: "0px 0px -12% 0px",
+        /* A generous bottom margin: a block settles while it is still well
+           below the fold, so by the time the reader scrolls to it, it is in
+           place. Until 2026-10-22 this was -12%, which made every section
+           fade in only after it had been reached; on a slow phone, with the
+           photographs still arriving, the owner read that as the page
+           loading piece by piece. */
+        rootMargin: "0px 0px 45% 0px",
         threshold: 0.01,
       },
     );

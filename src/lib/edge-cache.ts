@@ -1,15 +1,30 @@
 /**
- * A short-lived cache for the public pages' database reads.
+ * A cache for the public pages' database reads that keeps the database off
+ * the critical path.
  *
  * The site is served from Cloudflare's edge (for most visitors, Dar es
- * Salaam), but the database is on another continent. Every page that waited
- * on it took 1–5 s before a single byte was sent, measured on 2026-10-21,
- * against well under 0.1 s for a page that did not.
+ * Salaam), but the database is on another continent. A page that waits on
+ * it takes 0.8–1.2 s before a single byte is sent, measured on 2026-10-21
+ * and again on 2026-10-22, against under 0.1 s for one that does not. On a
+ * quiet site almost every visit used to pay that: the data was kept for only
+ * five minutes, and five minutes is longer than the gap between visitors.
  *
- * So each read is kept for a few minutes: first in this isolate's memory,
- * then in Cloudflare's edge cache (the Workers Cache API), which every
- * isolate in the data centre shares. A change staff make in the admin
- * appears on the public site within TTL_SECONDS.
+ * So, stale-while-revalidate. Each read has three ages:
+ *
+ *   fresh   (TTL_SECONDS)    served as is;
+ *   stale   (STALE_SECONDS)  served as is, immediately, while one refresh
+ *                            runs in the background for the next visitor;
+ *   expired                  the visitor waits for a fresh read, as before.
+ *
+ * A change staff make in the admin shows on the next visit after
+ * TTL_SECONDS at the latest plus one more page view, since the first visit
+ * past the fresh window serves the old value and triggers the refresh.
+ *
+ * The value lives first in this isolate's memory, then in Cloudflare's
+ * edge cache (the Workers Cache API), which every isolate in the data
+ * centre shares. The background refresh is handed to the Worker's
+ * `waitUntil` when the request exposes one, so it survives the response
+ * being sent; without it the promise simply runs unawaited.
  *
  * A failed read serves the last good answer when this isolate has one.
  * Otherwise it serves the caller's fallback, and that is remembered for
@@ -22,10 +37,14 @@
  */
 
 export const TTL_SECONDS = 300;
+/** How long past fresh a value is still served while a refresh runs. */
+export const STALE_SECONDS = 6 * 60 * 60;
 export const ERROR_TTL_SECONDS = 60;
 
-type Entry = { expires: number; value: unknown };
+type Entry = { freshUntil: number; staleUntil: number; value: unknown };
 const memory = new Map<string, Entry>();
+/** One background refresh per key at a time. */
+const inflight = new Map<string, Promise<void>>();
 
 type EdgeCache = {
   match(req: Request): Promise<Response | undefined>;
@@ -40,6 +59,80 @@ function edgeCache(): EdgeCache | null {
 const cacheRequest = (key: string) =>
   new Request(`https://edge-cache.alphaschools.internal/${encodeURIComponent(key)}`);
 
+/** The body stored at the edge: the value and its two deadlines. */
+type Stored = { value: unknown; freshUntil: number; staleUntil: number };
+
+async function readEdge(key: string): Promise<Entry | null> {
+  const edge = edgeCache();
+  if (!edge) return null;
+  try {
+    const res = await edge.match(cacheRequest(key));
+    if (!res) return null;
+    const s = (await res.json()) as Stored;
+    if (typeof s?.freshUntil !== "number" || typeof s?.staleUntil !== "number") return null;
+    return { value: s.value, freshUntil: s.freshUntil, staleUntil: s.staleUntil };
+  } catch {
+    // A cache read failing is not a page failing: fall through to the database.
+    return null;
+  }
+}
+
+async function writeEdge(key: string, entry: Entry): Promise<void> {
+  const edge = edgeCache();
+  if (!edge) return;
+  const keepSeconds = Math.max(1, Math.ceil((entry.staleUntil - Date.now()) / 1000));
+  try {
+    const body: Stored = {
+      value: entry.value,
+      freshUntil: entry.freshUntil,
+      staleUntil: entry.staleUntil,
+    };
+    await edge.put(
+      cacheRequest(key),
+      new Response(JSON.stringify(body), {
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": `public, max-age=${keepSeconds}`,
+        },
+      }),
+    );
+  } catch {
+    // Not cached at the edge this time; the memory layer still holds it.
+  }
+}
+
+/**
+ * Keeps a promise alive past the response when the runtime allows it.
+ * Nitro's Cloudflare handler puts `waitUntil` on the incoming Request;
+ * TanStack Start hands that Request back through getRequest().
+ */
+async function inBackground(work: Promise<void>): Promise<void> {
+  try {
+    const { getRequest } = await import("@tanstack/react-start/server");
+    const req = getRequest() as Request & { waitUntil?: (p: Promise<unknown>) => void };
+    if (typeof req?.waitUntil === "function") {
+      req.waitUntil(work);
+      return;
+    }
+  } catch {
+    // No request in scope (tests, scripts): the promise runs unawaited.
+  }
+  void work;
+}
+
+async function refresh<T>(key: string, load: () => Promise<T>, ttlSeconds: number): Promise<T> {
+  const value = await load();
+  const now = Date.now();
+  const entry: Entry = {
+    value,
+    freshUntil: now + ttlSeconds * 1000,
+    staleUntil: now + (ttlSeconds + STALE_SECONDS) * 1000,
+  };
+  memory.set(key, entry);
+  await writeEdge(key, entry);
+  return value;
+}
+
 export async function cached<T>(
   key: string,
   load: () => Promise<T>,
@@ -47,55 +140,49 @@ export async function cached<T>(
   fallback?: () => T,
 ): Promise<T> {
   const now = Date.now();
-  const hit = memory.get(key);
-  if (hit && hit.expires > now) return hit.value as T;
-
-  const edge = edgeCache();
-  if (edge) {
-    try {
-      const res = await edge.match(cacheRequest(key));
-      if (res) {
-        const value = (await res.json()) as T;
-        memory.set(key, { expires: now + ttlSeconds * 1000, value });
-        return value;
-      }
-    } catch {
-      // A cache read failing is not a page failing: fall through to the database.
+  let hit = memory.get(key) ?? null;
+  if (!hit || hit.staleUntil <= now) {
+    const fromEdge = await readEdge(key);
+    if (fromEdge && fromEdge.staleUntil > now) {
+      memory.set(key, fromEdge);
+      hit = fromEdge;
     }
   }
 
-  let value: T;
+  if (hit && hit.freshUntil > now) return hit.value as T;
+
+  if (hit && hit.staleUntil > now) {
+    /* Stale: this visitor gets the old value at once; the next gets a fresh one. */
+    if (!inflight.has(key)) {
+      const work = refresh(key, load, ttlSeconds)
+        .catch((err) => console.error(`[cached ${key}] refresh`, err))
+        .then(() => {
+          inflight.delete(key);
+        });
+      inflight.set(key, work);
+      void inBackground(work);
+    }
+    return hit.value as T;
+  }
+
   try {
-    value = await load();
+    return await refresh(key, load, ttlSeconds);
   } catch (err) {
-    if (hit) return hit.value as T; // stale, but better than empty
+    if (hit) return hit.value as T; // expired, but better than empty
     if (!fallback) throw err;
     console.error(`[cached ${key}]`, err);
     const value = fallback();
-    memory.set(key, { expires: now + ERROR_TTL_SECONDS * 1000, value });
+    memory.set(key, {
+      value,
+      freshUntil: now + ERROR_TTL_SECONDS * 1000,
+      staleUntil: now + ERROR_TTL_SECONDS * 1000,
+    });
     return value;
   }
-
-  memory.set(key, { expires: now + ttlSeconds * 1000, value });
-  if (edge) {
-    try {
-      await edge.put(
-        cacheRequest(key),
-        new Response(JSON.stringify(value), {
-          headers: {
-            "Content-Type": "application/json",
-            "Cache-Control": `public, max-age=${ttlSeconds}`,
-          },
-        }),
-      );
-    } catch {
-      // Not cached at the edge this time; the memory layer still holds it.
-    }
-  }
-  return value;
 }
 
 /** For tests. */
 export function clearMemoryCache() {
   memory.clear();
+  inflight.clear();
 }

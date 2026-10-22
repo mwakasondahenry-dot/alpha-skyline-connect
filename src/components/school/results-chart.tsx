@@ -48,7 +48,9 @@ export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; colu
           io.disconnect();
         }
       },
-      { rootMargin: "0px 0px -15% 0px" },
+      /* Fill in while the chart is still a quarter-viewport below the fold,
+         so the squares are already there when the reader reaches them. */
+      { rootMargin: "0px 0px 25% 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
