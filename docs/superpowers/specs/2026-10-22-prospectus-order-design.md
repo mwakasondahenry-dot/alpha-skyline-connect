@@ -110,10 +110,10 @@ NECTA's pages for centre S2549:
 | ACSEE 2026 | 188 | 85 | 76 | 27 | 0 | 0 | 2.5062, Grade C |
 
 CSEE 2025 English Language: GPA 1.5761, Grade A, 92 sat. The page names the
-centre as NECTA names it. The site owner is told in the hand-over that
-S2549 "Alpha Secondary School, Dar es Salaam" was matched to Alpha High
-(co-education, Dar es Salaam, the only Alpha centre besides Alpha Girls and
-Alpha Adventist) and asked to confirm.
+centre as NECTA names it. S2549 "Alpha Secondary School, Dar es Salaam" was
+matched to Alpha High (co-education, Dar es Salaam, the only Alpha centre
+besides Alpha Girls and Alpha Adventist) and the site owner confirmed the
+match on 2026-10-22.
 
 ### Home page
 

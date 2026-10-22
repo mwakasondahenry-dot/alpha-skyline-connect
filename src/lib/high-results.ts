@@ -11,8 +11,8 @@
  *
  * The centre was matched to Alpha High on 2026-10-22 as the only
  * co-education "Alpha" centre in Dar es Salaam in NECTA's index (the others
- * are Alpha Girls, S5889, and Alpha Adventist, S5603). The site owner has
- * been asked to confirm the match.
+ * are Alpha Girls, S5889, and Alpha Adventist, S5603). The site owner
+ * confirmed the match the same day: S2549 is Alpha High.
  */
 import type { Sitting } from "./girls-results";
 

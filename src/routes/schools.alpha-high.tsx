@@ -1316,7 +1316,9 @@ function StudentLife() {
  * ================================================================== */
 
 function People({ staff }: { staff: SchoolBundle["staff"] }) {
-  // Seed the Head Teacher until the backend supplies the staff list.
+  // Seed the Head Teacher until the backend supplies the staff list. The
+  // name was confirmed by the site owner on 2026-10-22; the photograph is
+  // still owed.
   const list =
     staff.length > 0
       ? staff

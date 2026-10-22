@@ -96,6 +96,13 @@ engineering modules arrived September 2026 and are live on /aviation. The
 aviation **positioning claim** was approved on 2026-10-21 and is live — see
 design/CONTENT-FROM-SCHOOL.md.
 
+Confirmed by the owner on 2026-10-22: NECTA examination centre **S2549**
+("Alpha Secondary School, Dar es Salaam") is Alpha High, so its published
+results may be shown as the school's own (`src/lib/high-results.ts`); and
+**Richard Gatere Maina, Head Teacher** is correct on the Alpha High page. His
+photograph is still owed. Club photographs for Alpha High are also still owed
+and appear only once uploaded through the admin photo slots.
+
 ## Technical
 
 TanStack Start · Vite · Tailwind v4 · Supabase · deployed via nitro
