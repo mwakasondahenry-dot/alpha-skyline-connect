@@ -10,6 +10,14 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+/* The whole stylesheet, as text, to be written into every page's <head>.
+   On a slow connection a separate 30 KB stylesheet request shared the line
+   with the first photograph and the scripts and arrived at 1.5 s, and a page
+   cannot paint before its stylesheet; inlined, the styles ride in with the
+   HTML and the page paints as soon as the body arrives. The cost is ~29 KB
+   (compressed) on every page view instead of once. In development the
+   external file stays, so stylesheet edits still hot-reload. */
+import appCssInline from "../styles.css?inline";
 /* The 128px mark, 7 KB. The full logo is 74 KB and was the favicon on every
    page load until 2026-10-22. */
 import alphaLogo from "@/assets/alpha-logo-mark.webp";
@@ -118,7 +126,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: OG_IMAGE },
     ],
     links: [
-      { rel: "stylesheet", href: appCss },
+      ...(import.meta.env.DEV ? [{ rel: "stylesheet", href: appCss }] : []),
       { rel: "icon", type: "image/webp", href: alphaLogo },
       /* The two type faces are self-hosted (styles.css) and NOT preloaded:
          on a 1.6 Mbps connection their 64 KB raced the stylesheet for
@@ -126,6 +134,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
          load after the stylesheet, with font-display: swap, so the text
          is on screen in a fallback face first. */
     ],
+    styles: import.meta.env.DEV ? [] : [{ children: appCssInline }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
