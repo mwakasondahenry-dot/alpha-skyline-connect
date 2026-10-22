@@ -2,14 +2,35 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUrgentNews, type UrgentNewsItem } from "@/lib/alpha-content.functions";
 
+/**
+ * Once per visitor: a dismissed announcement is remembered in localStorage,
+ * keyed by its id, so it never comes back on that browser. A new
+ * announcement has a new id and shows once in its turn. Until 2026-10-22
+ * this was sessionStorage, which forgot on every new tab and visit, and the
+ * owner found the popup meeting every visitor on every page.
+ */
 const STORAGE_KEY = "alpha:dismissed-urgent-news";
 
 function getDismissed(): string[] {
   if (typeof window === "undefined") return [];
   try {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY) ?? "[]");
+    const raw = localStorage.getItem(STORAGE_KEY) ?? sessionStorage.getItem(STORAGE_KEY) ?? "[]";
+    const ids = JSON.parse(raw);
+    return Array.isArray(ids) ? ids.filter((id) => typeof id === "string") : [];
   } catch {
     return [];
+  }
+}
+
+function rememberDismissed(ids: string[]) {
+  const value = JSON.stringify(ids);
+  try {
+    localStorage.setItem(STORAGE_KEY, value);
+  } catch {
+    /* Storage blocked (private mode on some browsers): remember for the tab at least. */
+    try {
+      sessionStorage.setItem(STORAGE_KEY, value);
+    } catch {}
   }
 }
 
@@ -39,9 +60,7 @@ export function UrgentAnnouncements() {
   const dismiss = () => {
     const next = [...dismissed, current.id];
     setDismissed(next);
-    try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(next));
-    } catch {}
+    rememberDismissed(next);
     setIndex(0);
   };
 
