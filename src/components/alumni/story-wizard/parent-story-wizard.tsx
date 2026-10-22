@@ -1,23 +1,19 @@
-/** The parent story wizard, for /parents/story and personal parent links. */
+/** The parent story form, for /parents/story and personal parent links. One screen. */
 import { submitStory } from "@/lib/alumni.functions";
-import { checkConsent, checkQuote } from "@/lib/story/fields";
 import {
   PARENT_CONSENT_TEXT,
-  PARENT_PROMPTS,
-  checkParentAbout,
-  checkParentPrompts,
+  checkParentStory,
   parentDraftToForm,
   type ParentDraft,
 } from "@/lib/story/parent-fields";
-import { ParentAboutStep, ParentReviewStep } from "./parent-steps";
-import { PhotoConsentStep, PromptsStep, QuoteStep, usePhoto } from "./steps";
+import { ParentFields } from "./parent-steps";
+import { PhotoConsentStep, usePhoto } from "./steps";
 import { useStoryDraft } from "./use-story-draft";
-import { StoryWizardFrame, type FrameStep } from "./wizard-frame";
+import { StoryWizardFrame } from "./wizard-frame";
 
 const INTRO =
-  "We would like to share parents' experiences of Alpha on our website. It takes about five " +
-  "minutes, you can change any answer before you send it, and a member of staff reads every " +
-  "story before it is published.";
+  "Parents: one question, a minute of your time. Your answer goes on our website beside your " +
+  "name, once a member of staff has read it.";
 
 export function ParentStoryWizard({
   code,
@@ -27,55 +23,28 @@ export function ParentStoryWizard({
   initial: ParentDraft;
 }) {
   const storageKey = `alpha-parent-draft:${code ? code.slice(0, 12) : "general"}`;
-  const { draft, update, setAnswer, clear, restored } = useStoryDraft(storageKey, initial);
+  const { draft, update, clear, restored } = useStoryDraft(storageKey, initial);
   const { photo, photoError, onPickPhoto } = usePhoto();
-
-  const steps: FrameStep[] = [
-    { title: "About you", short: "You", check: () => checkParentAbout(draft) },
-    { title: "Your experience", short: "Experience", check: () => checkParentPrompts(draft) },
-    { title: "Your quote", short: "Quote", check: () => checkQuote(draft) },
-    { title: "Photo and consent", short: "Photo", check: () => checkConsent(draft) },
-    { title: "Check and send", short: "Send" },
-  ];
 
   return (
     <StoryWizardFrame
       intro={INTRO}
-      steps={steps}
+      steps={[{ title: "Your experience", short: "Experience", check: () => checkParentStory(draft) }]}
       submit={() => submitStory({ data: parentDraftToForm(draft, code, photo) })}
       onSent={clear}
-      renderStep={(step, goTo) => (
-        <>
-          {step === 0 && <ParentAboutStep draft={draft} update={update} />}
-          {step === 1 && (
-            <PromptsStep prompts={PARENT_PROMPTS} answers={draft.answers} onAnswer={setAnswer} />
-          )}
-          {step === 2 && (
-            <QuoteStep
-              lead="In a sentence or two, what has Alpha meant for your family? This is the part we publish, next to your name."
-              quote={draft.quote}
-              onChange={(quote) => update({ quote })}
-            />
-          )}
-          {step === 3 && (
-            <PhotoConsentStep
-              consent={draft.consent}
-              onConsent={(consent) => update({ consent })}
-              consentText={PARENT_CONSENT_TEXT}
-              photo={photo}
-              photoError={photoError}
-              onPickPhoto={onPickPhoto}
-            />
-          )}
-          {step === 4 && (
-            <ParentReviewStep
-              draft={draft}
-              photo={photo}
-              photoLostOnReload={restored && !photo}
-              onEdit={goTo}
-            />
-          )}
-        </>
+      renderStep={() => (
+        <div className="space-y-8">
+          <ParentFields draft={draft} update={update} />
+          <PhotoConsentStep
+            consent={draft.consent}
+            onConsent={(consent) => update({ consent })}
+            consentText={PARENT_CONSENT_TEXT}
+            photo={photo}
+            photoError={photoError}
+            onPickPhoto={onPickPhoto}
+            lostOnReload={restored}
+          />
+        </div>
       )}
     />
   );

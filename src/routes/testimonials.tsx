@@ -310,8 +310,8 @@ function ShareYourStory() {
             Your experience can help another family decide
           </h2>
           <p className="mt-3 max-w-xl text-[var(--color-ink-soft)]" style={T.body}>
-            Are you an Alpha parent, or did you study here? Tell us in about five minutes. A member
-            of staff reads every story before it is published.
+            Are you an Alpha parent, or did you study here? One question, a minute of your time. A
+            member of staff reads every answer before it is published.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link

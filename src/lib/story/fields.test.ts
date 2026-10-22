@@ -1,14 +1,14 @@
 import { describe, it, expect } from "vitest";
 import {
+  ALUMNI_QUESTION,
   EMPTY_DRAFT,
   MESSAGE_MAX,
-  PROMPT_MAX,
   StoryError,
   checkAbout,
   checkConsent,
   checkNow,
-  checkPrompts,
   checkQuote,
+  checkStory,
   draftToForm,
   validateStory,
   type StoryDraft,
@@ -23,19 +23,26 @@ const good: StoryDraft = {
   schoolSlug: "alpha-high",
   gradYear: "2018",
   role: "Pilot",
-  company: "",
-  cityCountry: "Dar es Salaam",
-  answers: { gave_you: "Confidence", moment: "", advice: "" },
   quote: "Alpha taught me to aim high.",
   consent: true,
 };
 
-describe("step checks", () => {
+describe("the form", () => {
+  it("asks one published question and nothing unpublished", () => {
+    expect(ALUMNI_QUESTION).toBe("What did Alpha give you that you still use today?");
+    expect(Object.keys(EMPTY_DRAFT).sort()).toEqual(
+      ["consent", "fullName", "gradYear", "quote", "role", "schoolSlug"].sort(),
+    );
+  });
+});
+
+describe("checks", () => {
   it("pass a complete draft", () => {
     expect(checkAbout(good, YEAR)).toBeNull();
-    for (const check of [checkNow, checkPrompts, checkQuote, checkConsent]) {
+    for (const check of [checkNow, checkQuote, checkConsent]) {
       expect(check(good)).toBeNull();
     }
+    expect(checkStory(good, YEAR)).toBeNull();
   });
 
   it.each([
@@ -49,29 +56,27 @@ describe("step checks", () => {
     expect(checkAbout({ ...good, ...patch }, YEAR)).toBe(message);
   });
 
-  it("checkNow requires a role and limits lengths", () => {
-    expect(checkNow({ ...good, role: " " })).toBe("Please tell us what you do now.");
-    expect(checkNow({ ...good, company: "x".repeat(121) })).toBe("That company name is too long.");
-    expect(checkNow({ ...good, cityCountry: "x".repeat(81) })).toBe("That place name is too long.");
+  it("checkNow requires one line on what they do", () => {
+    expect(checkNow({ role: " " })).toBe("Please tell us what you do now.");
+    expect(checkNow({ role: "x".repeat(121) })).toBe("That is too long for one line.");
   });
 
-  it("checkPrompts limits each answer", () => {
-    const answers = { ...good.answers, advice: "x".repeat(PROMPT_MAX + 1) };
-    expect(checkPrompts({ ...good, answers })).toBe(
-      `Please keep each answer under ${PROMPT_MAX} characters.`,
-    );
-  });
-
-  it("checkQuote requires a short quote", () => {
-    expect(checkQuote({ ...good, quote: "" })).toBe("Please write a sentence or two for your quote.");
-    expect(checkQuote({ ...good, quote: "x".repeat(MESSAGE_MAX + 1) })).toBe(
-      `Please keep your quote under ${MESSAGE_MAX} characters.`,
+  it("checkQuote requires a short answer", () => {
+    expect(checkQuote({ quote: "" })).toBe("Please answer the question in a sentence or two.");
+    expect(checkQuote({ quote: "x".repeat(MESSAGE_MAX + 1) })).toBe(
+      `Please keep your answer under ${MESSAGE_MAX} characters.`,
     );
   });
 
   it("checkConsent requires the box", () => {
-    expect(checkConsent({ ...good, consent: false })).toBe(
-      "Please agree to the consent statement to submit.",
+    expect(checkConsent({ consent: false })).toBe(
+      "Please tick the box to let us publish your answer.",
+    );
+  });
+
+  it("checkStory reports the first problem in form order", () => {
+    expect(checkStory({ ...good, role: "", quote: "" }, YEAR)).toBe(
+      "Please tell us what you do now.",
     );
   });
 });
@@ -84,18 +89,12 @@ describe("validateStory", () => {
       schoolSlug: "alpha-high",
       gradYear: 2018,
       role: "Pilot",
-      company: null,
-      cityCountry: "Dar es Salaam",
-      answers: { gave_you: "Confidence" },
       quote: "Alpha taught me to aim high.",
     });
   });
 
-  it("treats a missing code as the general link and empty answers as null", () => {
-    const draft = { ...good, answers: { gave_you: " ", moment: "", advice: "" } };
-    const input = validateStory(draftToForm(draft, null, null), YEAR);
-    expect(input.code).toBeNull();
-    expect(input.answers).toBeNull();
+  it("treats a missing code as the general link", () => {
+    expect(validateStory(draftToForm(good, null, null), YEAR).code).toBeNull();
   });
 
   it("rejects a malformed code", () => {
@@ -104,7 +103,7 @@ describe("validateStory", () => {
     );
   });
 
-  it("throws the first step problem as a StoryError", () => {
+  it("throws the first problem as a StoryError", () => {
     const form = draftToForm({ ...good, consent: false }, null, null);
     expect(() => validateStory(form, YEAR)).toThrow(StoryError);
   });

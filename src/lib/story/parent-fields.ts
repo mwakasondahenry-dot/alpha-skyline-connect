@@ -1,10 +1,13 @@
 /**
- * The parent story: prompts, the per-step checks, and the server-side
- * validation. Limits and consent wording are shared with the alumni story.
+ * The parent story: the one question, the checks, and the server-side
+ * validation. Limits and the photo rules are shared with the alumni story.
+ *
+ * Cut down on 2026-10-22 with the alumni form: one screen, one published
+ * question, a minute to complete.
  */
 import { ALUMNI_SCHOOLS, type AlumniSchool } from "@/lib/invites/contacts";
 import { CODE_PATTERN } from "@/lib/invites/token";
-import { NAME_MAX, PROMPT_MAX, StoryError, checkConsent, checkQuote } from "./fields";
+import { NAME_MAX, StoryError, checkConsent, checkQuote } from "./fields";
 
 /**
  * The wording a parent agrees to. It names the school their child attends,
@@ -16,8 +19,15 @@ export const PARENT_CONSENT_TEXT =
   "the school my child attends on its public website. I understand I can " +
   "request removal at any time by contacting the school.";
 
-export type ParentPromptKey = "chose_alpha" | "changed" | "advice_parents";
+/** The one question a parent answers. The answer is the published quote. */
+export const PARENT_QUESTION = "What has Alpha done for your child?";
 
+/**
+ * Labels for the unpublished prompts the old wizard asked. No form asks
+ * them any more; the admin queue still uses these to label answers on
+ * submissions that arrived before 2026-10-22.
+ */
+export type ParentPromptKey = "chose_alpha" | "changed" | "advice_parents";
 export const PARENT_PROMPTS: readonly { key: ParentPromptKey; label: string }[] = [
   { key: "chose_alpha", label: "Why did you choose Alpha?" },
   { key: "changed", label: "What has changed for your child since joining?" },
@@ -27,7 +37,6 @@ export const PARENT_PROMPTS: readonly { key: ParentPromptKey; label: string }[] 
 export type ParentDraft = {
   fullName: string;
   schoolSlug: string;
-  answers: Record<ParentPromptKey, string>;
   quote: string;
   consent: boolean;
 };
@@ -35,7 +44,6 @@ export type ParentDraft = {
 export const EMPTY_PARENT_DRAFT: ParentDraft = {
   fullName: "",
   schoolSlug: "",
-  answers: { chose_alpha: "", changed: "", advice_parents: "" },
   quote: "",
   consent: false,
 };
@@ -45,7 +53,6 @@ export type ParentStoryInput = {
   fullName: string;
   schoolSlug: AlumniSchool;
   relationship: string;
-  answers: Partial<Record<ParentPromptKey, string>> | null;
   quote: string;
 };
 
@@ -61,9 +68,9 @@ export function checkParentAbout(d: ParentDraft): string | null {
   return null;
 }
 
-export function checkParentPrompts(d: ParentDraft): string | null {
-  const tooLong = PARENT_PROMPTS.some((p) => d.answers[p.key].trim().length > PROMPT_MAX);
-  return tooLong ? `Please keep each answer under ${PROMPT_MAX} characters.` : null;
+/** Every check, in the order the fields appear on the form. */
+export function checkParentStory(d: ParentDraft): string | null {
+  return checkParentAbout(d) ?? checkQuote(d) ?? checkConsent(d);
 }
 
 export function parentDraftToForm(
@@ -76,7 +83,6 @@ export function parentDraftToForm(
   if (code) form.set("code", code);
   form.set("full_name", d.fullName);
   form.set("school", d.schoolSlug);
-  for (const p of PARENT_PROMPTS) form.set(p.key, d.answers[p.key]);
   form.set("quote", d.quote);
   form.set("consent", d.consent ? "yes" : "no");
   if (photo) form.set("photo", photo);
@@ -97,30 +103,18 @@ export function validateParentStory(form: FormData): ParentStoryInput {
   const d: ParentDraft = {
     fullName: text(form, "full_name"),
     schoolSlug: text(form, "school"),
-    answers: {
-      chose_alpha: text(form, "chose_alpha"),
-      changed: text(form, "changed"),
-      advice_parents: text(form, "advice_parents"),
-    },
     quote: text(form, "quote"),
     consent: text(form, "consent") === "yes",
   };
 
-  const problem = checkParentAbout(d) ?? checkParentPrompts(d) ?? checkQuote(d) ?? checkConsent(d);
+  const problem = checkParentStory(d);
   if (problem) throw new StoryError(problem);
-
-  const answers: Partial<Record<ParentPromptKey, string>> = {};
-  for (const p of PARENT_PROMPTS) {
-    const a = d.answers[p.key].trim();
-    if (a) answers[p.key] = a;
-  }
 
   return {
     code: codeText || null,
     fullName: d.fullName.trim(),
     schoolSlug: d.schoolSlug as AlumniSchool,
     relationship: `Parent, ${schoolLabel(d.schoolSlug)}`,
-    answers: Object.keys(answers).length ? answers : null,
     quote: d.quote.trim(),
   };
 }

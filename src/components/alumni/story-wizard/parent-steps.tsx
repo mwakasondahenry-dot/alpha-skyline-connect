@@ -1,11 +1,10 @@
-/** Step bodies specific to the parent story. */
-import { ALUMNI_SCHOOLS } from "@/lib/invites/contacts";
+/** The parent form's fields: two facts and the question. */
 import { NAME_MAX } from "@/lib/story/fields";
-import { PARENT_PROMPTS, type ParentDraft } from "@/lib/story/parent-fields";
+import { PARENT_QUESTION, type ParentDraft } from "@/lib/story/parent-fields";
 import { TextField } from "./field-ui";
-import { ReviewList, SchoolChoice, answerItems, photoItems, type ReviewSection } from "./steps";
+import { QuestionField, SchoolChoice } from "./steps";
 
-export function ParentAboutStep({
+export function ParentFields({
   draft,
   update,
 }: {
@@ -28,27 +27,12 @@ export function ParentAboutStep({
         value={draft.schoolSlug}
         onChange={(schoolSlug) => update({ schoolSlug })}
       />
+      <QuestionField
+        question={PARENT_QUESTION}
+        hint="One or two sentences. This is published next to your name as a parent at the school."
+        value={draft.quote}
+        onChange={(quote) => update({ quote })}
+      />
     </div>
   );
-}
-
-export function ParentReviewStep({
-  draft,
-  photo,
-  photoLostOnReload,
-  onEdit,
-}: {
-  draft: ParentDraft;
-  photo: File | null;
-  photoLostOnReload: boolean;
-  onEdit: (step: number) => void;
-}) {
-  const school = ALUMNI_SCHOOLS.find((s) => s.value === draft.schoolSlug)?.label ?? "";
-  const sections: ReviewSection[] = [
-    { step: 0, title: "About you", items: [{ value: `${draft.fullName.trim()}, parent at ${school}` }] },
-    { step: 1, title: "Your experience", items: answerItems(PARENT_PROMPTS, draft.answers) },
-    { step: 2, title: "Your quote", items: [{ value: draft.quote.trim() }] },
-    { step: 3, title: "Photo", items: photoItems(photo, photoLostOnReload) },
-  ];
-  return <ReviewList sections={sections} photo={photo} photoStep={3} onEdit={onEdit} />;
 }

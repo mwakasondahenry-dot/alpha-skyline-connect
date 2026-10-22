@@ -1,7 +1,8 @@
 /**
- * The frame both story wizards share: named steps, Back/Next, the error
- * line, submit, and the result cards. Each wizard supplies its steps, their
- * checks, the step bodies and the submit call.
+ * The frame both story forms share: the error line, submit, and the result
+ * cards; with more than one step it also draws the step rail and Back/Next.
+ * Each form supplies its steps, their checks, the bodies and the submit call.
+ * Since 2026-10-22 both forms are a single step.
  */
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
@@ -178,6 +179,8 @@ export function StoryWizardFrame({
   if (result === "invalid") return <InvalidLinkCard />;
 
   const last = step === steps.length - 1;
+  /* A one-screen form: no step rail, no step heading, just the fields. */
+  const single = steps.length === 1;
 
   return (
     <>
@@ -186,18 +189,21 @@ export function StoryWizardFrame({
       </p>
 
       <div className={`${CARD} mt-[var(--space-block-y)]`}>
-        <StepIndicator steps={steps} step={step} />
+        {!single && (
+          <>
+            <StepIndicator steps={steps} step={step} />
+            <h2
+              ref={headingRef}
+              tabIndex={-1}
+              className="mt-5 font-display text-[var(--color-deep-blue)] focus:outline-none"
+              style={T.cardTitle}
+            >
+              {steps[step].title}
+            </h2>
+          </>
+        )}
 
-        <h2
-          ref={headingRef}
-          tabIndex={-1}
-          className="mt-5 font-display text-[var(--color-deep-blue)] focus:outline-none"
-          style={T.cardTitle}
-        >
-          {steps[step].title}
-        </h2>
-
-        <div className="mt-4">{renderStep(step, goTo)}</div>
+        <div className={single ? "" : "mt-4"}>{renderStep(step, goTo)}</div>
 
         {error && (
           <p
@@ -231,7 +237,7 @@ export function StoryWizardFrame({
               className={`${BTN_PRIMARY} w-full sm:w-auto`}
               style={BTN_PRIMARY_STYLE}
             >
-              {busy ? "Sending…" : "Send my story"}
+              {busy ? "Sending…" : single ? "Send" : "Send my story"}
             </button>
           ) : (
             <button

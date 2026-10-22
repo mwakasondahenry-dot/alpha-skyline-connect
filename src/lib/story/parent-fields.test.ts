@@ -3,9 +3,9 @@ import { StoryError } from "./fields";
 import {
   EMPTY_PARENT_DRAFT,
   PARENT_CONSENT_TEXT,
-  PARENT_PROMPTS,
+  PARENT_QUESTION,
   checkParentAbout,
-  checkParentPrompts,
+  checkParentStory,
   parentDraftToForm,
   validateParentStory,
   type ParentDraft,
@@ -17,18 +17,16 @@ const good: ParentDraft = {
   ...EMPTY_PARENT_DRAFT,
   fullName: " Grace Mollel ",
   schoolSlug: "alpha-girls",
-  answers: { chose_alpha: "The aviation programme.", changed: "", advice_parents: "" },
   quote: "Our daughter found her confidence here.",
   consent: true,
 };
 
-describe("parent prompts", () => {
-  it("uses the agreed questions", () => {
-    expect(PARENT_PROMPTS.map((p) => p.label)).toEqual([
-      "Why did you choose Alpha?",
-      "What has changed for your child since joining?",
-      "What would you tell a parent deciding now?",
-    ]);
+describe("the form", () => {
+  it("asks one published question and nothing unpublished", () => {
+    expect(PARENT_QUESTION).toBe("What has Alpha done for your child?");
+    expect(Object.keys(EMPTY_PARENT_DRAFT).sort()).toEqual(
+      ["consent", "fullName", "quote", "schoolSlug"].sort(),
+    );
   });
 });
 
@@ -42,7 +40,7 @@ describe("parent consent wording", () => {
 describe("parent checks", () => {
   it("pass a complete draft", () => {
     expect(checkParentAbout(good)).toBeNull();
-    expect(checkParentPrompts(good)).toBeNull();
+    expect(checkParentStory(good)).toBeNull();
   });
 
   it.each([
@@ -52,13 +50,6 @@ describe("parent checks", () => {
     [{ schoolSlug: "group-wide" }, "Please choose your child's school."],
   ])("checkParentAbout rejects %j", (patch, message) => {
     expect(checkParentAbout({ ...good, ...patch })).toBe(message);
-  });
-
-  it("limits each answer", () => {
-    const answers = { ...good.answers, changed: "x".repeat(601) };
-    expect(checkParentPrompts({ ...good, answers })).toBe(
-      "Please keep each answer under 600 characters.",
-    );
   });
 });
 
@@ -71,22 +62,18 @@ describe("validateParentStory", () => {
       fullName: "Grace Mollel",
       schoolSlug: "alpha-girls",
       relationship: "Parent, Alpha Girls",
-      answers: { chose_alpha: "The aviation programme." },
       quote: "Our daughter found her confidence here.",
     });
   });
 
-  it("treats no code as the general link and blank answers as null", () => {
-    const draft = { ...good, answers: { chose_alpha: " ", changed: "", advice_parents: "" } };
-    const input = validateParentStory(parentDraftToForm(draft, null, null));
-    expect(input.code).toBeNull();
-    expect(input.answers).toBeNull();
+  it("treats no code as the general link", () => {
+    expect(validateParentStory(parentDraftToForm(good, null, null)).code).toBeNull();
   });
 
   it.each([
-    [{ quote: "" }, "Please write a sentence or two for your quote."],
-    [{ quote: "x".repeat(401) }, "Please keep your quote under 400 characters."],
-    [{ consent: false }, "Please agree to the consent statement to submit."],
+    [{ quote: "" }, "Please answer the question in a sentence or two."],
+    [{ quote: "x".repeat(401) }, "Please keep your answer under 400 characters."],
+    [{ consent: false }, "Please tick the box to let us publish your answer."],
     [{ schoolSlug: "" }, "Please choose your child's school."],
   ])("rejects %j", (patch, message) => {
     const form = parentDraftToForm({ ...good, ...patch }, null, null);

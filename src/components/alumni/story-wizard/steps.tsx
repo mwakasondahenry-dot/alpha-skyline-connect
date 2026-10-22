@@ -1,31 +1,19 @@
-/** Step bodies for the story wizards, and the pieces both audiences share. */
-import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+/** The fields of the story forms, and the pieces both audiences share. */
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Upload } from "lucide-react";
 import { T } from "@/components/type-roles";
 import { ALUMNI_SCHOOLS } from "@/lib/invites/contacts";
 import {
+  ALUMNI_QUESTION,
   CONSENT_TEXT,
-  COMPANY_MAX,
   MESSAGE_MAX,
   NAME_MAX,
   PHOTO_ACCEPT,
   PHOTO_MAX_BYTES,
-  PLACE_MAX,
-  PROMPT_MAX,
   ROLE_MAX,
-  STORY_PROMPTS,
-  type PromptKey,
   type StoryDraft,
 } from "@/lib/story/fields";
 import { BTN_SECONDARY, CountedTextArea, FieldLabel, TextField } from "./field-ui";
-
-export function StepText({ children }: { children: ReactNode }) {
-  return (
-    <p className="text-[var(--color-ink-soft)]" style={T.body}>
-      {children}
-    </p>
-  );
-}
 
 /** A local preview of the chosen photo. Nothing is uploaded until Send. */
 export function usePreviewUrl(file: File | null): string | null {
@@ -97,12 +85,48 @@ export function SchoolChoice({
   );
 }
 
-type DraftProps = {
+/**
+ * The one question, with the answer box. The question is the label, so the
+ * person sees exactly what they are answering, and the hint says where the
+ * answer goes.
+ */
+export function QuestionField({
+  question,
+  hint,
+  value,
+  onChange,
+}: {
+  question: string;
+  hint: string;
+  value: string;
+  onChange: (quote: string) => void;
+}) {
+  return (
+    <div>
+      <CountedTextArea
+        id="quote"
+        label={question}
+        required
+        value={value}
+        onChange={onChange}
+        max={MESSAGE_MAX}
+        rows={4}
+      />
+      <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+        {hint}
+      </p>
+    </div>
+  );
+}
+
+/** The alumni form: four short facts and the question. */
+export function AlumniFields({
+  draft,
+  update,
+}: {
   draft: StoryDraft;
   update: (patch: Partial<StoryDraft>) => void;
-};
-
-export function AboutStep({ draft, update }: DraftProps) {
+}) {
   return (
     <div className="space-y-5">
       <TextField
@@ -127,88 +151,19 @@ export function AboutStep({ draft, update }: DraftProps) {
         value={draft.gradYear}
         onChange={(gradYear) => update({ gradYear })}
       />
-    </div>
-  );
-}
-
-export function NowStep({ draft, update }: DraftProps) {
-  return (
-    <div className="space-y-5">
       <TextField
-        label="What you do now (job or studies)"
+        label="What you do now"
         required
-        placeholder="Software engineer"
+        placeholder="Pilot, Precision Air"
         value={draft.role}
         onChange={(role) => update({ role })}
         maxLength={ROLE_MAX}
       />
-      <TextField
-        label="Company, organisation or university"
-        value={draft.company}
-        onChange={(company) => update({ company })}
-        maxLength={COMPANY_MAX}
-      />
-      <TextField
-        label="City and country"
-        placeholder="Dar es Salaam, Tanzania"
-        value={draft.cityCountry}
-        onChange={(cityCountry) => update({ cityCountry })}
-        maxLength={PLACE_MAX}
-      />
-    </div>
-  );
-}
-
-/** Optional questions, for either audience. */
-export function PromptsStep({
-  prompts,
-  answers,
-  onAnswer,
-}: {
-  prompts: readonly { key: string; label: string }[];
-  answers: Record<string, string>;
-  onAnswer: (key: string, value: string) => void;
-}) {
-  return (
-    <div className="space-y-5">
-      <StepText>
-        Answer any you like, or none. These are for the school to read and are not published.
-      </StepText>
-      {prompts.map((p) => (
-        <CountedTextArea
-          key={p.key}
-          id={`prompt-${p.key}`}
-          label={p.label}
-          value={answers[p.key] ?? ""}
-          onChange={(value) => onAnswer(p.key, value)}
-          max={PROMPT_MAX}
-          rows={3}
-        />
-      ))}
-    </div>
-  );
-}
-
-export function QuoteStep({
-  lead,
-  quote,
-  onChange,
-}: {
-  lead: string;
-  quote: string;
-  onChange: (quote: string) => void;
-}) {
-  return (
-    <div className="space-y-4">
-      <StepText>{lead}</StepText>
-      <CountedTextArea
-        id="quote"
-        label="Your quote"
-        required
-        value={quote}
-        onChange={onChange}
-        max={MESSAGE_MAX}
-        rows={5}
+      <QuestionField
+        question={ALUMNI_QUESTION}
+        hint="One or two sentences. This is published next to your name, school and year."
+        value={draft.quote}
+        onChange={(quote) => update({ quote })}
       />
     </div>
   );
@@ -221,6 +176,7 @@ export function PhotoConsentStep({
   photo,
   photoError,
   onPickPhoto,
+  lostOnReload = false,
 }: {
   consent: boolean;
   onConsent: (consent: boolean) => void;
@@ -229,6 +185,8 @@ export function PhotoConsentStep({
   photo: File | null;
   photoError: string | null;
   onPickPhoto: (file: File | null) => void;
+  /** The draft came back from storage, so any photo chosen before is gone. */
+  lostOnReload?: boolean;
 }) {
   const fileRef = useRef<HTMLInputElement | null>(null);
   const preview = usePreviewUrl(photo);
@@ -283,7 +241,9 @@ export function PhotoConsentStep({
           )}
         </div>
         <p className="mt-2 text-[var(--color-ink-soft)]" style={T.body}>
-          A clear photo of you. JPEG, PNG or WebP, up to 5 MB.
+          {lostOnReload && !photo
+            ? "If you chose a photo before the page reloaded, choose it again. JPEG, PNG or WebP, up to 5 MB."
+            : "A clear photo of you. JPEG, PNG or WebP, up to 5 MB."}
         </p>
         {photoError && (
           <p className="mt-2 text-[var(--color-danger)]" style={T.body} role="alert">
@@ -306,124 +266,4 @@ export function PhotoConsentStep({
       </label>
     </div>
   );
-}
-
-export type ReviewItem = { label?: string; value: string };
-export type ReviewSection = { step: number; title: string; items: ReviewItem[] };
-
-/** The photo section's lines: empty when there is a photo (the preview shows instead). */
-export function photoItems(photo: File | null, lostOnReload: boolean): ReviewItem[] {
-  if (photo) return [];
-  return [
-    {
-      value: lostOnReload
-        ? "No photo attached. If you chose one before the page reloaded, choose it again."
-        : "No photo.",
-    },
-  ];
-}
-
-/** Answered prompts as review lines, or "Not answered." */
-export function answerItems(
-  prompts: readonly { key: string; label: string }[],
-  answers: Record<string, string>,
-): ReviewItem[] {
-  const answered = prompts.filter((p) => (answers[p.key] ?? "").trim());
-  return answered.length
-    ? answered.map((p) => ({ label: p.label, value: answers[p.key].trim() }))
-    : [{ value: "Not answered." }];
-}
-
-export function ReviewList({
-  sections,
-  photo,
-  photoStep,
-  onEdit,
-}: {
-  sections: ReviewSection[];
-  photo: File | null;
-  photoStep: number;
-  onEdit: (step: number) => void;
-}) {
-  const preview = usePreviewUrl(photo);
-  return (
-    <dl className="divide-y divide-[var(--color-deep-blue)]/10 border-y border-[var(--color-deep-blue)]/10">
-      {sections.map((s) => (
-        <div key={s.title} className="py-4">
-          <div className="flex items-baseline justify-between gap-3">
-            <dt className="text-[var(--color-deep-blue)]" style={T.label}>
-              {s.title}
-            </dt>
-            <button
-              type="button"
-              onClick={() => onEdit(s.step)}
-              aria-label={`Change ${s.title.toLowerCase()}`}
-              className="text-[var(--color-bright-blue)] underline underline-offset-2 hover:text-[var(--color-deep-blue)]"
-              style={T.body}
-            >
-              Change
-            </button>
-          </div>
-          {s.step === photoStep && preview && (
-            <dd className="mt-2">
-              <img
-                width={80}
-                height={80}
-                loading="lazy"
-                src={preview}
-                alt="Your chosen photo"
-                className="aspect-square w-20 rounded-lg object-cover ring-1 ring-[var(--color-deep-blue)]/10"
-              />
-            </dd>
-          )}
-          {s.items.map((item, i) => (
-            <dd key={i} className={i === 0 ? "mt-1" : "mt-3"}>
-              {item.label && (
-                <span className="block text-[var(--color-ink-soft)]" style={T.body}>
-                  {item.label}
-                </span>
-              )}
-              <span
-                className="block whitespace-pre-line break-words text-[var(--color-ink)]"
-                style={T.body}
-              >
-                {item.value}
-              </span>
-            </dd>
-          ))}
-        </div>
-      ))}
-    </dl>
-  );
-}
-
-export function ReviewStep({
-  draft,
-  photo,
-  photoLostOnReload,
-  onEdit,
-}: {
-  draft: StoryDraft;
-  photo: File | null;
-  photoLostOnReload: boolean;
-  onEdit: (step: number) => void;
-}) {
-  const school = ALUMNI_SCHOOLS.find((s) => s.value === draft.schoolSlug)?.label ?? "";
-  const now = [draft.role, draft.company, draft.cityCountry].map((s) => s.trim()).filter(Boolean);
-  const sections: ReviewSection[] = [
-    {
-      step: 0,
-      title: "About you",
-      items: [{ value: `${draft.fullName.trim()}, ${school}, class of ${draft.gradYear}` }],
-    },
-    { step: 1, title: "Where you are now", items: [{ value: now.join(", ") }] },
-    {
-      step: 2,
-      title: "Your story",
-      items: answerItems(STORY_PROMPTS, draft.answers as Record<PromptKey, string>),
-    },
-    { step: 3, title: "Your quote", items: [{ value: draft.quote.trim() }] },
-    { step: 4, title: "Photo", items: photoItems(photo, photoLostOnReload) },
-  ];
-  return <ReviewList sections={sections} photo={photo} photoStep={4} onEdit={onEdit} />;
 }

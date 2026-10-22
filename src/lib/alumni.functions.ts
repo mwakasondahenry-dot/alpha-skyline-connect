@@ -1,6 +1,8 @@
 /**
- * Server function for the story wizards: alumni (/alumni/story) and parents
- * (/parents/story), general and personal links.
+ * Server function for the story forms: alumni (/alumni/story) and parents
+ * (/parents/story), general and personal links. Since 2026-10-22 each form
+ * asks one published question; company, city and the unpublished prompt
+ * answers are always null on new rows (older rows keep theirs).
  *
  * Everything a stranger sends arrives here and is treated as hostile. The
  * client is used for nothing but convenience: every limit is enforced again
@@ -75,7 +77,7 @@ function readStory(form: FormData): StoryRow {
       company: null,
       cityCountry: null,
       gradYear: null,
-      answers: p.answers,
+      answers: null,
       quote: p.quote,
     };
   }
@@ -87,10 +89,10 @@ function readStory(form: FormData): StoryRow {
     schoolSlug: a.schoolSlug,
     fullName: a.fullName,
     relationship: a.role,
-    company: a.company,
-    cityCountry: a.cityCountry,
+    company: null,
+    cityCountry: null,
     gradYear: a.gradYear,
-    answers: a.answers,
+    answers: null,
     quote: a.quote,
   };
 }
