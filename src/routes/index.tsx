@@ -174,24 +174,17 @@ const SCHOOLS = [
   },
 ] as const;
 
-/* Values and labels are unchanged — only `Icon` was added, for the rail
-   layout. design/README.md: the year figure is calculated from the 2007
-   founding date and must never be hardcoded. */
+/* Values and labels are unchanged. design/README.md: the year figure is
+   calculated from the 2007 founding date and must never be hardcoded. */
 const STATS: ReadonlyArray<{
   value: number;
   suffix?: string;
-  label: [string, string];
-  Icon: typeof Award;
+  label: string;
 }> = [
-  {
-    value: YEARS_OPERATIONAL,
-    suffix: "+",
-    label: ["years shaping", "leaders since 2007"],
-    Icon: Award,
-  },
-  { value: 3, label: ["schools across", "Dar es Salaam"], Icon: Building2 },
-  { value: 1, label: ["aviation programme", "across our schools"], Icon: Plane },
-  { value: 2, label: ["campuses —", "Kunduchi & Mikocheni"], Icon: MapPin },
+  { value: YEARS_OPERATIONAL, suffix: "+", label: "years shaping leaders since 2007" },
+  { value: 3, label: "schools across Dar es Salaam" },
+  { value: 1, label: "aviation programme across our schools" },
+  { value: 2, label: "campuses — Kunduchi & Mikocheni" },
 ] as const;
 
 const SCHOOL_LABELS: Record<string, string> = {
@@ -252,21 +245,19 @@ function Home() {
 }
 
 /* ------------------------------------------------------------------ *
- * 1. HERO + STAT RAIL — the opening screen.
+ * 1. HERO + STAT STRIP — the opening screen.
  *
  * The hero fills the viewport (100svh) with the navigation overlaid on
  * it, so nothing from "Find the Right School" shows beneath the fold.
  *
- * The stat rail keeps the layout design/README.md asks for — a vertical
- * rail on desktop, a grid on mobile — but the two now sit in different
- * places. On desktop it is the hero's right-hand column, translucent
- * rather than solid so the photograph still reads through it: the
- * desktop scrim is deliberately lightest at the right edge, and a solid
- * navy block there would cover the only part of the picture that is not
- * already dimmed. On mobile it moves out of the hero entirely and
- * becomes the first thing the reader discovers on scrolling, because a
- * 100svh opening screen on a phone has room for the headline and the
- * call to action or for four statistics, but not for both.
+ * The four figures sit in a strip across the hero's foot on desktop,
+ * set in the headline's own face: the numeral at hero size in white, the
+ * label in gold, bold. (Until 2026-10-22 they were a thin icon rail down
+ * the right edge, in small type; the owner found it weak.) The strip is
+ * translucent so the photograph still reads through it. On mobile it
+ * moves out of the hero and becomes the first thing the reader discovers
+ * on scrolling, because a 100svh opening screen on a phone has room for
+ * the headline and the call to action or for four figures, not both.
  *
  * Only one of the two is ever in the accessibility tree: each is
  * display:none at the other's breakpoint.
@@ -301,43 +292,44 @@ function Hero() {
             </GhostButton>
           </>
         }
-        rail={<StatRail variant="rail" />}
-        cueHref="#find-the-right-school"
-        cueLabel="Skip to Find the Right School"
+        foot={<StatStrip variant="foot" />}
       />
-      <StatRail variant="band" />
+      <StatStrip variant="band" />
     </>
   );
 }
 
-function StatRail({ variant }: { variant: "rail" | "band" }) {
-  const isRail = variant === "rail";
+function StatStrip({ variant }: { variant: "foot" | "band" }) {
+  const foot = variant === "foot";
   return (
     <aside
       aria-label="Alpha Schools at a glance"
       className={
-        isRail
-          ? "h-full w-full border-l border-[var(--color-surface)]/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm"
+        foot
+          ? "hidden border-t border-[var(--color-surface)]/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm lg:block"
           : "bg-[var(--stat-row-bg)] lg:hidden"
       }
     >
-      <ul className={isRail ? "flex h-full flex-col justify-center" : "grid grid-cols-2"}>
-        {STATS.map((s, i) => (
-          <li
-            key={i}
-            className="flex items-center gap-3 p-[var(--stat-pad)]"
-            style={{ borderTop: i === 0 ? undefined : "var(--stat-divider)" }}
-          >
-            <s.Icon className="h-5 w-5 shrink-0 text-[var(--stat-icon-color)]" aria-hidden />
-            <div className="min-w-0">
-              <div className="font-display text-[var(--stat-figure-color)]" style={T.stat}>
-                {s.value}
-                {s.suffix ?? ""}
-              </div>
-              <div className="text-[var(--stat-label-color)]" style={T.statLabel}>
-                {s.label[0]} {s.label[1]}
-              </div>
-            </div>
+      <ul
+        className={`${SHELL} grid ${
+          foot ? "grid-cols-4 gap-8 py-7" : "grid-cols-2 gap-x-6 gap-y-8 py-9"
+        }`}
+      >
+        {STATS.map((s) => (
+          <li key={s.label}>
+            <span
+              className="block font-display tabular-nums tracking-tight text-[var(--color-surface)]"
+              style={{ ...T.hero, lineHeight: 1 }}
+            >
+              {s.value}
+              {s.suffix ?? ""}
+            </span>
+            <span
+              className="mt-2 block max-w-[16rem] font-display text-[var(--color-gold)]"
+              style={{ ...T.body, fontWeight: 800, lineHeight: 1.3 }}
+            >
+              {s.label}
+            </span>
           </li>
         ))}
       </ul>
