@@ -36,6 +36,8 @@
  * memory layer alone applies.
  */
 
+import { currentWaitUntil } from "@/lib/server/wait-until";
+
 export const TTL_SECONDS = 300;
 /** How long past fresh a value is still served while a refresh runs. */
 export const STALE_SECONDS = 6 * 60 * 60;
@@ -103,19 +105,17 @@ async function writeEdge(key: string, entry: Entry): Promise<void> {
 
 /**
  * Keeps a promise alive past the response when the runtime allows it.
- * Nitro's Cloudflare handler puts `waitUntil` on the incoming Request;
- * TanStack Start hands that Request back through getRequest().
+ * src/server.ts stores the Worker's `waitUntil` for the current request;
+ * without one (tests, local dev) the promise simply runs unawaited.
+ *
+ * Measured on 2026-10-22: without waitUntil the refresh never completed on
+ * the live Worker, and a page kept serving the stale value on every visit.
  */
-async function inBackground(work: Promise<void>): Promise<void> {
-  try {
-    const { getRequest } = await import("@tanstack/react-start/server");
-    const req = getRequest() as Request & { waitUntil?: (p: Promise<unknown>) => void };
-    if (typeof req?.waitUntil === "function") {
-      req.waitUntil(work);
-      return;
-    }
-  } catch {
-    // No request in scope (tests, scripts): the promise runs unawaited.
+function inBackground(work: Promise<void>): void {
+  const waitUntil = currentWaitUntil();
+  if (waitUntil) {
+    waitUntil(work);
+    return;
   }
   void work;
 }
@@ -141,9 +141,12 @@ export async function cached<T>(
 ): Promise<T> {
   const now = Date.now();
   let hit = memory.get(key) ?? null;
-  if (!hit || hit.staleUntil <= now) {
+  /* No fresh value in this isolate's memory: another isolate in the data
+     centre may have refreshed it already, so the shared edge cache is
+     consulted before anything is treated as stale. */
+  if (!hit || hit.freshUntil <= now) {
     const fromEdge = await readEdge(key);
-    if (fromEdge && fromEdge.staleUntil > now) {
+    if (fromEdge && fromEdge.staleUntil > now && (!hit || fromEdge.freshUntil > hit.freshUntil)) {
       memory.set(key, fromEdge);
       hit = fromEdge;
     }
@@ -160,7 +163,7 @@ export async function cached<T>(
           inflight.delete(key);
         });
       inflight.set(key, work);
-      void inBackground(work);
+      inBackground(work);
     }
     return hit.value as T;
   }
