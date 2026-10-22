@@ -20,10 +20,12 @@ import { useCallback, useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { Check, X, Loader2 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-auth";
-import { STORY_PROMPTS } from "@/lib/story/fields";
+import { CONTACT_FIELDS, STORY_PROMPTS } from "@/lib/story/fields";
 import { PARENT_PROMPTS } from "@/lib/story/parent-fields";
 
-const ALL_PROMPTS = [...STORY_PROMPTS, ...PARENT_PROMPTS];
+/* The alumni form's email and phone first (collected since 2026-10-22),
+   then the unpublished prompt answers that older submissions carry. */
+const ALL_PROMPTS = [...CONTACT_FIELDS, ...STORY_PROMPTS, ...PARENT_PROMPTS];
 
 const PENDING_BUCKET = "alumni-pending";
 const PUBLIC_BUCKET = "media";
@@ -284,7 +286,7 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
                     {row.answers && ALL_PROMPTS.some((p) => row.answers?.[p.key]) && (
                       <details className="mt-2">
                         <summary className="cursor-pointer text-xs text-[var(--color-ink)]/60">
-                          Story answers (not published)
+                          Contact details and story answers (not published)
                         </summary>
                         <dl className="mt-1 space-y-2 text-sm">
                           {ALL_PROMPTS.filter((p) => row.answers?.[p.key]).map((p) => (

@@ -6,6 +6,7 @@ import {
   StoryError,
   checkAbout,
   checkConsent,
+  checkContact,
   checkNow,
   checkQuote,
   checkStory,
@@ -23,15 +24,17 @@ const good: StoryDraft = {
   schoolSlug: "alpha-high",
   gradYear: "2018",
   role: "Pilot",
+  email: "asha@example.com",
+  phone: "+255 712 345 678",
   quote: "Alpha taught me to aim high.",
   consent: true,
 };
 
 describe("the form", () => {
-  it("asks one published question and nothing unpublished", () => {
+  it("asks one published question, plus email and phone for the alumni network", () => {
     expect(ALUMNI_QUESTION).toBe("What did Alpha give you that you still use today?");
     expect(Object.keys(EMPTY_DRAFT).sort()).toEqual(
-      ["consent", "fullName", "gradYear", "quote", "role", "schoolSlug"].sort(),
+      ["consent", "email", "fullName", "gradYear", "phone", "quote", "role", "schoolSlug"].sort(),
     );
   });
 });
@@ -39,7 +42,7 @@ describe("the form", () => {
 describe("checks", () => {
   it("pass a complete draft", () => {
     expect(checkAbout(good, YEAR)).toBeNull();
-    for (const check of [checkNow, checkQuote, checkConsent]) {
+    for (const check of [checkNow, checkContact, checkQuote, checkConsent]) {
       expect(check(good)).toBeNull();
     }
     expect(checkStory(good, YEAR)).toBeNull();
@@ -59,6 +62,15 @@ describe("checks", () => {
   it("checkNow requires one line on what they do", () => {
     expect(checkNow({ role: " " })).toBe("Please tell us what you do now.");
     expect(checkNow({ role: "x".repeat(121) })).toBe("That is too long for one line.");
+  });
+
+  it.each([
+    [{ email: " " }, "Please enter your email address."],
+    [{ email: "asha.example.com" }, "That email address doesn't look right."],
+    [{ phone: "" }, "Please enter your phone number."],
+    [{ phone: "0712" }, "That phone number doesn't look right."],
+  ])("checkContact rejects %j", (patch, message) => {
+    expect(checkContact({ ...good, ...patch })).toBe(message);
   });
 
   it("checkQuote requires a short answer", () => {
@@ -89,6 +101,7 @@ describe("validateStory", () => {
       schoolSlug: "alpha-high",
       gradYear: 2018,
       role: "Pilot",
+      contact: { email: "asha@example.com", phone: "+255 712 345 678" },
       quote: "Alpha taught me to aim high.",
     });
   });

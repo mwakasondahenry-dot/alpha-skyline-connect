@@ -92,7 +92,7 @@ function readStory(form: FormData): StoryRow {
     company: null,
     cityCountry: null,
     gradYear: a.gradYear,
-    answers: null,
+    answers: a.contact,
     quote: a.quote,
   };
 }

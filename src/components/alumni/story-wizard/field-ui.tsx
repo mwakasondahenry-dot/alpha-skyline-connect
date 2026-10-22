@@ -41,6 +41,7 @@ export function TextField({
   placeholder,
   autoComplete,
   numeric,
+  type = "text",
 }: {
   label: string;
   value: string;
@@ -51,13 +52,15 @@ export function TextField({
   autoComplete?: string;
   /** Numeric keypad without type="number", which scrolls on Android. */
   numeric?: boolean;
+  /** "email" and "tel" bring up the matching keyboard on a phone. */
+  type?: "text" | "email" | "tel";
 }) {
   return (
     <label className="block">
       <FieldLabel required={required}>{label}</FieldLabel>
       <input
-        type="text"
-        inputMode={numeric ? "numeric" : undefined}
+        type={type}
+        inputMode={numeric ? "numeric" : type === "tel" ? "tel" : type === "email" ? "email" : undefined}
         pattern={numeric ? "[0-9]*" : undefined}
         value={value}
         onChange={(e) => onChange(numeric ? e.target.value.replace(/\D/g, "").slice(0, 4) : e.target.value)}

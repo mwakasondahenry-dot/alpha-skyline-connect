@@ -6,8 +6,10 @@ import { ALUMNI_SCHOOLS } from "@/lib/invites/contacts";
 import {
   ALUMNI_QUESTION,
   CONSENT_TEXT,
+  EMAIL_MAX,
   MESSAGE_MAX,
   NAME_MAX,
+  PHONE_MAX,
   PHOTO_ACCEPT,
   PHOTO_MAX_BYTES,
   ROLE_MAX,
@@ -159,6 +161,31 @@ export function AlumniFields({
         onChange={(role) => update({ role })}
         maxLength={ROLE_MAX}
       />
+      {/* For the alumni network, not for the website. */}
+      <div className="grid gap-5 sm:grid-cols-2">
+        <TextField
+          label="Email"
+          required
+          type="email"
+          value={draft.email}
+          onChange={(email) => update({ email })}
+          maxLength={EMAIL_MAX}
+          autoComplete="email"
+        />
+        <TextField
+          label="Phone / WhatsApp"
+          required
+          type="tel"
+          placeholder="+255 7xx xxx xxx"
+          value={draft.phone}
+          onChange={(phone) => update({ phone })}
+          maxLength={PHONE_MAX}
+          autoComplete="tel"
+        />
+      </div>
+      <p className="-mt-2 text-[var(--color-ink-soft)]" style={T.body}>
+        Your email and phone are for the alumni network only. They are never published.
+      </p>
       <QuestionField
         question={ALUMNI_QUESTION}
         hint="One or two sentences. This is published next to your name, school and year."

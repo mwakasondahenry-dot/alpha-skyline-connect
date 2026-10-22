@@ -1,23 +1,25 @@
 import { describe, it, expect } from "vitest";
 import { firstName, generalMessage, inviteMessage, whatsappUrl, parentInviteMessage, parentGeneralMessage } from "./whatsapp";
 
+const PITCH =
+  "Alpha Schools is building an alumni platform and digital network for our former students, " +
+  "and we would love you to be part of it. Start by sharing your story, it takes a minute:";
+
 describe("whatsapp", () => {
   it("uses the first name, or a neutral greeting", () => {
     expect(firstName("  Asha   Mushi ")).toBe("Asha");
     expect(firstName("   ")).toBe("there");
   });
 
-  it("writes the invite message", () => {
+  it("writes the alumni invite around the alumni platform", () => {
     expect(inviteMessage("Asha Mushi", "https://x.test/alumni/story/abc")).toBe(
-      "Hello Asha, Alpha Schools would love to feature your story on our alumni page. " +
-        "It takes a minute: https://x.test/alumni/story/abc",
+      `Hello Asha, ${PITCH} https://x.test/alumni/story/abc`,
     );
   });
 
-  it("writes the general message", () => {
+  it("writes the general alumni message", () => {
     expect(generalMessage("https://x.test/alumni/story")).toBe(
-      "Did you study at Alpha? Alpha Schools would love to feature your story on our alumni page. " +
-        "It takes a minute: https://x.test/alumni/story",
+      `Did you study at Alpha? ${PITCH} https://x.test/alumni/story`,
     );
   });
 

@@ -28,6 +28,19 @@ export const PENDING_BUCKET = "alumni-pending";
 export const PHOTO_ACCEPT = "image/jpeg,image/png,image/webp";
 export const NAME_MAX = 120;
 export const ROLE_MAX = 120;
+export const EMAIL_MAX = 160;
+export const PHONE_MAX = 32;
+
+/**
+ * Contact details the alumni form asks for, so the school can invite the
+ * person into the alumni platform and digital network it is building.
+ * Required since 2026-10-22, never published, stored in the submission's
+ * `answers` beside nothing else; the admin queue labels them with these.
+ */
+export const CONTACT_FIELDS: readonly { key: "email" | "phone"; label: string }[] = [
+  { key: "email", label: "Email" },
+  { key: "phone", label: "Phone / WhatsApp" },
+];
 
 /**
  * Labels for the unpublished prompts the old wizard asked. No form asks
@@ -46,6 +59,8 @@ export type StoryDraft = {
   schoolSlug: string;
   gradYear: string;
   role: string;
+  email: string;
+  phone: string;
   quote: string;
   consent: boolean;
 };
@@ -55,6 +70,8 @@ export const EMPTY_DRAFT: StoryDraft = {
   schoolSlug: "",
   gradYear: "",
   role: "",
+  email: "",
+  phone: "",
   quote: "",
   consent: false,
 };
@@ -65,6 +82,8 @@ export type StoryInput = {
   schoolSlug: AlumniSchool;
   gradYear: number;
   role: string;
+  /** Email and phone. Not published. */
+  contact: { email: string; phone: string };
   quote: string;
 };
 
@@ -94,6 +113,21 @@ export function checkNow(d: { role: string }): string | null {
   return null;
 }
 
+/** Both required: they are how the alumni network reaches the person. */
+export function checkContact(d: { email: string; phone: string }): string | null {
+  const email = d.email.trim();
+  if (!email) return "Please enter your email address.";
+  if (email.length > EMAIL_MAX || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return "That email address doesn't look right.";
+  }
+  const phone = d.phone.trim();
+  if (!phone) return "Please enter your phone number.";
+  if (phone.length > PHONE_MAX || (phone.match(/\d/g) ?? []).length < 7) {
+    return "That phone number doesn't look right.";
+  }
+  return null;
+}
+
 export function checkQuote(d: { quote: string }): string | null {
   const quote = d.quote.trim();
   if (!quote) return "Please answer the question in a sentence or two.";
@@ -107,7 +141,9 @@ export function checkConsent(d: { consent: boolean }): string | null {
 
 /** Every check, in the order the fields appear on the form. */
 export function checkStory(d: StoryDraft, thisYear = new Date().getFullYear()): string | null {
-  return checkAbout(d, thisYear) ?? checkNow(d) ?? checkQuote(d) ?? checkConsent(d);
+  return (
+    checkAbout(d, thisYear) ?? checkNow(d) ?? checkContact(d) ?? checkQuote(d) ?? checkConsent(d)
+  );
 }
 
 export function draftToForm(d: StoryDraft, code: string | null, photo: File | null): FormData {
@@ -117,6 +153,8 @@ export function draftToForm(d: StoryDraft, code: string | null, photo: File | nu
   form.set("school", d.schoolSlug);
   form.set("grad_year", d.gradYear);
   form.set("role", d.role);
+  form.set("email", d.email);
+  form.set("phone", d.phone);
   form.set("quote", d.quote);
   form.set("consent", d.consent ? "yes" : "no");
   if (photo) form.set("photo", photo);
@@ -134,6 +172,8 @@ function formToDraft(form: FormData): StoryDraft {
     schoolSlug: text(form, "school"),
     gradYear: text(form, "grad_year"),
     role: text(form, "role"),
+    email: text(form, "email"),
+    phone: text(form, "phone"),
     quote: text(form, "quote"),
     consent: text(form, "consent") === "yes",
   };
@@ -155,6 +195,7 @@ export function validateStory(form: FormData, thisYear = new Date().getFullYear(
     schoolSlug: d.schoolSlug as AlumniSchool,
     gradYear: Number(d.gradYear.trim()),
     role: d.role.trim(),
+    contact: { email: d.email.trim(), phone: d.phone.trim() },
     quote: d.quote.trim(),
   };
 }

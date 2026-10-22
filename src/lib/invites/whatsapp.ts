@@ -4,15 +4,21 @@ export function firstName(fullName: string): string {
   return fullName.trim().split(/\s+/)[0] || "there";
 }
 
-const PITCH =
-  "Alpha Schools would love to feature your story on our alumni page. It takes a minute:";
+/**
+ * The alumni invitation, as the owner framed it on 2026-10-22: Alpha is
+ * building an alumni platform and digital network, and the story form,
+ * which also takes the person's email and phone, is the first step into it.
+ */
+const ALUMNI_PITCH =
+  "Alpha Schools is building an alumni platform and digital network for our former students, " +
+  "and we would love you to be part of it. Start by sharing your story, it takes a minute:";
 
 export function inviteMessage(fullName: string, link: string): string {
-  return `Hello ${firstName(fullName)}, ${PITCH} ${link}`;
+  return `Hello ${firstName(fullName)}, ${ALUMNI_PITCH} ${link}`;
 }
 
 export function generalMessage(link: string): string {
-  return `Did you study at Alpha? ${PITCH} ${link}`;
+  return `Did you study at Alpha? ${ALUMNI_PITCH} ${link}`;
 }
 
 /** With no number, WhatsApp asks the sender which chat, group or status to use. */
