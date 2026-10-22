@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { T } from "@/components/type-roles";
 import { DIVISIONS, squares, type Division, type Sitting } from "@/lib/girls-results";
 
@@ -17,45 +17,13 @@ const EXAM_NAME: Record<Sitting["exam"], string> = {
 };
 
 /**
- * One square per candidate, coloured by division, best first. The squares
- * fill in once when the chart scrolls into view; under reduced motion, or
- * without IntersectionObserver, they are simply there. Pointing at or
- * focusing a division in the legend lights its squares and dims the rest.
+ * One square per candidate, coloured by division, best first, there from
+ * first paint (the fill-in-on-scroll animation went on 2026-10-22 with the
+ * rest of the scroll reveal). Pointing at or focusing a division in the
+ * legend lights its squares and dims the rest.
  */
 export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; columns?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  // Visible by default: server HTML, a failed bundle and reduced motion all
-  // show the squares. Only once the page has loaded, and only when the chart
-  // is still below the fold, are they hidden to be filled in on arrival.
-  const [armed, setArmed] = useState(false);
   const [focus, setFocus] = useState<Division | null>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (
-      !("IntersectionObserver" in window) ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
-      el.getBoundingClientRect().top < window.innerHeight
-    ) {
-      return;
-    }
-    setArmed(true);
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setArmed(false);
-          io.disconnect();
-        }
-      },
-      /* Fill in while the chart is still a quarter-viewport below the fold,
-         so the squares are already there when the reader reaches them. */
-      { rootMargin: "0px 0px 25% 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  const shown = !armed;
 
   const sq = squares(sitting);
   const present = DIVISIONS.filter((d) => sitting.divisions[d] > 0);
@@ -63,7 +31,6 @@ export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; colu
 
   return (
     <figure
-      ref={ref}
       aria-label={`${EXAM_NAME[sitting.exam]} ${sitting.year}: ${sitting.candidates} candidates, ${sitting.passed} passed. ${summary}.`}
     >
       <div
@@ -74,11 +41,9 @@ export function ResultsChart({ sitting, columns = 15 }: { sitting: Sitting; colu
         {sq.map((d, i) => (
           <span
             key={i}
-            className="aspect-square rounded-[4px] transition-[transform,opacity] duration-300 ease-out motion-reduce:transition-none"
+            className="aspect-square rounded-[4px] transition-opacity duration-200 motion-reduce:transition-none"
             style={{
               background: FILL[d],
-              transform: shown ? "scale(1)" : "scale(0)",
-              transitionDelay: shown ? `${Math.min(i * 22, 900)}ms` : "0ms",
               opacity: focus && focus !== d ? 0.18 : 1,
             }}
           />

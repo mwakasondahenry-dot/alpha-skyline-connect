@@ -15,7 +15,6 @@ import mulishWoff2 from "@fontsource-variable/mulish/files/mulish-latin-wght-nor
 import hankenWoff2 from "@fontsource-variable/hanken-grotesk/files/hanken-grotesk-latin-wght-normal.woff2?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { UrgentAnnouncements } from "../components/urgent-announcements";
-import { RevealWatcher } from "../components/reveal";
 import { OG_IMAGE, SITE_NAME } from "@/lib/seo";
 
 const DEFAULT_TITLE = "Alpha Schools: Private Schools in Dar es Salaam, Nursery to A-Level";
@@ -139,39 +138,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    /* The head script below adds class="rv-on" and data-rv-ready here
-       before hydration, so React would otherwise report an attribute
-       mismatch it cannot patch. Scoped to this element only. */
     <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
-        {/* Scroll-reveal opt-in. src/styles.css only hides a [data-reveal]
-            block while this class is on <html>, so the server-rendered HTML
-            is fully visible on its own — a reader with no JS, or one whose
-            bundle fails, never sees a blank page. The timer is the second
-            half of that guarantee: RevealWatcher stamps data-rv-ready when it
-            mounts, and if that never happens within 1.2s the class is dropped
-            and every block falls back to visible. A slow phone must never be
-            left looking at a blank section, so that window is short.
-
-            It also never hides anything when the page loads in a background
-            tab: IntersectionObserver does not deliver callbacks there, so the
-            reveal would have nothing to trigger it and the content would sit
-            invisible until the reader came back to the tab.
-
-            It has to run here, in the head, rather than on hydration: hiding
-            has to be in effect before first paint or a revealed block would
-            flash visible and then vanish. */}
-        <script
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html:
-              'var e=document.documentElement;' +
-              'if(document.visibilityState==="visible"){e.classList.add("rv-on");' +
-              'setTimeout(function(){if(!e.hasAttribute("data-rv-ready"))' +
-              'e.classList.remove("rv-on")},1200);}',
-          }}
-        />
       </head>
       <body>
         {/* eslint-disable-next-line react/no-danger */}
@@ -224,7 +193,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <RevealWatcher />
       <Outlet />
       <UrgentAnnouncements />
     </QueryClientProvider>

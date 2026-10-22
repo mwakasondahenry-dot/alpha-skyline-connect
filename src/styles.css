@@ -532,71 +532,15 @@
 }
 
 /* ===================================================================
-   SCROLL REVEAL — sections arrive as the reader reaches them.
+   SCROLL REVEAL — removed 2026-10-22.
 
-   This reinstates the behaviour the motion audit removed, without the
-   three faults that got it removed:
-
-   1. ONE observer, not one per call site. RevealWatcher in
-      src/components/reveal.tsx shares a single IntersectionObserver
-      across every marked block on every page.
-   2. The hidden state is opt-IN, gated on `html.rv-on`. That class is
-      set by an inline script in the document head and removed again if
-      hydration never confirms, so server-rendered HTML, a failed bundle
-      and a no-JS reader all get fully visible content. The audit's worst
-      finding was opacity:0 shipping in the SSR payload; it cannot recur.
-      Keying off [data-reveal] rather than a JS-applied class is part of
-      that: a block is hidden from first paint or not at all, so nothing
-      ever flashes visible and then disappears.
-   3. Copy is not withheld from someone already looking at it. The
-      observer's rootMargin fires a block slightly before its top edge
-      clears the fold, the transition is 420ms not 600ms, and staggered
-      delays are capped in the component at 350ms.
-
-   Transform and opacity only, one-shot (the observer unobserves on
-   first intersection), and a full collapse under reduced motion.
+   Sections used to be hidden (opacity 0) until an IntersectionObserver
+   saw them, then faded in. On the owner's iPad, Safari delivered those
+   callbacks late and whole screens sat blank while scrolling; on slow
+   phones it read as the page loading piece by piece. Every section is
+   now visible from first paint. <Reveal> remains as a plain wrapper so
+   the page files did not have to change.
    =================================================================== */
-
-[data-reveal] {
-  transition:
-    opacity 300ms var(--ease-out),
-    transform 300ms var(--ease-out);
-  transition-delay: var(--rv-delay, 0ms);
-}
-html.rv-on [data-reveal] {
-  opacity: 0;
-  transform: translate3d(var(--rv-x, 0), var(--rv-y, 14px), 0);
-}
-html.rv-on [data-reveal][data-rv-in] {
-  opacity: 1;
-  transform: translate3d(0, 0, 0);
-}
-
-/* Stagger scale. Delays are a fixed set of values expressed in CSS rather
-   than written onto elements by JS: the route content streams inside a
-   Suspense boundary, so anything the watcher wrote to `style` landed before
-   React hydrated that boundary and was reported as a mismatch it could not
-   patch. It is also a better constraint — a stagger picks a step off a scale
-   instead of inventing a number. The top of the scale stays under the 350ms
-   cap the motion audit set. */
-[data-reveal-delay="80"]  { --rv-delay: 80ms; }
-[data-reveal-delay="160"] { --rv-delay: 160ms; }
-[data-reveal-delay="240"] { --rv-delay: 240ms; }
-[data-reveal-delay="320"] { --rv-delay: 320ms; }
-
-/* Direction variants. "up" is the default and needs no value. */
-[data-reveal="left"]  { --rv-x: -18px; --rv-y: 0; }
-[data-reveal="right"] { --rv-x: 18px;  --rv-y: 0; }
-[data-reveal="none"]  { --rv-x: 0;     --rv-y: 0; }  /* fade, no travel */
-
-@media (prefers-reduced-motion: reduce) {
-  html.rv-on [data-reveal],
-  html.rv-on [data-reveal][data-rv-in] {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-}
 
 /* ===================================================================
    HERO ENTRANCE — the opening screen assembles itself once, on load.
@@ -618,41 +562,12 @@ html.rv-on [data-reveal][data-rv-in] {
   --hero-t-tail:    840ms;
 }
 
-@keyframes alpha-hero-settle {
-  from { transform: scale(1.06); }
-  to   { transform: scale(1); }
-}
-@keyframes alpha-hero-scrim {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes alpha-hero-rise {
-  from { opacity: 0; transform: translate3d(0, 16px, 0); }
-  to   { opacity: 1; transform: translate3d(0, 0, 0); }
-}
-
-/* The photograph starts fractionally oversized and settles. Scaling DOWN
-   to exactly 1 means the frame is never underfilled mid-animation. */
-.hero-media {
-  animation: alpha-hero-settle 1200ms var(--ease-out) both;
-}
-.hero-scrim {
-  animation: alpha-hero-scrim 600ms linear both;
-}
-.hero-rise {
-  animation: alpha-hero-rise var(--hero-rise-dur, 380ms) var(--ease-out) both;
-  animation-delay: var(--hero-delay, 0ms);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-media,
-  .hero-scrim,
-  .hero-rise {
-    animation: none;
-    opacity: 1;
-    transform: none;
-  }
-}
+/* The hero's entrance choreography (photo settling from 1.06, scrim fade,
+   lines rising on a staggered schedule to ~1.2 s) was removed on
+   2026-10-22 with the scroll reveal: the opening screen is static from
+   first paint. The --hero-t-* tokens above are kept for heroStep()
+   callers, which now only set a delay on an element that no longer
+   animates. */
 
 /* The opening screen's height. Two declarations, not one: svh is what makes
    the hero survive a mobile browser's collapsing address bar, and vh is the
@@ -707,21 +622,6 @@ html.rv-on [data-reveal][data-rv-in] {
    animation-play-state is not a compositor property, but it is set once
    per block on a handful of short paths, not per frame.
    =================================================================== */
-@media (prefers-reduced-motion: no-preference) {
-  html.rv-on [data-reveal] .alpha-draw {
-    animation-play-state: paused;
-  }
-  html.rv-on [data-reveal][data-rv-in] .alpha-draw {
-    animation-play-state: running;
-  }
-  /* Stickers pop with the section rather than before it. */
-  html.rv-on [data-reveal] .alpha-pop {
-    animation-play-state: paused;
-  }
-  html.rv-on [data-reveal][data-rv-in] .alpha-pop {
-    animation-play-state: running;
-  }
-}
 
 /* A mark drawn behind a word rather than under a line of type. It
    stretches to whatever it wraps, so the stroke belongs to the word at
