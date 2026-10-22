@@ -45,20 +45,15 @@ school confirms the exact approved wording.** Until then the existing
 `[Aviation positioning statement — wording to be confirmed]` placeholder stays
 on all five pages that use it.
 
-### The founder's name — RESOLVED 2026-09-10
+### The founder's name — RESOLVED 2026-10-22
 
-The site now says **Professor Aloysius Mayo** everywhere.
-
-The Managing Director's signed letter of September 2026 uses that form, and it
-is the most recent and most senior source on the record. Adopting it changed
-four references in `src/routes/about.tsx` — the timeline entry, the portrait's
-alt text, the founder heading and the founder paragraph — and left her letter
-untouched, which is the safer edit: a signed document should not be rewritten
-to match the site around it.
-
-The earlier form, *Professor Wenceslaus Aloyce Mayo*, is retired. If the school
-later confirms that *Wenceslaus* belongs in the name, this is a one-line change
-back in those four places.
+The site says **Prof. Aloyce W. Mayo** everywhere, the form the site owner gave
+on 2026-10-22. It replaces *Professor Aloysius Mayo* (taken from the Managing
+Director's September 2026 letter, adopted 2026-09-10) and the earlier
+*Professor Wenceslaus Aloyce Mayo*. The Director's letter on /about is otherwise
+verbatim; its two mentions of the founder were changed to the confirmed form so
+the page does not show two names. If the school wants the letter's original
+wording back, that is a two-line change in `src/routes/about.tsx`.
 
 ### Alpha Girls founding date — RESOLVED 2026-09-10
 

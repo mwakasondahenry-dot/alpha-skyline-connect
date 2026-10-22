@@ -15,7 +15,8 @@ campuses:
 | Alpha High | **Co-education** | Mikocheni | Form 1–6 |
 | Alpha Girls | **Girls only** | Kunduchi | Form 1–6 |
 
-Founded 19 March 2007 by the late Professor Wenceslaus Aloyce Mayo. The
+Founded 19 March 2007 by the late Prof. Aloyce W. Mayo (name confirmed by the
+owner on 2026-10-22). The
 secondary schools teach the Tanzanian national curriculum to NECTA — CSEE at
 O-Level, ACSEE at A-Level.
 
@@ -86,9 +87,8 @@ High O-Level · Alpha Girls' founding
 year (the timeline says 2020; their own document implies a 5th Form VI
 graduation in 2026) · whether Form Three and Form Four options are genuinely
 identical · testimonial quotes with consent · the Director's **photograph**
-(her message arrived September 2026) · the founder's correct full name — her
-message says "Professor Aloysius Mayo", the site says "Professor Wenceslaus
-Aloyce Mayo", and both are live on /about · application form PDF · term dates ·
+(her message arrived September 2026) · the founder's biography · application
+form PDF · term dates ·
 confirmed social handles · Google Maps links per campus.
 
 The aviation **module lists** are no longer owed: ground school and aircraft

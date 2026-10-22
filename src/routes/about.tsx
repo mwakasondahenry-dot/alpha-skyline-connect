@@ -56,7 +56,7 @@ const TIMELINE: ReadonlyArray<{ year: string; title: string; body: string }> = [
   {
     year: "2007",
     title: "Alpha High School",
-    body: "Established on 19 March 2007 by the late Professor Aloysius Mayo, in Mikocheni.",
+    body: "Established on 19 March 2007 by the late Prof. Aloyce W. Mayo, in Mikocheni.",
   },
   {
     year: "2020",
@@ -160,7 +160,7 @@ function Hero() {
           </h1>
           <p className="mt-6 max-w-xl text-[var(--color-ink)]/85" style={T.body}>
             Alpha began on 19 March 2007 with one secondary school in Mikocheni, founded by the
-            late Professor Aloysius Mayo. Today it is three schools on two campuses in Dar es
+            late Prof. Aloyce W. Mayo. Today it is three schools on two campuses in Dar es
             Salaam, from the first day of nursery to Form Six, with aviation and coding on the
             timetable.
           </p>
@@ -200,7 +200,7 @@ function Hero() {
               width={1100}
               height={1010}
               src={profMayo}
-              alt="Professor Aloysius Mayo, founder of Alpha Schools"
+              alt="Prof. Aloyce W. Mayo, founder of Alpha Schools"
               sizes="(min-width: 1024px) 40vw, 24rem"
               loading="eager"
               fetchPriority="high"
@@ -211,7 +211,7 @@ function Hero() {
           <figcaption className="mt-5">
             <span aria-hidden className="mb-3 block h-1 w-12 rounded-full" style={{ background: GOLD }} />
             <span className="block font-display" style={{ ...T.cardTitle, color: NAVY }}>
-              Professor Aloysius Mayo
+              Prof. Aloyce W. Mayo
             </span>
             <span className="block text-[var(--color-ink-soft)]" style={T.body}>
               Founder. Opened Alpha High School in Mikocheni on 19 March 2007.
@@ -240,11 +240,11 @@ function Founder() {
               <>
                 In honour of the late{" "}
                 <Marked kind="underline" color={GOLD}>
-                  Professor Aloysius Mayo.
+                  Prof. Aloyce W. Mayo.
                 </Marked>
               </>
             }
-            lead="Alpha Schools was founded in 2007 by the late Professor Aloysius Mayo — a man whose conviction that education should serve both intellect and character still anchors everything we do."
+            lead="Alpha Schools was founded in 2007 by the late Prof. Aloyce W. Mayo — a man whose conviction that education should serve both intellect and character still anchors everything we do."
           />
           <Reveal direction="up" className="mt-8 max-w-2xl space-y-5 text-[var(--color-ink)]/85" style={T.body}>
             <p>
@@ -309,8 +309,10 @@ function Founder() {
  * 3. A WORD FROM THE DIRECTOR
  * School-supplied, September 2026. Reproduced verbatim — this is a
  * signed letter from a named person, so it is not edited for house
- * style. It names the founder "Professor Aloysius Mayo", the form the
- * site adopted on 2026-09-10, and uses "Alpha Girls High School" and
+ * style, with one exception: the founder's name. Her letter as supplied
+ * read "Professor Aloysius Mayo"; the owner confirmed on 2026-10-22 that
+ * the founder is Prof. Aloyce W. Mayo, so the letter now carries that
+ * form rather than show two names on one page. It uses "Alpha Girls High School" and
  * "Alpha Nursery and Primary School" where the brand names are "Alpha
  * Girls" and "Nursery & Primary": the naming rule governs the site's
  * own copy, not a quotation. Her photograph is still owed; the
@@ -348,7 +350,7 @@ function Director() {
           <div className="mt-8 max-w-2xl space-y-5 text-white/85" style={T.body}>
             <p>
               As the Managing Director of Alpha High School, I am honoured to pay tribute to our
-              esteemed founder, Professor Aloysius Mayo. His visionary leadership laid the
+              esteemed founder, Prof. Aloyce W. Mayo. His visionary leadership laid the
               foundation for Alpha Schools, which include Alpha Nursery and Primary School, Alpha
               Girls High School, and Alpha High School. Professor Mayo's commitment to preparing
               young Tanzanians for success in the competitive realms of technology,
