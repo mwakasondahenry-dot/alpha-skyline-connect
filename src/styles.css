@@ -653,8 +653,8 @@ html.rv-on [data-reveal][data-rv-in] {
    "there is more" cue, since the scrollbar is hidden. */
 @media (max-width: 639px) {
   .hero-cred-strip {
-    -webkit-mask-image: linear-gradient(to right, black 86%, transparent);
-    mask-image: linear-gradient(to right, black 86%, transparent);
+    -webkit-mask-image: linear-gradient(to right, black 68%, transparent 97%);
+    mask-image: linear-gradient(to right, black 68%, transparent 97%);
   }
 }
 .hero-viewport {
