@@ -3,6 +3,7 @@ import "./lib/error-capture";
 import { consumeLastCapturedError } from "./lib/error-capture";
 import { renderErrorPage } from "./lib/error-page";
 import { runWithWaitUntil, waitUntilFrom } from "./lib/server/wait-until";
+import { withLowPriorityPreloads } from "./lib/server/html-head";
 
 type ServerEntry = {
   fetch: (request: Request, env: unknown, ctx: unknown) => Promise<Response> | Response;
@@ -47,7 +48,7 @@ export default {
       const response = await runWithWaitUntil(waitUntilFrom(request, ctx), () =>
         handler.fetch(request, env, ctx),
       );
-      return await normalizeCatastrophicSsrResponse(response);
+      return withLowPriorityPreloads(await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
       return new Response(renderErrorPage(), {
