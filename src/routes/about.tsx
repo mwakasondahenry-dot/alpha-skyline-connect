@@ -531,10 +531,10 @@ function AboutPage() {
       <section className="bg-[var(--color-off-white)]">
         <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <ChapterHead
-            title="Two decades. Real results."
+            title={`${YEARS} years. Real results.`}
             lead="NECTA's own published figures for the two secondary schools, and the programme no other school in Dar es Salaam can copy."
           />
-          <ul className="mt-10 grid gap-6 md:grid-cols-3">
+          <ul className="mt-10 border-t border-[var(--color-hairline)]">
             {[
               {
                 Icon: Award,
@@ -558,33 +558,37 @@ function AboutPage() {
                 cta: "Inside the aviation programme",
               },
             ].map((r) => (
-              <Reveal key={r.title} direction="up">
-                <article className="flex h-full flex-col rounded-[1.75rem] bg-white p-7 ring-1 ring-[var(--color-hairline)]">
-                  <span className="grid h-12 w-12 place-items-center rounded-full" style={{ background: GOLD }}>
-                    <r.Icon className="h-6 w-6" style={{ color: NAVY }} aria-hidden />
-                  </span>
-                  <h3 className="mt-5 font-display" style={{ ...T.cardTitle, color: NAVY }}>
+              <li
+                key={r.title}
+                className="grid gap-4 border-b border-[var(--color-hairline)] py-6 sm:grid-cols-[3.5rem_1fr_auto] sm:items-start sm:gap-6"
+              >
+                <span className="grid h-12 w-12 place-items-center rounded-full" style={{ background: GOLD }}>
+                  <r.Icon className="h-6 w-6" style={{ color: NAVY }} aria-hidden />
+                </span>
+                <div>
+                  <h3 className="font-display" style={{ ...T.cardTitle, color: NAVY }}>
                     {r.title}
                   </h3>
-                  <p className="mt-3 flex-1 text-[var(--color-ink)]/85" style={T.body}>
+                  <p className="mt-2 max-w-2xl text-[var(--color-ink)]/85" style={T.body}>
                     {r.body}
                   </p>
-                  <Link
-                    to={r.to}
-                    hash={r.to.startsWith("/schools") ? "results" : undefined}
-                    className="mt-5 inline-flex items-center gap-1.5 font-display hover:underline"
-                    style={{ ...T.body, fontWeight: 800, color: NAVY }}
-                  >
-                    {r.cta} <ArrowRight className="h-4 w-4" aria-hidden />
-                  </Link>
-                </article>
-              </Reveal>
+                </div>
+                <Link
+                  to={r.to}
+                  hash={r.to.startsWith("/schools") ? "results" : undefined}
+                  className="inline-flex items-center gap-1.5 font-display hover:underline sm:mt-1"
+                  style={{ ...T.body, fontWeight: 800, color: NAVY }}
+                >
+                  {r.cta} <ArrowRight className="h-4 w-4" aria-hidden />
+                </Link>
+              </li>
             ))}
           </ul>
           <p className="mt-8 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
             The school also reports that 80% of teachers hold a bachelor&rsquo;s degree or higher
-            across the three schools. Figure to be re-confirmed with the school office before it is
-            given more prominence.
+            across the three schools, and earlier NECTA placings of 2nd in the Dar es Salaam zone
+            for the 2012 Form Six (ACSEE) and 4th in the zone for the 2011 Form Four (CSEE). Figures
+            to be re-confirmed with the school office before they are given more prominence.
           </p>
         </div>
       </section>

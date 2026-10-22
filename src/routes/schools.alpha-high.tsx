@@ -19,7 +19,6 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getSchoolBundle, getSchoolPhotos, type SchoolBundle } from "@/lib/alpha-content.functions";
 import { ParentVoices } from "@/components/school/parent-voices";
 import { testimonialsQuery } from "@/lib/testimonials-query";
-import { slotPhoto } from "@/lib/photo-slots";
 import { ACSEE_2026, CSEE_2024, CSEE_2025, CSEE_2025_ENGLISH } from "@/lib/high-results";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
@@ -1025,49 +1024,62 @@ function StudentLife() {
               education.
             </>
           }
-          lead="Ten student-led clubs, five sports, trips out of the gate, four meals a day and a counselling department. Every photograph here is the school's own."
+          lead="Ten student-led clubs, five sports, trips out of the gate, four meals a day and a counselling department. The photographs are the school's own, from its folder and its Instagram."
         />
 
         <div className="mt-12 space-y-12">
           {/* Clubs and sport */}
           <LifeGroup
             title="Clubs and sport."
-            lead="Every club has its own photograph; staff can replace any of them."
+            lead="Ten clubs, every one student-led. Club photographs appear here as the school uploads them."
             cols={1}
           >
             <div className="min-w-0">
-              <ul
-                className="-mx-[var(--container-gutter)] flex snap-x gap-3 overflow-x-auto px-[var(--container-gutter)] pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:mx-0 lg:px-0"
-                style={{
-                  maskImage: "linear-gradient(to right, black 92%, transparent)",
-                  WebkitMaskImage: "linear-gradient(to right, black 92%, transparent)",
-                }}
-              >
+              {/* A club shows a photograph only when staff have uploaded one
+                  through the admin photo slots; the bundled stand-ins are not
+                  the school's own pictures, so they are not shown. */}
+              <ul className="flex flex-wrap gap-2">
                 {CLUBS.map((c) => {
-                  const p = slotPhoto(photos, c.key)!;
+                  const uploaded = photos[c.key];
                   return (
-                    <li key={c.key} className="w-40 shrink-0 snap-start sm:w-44">
-                      <div className="aspect-[4/5] overflow-hidden rounded-[1.25rem]">
-                        <img
-                          src={p.src}
-                          alt={photos[c.key]?.alt_text ?? `${c.name} club at Alpha High`}
-                          width={800}
-                          height={1024}
-                          loading="lazy"
-                          decoding="async"
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
-                      <p
-                        className="mt-2 font-display text-[var(--color-deep-blue)]"
-                        style={{ ...T.body, fontWeight: 800 }}
-                      >
-                        {c.name}
-                      </p>
+                    <li key={c.key}>
+                      {uploaded ? (
+                        <figure className="w-40 sm:w-44">
+                          <div className="aspect-[4/5] overflow-hidden rounded-[1.25rem]">
+                            <img
+                              src={uploaded.image_url}
+                              alt={uploaded.alt_text || `${c.name} club at Alpha High`}
+                              width={800}
+                              height={1024}
+                              loading="lazy"
+                              decoding="async"
+                              className="h-full w-full object-cover"
+                            />
+                          </div>
+                          <figcaption
+                            className="mt-2 font-display text-[var(--color-deep-blue)]"
+                            style={{ ...T.body, fontWeight: 800 }}
+                          >
+                            {c.name}
+                          </figcaption>
+                        </figure>
+                      ) : (
+                        <span
+                          className="inline-flex rounded-[var(--radius-pill)] px-4 py-2 font-display text-white"
+                          style={{ ...T.body, fontWeight: 700, background: ACCENT }}
+                        >
+                          {c.name}
+                        </span>
+                      )}
                     </li>
                   );
                 })}
               </ul>
+              {CLUBS.some((c) => !photos[c.key]) && (
+                <p className="mt-3 text-[var(--color-ink-soft)]" style={T.body}>
+                  [Club photographs &mdash; to be provided by the school]
+                </p>
+              )}
               <div className="mt-6 grid gap-6 md:grid-cols-2 md:gap-10">
                 <PhotoStory
                   layout="wide"
@@ -1103,8 +1115,8 @@ function StudentLife() {
                     {SPORTS.map((s) => (
                       <li
                         key={s}
-                        className="rounded-[var(--radius-pill)] px-4 py-2 font-display text-white"
-                        style={{ ...T.body, fontWeight: 700, background: ACCENT }}
+                        className="rounded-[var(--radius-pill)] border px-4 py-2 font-display text-[var(--color-deep-blue)]"
+                        style={{ ...T.body, fontWeight: 700, borderColor: ACCENT }}
                       >
                         {s}
                       </li>

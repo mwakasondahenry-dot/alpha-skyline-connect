@@ -568,7 +568,7 @@ export function HeroCredentials({
   return (
     <div className="border-t border-[var(--color-gold)]/30 bg-[rgba(0,26,60,0.72)] backdrop-blur-sm">
       <ul
-        className={`${SHELL} flex gap-5 overflow-x-auto py-3 [scrollbar-width:none] sm:grid sm:gap-6 sm:overflow-visible sm:py-5 [&::-webkit-scrollbar]:hidden`}
+        className={`${SHELL} hero-cred-strip flex gap-5 overflow-x-auto py-3 [scrollbar-width:none] sm:grid sm:gap-6 sm:overflow-visible sm:py-5 [&::-webkit-scrollbar]:hidden`}
         style={{
           ["--cred-cols" as string]: String(items.length),
         }}

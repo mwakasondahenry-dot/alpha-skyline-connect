@@ -239,13 +239,13 @@ function Hero() {
         style={{ ...heroStep("var(--hero-t-tail)", "320ms"), background: ACCENT }}
       >
         <ul
-          className={`${SHELL} flex gap-6 overflow-x-auto py-4 [scrollbar-width:none] sm:grid sm:grid-cols-4 sm:gap-6 sm:overflow-visible sm:py-5 [&::-webkit-scrollbar]:hidden`}
+          className={`${SHELL} hero-cred-strip flex gap-6 overflow-x-auto py-4 [scrollbar-width:none] sm:grid sm:grid-cols-4 sm:gap-6 sm:overflow-visible sm:py-5 [&::-webkit-scrollbar]:hidden`}
         >
           {[
             { label: "Form 1 to 6", sub: "O-Level and A-Level", Icon: GraduationCap },
             { label: "Kunduchi", sub: "Dar es Salaam", Icon: MapPin },
             { label: "Girls only", sub: "A girls' secondary", Icon: Users },
-            { label: "Since 2020", sub: "Part of Alpha since 2007", Icon: Calendar },
+            { label: "Since 2020", sub: "Alpha's girls' school", Icon: Calendar },
           ].map((c) => (
             <li key={c.label} className="flex shrink-0 items-center gap-3 sm:shrink">
               <span
@@ -313,7 +313,7 @@ const MILESTONES = [
   {
     when: "2020",
     what: "Alpha Girls opens at the Kunduchi campus",
-    body: "A girls-only secondary school, part of Alpha Schools since 2007.",
+    body: "A girls-only secondary school in the Alpha group, whose first school dates from 2007.",
   },
   {
     when: "18 April 2026",
@@ -1184,10 +1184,16 @@ function StudentLife() {
 function People({ staff }: { staff: SchoolBundle["staff"] }) {
   return (
     <div id="people" style={ANCHOR}>
-      {staff.length > 0 && (
-        <section style={{ background: TINT }}>
-          <div className={`${SHELL} py-[var(--space-section-y)]`}>
-            <ChapterHead title="The women and men behind the climb." />
+      <section style={{ background: TINT }}>
+        <div className={`${SHELL} py-[var(--space-section-y)]`}>
+          <ChapterHead title="The women and men behind the climb." />
+          {staff.length === 0 ? (
+            /* The chapter stays on the page while the school owes the list:
+               a placeholder is kept visible, never a section quietly dropped. */
+            <p className="mt-6 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+              [Staff &mdash; names, roles and photographs to be provided by the school]
+            </p>
+          ) : (
             <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {staff.map((p) => (
                 <li key={p.id}>
@@ -1224,9 +1230,9 @@ function People({ staff }: { staff: SchoolBundle["staff"] }) {
                 </li>
               ))}
             </ul>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+      </section>
       <ParentVoices school="alpha-girls" accent={ACCENT} />
     </div>
   );

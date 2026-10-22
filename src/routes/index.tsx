@@ -274,7 +274,6 @@ function Hero() {
   return (
     <>
       <CinematicHero
-        eyebrow="Dar es Salaam, Tanzania · Since 2007"
         srLead="Alpha Schools, Dar es Salaam:"
         lineOne="Your potential,"
         lineTwo="unlocked."
