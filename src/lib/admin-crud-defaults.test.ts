@@ -1,5 +1,14 @@
-import { describe, expect, it } from "vitest";
-import { dateInputValue, initialValue, saveValue } from "./admin-crud-defaults";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  dateCellLabel,
+  dateInputValue,
+  initialValue,
+  itemNameOf,
+  outcomeLine,
+  rowName,
+  saveValue,
+  todayInDar,
+} from "./admin-crud-defaults";
 
 describe("initialValue", () => {
   it("leaves a nullable number empty when there is no value", () => {
@@ -88,5 +97,87 @@ describe("saveValue", () => {
     expect(saveValue({ type: "date" }, "2026-10-22", "2026-10-20T09:15:00+00:00")).toBe(
       "2026-10-22",
     );
+  });
+});
+
+describe("today as a default", () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('resolves "today" when the form opens, as the Dar es Salaam day', () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-10-23T09:00:00Z"));
+    expect(initialValue({ type: "date", defaultValue: "today" }, null)).toBe("2026-10-23");
+    // Not frozen at first use: a later open gets the later day.
+    vi.setSystemTime(new Date("2026-10-25T09:00:00Z"));
+    expect(initialValue({ type: "date", defaultValue: "today" }, null)).toBe("2026-10-25");
+  });
+
+  it("is already tomorrow just after 21:00 UTC", () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-10-23T21:05:00Z"));
+    expect(todayInDar()).toBe("2026-10-24");
+    expect(initialValue({ type: "date", defaultValue: "today" }, undefined)).toBe("2026-10-24");
+  });
+
+  it("keeps an existing date over the today default", () => {
+    expect(initialValue({ type: "date", defaultValue: "today" }, "2026-01-02")).toBe("2026-01-02");
+  });
+});
+
+describe("dateCellLabel", () => {
+  const now = new Date("2026-10-23T09:00:00Z");
+  it("shows a picked date without a time", () => {
+    expect(dateCellLabel("2026-10-01", now)).toBe("1 Oct");
+    expect(dateCellLabel("2025-10-01", now)).toBe("1 Oct 2025");
+  });
+  it("shows a timestamp as its Dar es Salaam day, without a time", () => {
+    expect(dateCellLabel("2026-10-01T22:30:00Z", now)).toBe("2 Oct");
+    expect(dateCellLabel("2026-10-23T00:00:00+00:00", now)).toBe("23 Oct");
+  });
+  it("is empty for something that is not a date", () => {
+    expect(dateCellLabel("soon", now)).toBe("");
+  });
+});
+
+describe("naming a row", () => {
+  const staff = {
+    nameKey: "name",
+    listColumns: [{ key: "photo_url" }, { key: "name" }, { key: "title" }],
+  };
+  const row = { name: "Grace Mushi", title: "Head Teacher", photo_url: "https://x/y.webp" };
+
+  it("uses the configured nameKey, so a staff member is named, not their role", () => {
+    expect(rowName(row, staff)).toBe("Grace Mushi");
+  });
+
+  it("without a nameKey, uses the first name-like list column", () => {
+    expect(rowName(row, { listColumns: staff.listColumns })).toBe("Grace Mushi");
+  });
+
+  it("falls back to title, name, caption, alt text", () => {
+    expect(rowName({ caption: "Sports day" }, { listColumns: [] })).toBe("Sports day");
+    expect(rowName({ school_slug: "alpha-high" }, { listColumns: [{ key: "school_slug" }] })).toBe(
+      null,
+    );
+  });
+
+  it("skips an empty nameKey value", () => {
+    expect(rowName({ name: " ", title: "Head" }, { nameKey: "name", listColumns: [] })).toBe(
+      "Head",
+    );
+  });
+
+  it("names the item from config", () => {
+    expect(itemNameOf({ title: "Staff", itemName: "staff member" })).toBe("staff member");
+    expect(itemNameOf({ title: "Facilities" })).toBe("facility");
+    expect(itemNameOf({ title: "Hero slides" })).toBe("hero slide");
+    expect(itemNameOf({ title: "News" })).toBe("news");
+  });
+
+  it("writes the outcome line with the name, or the item when there is none", () => {
+    expect(outcomeLine("Deleted", row, "staff member", staff)).toBe("Deleted “Grace Mushi”.");
+    expect(outcomeLine("Saved", {}, "photo", { listColumns: [] })).toBe("Saved the photo.");
   });
 });

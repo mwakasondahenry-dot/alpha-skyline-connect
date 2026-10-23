@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminCrud, type CrudConfig } from "@/lib/admin-crud";
+import { TODAY } from "@/lib/admin-crud-defaults";
 
 export const Route = createFileRoute("/admin/news")({
   head: () => ({ meta: [{ title: "News · Alpha Admin" }] }),
@@ -56,7 +57,8 @@ const CONFIG: CrudConfig = {
       name: "published_at",
       label: "Publish date",
       kind: "date",
-      helpText: "Used to sort the homepage slideshow.",
+      defaultValue: TODAY,
+      helpText: "Starts as today. Used to sort the homepage slideshow, newest first.",
     },
   ],
 };

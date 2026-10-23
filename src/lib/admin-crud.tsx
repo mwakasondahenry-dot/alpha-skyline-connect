@@ -29,7 +29,17 @@ import {
 import { friendlyError } from "@/lib/admin/errors";
 import { formatAdminDate, schoolLabel } from "@/lib/admin/format";
 import { compressImage } from "@/lib/image-compress";
-import { crudKey, initialValue, saveValue, type FieldShape } from "@/lib/admin-crud-defaults";
+import {
+  NAME_KEYS,
+  crudKey,
+  dateCellLabel,
+  initialValue,
+  itemNameOf,
+  outcomeLine,
+  rowName,
+  saveValue,
+  type FieldShape,
+} from "@/lib/admin-crud-defaults";
 import { cn } from "@/lib/utils";
 
 type SchoolSlug = "group-wide" | "nursery-primary" | "alpha-high" | "alpha-girls";
@@ -75,6 +85,8 @@ export type CrudConfig = {
   description?: string;
   /** One item in plain words, e.g. "news post". Names the form and the outcome lines. */
   itemName?: string;
+  /** The column that names a row in confirms and outcome lines (Staff: "name", not the role). */
+  nameKey?: string;
   /** Columns shown in the list view + how to render them. */
   listColumns: {
     key: string;
@@ -89,33 +101,8 @@ export type CrudConfig = {
 
 type Row = Record<string, unknown>;
 
-const NAME_KEYS = ["title", "name", "caption", "alt_text"];
-
-function itemNameOf(config: CrudConfig): string {
-  if (config.itemName) return config.itemName;
-  const t = config.title.toLowerCase();
-  if (t.endsWith("ies")) return t.slice(0, -3) + "y";
-  if (t.endsWith("s") && !t.endsWith("ss") && t !== "news") return t.slice(0, -1);
-  return t;
-}
-
-/** The row's own name ("Open day"), if it has one. */
-function rowName(row: Row): string | null {
-  for (const k of NAME_KEYS) {
-    const v = row[k];
-    if (typeof v === "string" && v.trim()) return v.trim();
-  }
-  return null;
-}
-
 function shape(f: FieldDef): FieldShape {
   return { type: f.kind, nullable: f.nullable, defaultValue: f.defaultValue };
-}
-
-/** A sentence naming the item: `Saved “Open day”.` or `Saved the event.` */
-function outcomeLine(verb: string, row: Row, item: string) {
-  const name = rowName(row);
-  return name ? `${verb} “${name}”.` : `${verb} the ${item}.`;
 }
 
 export function AdminCrud({ config }: { config: CrudConfig }) {
@@ -174,7 +161,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
     });
     setSheetOpen(false);
     flashRow(id);
-    outcome.show({ text: outcomeLine(isNew ? "Added" : "Saved", saved, item) });
+    outcome.show({ text: outcomeLine(isNew ? "Added" : "Saved", saved, item, config) });
     // Refetch puts the row in its sorted place; the list stays on screen meanwhile.
     void queryClient.invalidateQueries({ queryKey: key });
   }
@@ -190,7 +177,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
       );
       if (visible) await collapseAndRemove(visible);
       queryClient.setQueryData<Row[]>(key, (old) => old?.filter((r) => String(r.id) !== id));
-      outcome.show({ text: outcomeLine("Deleted", row, item) });
+      outcome.show({ text: outcomeLine("Deleted", row, item, config) });
       void queryClient.invalidateQueries({ queryKey: key });
     })();
   }
@@ -200,6 +187,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
       config.fields.some((f) => f.name === c.key && f.kind === "image") || c.key.endsWith("_url"),
   );
   const nameCol =
+    (config.nameKey ? config.listColumns.find((c) => c.key === config.nameKey) : undefined) ??
     config.listColumns.find((c) => NAME_KEYS.includes(c.key)) ??
     config.listColumns.find((c) => c !== imageCol);
   const restCols = config.listColumns.filter((c) => c !== imageCol && c !== nameCol);
@@ -208,7 +196,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
     return c.render ? c.render(row[c.key], row) : renderCell(c.key, row[c.key], config.fields);
   }
 
-  const toDeleteName = toDelete ? rowName(toDelete) : null;
+  const toDeleteName = toDelete ? rowName(toDelete, config) : null;
 
   return (
     <div className="space-y-5">
@@ -283,7 +271,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
                       </div>
                     </div>
                     <RowActions
-                      row={row}
+                      name={rowName(row, config)}
                       readOnly={!!config.readOnlyCreate}
                       onEdit={() => openSheet(row)}
                       onDelete={() => setToDelete(row)}
@@ -343,7 +331,7 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
                       ))}
                       <td className="border-b border-[var(--color-hairline)] px-3 py-1.5">
                         <RowActions
-                          row={row}
+                          name={rowName(row, config)}
                           readOnly={!!config.readOnlyCreate}
                           onEdit={() => openSheet(row)}
                           onDelete={() => setToDelete(row)}
@@ -397,19 +385,18 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
 }
 
 function RowActions({
-  row,
+  name,
   readOnly,
   onEdit,
   onDelete,
   className,
 }: {
-  row: Row;
+  name: string | null;
   readOnly: boolean;
   onEdit: () => void;
   onDelete: () => void;
   className?: string;
 }) {
-  const name = rowName(row);
   return (
     <div className={cn("flex flex-wrap gap-2", className)}>
       {!readOnly && (
@@ -478,9 +465,9 @@ function renderCell(key: string, v: unknown, fields: FieldDef[]): ReactNode {
       />
     );
   }
-  if (typeof v === "string" && DATE_ONLY.test(v)) {
-    // Noon in Dar es Salaam, so the day never shifts; the time is not shown.
-    return formatAdminDate(`${v}T12:00:00+03:00`).replace(/ \d{2}:\d{2}$/, "");
+  if (field?.kind === "date" || (typeof v === "string" && DATE_ONLY.test(v))) {
+    // A picked date: the day only; its time was never chosen by anyone.
+    return <span className="whitespace-nowrap">{dateCellLabel(v) || <Soft>—</Soft>}</span>;
   }
   if (typeof v === "string" && TIMESTAMP.test(v)) {
     return <span className="whitespace-nowrap">{formatAdminDate(v)}</span>;
@@ -532,9 +519,10 @@ function CrudForm({
   const [error, setError] = useState<string | null>(null);
   const anyUploading = Object.values(uploading).some(Boolean);
 
+  // An upload in flight also holds the sheet open, so no file is left orphaned.
   useEffect(() => {
-    onBusyChange(busy);
-  }, [busy, onBusyChange]);
+    onBusyChange(busy || anyUploading);
+  }, [busy, anyUploading, onBusyChange]);
   useEffect(() => () => onBusyChange(false), [onBusyChange]);
 
   function set(k: string, v: unknown) {
@@ -654,7 +642,7 @@ function CrudForm({
       {error ? <ErrorLine message={error} /> : null}
 
       <div className="flex flex-col-reverse gap-2 border-t border-[var(--color-hairline)] pt-4 sm:flex-row sm:justify-end">
-        <AdminButton variant="secondary" onClick={onCancel} disabled={busy}>
+        <AdminButton variant="secondary" onClick={onCancel} disabled={busy || anyUploading}>
           Cancel
         </AdminButton>
         <AdminButton

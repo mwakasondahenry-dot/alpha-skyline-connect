@@ -10,6 +10,7 @@ const CONFIG: CrudConfig = {
   table: "staff",
   title: "Staff",
   itemName: "staff member",
+  nameKey: "name",
   description: "Teachers and leadership shown on school pages.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
