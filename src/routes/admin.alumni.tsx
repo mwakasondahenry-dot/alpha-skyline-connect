@@ -67,7 +67,7 @@ function AlumniLayout() {
 
 /** The file opens in Excel with its accents intact only with a byte-order mark. */
 function downloadCsv(people: AlumniPerson[]) {
-  const blob = new Blob(["﻿", alumniCsv(people)], { type: "text/csv;charset=utf-8" });
+  const blob = new Blob(["﻿",alumniCsv(people)], { type: "text/csv;charset=utf-8" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
