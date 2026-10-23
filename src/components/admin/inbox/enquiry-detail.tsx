@@ -214,6 +214,8 @@ export function EnquiryDetail({ enquiry, backTab }: { enquiry: Enquiry; backTab:
               >
                 {email}
               </a>
+            ) : email ? (
+              <span className="break-all text-[var(--color-ink)]">{email}</span>
             ) : (
               <span className="text-[var(--color-ink-soft)]">Not given</span>
             )}

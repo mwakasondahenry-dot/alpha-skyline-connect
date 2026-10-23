@@ -91,9 +91,21 @@ export function contactLinks(p: {
   }
   let mailto: string | null = null;
   const email = p.email?.trim();
-  if (email) {
-    mailto = `mailto:${email}`;
+  const local = email ? usableEmailLocalPart(email) : null;
+  if (email && local !== null) {
+    mailto = `mailto:${encodeURIComponent(local)}${email.slice(local.length)}`;
     if (p.subject) mailto += `?subject=${encodeURIComponent(`Re: ${p.subject}`)}`;
   }
   return { whatsapp, tel, mailto };
+}
+
+/**
+ * The part before the @ when `email` is safe to put in a mailto: link, else
+ * null. A typed-in address holding ? & # or spaces could add cc/bcc/body
+ * fields to the mail, so such an address is shown as plain text instead.
+ */
+function usableEmailLocalPart(email: string): string | null {
+  if (/[?&#\s]/.test(email)) return null;
+  const m = /^([^@]+)@([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+)$/.exec(email);
+  return m ? m[1] : null;
 }

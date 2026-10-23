@@ -78,4 +78,25 @@ describe("contactLinks", () => {
   it("omits the subject when not given", () => {
     expect(contactLinks({ email: "a@b.co" }).mailto).toBe("mailto:a@b.co");
   });
+  it("gives no email link for an address that could carry extra mail fields", () => {
+    for (const email of [
+      "a@b.co?cc=evil@x.co",
+      "a@b.co&bcc=evil@x.co",
+      "a@b.co#x",
+      "a b@c.co",
+      ["a@b.co", "bcc:x@y.co"].join(String.fromCharCode(10)),
+      "not an email",
+      "a@b",
+      "@b.co",
+      "a@@b.co",
+    ]) {
+      expect(contactLinks({ email, subject: "Fees" }).mailto, email).toBeNull();
+    }
+  });
+  it("encodes the local part of a usable address", () => {
+    expect(contactLinks({ email: "o'neil+fees@school.co.tz" }).mailto).toBe(
+      "mailto:o'neil%2Bfees@school.co.tz",
+    );
+    expect(contactLinks({ email: "  a@b.co  " }).mailto).toBe("mailto:a@b.co");
+  });
 });
