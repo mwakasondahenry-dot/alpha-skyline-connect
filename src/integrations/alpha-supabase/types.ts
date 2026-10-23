@@ -153,6 +153,8 @@ export type TestimonialInviteRow = {
   created_at: string;
 }
 
+export type StoryStatus = "waiting" | "live" | "hidden" | "declined";
+
 export type TestimonialRow = {
   id: string;
   school_slug: SchoolSlug | null;
@@ -182,6 +184,15 @@ export type TestimonialRow = {
   /** Story prompt answers keyed by prompt (alumni or parent prompts). Staff only; never published. */
   answers: Record<string, string> | null;
   city_country: string | null;
+
+  /* Story states — see alpha_migration_admin_stories.sql. A trigger keeps
+     published = (status = 'live'). */
+  status: StoryStatus;
+  decline_reason: string | null;
+  featured: boolean;
+  featured_order: number | null;
+  decided_at: string | null;
+  decided_by: string | null;
 }
 
 export interface Database {

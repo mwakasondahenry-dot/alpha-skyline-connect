@@ -92,12 +92,15 @@ Cloudflare issues the HTTPS certificate itself; nothing else to configure.
   Redirect URLs, so admin password-reset links work.
 - Supabase → Authentication: confirm **"Allow new users to sign up" is off**.
   Any account with a profile row counts as staff.
-- Check the four migrations have been run on the Supabase project, in order:
+- Check the five migrations have been run on the Supabase project, in order:
   `alpha_migration_alumni_submissions.sql`,
   `alpha_migration_testimonial_invites.sql`,
   `alpha_migration_parent_invites.sql`,
   `alpha_migration_alumni_contact_privacy.sql` (keeps alumni email and phone
-  off the public API key; run before any alumni story is published).
+  off the public API key; run before any alumni story is published),
+  `alpha_migration_admin_stories.sql` (explicit story states). Run before
+  deploying the admin redesign; the old admin keeps working after it (the
+  trigger keeps `published` and `status` in step).
 
 ## Later deploys
 
