@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Photo } from "@/components/photo";
+import { orderForHome } from "@/lib/home-voices-order";
 import { VoicesSpotlight } from "@/components/testimonials/voices-spotlight";
 import { seo } from "@/lib/seo";
 import { organizationLd, websiteLd } from "@/lib/structured-data";
@@ -627,7 +628,7 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
         <span id="home-voices">In their words</span>
       </SectionHeading>
       <div className="mt-10">
-        <VoicesSpotlight items={items} />
+        <VoicesSpotlight items={orderForHome(items)} />
       </div>
     </section>
   );

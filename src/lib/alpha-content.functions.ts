@@ -466,6 +466,8 @@ export type TestimonialItem = Pick<
   | "grad_year"
   | "company"
   | "created_at"
+  | "featured"
+  | "featured_order"
 >;
 
 /**
@@ -497,10 +499,9 @@ export const getTestimonials = createServerFn({ method: "GET" }).handler(
         const { data, error } = await sb
           .from("testimonials")
           .select(
-            "id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at",
+            "id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at,featured,featured_order",
           )
-          .eq("published", true)
-          .order("sort_order", { ascending: true });
+          .eq("published", true);
         if (error) throw error;
         return data ?? [];
       },
@@ -528,7 +529,7 @@ export const getAlumniStories = createServerFn({ method: "GET" }).handler(
         const { data, error } = await sb
           .from("testimonials")
           .select(
-            "id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at",
+            "id,author_name,relationship,quote,photo_url,school_slug,grad_year,company,created_at,featured,featured_order",
           )
           .eq("published", true)
           .not("grad_year", "is", null)
