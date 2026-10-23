@@ -37,7 +37,7 @@ export function formatBytes(n: number): string {
   return `${(n / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-function loadImage(file: File): Promise<HTMLImageElement> {
+function loadImage(file: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
@@ -103,4 +103,22 @@ export async function compressImage(file: File): Promise<CompressResult> {
   }
 
   return { blob, width, height, originalBytes: file.size, bytes: blob.size, ext };
+}
+
+/**
+ * A small WebP copy of a photo, longest edge `maxEdge`, for slots that show it
+ * at thumbnail size (testimonial portraits). Unlike compressImage it never
+ * refuses: a copy this small is always a few kilobytes.
+ */
+export async function makeSmallCopy(file: Blob, maxEdge: number): Promise<Blob> {
+  const img = await loadImage(file);
+  const { width, height } = fitWithin(img.naturalWidth, img.naturalHeight, maxEdge);
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("This browser could not process the image.");
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(img, 0, 0, width, height);
+  return toBlob(canvas, "image/webp", 0.8);
 }

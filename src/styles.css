@@ -1347,3 +1347,102 @@
     transition: none;
   }
 }
+
+/* ===================================================================
+   Testimonials: the home page voices (VoicesSpotlight)
+
+   Every quote sits in one grid cell. The one speaking is "on"; the one
+   that just spoke is "out" and lifts away while the next rises in from
+   a soft blur. The rest are hidden, out of the accessibility tree and
+   out of the tab order. The gold timer line scales across its track,
+   and its end is what moves the quote on.
+   =================================================================== */
+:root {
+  --voice-fade: 650ms;
+}
+
+.voice {
+  transition:
+    opacity var(--voice-fade) var(--ease-out),
+    transform var(--voice-fade) var(--ease-out),
+    filter var(--voice-fade) var(--ease-out),
+    visibility 0s linear var(--voice-fade);
+}
+.voice[data-state="on"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  visibility: visible;
+  transition-delay: 120ms, 120ms, 120ms, 0s;
+}
+.voice[data-state="out"] {
+  opacity: 0;
+  transform: translate3d(0, -0.5rem, 0);
+  filter: blur(4px);
+  visibility: hidden;
+}
+.voice[data-state="off"] {
+  opacity: 0;
+  transform: translate3d(0, 0.75rem, 0);
+  filter: blur(6px);
+  visibility: hidden;
+}
+
+.voice-timer {
+  transform: scaleX(0);
+  animation-name: voice-timer;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+@keyframes voice-timer {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* The faces: a quiet crowd, the speaker ringed in gold. On phones the row
+   scrolls sideways with its scrollbar hidden and an edge fade. */
+.voice-face > span {
+  opacity: 0.5;
+  filter: saturate(0.4);
+  transition:
+    opacity 300ms var(--ease-out),
+    filter 300ms var(--ease-out),
+    transform 300ms var(--ease-out),
+    box-shadow 300ms var(--ease-out);
+}
+.voice-face:hover > span {
+  opacity: 0.9;
+  filter: none;
+}
+.voice-face[data-on] > span {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 2px var(--color-surface),
+    0 0 0 4px var(--color-gold);
+}
+.voice-faces {
+  scrollbar-width: none;
+  mask-image: linear-gradient(to right, transparent 0, black 1.25rem, black calc(100% - 2.5rem), transparent);
+}
+.voice-faces::-webkit-scrollbar {
+  display: none;
+}
+@media (min-width: 640px) {
+  .voice-faces {
+    mask-image: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice,
+  .voice-face > span {
+    transition: none;
+  }
+  .voice[data-state] {
+    transform: none;
+    filter: none;
+  }
+}

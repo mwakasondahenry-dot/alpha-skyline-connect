@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Photo } from "@/components/photo";
-import { VoicesSlider } from "@/components/testimonials/voices-slider";
+import { VoicesSpotlight } from "@/components/testimonials/voices-spotlight";
 import { seo } from "@/lib/seo";
 import { organizationLd, websiteLd } from "@/lib/structured-data";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
@@ -548,8 +548,7 @@ function AviationChapter() {
       >
         <Reveal direction="up">
           <h2 className="font-display tracking-tight text-balance" style={T.hero}>
-            Pilots and engineers,{" "}
-            <span className="text-[var(--color-gold)]">from Form One.</span>
+            Pilots and engineers, <span className="text-[var(--color-gold)]">from Form One.</span>
           </h2>
           <p className="mt-5 max-w-xl text-[var(--color-surface)]/90" style={T.body}>
             Alpha Schools proudly stand as the pioneer institutions in Tanzania to introduce
@@ -605,10 +604,10 @@ function AviationChapter() {
 
 /* ------------------------------------------------------------------ *
  * 6. IN THEIR WORDS
- * Every published quote, parents and former students alike, one at a
- * time across the full width, sliding on every few seconds. Until
- * 2026-10-22 this was two small cards, and the alumni card showed only
- * one of the stories; the owner asked for all of them, in motion.
+ * Every published quote, parents and former students alike: one large
+ * quote at a time with every voice present as a row of faces beneath it.
+ * The owner asked for all of them, in motion (2026-10-22), then for
+ * something minimal with no boxes (2026-10-23).
  * ------------------------------------------------------------------ */
 function Testimonials({ items }: { items: TestimonialItem[] }) {
   if (items.length === 0) return null;
@@ -628,7 +627,7 @@ function Testimonials({ items }: { items: TestimonialItem[] }) {
         <span id="home-voices">In their words</span>
       </SectionHeading>
       <div className="mt-10">
-        <VoicesSlider items={items} />
+        <VoicesSpotlight items={items} />
       </div>
     </section>
   );

@@ -15,7 +15,7 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { Award, Building2, MapPin, Plane } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { T, SHELL } from "@/components/type-roles";
-import { QuoteCarousel } from "@/components/testimonials/quote-carousel";
+import { StoryList } from "@/components/testimonials/story-list";
 import { isAlumniStory, parentQuotes, type TestimonialItem } from "@/lib/alpha-content.functions";
 import { testimonialsQuery } from "@/lib/testimonials-query";
 import heroGraduate from "@/assets/h1-grad-girl.webp";
@@ -72,14 +72,13 @@ function TestimonialsPage() {
 
       <section id="parents" className={`${SHELL} scroll-mt-24 py-[var(--space-section-y)]`}>
         <SectionHead
-          kicker="Parent testimonials"
           title="Trusted by"
           accent="Families"
           intro="Parents share what Alpha has meant for their children, inside and outside the classroom."
         />
         {parents.length > 0 ? (
           <div className="mt-[var(--space-block-y)]">
-            <QuoteCarousel
+            <StoryList
               items={parents}
               label="Parent testimonials"
               meta={(t) => [t.relationship ?? `Parent, ${schoolOf(t)}`]}
@@ -90,20 +89,16 @@ function TestimonialsPage() {
         )}
       </section>
 
-      <section
-        id="alumni"
-        className="scroll-mt-24 border-y border-[var(--color-hairline)] bg-[var(--color-surface)]"
-      >
+      <section id="alumni" className="scroll-mt-24 bg-[var(--color-surface)]">
         <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <SectionHead
-            kicker="Alumni stories"
             title="Where they are"
             accent="now"
             intro="Former students on how their years at Alpha shaped what came next, at university, at work and in life."
           />
           {alumni.length > 0 ? (
             <div className="mt-[var(--space-block-y)]">
-              <QuoteCarousel items={alumni} label="Alumni stories" meta={alumniMeta} />
+              <StoryList items={alumni} label="Alumni stories" meta={alumniMeta} />
             </div>
           ) : (
             <Waiting>Alumni stories will appear here as they arrive.</Waiting>
@@ -183,28 +178,11 @@ function JumpLink({ to, children }: { to: string; children: string }) {
   );
 }
 
-function SectionHead({
-  kicker,
-  title,
-  accent,
-  intro,
-}: {
-  kicker: string;
-  title: string;
-  accent: string;
-  intro: string;
-}) {
+function SectionHead({ title, accent, intro }: { title: string; accent: string; intro: string }) {
   return (
     <div>
-      <p className="flex items-center gap-3 text-[var(--color-brand-blue)]" style={T.label}>
-        <span
-          aria-hidden
-          className="inline-block h-[3px] w-8 shrink-0 rounded-full bg-[var(--color-gold)]"
-        />
-        {kicker}
-      </p>
       <h2
-        className="mt-3 font-display tracking-tight text-balance text-[var(--color-deep-blue)]"
+        className="font-display tracking-tight text-balance text-[var(--color-deep-blue)]"
         style={T.section}
       >
         {title} <span className="text-[var(--color-brand-blue)]">{accent}</span>

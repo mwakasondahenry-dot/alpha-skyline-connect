@@ -22,6 +22,8 @@ import { Check, X, Loader2 } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { CONTACT_FIELDS, STORY_PROMPTS } from "@/lib/story/fields";
 import { PARENT_PROMPTS } from "@/lib/story/parent-fields";
+import { makeSmallCopy } from "@/lib/image-compress";
+import { SMALL_EDGE, smallPhotoPath } from "@/lib/testimonial-photo";
 
 /* The alumni form's email and phone first (collected since 2026-10-22),
    then the unpublished prompt answers that older submissions carry. */
@@ -141,8 +143,24 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
           .upload(destination, file, { contentType: file.type, upsert: true });
         if (upError) throw new Error(`Could not publish the photo: ${upError.message}`);
 
-        publicUrl = client.storage.from(PUBLIC_BUCKET).getPublicUrl(destination)
-          .data.publicUrl;
+        publicUrl = client.storage.from(PUBLIC_BUCKET).getPublicUrl(destination).data.publicUrl;
+
+        /* The site shows story photos at most 120px tall and loads this small
+           copy instead of the original (src/lib/testimonial-photo.ts). If it
+           cannot be made, the page falls back to the original, so a failure
+           here is reported to the console and does not block publishing. */
+        try {
+          const small = await makeSmallCopy(file, SMALL_EDGE);
+          const { error: smallError } = await client.storage
+            .from(PUBLIC_BUCKET)
+            .upload(smallPhotoPath(`story-${row.id}`), small, {
+              contentType: "image/webp",
+              upsert: true,
+            });
+          if (smallError) throw smallError;
+        } catch (smallErr) {
+          console.warn("Small copy of the story photo was not saved", smallErr);
+        }
       }
 
       /* Only overwrite photo_url when a pending photo was actually copied —
@@ -193,10 +211,7 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
         if (rmError) throw new Error(`Could not delete the photo: ${rmError.message}`);
       }
 
-      const { error: delError } = await client
-        .from("testimonials")
-        .delete()
-        .eq("id", row.id);
+      const { error: delError } = await client.from("testimonials").delete().eq("id", row.id);
       if (delError) throw new Error(delError.message);
 
       await refresh();
@@ -211,19 +226,13 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
   /* An empty queue is the normal state. Saying so beats an empty box, but it
      stays quiet — no card, no border. */
   if (!loading && rows.length === 0 && !error) {
-    return (
-      <p className="text-sm text-[var(--color-ink)]/60">
-        No stories waiting for review.
-      </p>
-    );
+    return <p className="text-sm text-[var(--color-ink)]/60">No stories waiting for review.</p>;
   }
 
   return (
     <section aria-label="Submissions awaiting review" className="space-y-3">
       <header className="flex flex-wrap items-center gap-3">
-        <h2 className="text-lg font-bold text-[var(--color-deep-blue)]">
-          Awaiting review
-        </h2>
+        <h2 className="text-lg font-bold text-[var(--color-deep-blue)]">Awaiting review</h2>
         {rows.length > 0 && (
           <span className="rounded-full bg-[var(--color-gold)] px-2.5 py-0.5 text-xs font-bold text-[var(--color-accent-foreground)]">
             {rows.length}
@@ -291,8 +300,12 @@ export function AlumniPendingQueue({ onChanged }: { onChanged: () => void }) {
                         <dl className="mt-1 space-y-2 text-sm">
                           {ALL_PROMPTS.filter((p) => row.answers?.[p.key]).map((p) => (
                             <div key={p.key}>
-                              <dt className="text-xs font-semibold text-[var(--color-deep-blue)]">{p.label}</dt>
-                              <dd className="whitespace-pre-line text-[var(--color-ink)]">{row.answers?.[p.key]}</dd>
+                              <dt className="text-xs font-semibold text-[var(--color-deep-blue)]">
+                                {p.label}
+                              </dt>
+                              <dd className="whitespace-pre-line text-[var(--color-ink)]">
+                                {row.answers?.[p.key]}
+                              </dd>
                             </div>
                           ))}
                         </dl>
