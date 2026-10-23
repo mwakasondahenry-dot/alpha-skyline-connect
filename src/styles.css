@@ -1508,6 +1508,24 @@
   }
 }
 
+/* "All caught up": the Stories screen's single gold check, drawn once over
+   600ms (the path carries pathLength="1"). Static, fully drawn, under
+   reduced motion, because the animation only exists when motion is welcome. */
+.admin-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .admin-draw {
+    animation: admin-draw 600ms var(--ease-out) both;
+  }
+}
+@keyframes admin-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+
 /* Radix dialog, alert dialog and sheet (src/components/ui/*) when the admin
    marks them [data-admin]. These replace the tw-animate zoom/slide classes:
    overlay fades 150ms, panel fades and rises 8px over 200ms, every exit is

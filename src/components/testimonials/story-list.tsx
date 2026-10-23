@@ -32,41 +32,62 @@ export function StoryList({
           id={`story-${item.id}`}
           className="story mb-12 break-inside-avoid scroll-mt-28 last:mb-0 sm:mb-14"
         >
-          <figure className="flex gap-5 sm:gap-6">
-            <WholePhoto
-              src={item.photo_url}
-              name={item.author_name}
-              className="h-[6.25rem] w-20 rounded-xl sm:h-[7.5rem] sm:w-24"
-              initialClassName="text-3xl"
-            />
-            <div className="min-w-0 flex-1">
-              <blockquote
-                className="whitespace-pre-line break-words text-[var(--color-ink)]"
-                style={{ ...T.body, fontSize: "1.0625rem" }}
-              >
-                {item.quote}
-              </blockquote>
-              <figcaption className="mt-4">
-                <span
-                  className="block font-display text-[var(--color-deep-blue)]"
-                  style={{ ...T.body, fontWeight: 800 }}
-                >
-                  {item.author_name}
-                </span>
-                {meta(item).map((line) => (
-                  <span
-                    key={line}
-                    className="block text-[var(--color-ink-soft)]"
-                    style={{ ...T.body, fontSize: "0.875rem", lineHeight: 1.45 }}
-                  >
-                    {line}
-                  </span>
-                ))}
-              </figcaption>
-            </div>
-          </figure>
+          <StoryFigure item={item} meta={meta} />
         </li>
       ))}
     </ul>
+  );
+}
+
+type FigureItem = Pick<TestimonialItem, "author_name" | "quote" | "photo_url">;
+
+/**
+ * One story as the public site shows it: the whole photo beside the words,
+ * then the name and the lines under it. The admin's "How it will look"
+ * preview renders this same component, so the two cannot drift.
+ */
+export function StoryFigure<I extends FigureItem>({
+  item,
+  meta,
+}: {
+  item: I;
+  meta: (item: I) => string[];
+}) {
+  return (
+    <figure className="flex gap-5 sm:gap-6">
+      <WholePhoto
+        // A new address (a replaced photo) starts the small-copy check afresh.
+        key={item.photo_url ?? ""}
+        src={item.photo_url}
+        name={item.author_name}
+        className="h-[6.25rem] w-20 rounded-xl sm:h-[7.5rem] sm:w-24"
+        initialClassName="text-3xl"
+      />
+      <div className="min-w-0 flex-1">
+        <blockquote
+          className="whitespace-pre-line break-words text-[var(--color-ink)]"
+          style={{ ...T.body, fontSize: "1.0625rem" }}
+        >
+          {item.quote}
+        </blockquote>
+        <figcaption className="mt-4">
+          <span
+            className="block font-display text-[var(--color-deep-blue)]"
+            style={{ ...T.body, fontWeight: 800 }}
+          >
+            {item.author_name}
+          </span>
+          {meta(item).map((line) => (
+            <span
+              key={line}
+              className="block text-[var(--color-ink-soft)]"
+              style={{ ...T.body, fontSize: "0.875rem", lineHeight: 1.45 }}
+            >
+              {line}
+            </span>
+          ))}
+        </figcaption>
+      </div>
+    </figure>
   );
 }

@@ -33,12 +33,15 @@ import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
 import { Route as AdminPhotosRouteImport } from './routes/admin.photos'
 import { Route as AdminStaffRouteImport } from './routes/admin.staff'
+import { Route as AdminStoriesRouteImport } from './routes/admin.stories'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AlumniIndexRouteImport } from './routes/alumni.index'
 import { Route as AlumniSubmitRouteImport } from './routes/alumni.submit'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
+import { Route as AdminStoriesIdRouteImport } from './routes/admin.stories.$id'
+import { Route as AdminStoriesInviteRouteImport } from './routes/admin.stories.invite'
 import { Route as AdmissionApplyFormRouteImport } from './routes/admission_.apply.$form'
 import { Route as AlumniStoryIndexRouteImport } from './routes/alumni.story.index'
 import { Route as AlumniStoryCodeRouteImport } from './routes/alumni.story.$code'
@@ -165,6 +168,11 @@ const AdminStaffRoute = AdminStaffRouteImport.update({
   path: '/staff',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminStoriesRoute = AdminStoriesRouteImport.update({
+  id: '/stories',
+  path: '/stories',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminTestimonialsRoute = AdminTestimonialsRouteImport.update({
   id: '/testimonials',
   path: '/testimonials',
@@ -194,6 +202,16 @@ const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
   id: '/schools/nursery-primary',
   path: '/schools/nursery-primary',
   getParentRoute: () => rootRouteImport,
+} as any)
+const AdminStoriesIdRoute = AdminStoriesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminStoriesRoute,
+} as any)
+const AdminStoriesInviteRoute = AdminStoriesInviteRouteImport.update({
+  id: '/invite',
+  path: '/invite',
+  getParentRoute: () => AdminStoriesRoute,
 } as any)
 const AdmissionApplyFormRoute = AdmissionApplyFormRouteImport.update({
   id: '/admission_/apply/$form',
@@ -245,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/admin/news': typeof AdminNewsRoute
   '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
+  '/admin/stories': typeof AdminStoriesRouteWithChildren
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
@@ -252,6 +271,8 @@ export interface FileRoutesByFullPath {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/admin/stories/$id': typeof AdminStoriesIdRoute
+  '/admin/stories/invite': typeof AdminStoriesInviteRoute
   '/admission/apply/$form': typeof AdmissionApplyFormRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
   '/parents/story/$code': typeof ParentsStoryCodeRoute
@@ -281,6 +302,7 @@ export interface FileRoutesByTo {
   '/admin/news': typeof AdminNewsRoute
   '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
+  '/admin/stories': typeof AdminStoriesRouteWithChildren
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
@@ -288,6 +310,8 @@ export interface FileRoutesByTo {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin': typeof AdminIndexRoute
   '/alumni': typeof AlumniIndexRoute
+  '/admin/stories/$id': typeof AdminStoriesIdRoute
+  '/admin/stories/invite': typeof AdminStoriesInviteRoute
   '/admission/apply/$form': typeof AdmissionApplyFormRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
   '/parents/story/$code': typeof ParentsStoryCodeRoute
@@ -319,6 +343,7 @@ export interface FileRoutesById {
   '/admin/news': typeof AdminNewsRoute
   '/admin/photos': typeof AdminPhotosRoute
   '/admin/staff': typeof AdminStaffRoute
+  '/admin/stories': typeof AdminStoriesRouteWithChildren
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
@@ -326,6 +351,8 @@ export interface FileRoutesById {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/admin/stories/$id': typeof AdminStoriesIdRoute
+  '/admin/stories/invite': typeof AdminStoriesInviteRoute
   '/admission_/apply/$form': typeof AdmissionApplyFormRoute
   '/alumni/story/$code': typeof AlumniStoryCodeRoute
   '/parents/story/$code': typeof ParentsStoryCodeRoute
@@ -358,6 +385,7 @@ export interface FileRouteTypes {
     | '/admin/news'
     | '/admin/photos'
     | '/admin/staff'
+    | '/admin/stories'
     | '/admin/testimonials'
     | '/alumni/submit'
     | '/schools/alpha-girls'
@@ -365,6 +393,8 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/admin/stories/$id'
+    | '/admin/stories/invite'
     | '/admission/apply/$form'
     | '/alumni/story/$code'
     | '/parents/story/$code'
@@ -394,6 +424,7 @@ export interface FileRouteTypes {
     | '/admin/news'
     | '/admin/photos'
     | '/admin/staff'
+    | '/admin/stories'
     | '/admin/testimonials'
     | '/alumni/submit'
     | '/schools/alpha-girls'
@@ -401,6 +432,8 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin'
     | '/alumni'
+    | '/admin/stories/$id'
+    | '/admin/stories/invite'
     | '/admission/apply/$form'
     | '/alumni/story/$code'
     | '/parents/story/$code'
@@ -431,6 +464,7 @@ export interface FileRouteTypes {
     | '/admin/news'
     | '/admin/photos'
     | '/admin/staff'
+    | '/admin/stories'
     | '/admin/testimonials'
     | '/alumni/submit'
     | '/schools/alpha-girls'
@@ -438,6 +472,8 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/admin/stories/$id'
+    | '/admin/stories/invite'
     | '/admission_/apply/$form'
     | '/alumni/story/$code'
     | '/parents/story/$code'
@@ -641,6 +677,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminStaffRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/stories': {
+      id: '/admin/stories'
+      path: '/stories'
+      fullPath: '/admin/stories'
+      preLoaderRoute: typeof AdminStoriesRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/testimonials': {
       id: '/admin/testimonials'
       path: '/testimonials'
@@ -683,6 +726,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/stories/$id': {
+      id: '/admin/stories/$id'
+      path: '/$id'
+      fullPath: '/admin/stories/$id'
+      preLoaderRoute: typeof AdminStoriesIdRouteImport
+      parentRoute: typeof AdminStoriesRoute
+    }
+    '/admin/stories/invite': {
+      id: '/admin/stories/invite'
+      path: '/invite'
+      fullPath: '/admin/stories/invite'
+      preLoaderRoute: typeof AdminStoriesInviteRouteImport
+      parentRoute: typeof AdminStoriesRoute
+    }
     '/admission_/apply/$form': {
       id: '/admission_/apply/$form'
       path: '/admission/apply/$form'
@@ -721,6 +778,20 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminStoriesRouteChildren {
+  AdminStoriesIdRoute: typeof AdminStoriesIdRoute
+  AdminStoriesInviteRoute: typeof AdminStoriesInviteRoute
+}
+
+const AdminStoriesRouteChildren: AdminStoriesRouteChildren = {
+  AdminStoriesIdRoute: AdminStoriesIdRoute,
+  AdminStoriesInviteRoute: AdminStoriesInviteRoute,
+}
+
+const AdminStoriesRouteWithChildren = AdminStoriesRoute._addFileChildren(
+  AdminStoriesRouteChildren,
+)
+
 interface AdminRouteChildren {
   AdminEventsRoute: typeof AdminEventsRoute
   AdminFacilitiesRoute: typeof AdminFacilitiesRoute
@@ -732,6 +803,7 @@ interface AdminRouteChildren {
   AdminNewsRoute: typeof AdminNewsRoute
   AdminPhotosRoute: typeof AdminPhotosRoute
   AdminStaffRoute: typeof AdminStaffRoute
+  AdminStoriesRoute: typeof AdminStoriesRouteWithChildren
   AdminTestimonialsRoute: typeof AdminTestimonialsRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
@@ -747,6 +819,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminNewsRoute: AdminNewsRoute,
   AdminPhotosRoute: AdminPhotosRoute,
   AdminStaffRoute: AdminStaffRoute,
+  AdminStoriesRoute: AdminStoriesRouteWithChildren,
   AdminTestimonialsRoute: AdminTestimonialsRoute,
   AdminIndexRoute: AdminIndexRoute,
 }

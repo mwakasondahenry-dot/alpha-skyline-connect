@@ -6,19 +6,15 @@
  * await would be treated as an unrequested popup and blocked.
  */
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
+import { adminButtonBase } from "@/components/admin/kit";
 import type { TestimonialInviteRow } from "@/integrations/alpha-supabase/types";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { getInviteLink, regenerateInvite } from "@/lib/invites.functions";
 import type { Audience } from "@/lib/invites/audience";
 import { STATUS_LABEL, displayStatus, type DisplayStatus } from "@/lib/invites/status";
-import {
-  Notice,
-  copyText,
-  errorText,
-  useAccessToken,
-  type NoticeState,
-} from "./ui";
+import { Notice, copyText, errorText, useAccessToken, type NoticeState } from "./ui";
 
 type Row = Pick<
   TestimonialInviteRow,
@@ -36,22 +32,30 @@ const BADGE: Record<DisplayStatus, string> = {
 };
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString(undefined, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 export function InviteList({ audience, reloadKey }: { audience: Audience; reloadKey: number }) {
   const { client } = useAdminAuth();
   const accessToken = useAccessToken();
   const [rows, setRows] = useState<Row[]>([]);
+  /** invite id → the story it produced, for "Open story". */
+  const [storyOf, setStoryOf] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<Filter>("all");
   const [busyId, setBusyId] = useState<string | null>(null);
-  const [confirm, setConfirm] = useState<{ id: string; action: "delete" | "regenerate" } | null>(null);
+  const [confirm, setConfirm] = useState<{ id: string; action: "delete" | "regenerate" } | null>(
+    null,
+  );
   const [notice, setNotice] = useState<NoticeState>(null);
 
   const load = useCallback(async () => {
     if (!client) return;
-    setLoading(true);
+    // No setLoading(true) here: a reload keeps the rows on screen.
     const { data, error } = await client
       .from("testimonial_invites")
       .select("id,full_name,phone,email,status,expires_at,last_shared_at,created_at")
@@ -63,6 +67,15 @@ export function InviteList({ audience, reloadKey }: { audience: Audience; reload
     } else {
       setRows((data ?? []) as Row[]);
     }
+    const { data: stories } = await client
+      .from("testimonials")
+      .select("id,invite_id")
+      .not("invite_id", "is", null);
+    const links: Record<string, string> = {};
+    for (const s of (stories ?? []) as { id: string; invite_id: string | null }[]) {
+      if (s.invite_id) links[s.invite_id] = s.id;
+    }
+    setStoryOf(links);
     setLoading(false);
   }, [client, audience]);
 
@@ -158,15 +171,17 @@ export function InviteList({ audience, reloadKey }: { audience: Audience; reload
         setNotice({ tone: "error", text: `Could not delete: ${error.message}` });
         return;
       }
-      setNotice({ tone: "ok", text: `Invite for ${row.full_name} deleted. Any story they sent is kept.` });
+      setNotice({
+        tone: "ok",
+        text: `Invite for ${row.full_name} deleted. Any story they sent is kept.`,
+      });
       await load();
     });
   }
 
-  const rowBtn =
-    "rounded border border-[var(--color-deep-blue)]/20 px-2.5 py-1 text-xs font-semibold text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)] hover:text-white disabled:cursor-not-allowed disabled:opacity-50";
-  const dangerBtn =
-    "rounded border border-red-300 px-2.5 py-1 text-xs font-semibold text-red-700 hover:bg-red-600 hover:text-white disabled:cursor-not-allowed disabled:opacity-50";
+  // 44px targets, like every admin control.
+  const rowBtn = `${adminButtonBase} border border-[var(--color-hairline)] bg-[var(--color-surface)] px-3 text-[var(--color-deep-blue)] hover:bg-[var(--color-surface-muted)]`;
+  const dangerBtn = `${adminButtonBase} border border-[var(--color-danger)]/40 bg-[var(--color-surface)] px-3 text-[var(--color-danger)] hover:bg-[var(--color-danger)]/5`;
 
   return (
     <div className="space-y-3">
@@ -179,10 +194,10 @@ export function InviteList({ audience, reloadKey }: { audience: Audience; reload
               type="button"
               onClick={() => setFilter(f)}
               aria-pressed={filter === f}
-              className={`rounded-md px-2.5 py-1 text-xs font-semibold ${
+              className={`admin-press inline-flex min-h-11 items-center gap-1 rounded-[var(--radius-btn)] px-3 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)] ${
                 filter === f
-                  ? "bg-[var(--color-deep-blue)] text-white"
-                  : "text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)]/5"
+                  ? "bg-[var(--color-deep-blue)] text-[var(--color-surface)]"
+                  : "text-[var(--color-deep-blue)] hover:bg-[var(--color-surface-muted)]"
               }`}
             >
               {f === "all" ? "All" : STATUS_LABEL[f]}{" "}
@@ -194,7 +209,7 @@ export function InviteList({ audience, reloadKey }: { audience: Audience; reload
 
       <Notice notice={notice} />
 
-      <div className="overflow-hidden rounded-xl border border-[var(--color-deep-blue)]/10 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-surface)] shadow-[var(--shadow-card)]">
         {loading ? (
           <div className="p-6 text-sm text-[var(--color-deep-blue)]">Loading…</div>
         ) : visible.length === 0 ? (
@@ -233,7 +248,9 @@ export function InviteList({ audience, reloadKey }: { audience: Audience; reload
                         </span>
                       </td>
                       <td className="px-4 py-2.5 whitespace-nowrap">
-                        <span className={`rounded px-1.5 py-0.5 text-xs font-semibold ${BADGE[row.shown]}`}>
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-xs font-semibold ${BADGE[row.shown]}`}
+                        >
                           {STATUS_LABEL[row.shown]}
                         </span>
                       </td>
@@ -250,26 +267,54 @@ export function InviteList({ audience, reloadKey }: { audience: Audience; reload
                             </span>
                             <button
                               type="button"
-                              onClick={() => (confirming === "delete" ? remove(row) : regenerate(row))}
+                              onClick={() =>
+                                confirming === "delete" ? remove(row) : regenerate(row)
+                              }
                               className={confirming === "delete" ? dangerBtn : rowBtn}
                             >
                               {confirming === "delete" ? "Delete" : "Make new link"}
                             </button>
-                            <button type="button" onClick={() => setConfirm(null)} className={rowBtn}>
+                            <button
+                              type="button"
+                              onClick={() => setConfirm(null)}
+                              className={rowBtn}
+                            >
                               Cancel
                             </button>
                           </div>
                         ) : (
                           <div className="flex flex-wrap items-center justify-end gap-2">
                             {busy && (
-                              <Loader2 className="h-4 w-4 animate-spin text-[var(--color-deep-blue)]" aria-label="Working" />
+                              <Loader2
+                                className="h-4 w-4 animate-spin text-[var(--color-deep-blue)]"
+                                aria-label="Working"
+                              />
                             )}
+                            {storyOf[row.id] ? (
+                              <Link
+                                to="/admin/stories/$id"
+                                params={{ id: storyOf[row.id] }}
+                                className={rowBtn}
+                              >
+                                Open story
+                              </Link>
+                            ) : null}
                             {canShare && (
                               <>
-                                <button type="button" onClick={() => share(row)} disabled={busy} className={rowBtn}>
+                                <button
+                                  type="button"
+                                  onClick={() => share(row)}
+                                  disabled={busy}
+                                  className={rowBtn}
+                                >
                                   Send on WhatsApp
                                 </button>
-                                <button type="button" onClick={() => copy(row)} disabled={busy} className={rowBtn}>
+                                <button
+                                  type="button"
+                                  onClick={() => copy(row)}
+                                  disabled={busy}
+                                  className={rowBtn}
+                                >
                                   Copy link
                                 </button>
                               </>

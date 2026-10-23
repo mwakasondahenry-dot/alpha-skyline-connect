@@ -24,7 +24,15 @@ type Mode = "paste" | "csv";
 const CSV_MAX_BYTES = 1024 * 1024;
 const LOOKUP_CHUNK = 100;
 
-function RejectedList({ title, items, unit }: { title: string; items: RejectedContact[]; unit: string }) {
+function RejectedList({
+  title,
+  items,
+  unit,
+}: {
+  title: string;
+  items: RejectedContact[];
+  unit: string;
+}) {
   if (items.length === 0) return null;
   return (
     <details>
@@ -34,8 +42,8 @@ function RejectedList({ title, items, unit }: { title: string; items: RejectedCo
       <ul className="mt-1 space-y-1 text-sm">
         {items.map((r) => (
           <li key={`${r.line}-${r.raw}`} className="break-words text-[var(--color-ink)]/80">
-            <span className="font-semibold text-[var(--color-ink)]">{r.reason}</span> {unit} {r.line}:{" "}
-            {r.raw || "(empty)"}
+            <span className="font-semibold text-[var(--color-ink)]">{r.reason}</span> {unit}{" "}
+            {r.line}: {r.raw || "(empty)"}
           </li>
         ))}
       </ul>
@@ -104,7 +112,10 @@ export function BulkImport({
   async function onFile(file: File | null) {
     if (!file) return;
     if (file.size > CSV_MAX_BYTES) {
-      setNotice({ tone: "error", text: "That file is larger than 1 MB. Split it into smaller files." });
+      setNotice({
+        tone: "error",
+        text: "That file is larger than 1 MB. Split it into smaller files.",
+      });
       return;
     }
     const text = await file.text();
@@ -123,7 +134,10 @@ export function BulkImport({
       const skipped = res.skippedExisting.length
         ? ` ${res.skippedExisting.length} already had an invite and were skipped.`
         : "";
-      setNotice({ tone: "ok", text: `${res.created} added.${skipped} Send their links from the list below.` });
+      setNotice({
+        tone: "ok",
+        text: `${res.created} added.${skipped} Send their links from the list below.`,
+      });
       reset();
       onImported();
     } catch (err) {
@@ -138,7 +152,8 @@ export function BulkImport({
     const url = URL.createObjectURL(new Blob([template], { type: "text/csv" }));
     const a = document.createElement("a");
     a.href = url;
-    a.download = audience === "parent" ? "parent-invites-template.csv" : "alumni-invites-template.csv";
+    a.download =
+      audience === "parent" ? "parent-invites-template.csv" : "alumni-invites-template.csv";
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -154,7 +169,9 @@ export function BulkImport({
         setNotice(null);
       }}
       className={`rounded-md px-3 py-1.5 text-sm font-semibold ${
-        mode === m ? "bg-[var(--color-deep-blue)] text-white" : "text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)]/5"
+        mode === m
+          ? "bg-[var(--color-deep-blue)] text-[var(--color-surface)]"
+          : "text-[var(--color-deep-blue)] hover:bg-[var(--color-deep-blue)]/5"
       }`}
     >
       {label}
@@ -183,7 +200,11 @@ export function BulkImport({
           </label>
           <button
             type="button"
-            onClick={() => preview(() => parsePastedList(pasteText, undefined, { ignoreYear: audience === "parent" }))}
+            onClick={() =>
+              preview(() =>
+                parsePastedList(pasteText, undefined, { ignoreYear: audience === "parent" }),
+              )
+            }
             disabled={busy || !pasteText.trim()}
             className={A_BTN_SECONDARY}
           >
@@ -195,8 +216,8 @@ export function BulkImport({
           <p className="text-sm text-[var(--color-ink)]/70">
             {audience === "parent" ? (
               <>
-                Columns: <code>name</code>, <code>phone</code>, and optionally <code>email</code> and{" "}
-                <code>school</code> (the child's school).
+                Columns: <code>name</code>, <code>phone</code>, and optionally <code>email</code>{" "}
+                and <code>school</code> (the child's school).
               </>
             ) : (
               <>
@@ -256,7 +277,9 @@ export function BulkImport({
               disabled={busy || batch.valid.length === 0}
               className={A_BTN_PRIMARY}
             >
-              {busy ? "Adding…" : `Add ${batch.valid.length} ${batch.valid.length === 1 ? "person" : "people"}`}
+              {busy
+                ? "Adding…"
+                : `Add ${batch.valid.length} ${batch.valid.length === 1 ? "person" : "people"}`}
             </button>
             <button type="button" onClick={reset} disabled={busy} className={A_BTN_SECONDARY}>
               Cancel

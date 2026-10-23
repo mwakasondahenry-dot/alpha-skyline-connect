@@ -1,7 +1,7 @@
 /**
- * "Invite alumni" or "Invite parents" on the Testimonials admin page: the
+ * "Invite former students" or "Invite parents" on the Invite people page: the
  * general link, adding people, and the list of invites for that audience.
- * Stories that come back land in the moderation queue below it.
+ * Stories that come back wait under Stories, Waiting.
  */
 import { useEffect, useState } from "react";
 import { getLinkBase } from "@/lib/invites.functions";
@@ -15,15 +15,15 @@ import { A_CARD, Notice } from "./ui";
 const COPY: Record<Audience, { id: string; heading: string; description: string }> = {
   alumni: {
     id: "invite-alumni",
-    heading: "Invite alumni",
+    heading: "Invite former students",
     description:
-      'Each former student gets their own link to a short form. When they send it, their story waits under "Awaiting review" below.',
+      "Each former student gets their own link to a short form. When they send it, their story waits under Stories, Waiting.",
   },
   parent: {
     id: "invite-parents",
     heading: "Invite parents",
     description:
-      'Each parent gets their own link to a short form. Their quote is published as "Parent, <school>". When they send it, it waits under "Awaiting review" below.',
+      'Each parent gets their own link to a short form. Their quote is published as "Parent, <school>". When they send it, it waits under Stories, Waiting.',
   },
 };
 
@@ -41,10 +41,10 @@ export function InvitePanel({ audience }: { audience: Audience }) {
   return (
     <section aria-labelledby={copy.id} className="space-y-4">
       <header>
-        <h2 id={copy.id} className="text-lg font-bold text-[var(--color-deep-blue)]">
+        <h2 id={copy.id} className="font-display text-lg font-bold text-[var(--color-deep-blue)]">
           {copy.heading}
         </h2>
-        <p className="text-sm text-[var(--color-ink)]/70">{copy.description}</p>
+        <p className="text-sm text-[var(--color-ink-soft)]">{copy.description}</p>
       </header>
 
       {base?.isLocal && (

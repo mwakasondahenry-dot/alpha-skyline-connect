@@ -197,7 +197,9 @@ export const getInviteLink = createServerFn({ method: "POST" })
       if (stampError) console.error("[getInviteLink] stamp", stampError);
 
       const message =
-        audience === "parent" ? parentInviteMessage(row.full_name, link) : inviteMessage(row.full_name, link);
+        audience === "parent"
+          ? parentInviteMessage(row.full_name, link)
+          : inviteMessage(row.full_name, link);
       return { link, whatsapp: whatsappUrl(row.phone, message) };
     }),
   );
@@ -233,6 +235,83 @@ export const regenerateInvite = createServerFn({ method: "POST" })
         .neq("status", "submitted");
       if (updateError) throw updateError;
       return { ok: true as const };
+    }),
+  );
+
+/**
+ * "Invite again" on a Declined story that came from a personal invite: a fresh
+ * link on the same invite row, so the person can send a new story.
+ *
+ * The declined story is kept but unlinked first (invite_id null, the invite's
+ * id recorded in its answers as previous_invite_id), so testimonials_invite_uniq
+ * still holds when the new story arrives as a separate Waiting story. Only
+ * then is the invite reset to pending with a new token; if that fails, the
+ * story is linked back so the action can be tried again.
+ */
+export const reissueDeclinedInvite = createServerFn({ method: "POST" })
+  .validator((data: { accessToken: string; storyId: string }) => data)
+  .handler(({ data }) =>
+    guarded("reissueDeclinedInvite", async (): Promise<{ link: string }> => {
+      await requireStaff(data.accessToken);
+      const sb = serviceClient();
+
+      const { data: story, error } = await sb
+        .from("testimonials")
+        .select("id,status,invite_id,answers")
+        .eq("id", data.storyId)
+        .maybeSingle();
+      if (error) throw error;
+      if (!story) throw new InviteError("That story no longer exists.");
+      if (story.status !== "declined") {
+        throw new InviteError("Only a declined story can be invited again.");
+      }
+      const inviteId = story.invite_id as string | null;
+      if (!inviteId) throw new InviteError("This story did not come from a personal invite.");
+
+      const { data: invite, error: inviteError } = await sb
+        .from("testimonial_invites")
+        .select("id,audience")
+        .eq("id", inviteId)
+        .maybeSingle();
+      if (inviteError) throw inviteError;
+      if (!invite) throw new InviteError("That invite no longer exists.");
+
+      const before = (story.answers ?? null) as Record<string, unknown> | null;
+      const { data: unlinked, error: unlinkError } = await sb
+        .from("testimonials")
+        .update({ invite_id: null, answers: { ...(before ?? {}), previous_invite_id: inviteId } })
+        .eq("id", story.id)
+        .eq("status", "declined")
+        .eq("invite_id", inviteId)
+        .select("id");
+      if (unlinkError) throw unlinkError;
+      if (!Array.isArray(unlinked) || unlinked.length === 0) {
+        throw new InviteError("This story was changed by someone else. It has been refreshed.");
+      }
+
+      const { code, token_hash, token_cipher } = await mintToken(inviteLinkKey());
+      const { error: resetError } = await sb
+        .from("testimonial_invites")
+        .update({
+          token_hash,
+          token_cipher,
+          expires_at: expiry(),
+          status: "pending",
+          opened_at: null,
+          submitted_at: null,
+        })
+        .eq("id", inviteId);
+      if (resetError) {
+        const { error: relinkError } = await sb
+          .from("testimonials")
+          .update({ invite_id: inviteId, answers: before })
+          .eq("id", story.id);
+        if (relinkError) console.error("[reissueDeclinedInvite] relink", relinkError);
+        throw resetError;
+      }
+
+      const audience: Audience = invite.audience === "parent" ? "parent" : "alumni";
+      return { link: `${siteBase()}${storyPath(code, audience)}` };
     }),
   );
 

@@ -6,7 +6,7 @@
  * story photo gets a small copy beside it: `testimonials/story-<id>.jpg`
  * keeps its original, and `testimonials/small/story-<id>.webp` is the copy
  * the site loads. Supabase's own resizing is a paid add-on, so the copy is
- * made when a story is approved (src/components/admin/alumni-pending.tsx)
+ * made when a story is published (publishStory in src/lib/admin/stories-data.ts)
  * and, for photos approved before that, by scripts/make-testimonial-thumbs.mjs.
  *
  * Photos uploaded any other way (for example through the admin testimonials

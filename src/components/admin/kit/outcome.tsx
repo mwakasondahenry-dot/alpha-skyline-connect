@@ -155,7 +155,10 @@ function OutcomeCard({
     }
     if (!to.startsWith("/") || to.startsWith("//")) return;
     e.preventDefault();
-    void router.navigate({ to });
+    // The router takes a fragment ("/testimonials#story-1") as its own option;
+    // left in `to` it would become part of the path.
+    const [path, hash] = to.split("#", 2);
+    void router.navigate({ to: path, hash: hash || undefined });
   }
 
   return (

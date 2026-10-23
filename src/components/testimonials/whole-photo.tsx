@@ -19,6 +19,7 @@ export function WholePhoto({
   name,
   className = "",
   initialClassName = "",
+  original = false,
 }: {
   src: string | null;
   /** The person's name: its first letter stands in when there is no photo. */
@@ -27,8 +28,10 @@ export function WholePhoto({
   className?: string;
   /** Type size for the initial. */
   initialClassName?: string;
+  /** Skip the small copy: for a frame large enough to judge the photo by (the admin). */
+  original?: boolean;
 }) {
-  const small = smallPhotoUrl(src);
+  const small = original ? null : smallPhotoUrl(src);
   const [url, setUrl] = useState(small ?? src);
 
   if (!url) {

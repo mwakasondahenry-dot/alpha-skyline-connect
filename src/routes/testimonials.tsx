@@ -16,19 +16,13 @@ import { Award, Building2, MapPin, Plane } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { T, SHELL } from "@/components/type-roles";
 import { StoryList } from "@/components/testimonials/story-list";
-import { isAlumniStory, parentQuotes, type TestimonialItem } from "@/lib/alpha-content.functions";
+import { isAlumniStory, parentQuotes } from "@/lib/alpha-content.functions";
 import { testimonialsQuery } from "@/lib/testimonials-query";
+import { alumniMeta, parentMeta } from "@/lib/story/story-meta";
 import heroGraduate from "@/assets/h1-grad-girl.webp";
 import shareBand from "@/assets/campus-girls.webp";
 
 const FOUNDED = 2007;
-
-const SCHOOL_LABELS: Record<string, string> = {
-  "group-wide": "Alpha Schools",
-  "nursery-primary": "Nursery & Primary",
-  "alpha-high": "Alpha High",
-  "alpha-girls": "Alpha Girls",
-};
 
 export const Route = createFileRoute("/testimonials")({
   head: () => ({
@@ -78,11 +72,7 @@ function TestimonialsPage() {
         />
         {parents.length > 0 ? (
           <div className="mt-[var(--space-block-y)]">
-            <StoryList
-              items={parents}
-              label="Parent testimonials"
-              meta={(t) => [t.relationship ?? `Parent, ${schoolOf(t)}`]}
-            />
+            <StoryList items={parents} label="Parent testimonials" meta={parentMeta} />
           </div>
         ) : (
           <Waiting>Parent stories will appear here as families share them.</Waiting>
@@ -200,18 +190,6 @@ function Waiting({ children }: { children: string }) {
       {children}
     </p>
   );
-}
-
-const schoolOf = (t: TestimonialItem) =>
-  SCHOOL_LABELS[t.school_slug ?? "group-wide"] ?? "Alpha Schools";
-
-/** "Alpha High, class of 2018" then "Pilot at Air Tanzania", from whichever parts exist. */
-function alumniMeta(t: TestimonialItem): string[] {
-  const school = [schoolOf(t), t.grad_year ? `class of ${t.grad_year}` : null]
-    .filter(Boolean)
-    .join(", ");
-  const now = [t.relationship, t.company].filter(Boolean).join(" at ");
-  return [school, now].filter(Boolean) as string[];
 }
 
 /* ------------------------------------------------------------------ *
