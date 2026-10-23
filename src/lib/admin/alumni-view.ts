@@ -226,6 +226,30 @@ export function resultLine(n: number, filters: number): string {
   return `${people} · ${filters} ${filters === 1 ? "filter" : "filters"}`;
 }
 
+/** How many people the list draws at once; a phone stays quick with thousands. */
+export const ALUMNI_PAGE = 200;
+
+export type AlumniPageView<T> = {
+  visible: T[];
+  /** "Showing 200 of 512", or null when everything is shown. */
+  showing: string | null;
+  /** "Show 200 more", or null when nothing is left. */
+  moreLabel: string | null;
+  nextLimit: number;
+};
+
+/** The first `limit` matches, and what the "show more" control should say. */
+export function alumniPage<T>(items: T[], limit: number): AlumniPageView<T> {
+  const visible = items.length > limit ? items.slice(0, limit) : items;
+  const left = items.length - visible.length;
+  return {
+    visible,
+    showing: left > 0 ? `Showing ${visible.length} of ${items.length}` : null,
+    moreLabel: left > 0 ? `Show ${Math.min(ALUMNI_PAGE, left)} more` : null,
+    nextLimit: limit + ALUMNI_PAGE,
+  };
+}
+
 export type AlumniSearch = Partial<
   Record<"q" | "schools" | "story" | "invite" | "cities" | "has" | "sort", string> &
     Record<"yearFrom" | "yearTo", number>

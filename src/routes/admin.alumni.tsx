@@ -36,7 +36,9 @@ import {
   type AlumniPerson,
 } from "@/lib/admin/alumni-directory";
 import {
+  ALUMNI_PAGE,
   activeFilterCount,
+  alumniPage,
   alumniCsvFilename,
   alumniSearch,
   hasCounts,
@@ -92,6 +94,12 @@ function AlumniScreen({ detailKey }: { detailKey: string | null }) {
   );
   const [confirmOpen, setConfirmOpen] = useState(false);
   const nFilters = activeFilterCount(filters);
+
+  // Draw the first 200 matches; a new search or filter starts again at 200.
+  const filtersKey = JSON.stringify(filters);
+  const [paging, setPaging] = useState({ key: filtersKey, limit: ALUMNI_PAGE });
+  const limit = paging.key === filtersKey ? paging.limit : ALUMNI_PAGE;
+  const page = alumniPage(shown, limit);
 
   function setFilters(next: AlumniFilters) {
     const s = alumniSearch(next);
@@ -192,7 +200,7 @@ function AlumniScreen({ detailKey }: { detailKey: string | null }) {
             ) : (
               <>
                 <ul className={detailKey ? "space-y-2" : "space-y-2 md:hidden"}>
-                  {shown.map((p) => (
+                  {page.visible.map((p) => (
                     <li key={p.key}>
                       <PersonCard person={p} search={search} selected={p.key === detailKey} />
                     </li>
@@ -200,9 +208,24 @@ function AlumniScreen({ detailKey }: { detailKey: string | null }) {
                 </ul>
                 {detailKey ? null : (
                   <div className="hidden md:block">
-                    <PersonTable people={shown} search={search} />
+                    <PersonTable people={page.visible} search={search} />
                   </div>
                 )}
+                {page.showing ? (
+                  <div className="mt-4 flex flex-wrap items-center gap-3">
+                    <p className="text-sm tabular-nums text-[var(--color-ink-soft)]">
+                      {page.showing}
+                    </p>
+                    {page.moreLabel ? (
+                      <AdminButton
+                        variant="secondary"
+                        onClick={() => setPaging({ key: filtersKey, limit: page.nextLimit })}
+                      >
+                        {page.moreLabel}
+                      </AdminButton>
+                    ) : null}
+                  </div>
+                ) : null}
               </>
             )}
           </div>

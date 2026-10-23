@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { EMPTY_FILTERS, type AlumniFilters, type AlumniPerson } from "./alumni-directory";
 import {
+  ALUMNI_PAGE,
   DECADES,
+  alumniPage,
   activeChips,
   activeFilterCount,
   alumniCsvFilename,
@@ -229,5 +231,30 @@ describe("alumniCsvFilename", () => {
     // 22:30 UTC on the 23rd is already the 24th in Dar es Salaam (UTC+3).
     expect(alumniCsvFilename(new Date("2026-10-23T22:30:00Z"))).toBe("alpha-alumni-2026-10-24.csv");
     expect(alumniCsvFilename(new Date("2026-01-05T08:00:00Z"))).toBe("alpha-alumni-2026-01-05.csv");
+  });
+});
+
+describe("alumniPage", () => {
+  const list = (n: number) => Array.from({ length: n }, (_, i) => i);
+  it("shows everything, with no line or button, when it fits", () => {
+    expect(ALUMNI_PAGE).toBe(200);
+    const p = alumniPage(list(200), ALUMNI_PAGE);
+    expect(p.visible).toHaveLength(200);
+    expect(p.showing).toBeNull();
+    expect(p.moreLabel).toBeNull();
+  });
+  it("shows the first 200 of a longer list and offers 200 more", () => {
+    const p = alumniPage(list(512), ALUMNI_PAGE);
+    expect(p.visible).toEqual(list(200));
+    expect(p.showing).toBe("Showing 200 of 512");
+    expect(p.moreLabel).toBe("Show 200 more");
+    expect(p.nextLimit).toBe(400);
+  });
+  it("offers only what is left on the last page", () => {
+    const p = alumniPage(list(512), 400);
+    expect(p.visible).toHaveLength(400);
+    expect(p.showing).toBe("Showing 400 of 512");
+    expect(p.moreLabel).toBe("Show 112 more");
+    expect(alumniPage(list(512), 600).moreLabel).toBeNull();
   });
 });
