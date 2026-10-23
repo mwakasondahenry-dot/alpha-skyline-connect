@@ -2,19 +2,11 @@
  * The Stories screens' shared state: the stories query, the signed photo
  * links, per-row busy and error state, and the moves every screen makes.
  *
- * The provider sits in the /admin/stories layout, above both the list and
- * the detail, so a card can show the error from an action taken in the
- * detail panel, and the detail can make a card leave the list.
+ * The row-state provider (kit) sits in the /admin/stories layout, above both
+ * the list and the detail, so a card can show the error from an action taken
+ * in the detail panel, and the detail can make a card leave the list.
  */
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useMemo } from "react";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAdminAuth } from "@/lib/admin-auth";
 import { ADMIN_COUNTS_KEY } from "@/lib/admin/counts";
@@ -29,7 +21,7 @@ import {
   type MoveResult,
 } from "@/lib/admin/stories-data";
 import { UNDO, transition } from "@/lib/admin/story-status";
-import { collapseAndRemove } from "@/components/admin/kit";
+import { collapseAndRemove, useRowState } from "@/components/admin/kit";
 
 export const STORIES_LIST_KEY = ["admin", "stories", "list"] as const;
 
@@ -71,65 +63,11 @@ export function useSignedPhotos(stories: AdminStory[] | undefined): Record<strin
   return q.data ?? {};
 }
 
-type StoriesUi = {
-  busy: ReadonlySet<string>;
-  setBusy: (id: string, on: boolean) => void;
-  errors: Readonly<Record<string, string>>;
-  setError: (id: string, message: string | null) => void;
-  /** A value per row that changes whenever the row should flash gold. */
-  flash: Readonly<Record<string, number>>;
-  flashRow: (id: string) => void;
-  registerCard: (id: string, el: HTMLElement | null) => void;
-  cardEl: (id: string) => HTMLElement | undefined;
-};
-
-const StoriesUiContext = createContext<StoriesUi | null>(null);
-
-export function StoriesUiProvider({ children }: { children: ReactNode }) {
-  const [busy, setBusySet] = useState<ReadonlySet<string>>(() => new Set());
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [flash, setFlash] = useState<Record<string, number>>({});
-  const cards = useRef(new Map<string, HTMLElement>());
-
-  const setBusy = useCallback((id: string, on: boolean) => {
-    setBusySet((prev) => {
-      if (prev.has(id) === on) return prev;
-      const next = new Set(prev);
-      if (on) next.add(id);
-      else next.delete(id);
-      return next;
-    });
-  }, []);
-  const setError = useCallback((id: string, message: string | null) => {
-    setErrors((prev) => {
-      if ((prev[id] ?? null) === message) return prev;
-      const next = { ...prev };
-      if (message) next[id] = message;
-      else delete next[id];
-      return next;
-    });
-  }, []);
-  const flashRow = useCallback((id: string) => {
-    setFlash((prev) => ({ ...prev, [id]: (prev[id] ?? 0) + 1 }));
-  }, []);
-  const registerCard = useCallback((id: string, el: HTMLElement | null) => {
-    if (el) cards.current.set(id, el);
-    else cards.current.delete(id);
-  }, []);
-  const cardEl = useCallback((id: string) => cards.current.get(id), []);
-
-  const value = useMemo(
-    () => ({ busy, setBusy, errors, setError, flash, flashRow, registerCard, cardEl }),
-    [busy, setBusy, errors, setError, flash, flashRow, registerCard, cardEl],
-  );
-  return <StoriesUiContext.Provider value={value}>{children}</StoriesUiContext.Provider>;
-}
-
-export function useStoriesUi(): StoriesUi {
-  const ctx = useContext(StoriesUiContext);
-  if (!ctx) throw new Error("useStoriesUi must be used inside <StoriesUiProvider>");
-  return ctx;
-}
+/**
+ * Per-story busy, error and flash state, from the <RowStateProvider> in the
+ * /admin/stories layout.
+ */
+export const useStoriesUi = useRowState;
 
 /** A rejected undo or confirm carries this so friendlyError() says "changed by someone else". */
 export const CONFLICT = { kind: "conflict" } as const;

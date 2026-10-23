@@ -18,6 +18,7 @@ import {
   AdminButton,
   AdminSheet,
   ConfirmDialog,
+  StickyBar,
   adminButtonClass,
   useOutcome,
 } from "@/components/admin/kit";
@@ -57,7 +58,7 @@ import {
 import { reissueDeclinedInvite } from "@/lib/invites.functions";
 import { CONTACT_FIELDS, PHOTO_ACCEPT, STORY_PROMPTS } from "@/lib/story/fields";
 import { PARENT_PROMPTS } from "@/lib/story/parent-fields";
-import { ActionBar, StickyBar } from "./action-bar";
+import { ActionBar } from "./action-bar";
 import { StoryForm } from "./story-form";
 import { StoryPreview } from "./story-preview";
 import {

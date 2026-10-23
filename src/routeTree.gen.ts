@@ -28,6 +28,7 @@ import { Route as AdminFacilitiesRouteImport } from './routes/admin.facilities'
 import { Route as AdminFacilityPhotosRouteImport } from './routes/admin.facility-photos'
 import { Route as AdminGalleryRouteImport } from './routes/admin.gallery'
 import { Route as AdminHeroSlidesRouteImport } from './routes/admin.hero-slides'
+import { Route as AdminInboxRouteImport } from './routes/admin.inbox'
 import { Route as AdminLoginRouteImport } from './routes/admin.login'
 import { Route as AdminMessagesRouteImport } from './routes/admin.messages'
 import { Route as AdminNewsRouteImport } from './routes/admin.news'
@@ -40,6 +41,7 @@ import { Route as AlumniSubmitRouteImport } from './routes/alumni.submit'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
+import { Route as AdminInboxIdRouteImport } from './routes/admin.inbox.$id'
 import { Route as AdminStoriesIdRouteImport } from './routes/admin.stories.$id'
 import { Route as AdminStoriesInviteRouteImport } from './routes/admin.stories.invite'
 import { Route as AdmissionApplyFormRouteImport } from './routes/admission_.apply.$form'
@@ -143,6 +145,11 @@ const AdminHeroSlidesRoute = AdminHeroSlidesRouteImport.update({
   path: '/hero-slides',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminInboxRoute = AdminInboxRouteImport.update({
+  id: '/inbox',
+  path: '/inbox',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminLoginRoute = AdminLoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -203,6 +210,11 @@ const SchoolsNurseryPrimaryRoute = SchoolsNurseryPrimaryRouteImport.update({
   path: '/schools/nursery-primary',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminInboxIdRoute = AdminInboxIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AdminInboxRoute,
+} as any)
 const AdminStoriesIdRoute = AdminStoriesIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -258,6 +270,7 @@ export interface FileRoutesByFullPath {
   '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/hero-slides': typeof AdminHeroSlidesRoute
+  '/admin/inbox': typeof AdminInboxRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
@@ -271,6 +284,7 @@ export interface FileRoutesByFullPath {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/admin/inbox/$id': typeof AdminInboxIdRoute
   '/admin/stories/$id': typeof AdminStoriesIdRoute
   '/admin/stories/invite': typeof AdminStoriesInviteRoute
   '/admission/apply/$form': typeof AdmissionApplyFormRoute
@@ -297,6 +311,7 @@ export interface FileRoutesByTo {
   '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/hero-slides': typeof AdminHeroSlidesRoute
+  '/admin/inbox': typeof AdminInboxRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
@@ -310,6 +325,7 @@ export interface FileRoutesByTo {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin': typeof AdminIndexRoute
   '/alumni': typeof AlumniIndexRoute
+  '/admin/inbox/$id': typeof AdminInboxIdRoute
   '/admin/stories/$id': typeof AdminStoriesIdRoute
   '/admin/stories/invite': typeof AdminStoriesInviteRoute
   '/admission/apply/$form': typeof AdmissionApplyFormRoute
@@ -338,6 +354,7 @@ export interface FileRoutesById {
   '/admin/facility-photos': typeof AdminFacilityPhotosRoute
   '/admin/gallery': typeof AdminGalleryRoute
   '/admin/hero-slides': typeof AdminHeroSlidesRoute
+  '/admin/inbox': typeof AdminInboxRouteWithChildren
   '/admin/login': typeof AdminLoginRoute
   '/admin/messages': typeof AdminMessagesRoute
   '/admin/news': typeof AdminNewsRoute
@@ -351,6 +368,7 @@ export interface FileRoutesById {
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
   '/admin/': typeof AdminIndexRoute
   '/alumni/': typeof AlumniIndexRoute
+  '/admin/inbox/$id': typeof AdminInboxIdRoute
   '/admin/stories/$id': typeof AdminStoriesIdRoute
   '/admin/stories/invite': typeof AdminStoriesInviteRoute
   '/admission_/apply/$form': typeof AdmissionApplyFormRoute
@@ -380,6 +398,7 @@ export interface FileRouteTypes {
     | '/admin/facility-photos'
     | '/admin/gallery'
     | '/admin/hero-slides'
+    | '/admin/inbox'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
@@ -393,6 +412,7 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/admin/inbox/$id'
     | '/admin/stories/$id'
     | '/admin/stories/invite'
     | '/admission/apply/$form'
@@ -419,6 +439,7 @@ export interface FileRouteTypes {
     | '/admin/facility-photos'
     | '/admin/gallery'
     | '/admin/hero-slides'
+    | '/admin/inbox'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
@@ -432,6 +453,7 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin'
     | '/alumni'
+    | '/admin/inbox/$id'
     | '/admin/stories/$id'
     | '/admin/stories/invite'
     | '/admission/apply/$form'
@@ -459,6 +481,7 @@ export interface FileRouteTypes {
     | '/admin/facility-photos'
     | '/admin/gallery'
     | '/admin/hero-slides'
+    | '/admin/inbox'
     | '/admin/login'
     | '/admin/messages'
     | '/admin/news'
@@ -472,6 +495,7 @@ export interface FileRouteTypes {
     | '/schools/nursery-primary'
     | '/admin/'
     | '/alumni/'
+    | '/admin/inbox/$id'
     | '/admin/stories/$id'
     | '/admin/stories/invite'
     | '/admission_/apply/$form'
@@ -642,6 +666,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminHeroSlidesRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/inbox': {
+      id: '/admin/inbox'
+      path: '/inbox'
+      fullPath: '/admin/inbox'
+      preLoaderRoute: typeof AdminInboxRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/login': {
       id: '/admin/login'
       path: '/login'
@@ -726,6 +757,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SchoolsNurseryPrimaryRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/inbox/$id': {
+      id: '/admin/inbox/$id'
+      path: '/$id'
+      fullPath: '/admin/inbox/$id'
+      preLoaderRoute: typeof AdminInboxIdRouteImport
+      parentRoute: typeof AdminInboxRoute
+    }
     '/admin/stories/$id': {
       id: '/admin/stories/$id'
       path: '/$id'
@@ -778,6 +816,18 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AdminInboxRouteChildren {
+  AdminInboxIdRoute: typeof AdminInboxIdRoute
+}
+
+const AdminInboxRouteChildren: AdminInboxRouteChildren = {
+  AdminInboxIdRoute: AdminInboxIdRoute,
+}
+
+const AdminInboxRouteWithChildren = AdminInboxRoute._addFileChildren(
+  AdminInboxRouteChildren,
+)
+
 interface AdminStoriesRouteChildren {
   AdminStoriesIdRoute: typeof AdminStoriesIdRoute
   AdminStoriesInviteRoute: typeof AdminStoriesInviteRoute
@@ -798,6 +848,7 @@ interface AdminRouteChildren {
   AdminFacilityPhotosRoute: typeof AdminFacilityPhotosRoute
   AdminGalleryRoute: typeof AdminGalleryRoute
   AdminHeroSlidesRoute: typeof AdminHeroSlidesRoute
+  AdminInboxRoute: typeof AdminInboxRouteWithChildren
   AdminLoginRoute: typeof AdminLoginRoute
   AdminMessagesRoute: typeof AdminMessagesRoute
   AdminNewsRoute: typeof AdminNewsRoute
@@ -814,6 +865,7 @@ const AdminRouteChildren: AdminRouteChildren = {
   AdminFacilityPhotosRoute: AdminFacilityPhotosRoute,
   AdminGalleryRoute: AdminGalleryRoute,
   AdminHeroSlidesRoute: AdminHeroSlidesRoute,
+  AdminInboxRoute: AdminInboxRouteWithChildren,
   AdminLoginRoute: AdminLoginRoute,
   AdminMessagesRoute: AdminMessagesRoute,
   AdminNewsRoute: AdminNewsRoute,

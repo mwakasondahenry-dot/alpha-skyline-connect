@@ -24,6 +24,11 @@ describe("friendlyError", () => {
       "This story was changed by someone else. It has been refreshed.",
     );
   });
+  it("names the thing that changed in a conflict", () => {
+    expect(friendlyError({ kind: "conflict", what: "message" })).toBe(
+      "This message was changed by someone else. It has been refreshed.",
+    );
+  });
   it("falls back for anything else", () => {
     const fallback = "Something went wrong. Nothing was changed. Try again.";
     expect(friendlyError(new Error("boom"))).toBe(fallback);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contactLinks, formatAdminDate, schoolLabel } from "./format";
+import { contactLinks, formatAdminDate, formatAdminDateTime, schoolLabel } from "./format";
 
 const now = new Date("2026-10-23T09:00:00Z"); // 12:00 in Dar es Salaam
 
@@ -22,6 +22,16 @@ describe("formatAdminDate", () => {
   it("uses the Dar es Salaam day, not UTC", () => {
     // 22:00Z on the 22nd is 01:00 on the 23rd in Dar
     expect(formatAdminDate("2026-10-22T22:00:00Z", now)).toBe("Today 01:00");
+  });
+});
+
+describe("formatAdminDateTime", () => {
+  it("gives the full date and the Dar es Salaam time", () => {
+    expect(formatAdminDateTime("2026-10-18T14:02:22Z")).toBe("18 Oct 2026, 17:02");
+    expect(formatAdminDateTime("2026-10-22T22:00:00Z")).toBe("23 Oct 2026, 01:00");
+  });
+  it("returns empty for invalid input", () => {
+    expect(formatAdminDateTime("nope")).toBe("");
   });
 });
 

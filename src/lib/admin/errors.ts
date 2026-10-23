@@ -5,12 +5,15 @@ export function friendlyError(err: unknown): string {
     message?: unknown;
     code?: unknown;
     kind?: unknown;
+    what?: unknown;
   };
   const message = typeof e.message === "string" ? e.message : "";
   const code = typeof e.code === "string" ? e.code : "";
 
   if (e.kind === "conflict") {
-    return "This story was changed by someone else. It has been refreshed.";
+    // `what` names the thing ("message"); the Stories screens leave it out.
+    const what = typeof e.what === "string" && e.what ? e.what : "story";
+    return `This ${what} was changed by someone else. It has been refreshed.`;
   }
   if (code === "PGRST301" || /jwt expired/i.test(message)) return EXPIRED;
   if (err instanceof TypeError && /failed to fetch|network/i.test(message)) {

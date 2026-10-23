@@ -43,6 +43,13 @@ export function formatAdminDate(iso: string, now: Date = new Date()): string {
   return (sameYear ? dayMonthFmt : fullFmt).format(d);
 }
 
+/** The exact moment, for a detail screen: "18 Oct 2026, 17:02" in Dar es Salaam. */
+export function formatAdminDateTime(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return `${fullFmt.format(d)}, ${timeFmt.format(d)}`;
+}
+
 export function schoolLabel(slug: string | null | undefined): string {
   switch (slug) {
     case null:

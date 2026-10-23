@@ -62,8 +62,9 @@ export const ADMIN_NAV: AdminNavItem[] = [
 ];
 
 /**
- * The one untyped hop: some areas (Stories, Inbox, Alumni) are routes added by
- * later tasks, so the nav's paths are plain strings, cast here for <Link>.
+ * The one untyped hop: Alumni is a route added by a later task, so the nav's
+ * paths are plain strings, cast here for <Link>. Once /admin/alumni exists
+ * this can become a typed `to`.
  */
 export function linkTo(path: string): LinkProps["to"] {
   return path as LinkProps["to"];

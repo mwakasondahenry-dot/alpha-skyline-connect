@@ -9,12 +9,21 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus, Send } from "lucide-react";
-import { CountBadge, EmptyState, adminButtonClass, useOutcome } from "@/components/admin/kit";
+import {
+  CountBadge,
+  EmptyState,
+  RowStateProvider,
+  adminButtonClass,
+  adminDetailPanelClass,
+  adminListDetailGridClass,
+  adminTabListClass,
+  adminTabTriggerClass,
+  useOutcome,
+} from "@/components/admin/kit";
 import { FeaturedStrip } from "@/components/admin/stories/featured-strip";
 import { StoryCard } from "@/components/admin/stories/story-card";
 import {
   CONFLICT,
-  StoriesUiProvider,
   useSignedPhotos,
   useStoriesQuery,
   useStoriesUi,
@@ -52,9 +61,9 @@ function StoriesLayout() {
     ? decodeURIComponent(pathname.slice("/admin/stories/".length))
     : null;
   return (
-    <StoriesUiProvider>
+    <RowStateProvider>
       <StoriesScreen detailId={detailId} />
-    </StoriesUiProvider>
+    </RowStateProvider>
   );
 }
 
@@ -99,16 +108,9 @@ function StoriesScreen({ detailId }: { detailId: string | null }) {
 
       <Tabs.Root value={tab} onValueChange={setTab} activationMode="manual">
         <div className={detailId ? "hidden lg:block" : undefined}>
-          <Tabs.List
-            aria-label="Stories by state"
-            className="-mx-4 flex overflow-x-auto border-b border-[var(--color-hairline)] px-4 sm:mx-0 sm:px-0"
-          >
+          <Tabs.List aria-label="Stories by state" className={adminTabListClass}>
             {STORY_TABS.map((t) => (
-              <Tabs.Trigger
-                key={t}
-                value={t}
-                className="-mb-px inline-flex min-h-11 shrink-0 items-center gap-2 border-b-2 border-transparent px-3 text-sm font-semibold text-[var(--color-ink-soft)] hover:text-[var(--color-deep-blue)] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-[var(--color-gold)] data-[state=active]:border-[var(--color-deep-blue)] data-[state=active]:text-[var(--color-deep-blue)] sm:px-4"
-              >
+              <Tabs.Trigger key={t} value={t} className={adminTabTriggerClass}>
                 {STATUS_LABEL[t]}
                 {counts ? (
                   t === "waiting" ? (
@@ -125,7 +127,7 @@ function StoriesScreen({ detailId }: { detailId: string | null }) {
           </Tabs.List>
         </div>
 
-        <div className="mt-5 lg:grid lg:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] lg:items-start lg:gap-6">
+        <div className={adminListDetailGridClass}>
           <div className={detailId ? "hidden lg:block" : undefined}>
             {STORY_TABS.map((t) => (
               <Tabs.Content key={t} value={t} className="focus-visible:outline-none">
@@ -142,7 +144,7 @@ function StoriesScreen({ detailId }: { detailId: string | null }) {
             ))}
           </div>
 
-          <div className="lg:sticky lg:top-6 lg:max-h-[calc(100dvh-3rem)] lg:overflow-y-auto lg:rounded-[var(--radius-card)] lg:border lg:border-[var(--color-hairline)] lg:bg-[var(--color-surface)] lg:shadow-[var(--shadow-card)]">
+          <div className={adminDetailPanelClass}>
             {detailId ? (
               <Outlet />
             ) : (
