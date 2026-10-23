@@ -130,6 +130,10 @@ export const getAllNews = createServerFn({ method: "GET" }).handler(
  * UUID before any query, so a mistyped or hostile URL is a 404 without a
  * round trip to the database. An unpublished row is null, exactly as a
  * missing one is.
+ *
+ * A miss is never cached (`store`), so requests for made-up UUIDs cannot
+ * grow the cache. There is no fallback: a failed read with nothing cached
+ * throws, and the route shows its error page rather than a false 404.
  */
 export const getNewsArticle = createServerFn({ method: "GET" })
   .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
@@ -150,7 +154,8 @@ export const getNewsArticle = createServerFn({ method: "GET" })
         return row ?? null;
       },
       TTL_SECONDS,
-      () => null,
+      undefined,
+      { store: (row) => row !== null },
     );
   });
 

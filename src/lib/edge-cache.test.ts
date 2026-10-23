@@ -81,4 +81,24 @@ describe("cached", () => {
   it("throws when there is nothing to fall back on", async () => {
     await expect(cached("x", () => Promise.reject(new Error("down")))).rejects.toThrow("down");
   });
+
+  it("does not keep a value the caller marks as not for storing", async () => {
+    const load = vi.fn().mockResolvedValue(null);
+    const opts = { store: (v: unknown) => v !== null };
+    expect(await cached("miss", load, 300, undefined, opts)).toBeNull();
+    expect(await cached("miss", load, 300, undefined, opts)).toBeNull();
+    expect(load).toHaveBeenCalledTimes(2); // nothing was remembered
+  });
+
+  it("drops a held value once a refresh returns one not for storing", async () => {
+    vi.useFakeTimers();
+    const load = vi.fn().mockResolvedValueOnce({ id: 1 }).mockResolvedValue(null);
+    const opts = { store: (v: unknown) => v !== null };
+    expect(await cached("gone", load, 1, undefined, opts)).toEqual({ id: 1 });
+    vi.advanceTimersByTime(1500);
+    expect(await cached("gone", load, 1, undefined, opts)).toEqual({ id: 1 }); // stale
+    await vi.runAllTimersAsync();
+    expect(await cached("gone", load, 1, undefined, opts)).toBeNull(); // evicted, read again
+    vi.useRealTimers();
+  });
 });

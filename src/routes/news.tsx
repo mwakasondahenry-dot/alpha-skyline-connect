@@ -5,7 +5,7 @@ import { breadcrumbLd } from "@/lib/structured-data";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Photo } from "@/components/photo";
 import { getAllNews, type PublicNewsItem } from "@/lib/alpha-content.functions";
-import { formatNewsDate, newsExcerpt, newsSchoolLabel } from "@/lib/news";
+import { formatNewsDate, isHttpUrl, newsExcerpt, newsSchoolLabel } from "@/lib/news";
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/news")({
@@ -85,20 +85,21 @@ function NewsPage() {
 function NewsCard({ item, lead }: { item: PublicNewsItem; lead: boolean }) {
   const date = formatNewsDate(item.published_at);
   const excerpt = newsExcerpt(item.body, 220);
+  const cover = isHttpUrl(item.cover_url) ? item.cover_url : null;
 
   return (
     <li className={lead ? "sm:col-span-2 lg:col-span-3" : undefined}>
       <Link
         to="/news/$id"
         params={{ id: item.id }}
-        className={`group flex h-full flex-col overflow-hidden ${lead && item.cover_url ? "lg:grid lg:grid-cols-[1.25fr_1fr]" : ""} rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] transition-[box-shadow,transform] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)] motion-reduce:transition-none motion-reduce:hover:translate-y-0`}
+        className={`group flex h-full flex-col overflow-hidden ${lead && cover ? "lg:grid lg:grid-cols-[1.25fr_1fr]" : ""} rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] transition-[box-shadow,transform] duration-150 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:shadow-[var(--card-shadow-hover)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)] motion-reduce:transition-none motion-reduce:hover:translate-y-0`}
       >
-        {item.cover_url ? (
+        {cover ? (
           <div className="aspect-[16/10] overflow-hidden bg-[var(--color-surface-muted)]">
             <Photo
               width={1600}
               height={1000}
-              src={item.cover_url}
+              src={cover}
               sizes={
                 lead
                   ? "(min-width: 1024px) 55vw, 100vw"

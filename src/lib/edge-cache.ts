@@ -120,9 +120,33 @@ function inBackground(work: Promise<void>): void {
   void work;
 }
 
-async function refresh<T>(key: string, load: () => Promise<T>, ttlSeconds: number): Promise<T> {
+export type CacheOptions<T> = {
+  /**
+   * Return false for a value that must not be kept, e.g. a lookup that
+   * found nothing. It is returned to this caller only: nothing is added to
+   * memory or the edge, so requests for random keys cannot grow either, and
+   * an entry already held for the key is dropped, so a row that disappears
+   * stops being served.
+   */
+  store?: (value: T) => boolean;
+};
+
+async function refresh<T>(
+  key: string,
+  load: () => Promise<T>,
+  ttlSeconds: number,
+  options: CacheOptions<T> | undefined,
+  hadEntry: boolean,
+): Promise<T> {
   const value = await load();
   const now = Date.now();
+  if (options?.store && !options.store(value)) {
+    memory.delete(key);
+    /* An already-expired entry overwrites any copy at the edge (it lives a
+       second). Written only when the key was held, never for a new key. */
+    if (hadEntry) await writeEdge(key, { value, freshUntil: now, staleUntil: now });
+    return value;
+  }
   const entry: Entry = {
     value,
     freshUntil: now + ttlSeconds * 1000,
@@ -138,6 +162,7 @@ export async function cached<T>(
   load: () => Promise<T>,
   ttlSeconds: number = TTL_SECONDS,
   fallback?: () => T,
+  options?: CacheOptions<T>,
 ): Promise<T> {
   const now = Date.now();
   let hit = memory.get(key) ?? null;
@@ -157,7 +182,7 @@ export async function cached<T>(
   if (hit && hit.staleUntil > now) {
     /* Stale: this visitor gets the old value at once; the next gets a fresh one. */
     if (!inflight.has(key)) {
-      const work = refresh(key, load, ttlSeconds)
+      const work = refresh(key, load, ttlSeconds, options, true)
         .catch((err) => console.error(`[cached ${key}] refresh`, err))
         .then(() => {
           inflight.delete(key);
@@ -169,7 +194,7 @@ export async function cached<T>(
   }
 
   try {
-    return await refresh(key, load, ttlSeconds);
+    return await refresh(key, load, ttlSeconds, options, hit !== null);
   } catch (err) {
     if (hit) return hit.value as T; // expired, but better than empty
     if (!fallback) throw err;

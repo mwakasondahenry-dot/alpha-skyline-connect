@@ -14,7 +14,13 @@ import { seo } from "@/lib/seo";
 import { breadcrumbLd, newsArticleLd } from "@/lib/structured-data";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { getNewsArticle, type PublicNewsItem } from "@/lib/alpha-content.functions";
-import { formatNewsDate, newsExcerpt, newsParagraphs, newsSchoolLabel } from "@/lib/news";
+import {
+  formatNewsDate,
+  isHttpUrl,
+  newsExcerpt,
+  newsParagraphs,
+  newsSchoolLabel,
+} from "@/lib/news";
 import { T, SHELL } from "@/components/type-roles";
 
 export const Route = createFileRoute("/news_/$id")({
@@ -35,14 +41,15 @@ export const Route = createFileRoute("/news_/$id")({
     }
     const path = `/news/${article.id}`;
     const description = newsExcerpt(article.body, 155);
+    const cover = isHttpUrl(article.cover_url) ? article.cover_url : null;
     return seo({
       title: `${article.title} | Alpha Schools`,
       description,
       path,
       type: "article",
-      image: article.cover_url ?? undefined,
+      image: cover ?? undefined,
       ld: [
-        newsArticleLd(article, description),
+        newsArticleLd({ ...article, cover_url: cover }, description),
         breadcrumbLd([
           { name: "News", path: "/news" },
           { name: article.title, path },
@@ -52,6 +59,7 @@ export const Route = createFileRoute("/news_/$id")({
   },
   component: ArticlePage,
   notFoundComponent: ArticleNotFound,
+  errorComponent: ArticleError,
 });
 
 function BackToNews({ onNavy = false }: { onNavy?: boolean }) {
@@ -75,6 +83,7 @@ function ArticlePage() {
   const article = Route.useLoaderData() as PublicNewsItem;
   const date = formatNewsDate(article.published_at);
   const paragraphs = newsParagraphs(article.body);
+  const cover = isHttpUrl(article.cover_url) ? article.cover_url : null;
 
   return (
     <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
@@ -103,10 +112,10 @@ function ArticlePage() {
 
         <div className={`${SHELL} py-[var(--space-block-y)]`}>
           <div className="max-w-[52rem]">
-            {article.cover_url ? <WholeCover src={article.cover_url} /> : null}
+            {cover ? <WholeCover src={cover} /> : null}
 
             <div
-              className={`${article.cover_url ? "mt-[var(--space-block-y)]" : ""} max-w-[44rem] space-y-5 text-[var(--color-ink)]`}
+              className={`${cover ? "mt-[var(--space-block-y)]" : ""} max-w-[44rem] space-y-5 text-[var(--color-ink)]`}
               style={T.body}
             >
               {paragraphs.map((p, i) => (
@@ -188,6 +197,28 @@ function ArticleNotFound() {
         </h1>
         <p className="mt-4 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
           It may have been taken down, or the link may be mistyped.
+        </p>
+        <div className="mt-6">
+          <BackToNews />
+        </div>
+      </section>
+      <SiteFooter />
+    </div>
+  );
+}
+
+/** A failed database read: not a 404, and said plainly. */
+function ArticleError() {
+  return (
+    <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
+      <SiteHeader />
+      <section className={`${SHELL} py-[var(--space-section-y)]`}>
+        <h1 className="font-display text-[var(--color-deep-blue)]" style={T.section}>
+          This article could not be loaded
+        </h1>
+        <p className="mt-4 max-w-2xl text-[var(--color-ink-soft)]" style={T.body}>
+          Something went wrong on our side. Please try again in a minute, or see the other news in
+          the meantime.
         </p>
         <div className="mt-6">
           <BackToNews />

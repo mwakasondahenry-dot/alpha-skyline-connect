@@ -1,5 +1,12 @@
 import { describe, it, expect } from "vitest";
-import { formatNewsDate, isUuid, newsExcerpt, newsParagraphs, newsSchoolLabel } from "./news";
+import {
+  formatNewsDate,
+  isHttpUrl,
+  isUuid,
+  newsExcerpt,
+  newsParagraphs,
+  newsSchoolLabel,
+} from "./news";
 
 describe("formatNewsDate", () => {
   it("writes the day, the month in full and the year", () => {
@@ -76,5 +83,20 @@ describe("isUuid", () => {
     expect(isUuid("123")).toBe(false);
     expect(isUuid("3f2b8c1e-9a4d-4e2f-8b6a-1c2d3e4f5a6b'; drop table news;--")).toBe(false);
     expect(isUuid(undefined)).toBe(false);
+  });
+});
+
+describe("isHttpUrl", () => {
+  it("accepts http and https addresses", () => {
+    expect(isHttpUrl("https://x.supabase.co/a.png")).toBe(true);
+    expect(isHttpUrl("HTTP://example.com/a.png")).toBe(true);
+  });
+
+  it("rejects other schemes and empty values", () => {
+    expect(isHttpUrl("javascript:alert(1)")).toBe(false);
+    expect(isHttpUrl("data:image/png;base64,AAAA")).toBe(false);
+    expect(isHttpUrl("//example.com/a.png")).toBe(false);
+    expect(isHttpUrl("")).toBe(false);
+    expect(isHttpUrl(null)).toBe(false);
   });
 });

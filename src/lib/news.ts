@@ -69,3 +69,11 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 export function isUuid(value: unknown): value is string {
   return typeof value === "string" && UUID_RE.test(value);
 }
+
+/**
+ * True for an http(s) URL. A cover_url is typed by staff in the admin; only
+ * a web address is ever rendered as an image source or a link.
+ */
+export function isHttpUrl(value: string | null | undefined): value is string {
+  return typeof value === "string" && /^https?:\/\//i.test(value.trim());
+}
