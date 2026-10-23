@@ -309,7 +309,8 @@ Active filters show as removable chips with a "Clear all". Sort: name A–Z,
 class year (newest first, the default), recently added. A result count line
 ("42 former students · 3 filters"). Filters and search are kept in the URL so
 a filtered list can be bookmarked and survives a refresh. Phone: cards (photo,
-name, class and school, role at company, small status labels); desktop: a
+name, class and school, role at company, **the submitted phone and email,
+each tappable to call or email** (owner request), small status labels); desktop: a
 table with a sticky header that scrolls sideways if it must, never clips. The
 list loads once and filters on the device; it is expected to stay in the low
 thousands.
