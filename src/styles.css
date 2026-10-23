@@ -1446,3 +1446,116 @@
     filter: none;
   }
 }
+
+/* ===================================================================
+   Admin
+   The admin motion system, from motion-audits/admin (2026-10-23): one
+   curve (--ease-out), 120ms press and hover colour, 150ms exits, 200ms
+   enters, a 1200ms gold tint on a changed row. Transform, opacity and
+   colour only. Public pages never carry these classes or [data-admin],
+   so nothing here reaches them. Hover is colour only: no lift in admin.
+   =================================================================== */
+:root {
+  --admin-swap: 150ms;
+  --admin-enter: 200ms;
+  --admin-highlight: 1200ms;
+  --admin-scrim: color-mix(in srgb, var(--color-deep-blue) 55%, transparent);
+}
+
+.admin-press {
+  transition:
+    background-color var(--press-ms) var(--ease-out),
+    color var(--press-ms) var(--ease-out),
+    border-color var(--press-ms) var(--ease-out),
+    transform var(--press-ms) var(--ease-out);
+}
+.admin-press:active:not(:disabled):not([aria-disabled="true"]) {
+  transform: scale(var(--press-scale));
+}
+.admin-hover {
+  transition:
+    background-color var(--press-ms) var(--ease-out),
+    border-color var(--press-ms) var(--ease-out);
+}
+
+/* A row that just changed: gold tint fading to the row's own background.
+   No `to` frame, so it ends on whatever the row's background is. */
+.admin-flash {
+  animation: admin-flash var(--admin-highlight) var(--ease-out);
+}
+@keyframes admin-flash {
+  from {
+    background-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-surface));
+  }
+}
+
+/* Status line and other small arrivals: opacity plus a 6px rise. */
+.admin-rise {
+  animation: admin-rise var(--admin-enter) var(--ease-out);
+}
+@keyframes admin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.admin-fade-out {
+  animation: admin-fade-out var(--admin-swap) var(--ease-out) forwards;
+}
+@keyframes admin-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* Radix dialog, alert dialog and sheet (src/components/ui/*) when the admin
+   marks them [data-admin]. These replace the tw-animate zoom/slide classes:
+   overlay fades 150ms, panel fades and rises 8px over 200ms, every exit is
+   a 150ms fade. Unlayered, so they win over the utility classes. Tailwind 4
+   centres panels with the `translate` property, which composes with the
+   `transform` here. */
+.admin-overlay[data-admin] {
+  background-color: var(--admin-scrim);
+}
+/* Only when motion is welcome: these selectors outrank the single-class
+   reduced-motion rules below, so they must not exist under reduce. */
+@media (prefers-reduced-motion: no-preference) {
+  [data-admin].admin-overlay[data-state="open"] {
+    animation: admin-fade-in var(--admin-swap) var(--ease-out);
+  }
+  [data-admin][data-state="open"]:not(.admin-overlay) {
+    animation: admin-panel-in var(--admin-enter) var(--ease-out);
+  }
+  [data-admin][data-state="closed"] {
+    animation: admin-fade-out var(--admin-swap) var(--ease-out) forwards;
+  }
+}
+@keyframes admin-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes admin-panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-press,
+  .admin-hover {
+    transition: none;
+  }
+  .admin-press:active:not(:disabled):not([aria-disabled="true"]) {
+    transform: none;
+  }
+  /* Also strips the tw-animate enter/exit classes from marked dialogs,
+     so Radix opens and closes them at once. */
+  .admin-flash,
+  .admin-rise,
+  .admin-fade-out,
+  [data-admin][data-state] {
+    animation: none;
+  }
+}
