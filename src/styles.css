@@ -1577,3 +1577,127 @@
     animation: none;
   }
 }
+
+/* ===================================================================
+   YOUTH HERO — the home page opening (src/components/home/youth-hero.tsx)
+   and the two scroll moments below it.
+
+   One authored sequence on first paint: the picture opens out of a
+   smaller rounded window while it settles from a slight zoom, the two
+   headline lines rise in, the copy follows, the stickers pop on and the
+   underline draws. ~1.3s end to end, transform / opacity / clip-path /
+   filter only, and every piece starts from the finished layout, so a
+   phone that drops frames still lands on the right composition.
+
+   The gold ribbon is the one thing that keeps moving. It carries real
+   facts, it has a pause button, and it stops under a resting pointer.
+
+   Scroll moments (school cards dealt in, the flight-line photo landing)
+   use CSS scroll-driven timelines where the browser has them and are
+   simply absent where it does not. They are tied to the scroll position,
+   not to an observer firing late, so they cannot leave a screen blank:
+   the reason the old scroll reveals were removed on 2026-10-22.
+   =================================================================== */
+
+.yh-title {
+  font-size: clamp(2.75rem, 1rem + 5.4vw, 5.25rem);
+  line-height: 0.95;
+  font-weight: 900;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.yh-glow {
+  width: 70vmax;
+  height: 70vmax;
+  right: -25vmax;
+  top: 10%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--color-bright-blue) 55%, transparent),
+    transparent
+  );
+}
+
+.yh-sticker {
+  font-size: clamp(0.75rem, 0.68rem + 0.3vw, 0.875rem);
+  padding: 0.55em 1em;
+  white-space: nowrap;
+}
+
+.yh-track li {
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.375rem);
+  letter-spacing: -0.01em;
+}
+
+.yh-ribbon > div {
+  transform: rotate(-1.5deg);
+  width: 104%;
+  margin-left: -2%;
+  box-shadow: 0 10px 24px -12px rgba(0, 26, 60, 0.55);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes yh-open {
+    from { clip-path: inset(9% 7% 9% 7% round 2.5rem); }
+    to   { clip-path: inset(0 0 0 0 round 0); }
+  }
+  @keyframes yh-settle {
+    from { transform: scale(1.14); }
+    to   { transform: scale(1); }
+  }
+  @keyframes yh-rise {
+    from { opacity: 0; transform: translateY(0.45em); filter: blur(8px); }
+    to   { opacity: 1; transform: none; filter: none; }
+  }
+  @keyframes yh-fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes yh-marquee {
+    to { transform: translateX(-50%); }
+  }
+
+  .yh-window { animation: yh-open 1000ms var(--ease-out) 120ms both; }
+  .yh-photo  { animation: yh-settle 1600ms var(--ease-out) 120ms both; }
+  .yh-line   { animation: yh-rise 700ms var(--ease-out) var(--d, 0ms) both; }
+  .yh-copy   { animation: yh-fade-up 600ms var(--ease-out) 380ms both; }
+  .yh-ribbon { animation: yh-fade-up 600ms var(--ease-out) 600ms both; }
+
+  .yh-track { animation: yh-marquee 42s linear infinite; }
+  .yh-ribbon:hover .yh-track,
+  .yh-ribbon[data-paused] .yh-track { animation-play-state: paused; }
+
+  /* School cards: dealt onto the table as they scroll in, each from its
+     own small tilt, landing square. */
+  @supports (animation-timeline: view()) {
+    @keyframes yh-deal {
+      from { opacity: 0; transform: translateY(72px) rotate(var(--deal-tilt, 0deg)) scale(0.96); }
+      to   { opacity: 1; transform: none; }
+    }
+    .yh-deal {
+      animation: yh-deal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 30%;
+    }
+    @media (min-width: 768px) {
+      .yh-deal:nth-child(2) { animation-range: entry 8% cover 36%; }
+      .yh-deal:nth-child(3) { animation-range: entry 16% cover 42%; }
+    }
+
+    /* The flight-line photo comes in to land on the cockpit photo. */
+    @keyframes yh-land {
+      from { opacity: 0; translate: 48px 56px; rotate: 11deg; }
+      to   { opacity: 1; translate: 0 0; rotate: 2deg; }
+    }
+    .yh-land {
+      animation: yh-land linear both;
+      animation-timeline: view();
+      animation-range: entry 10% cover 45%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .yh-track > ul + ul { display: none; }
+}

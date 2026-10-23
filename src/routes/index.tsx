@@ -19,10 +19,10 @@ import {
 } from "lucide-react";
 import { SiteHeader, SiteFooter } from "@/components/site-chrome";
 import { Reveal } from "@/components/reveal";
-import { HeroSlideshow } from "@/components/hero-slideshow";
+import { YouthHero } from "@/components/home/youth-hero";
 import { HomeVideo } from "@/components/home-video";
 import { VIDEO_HOSTS } from "@/lib/home-video";
-import { CinematicHero, Marked, Backdrop, GhostButton } from "@/components/alpha-ui";
+import { Marked, Backdrop, GhostButton } from "@/components/alpha-ui";
 import {
   getHomeWhatsNew,
   getHomeUpcomingEvents,
@@ -31,7 +31,6 @@ import {
   type HomeEventItem,
   type TestimonialItem,
 } from "@/lib/alpha-content.functions";
-import heroCollage from "@/assets/hero-collage-v2.webp";
 import campusNurseryImage from "@/assets/campus-nursery.webp";
 import campusHighImage from "@/assets/campus-high.webp";
 import campusGirlsImage from "@/assets/campus-girls.webp";
@@ -172,6 +171,9 @@ const SCHOOLS = [
   },
 ] as const;
 
+/* Each school card is dealt in from its own small tilt (styles.css, yh-deal). */
+const DEAL_TILT = ["-5deg", "3deg", "6deg"] as const;
+
 /* Values and labels are unchanged. design/README.md: the year figure is
    calculated from the 2007 founding date and must never be hardcoded. */
 const STATS: ReadonlyArray<{
@@ -245,40 +247,15 @@ function Home() {
 /* ------------------------------------------------------------------ *
  * 1. HERO + STAT STRIP — the opening screen.
  *
- * The hero fills the viewport (100svh) with the navigation overlaid on
- * it, so nothing from "Find the Right School" shows beneath the fold.
- *
- * The four figures sit in a strip across the hero's foot on desktop,
- * set in the headline's own face: the numeral at hero size in white, the
- * label in gold, bold. (Until 2026-10-22 they were a thin icon rail down
- * the right edge, in small type; the owner found it weak.) The strip is
- * translucent so the photograph still reads through it. On mobile it
- * moves out of the hero and becomes the first thing the reader discovers
- * on scrolling, because a 100svh opening screen on a phone has room for
- * the headline and the call to action or for four figures, not both.
- *
- * Only one of the two is ever in the accessibility tree: each is
- * display:none at the other's breakpoint.
+ * The hero is YouthHero (src/components/home/youth-hero.tsx): headline and
+ * actions over one wide illustration, with the gold ribbon at its foot.
+ * The owner replaced the photo slideshow with it on 2026-10-23. The four
+ * figures follow as their own navy band at every width.
  * ------------------------------------------------------------------ */
 function Hero() {
   return (
     <>
-      <CinematicHero
-        srLead="Alpha Schools, Dar es Salaam:"
-        lineOne="Your potential,"
-        lineTwo="unlocked."
-        blurb="Three schools. One family. Limitless futures."
-        media={
-          <HeroSlideshow
-            pageKey="home"
-            fallback={[
-              {
-                src: heroCollage,
-                alt: "Alpha Schools students across nursery, primary, secondary and aviation",
-              },
-            ]}
-          />
-        }
+      <YouthHero
         actions={
           <>
             <Link to="/admission" className={`${BTN_BASE} w-full sm:w-auto`} style={BTN_PRIMARY}>
@@ -290,28 +267,17 @@ function Hero() {
             </GhostButton>
           </>
         }
-        foot={<StatStrip variant="foot" />}
       />
-      <StatStrip variant="band" />
+      <StatStrip />
     </>
   );
 }
 
-function StatStrip({ variant }: { variant: "foot" | "band" }) {
-  const foot = variant === "foot";
+function StatStrip() {
   return (
-    <aside
-      aria-label="Alpha Schools at a glance"
-      className={
-        foot
-          ? "hidden border-t border-[var(--color-surface)]/15 bg-[rgba(0,26,60,0.55)] backdrop-blur-sm lg:block"
-          : "bg-[var(--stat-row-bg)] lg:hidden"
-      }
-    >
+    <aside aria-label="Alpha Schools at a glance" className="bg-[var(--stat-row-bg)]">
       <ul
-        className={`${SHELL} grid ${
-          foot ? "grid-cols-4 gap-8 py-7" : "grid-cols-2 gap-x-6 gap-y-8 py-9"
-        }`}
+        className={`${SHELL} grid grid-cols-2 gap-x-6 gap-y-8 py-9 lg:grid-cols-4 lg:gap-8 lg:py-12`}
       >
         {STATS.map((s) => (
           <li key={s.label}>
@@ -368,11 +334,15 @@ function FindTheRightSchool() {
         data-reveal-delay="120"
         className="mt-[var(--space-block-y)] grid gap-[var(--space-card-gap)] md:grid-cols-3"
       >
-        {SCHOOLS.map((s) => (
-          <li key={s.slug} style={{ ["--band" as string]: s.band }}>
+        {SCHOOLS.map((s, i) => (
+          <li
+            key={s.slug}
+            className="yh-deal"
+            style={{ ["--band" as string]: s.band, ["--deal-tilt" as string]: DEAL_TILT[i] }}
+          >
             <Link
               to={s.to}
-              className="group relative isolate flex h-full min-h-[32rem] flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-[var(--band)] text-[var(--color-surface)] shadow-[var(--card-shadow)] transition-shadow duration-200 hover:shadow-[var(--card-shadow-hover)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--band)] md:min-h-[33rem]"
+              className="group relative isolate flex h-full min-h-[32rem] flex-col justify-end overflow-hidden rounded-[var(--radius-card)] bg-[var(--band)] text-[var(--color-surface)] shadow-[var(--card-shadow)] transition-[transform,box-shadow] duration-200 ease-out hover:-translate-y-1.5 hover:rotate-[-0.6deg] hover:shadow-[var(--card-shadow-hover)] active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:translate-y-0 motion-reduce:hover:rotate-0 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--band)] md:min-h-[33rem]"
             >
               <Photo
                 width={800}
@@ -594,7 +564,7 @@ function AviationChapter() {
             alt="Alpha aviation students lined up on the flight line beside the aircraft"
             loading="lazy"
             decoding="async"
-            className="absolute bottom-0 right-0 w-[52%] rotate-2 rounded-[1.25rem] border-4 object-cover shadow-[var(--shadow-card-hover)]"
+            className="yh-land absolute bottom-0 right-0 w-[52%] rotate-2 rounded-[1.25rem] border-4 object-cover shadow-[var(--shadow-card-hover)]"
             style={{ aspectRatio: "3 / 2", borderColor: "var(--color-gold)" }}
           />
         </Reveal>
