@@ -6,15 +6,7 @@ import { Link } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import { AdminButton, CountBadge } from "@/components/admin/kit";
 import type { AdminCounts } from "@/lib/admin/counts";
-import {
-  ADMIN_NAV,
-  COUNT_LABEL,
-  activeOptions,
-  isCurrent,
-  isWithin,
-  linkTo,
-  navCount,
-} from "./nav";
+import { ADMIN_NAV, COUNT_LABEL, activeOptions, isCurrent, isWithin, navCount } from "./nav";
 
 const ITEM =
   "admin-hover flex min-h-11 items-center gap-3 rounded-[var(--radius-btn)] px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]";
@@ -57,7 +49,7 @@ export function Sidebar({
             return (
               <li key={item.to}>
                 <Link
-                  to={linkTo(item.to)}
+                  to={item.to}
                   activeOptions={activeOptions(item.to)}
                   aria-current={current ? "page" : undefined}
                   className={
@@ -80,7 +72,7 @@ export function Sidebar({
                       return (
                         <li key={c.to}>
                           <Link
-                            to={linkTo(c.to)}
+                            to={c.to}
                             activeOptions={activeOptions(c.to)}
                             aria-current={sub ? "page" : undefined}
                             className={

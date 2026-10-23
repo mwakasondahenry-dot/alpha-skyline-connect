@@ -6,7 +6,7 @@ import { totalNeedingAttention, useAdminCounts } from "@/lib/admin/counts";
 import { formatAdminDate, schoolLabel } from "@/lib/admin/format";
 import type { AdminStory } from "@/lib/admin/stories-data";
 import { EmptyState } from "@/components/admin/kit";
-import { linkTo } from "@/components/admin/shell/nav";
+import type { AdminPath } from "@/components/admin/shell/nav";
 
 export const Route = createFileRoute("/admin/")({
   head: () => ({ meta: [{ title: "Today · Alpha Schools Admin" }] }),
@@ -136,7 +136,7 @@ function CountCard({
   label,
   hint,
 }: {
-  to: string;
+  to: AdminPath;
   icon: LucideIcon;
   n: number;
   loading: boolean;
@@ -146,7 +146,7 @@ function CountCard({
   return (
     <li>
       <Link
-        to={linkTo(to)}
+        to={to}
         className="admin-hover flex min-h-11 items-center gap-4 rounded-[var(--radius-card)] border border-[var(--color-hairline)] bg-[var(--color-surface)] p-4 shadow-[var(--shadow-card)] hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)] md:h-full md:flex-col md:items-start md:gap-3 md:p-5"
       >
         <span className="grid h-[var(--disc-size-sm)] w-[var(--disc-size-sm)] shrink-0 place-items-center rounded-full bg-[var(--color-surface-muted)] text-[var(--color-deep-blue)]">

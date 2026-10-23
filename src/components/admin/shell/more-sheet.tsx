@@ -5,7 +5,7 @@
 import { Link } from "@tanstack/react-router";
 import { LogOut } from "lucide-react";
 import { AdminButton, AdminSheet } from "@/components/admin/kit";
-import { ADMIN_NAV, activeOptions, isCurrent, linkTo } from "./nav";
+import { ADMIN_NAV, activeOptions, isCurrent } from "./nav";
 
 const ROW =
   "admin-hover flex min-h-12 items-center gap-3 rounded-[var(--radius-btn)] px-3 text-base focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-gold)]";
@@ -39,7 +39,7 @@ export function MoreSheet({
             return (
               <li key={item.to}>
                 <Link
-                  to={linkTo(item.to)}
+                  to={item.to}
                   activeOptions={activeOptions(item.to)}
                   aria-current={current ? "page" : undefined}
                   onClick={close}
@@ -55,7 +55,7 @@ export function MoreSheet({
                       return (
                         <li key={c.to}>
                           <Link
-                            to={linkTo(c.to)}
+                            to={c.to}
                             activeOptions={activeOptions(c.to)}
                             aria-current={sub ? "page" : undefined}
                             onClick={close}

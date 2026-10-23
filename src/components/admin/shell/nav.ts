@@ -2,7 +2,7 @@
  * The admin's areas, by job rather than by table. One list feeds the desktop
  * sidebar, the phone bottom bar and the More sheet, so they cannot drift.
  */
-import type { LinkProps } from "@tanstack/react-router";
+import type { FileRoutesByTo } from "@/routeTree.gen";
 import {
   GraduationCap,
   Images,
@@ -16,7 +16,10 @@ import {
 
 export type AdminNavCount = "storiesWaiting" | "inboxNew" | "todayTotal";
 
-export type AdminNavLink = { to: string; label: string };
+/** A real admin page: a typo or a removed route fails the typecheck. */
+export type AdminPath = Extract<keyof FileRoutesByTo, `/admin${string}`>;
+
+export type AdminNavLink = { to: AdminPath; label: string };
 
 export type AdminNavItem = AdminNavLink & {
   icon: LucideIcon;
@@ -60,15 +63,6 @@ export const ADMIN_NAV: AdminNavItem[] = [
   },
   { to: "/admin/staff", label: "People", icon: Users, phone: "more" },
 ];
-
-/**
- * The one untyped hop: Alumni is a route added by a later task, so the nav's
- * paths are plain strings, cast here for <Link>. Once /admin/alumni exists
- * this can become a typed `to`.
- */
-export function linkTo(path: string): LinkProps["to"] {
-  return path as LinkProps["to"];
-}
 
 function trim(path: string) {
   return path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;

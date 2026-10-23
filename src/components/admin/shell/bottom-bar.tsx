@@ -8,15 +8,7 @@ import { Link } from "@tanstack/react-router";
 import { Menu } from "lucide-react";
 import { CountBadge } from "@/components/admin/kit";
 import type { AdminCounts } from "@/lib/admin/counts";
-import {
-  ADMIN_NAV,
-  COUNT_LABEL,
-  activeOptions,
-  isCurrent,
-  isWithin,
-  linkTo,
-  navCount,
-} from "./nav";
+import { ADMIN_NAV, COUNT_LABEL, activeOptions, isCurrent, isWithin, navCount } from "./nav";
 
 /** Bar height above the safe-area inset. Keep in step with the shell's padding. */
 export const BOTTOM_BAR_HEIGHT = "4rem";
@@ -51,7 +43,7 @@ export function BottomBar({
           return (
             <li key={item.to} className="flex flex-1">
               <Link
-                to={linkTo(item.to)}
+                to={item.to}
                 activeOptions={activeOptions(item.to)}
                 aria-current={current ? "page" : undefined}
                 className={TAB + (current ? ON : OFF)}
