@@ -91,7 +91,9 @@ Cloudflare issues the HTTPS certificate itself; nothing else to configure.
   `https://alphaschools.co.tz` and add `https://alphaschools.co.tz/**` under
   Redirect URLs, so admin password-reset links work.
 - Supabase → Authentication: confirm **"Allow new users to sign up" is off**.
-  Any account with a profile row counts as staff.
+  Until `alpha_migration_staff_role.sql` has run, any account with a profile
+  row counts as staff; after it, staff means a profile with role `editor` or
+  `admin`.
 - Check the five migrations have been run on the Supabase project, in order:
   `alpha_migration_alumni_submissions.sql`,
   `alpha_migration_testimonial_invites.sql`,

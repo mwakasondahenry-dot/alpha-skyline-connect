@@ -60,15 +60,27 @@
 --   update public.profiles set role = 'editor' where id = '<their id>';
 -- ============================================================
 
-select p.id, u.email, p.role
-from public.profiles p
-join auth.users u on u.id = p.id
+-- Accounts with no profile row show role null (they will NOT count as staff).
+select u.id, u.email, p.role
+from auth.users u
+left join public.profiles p on p.id = u.id
 order by u.email;
 
 
 -- ============================================================
 -- PART B — the change. Run only after PART A looks right.
 -- ============================================================
+
+-- Backstop: pasting the whole file cannot lock anyone out. Aborts here if any
+-- profile has a role other than editor/admin.
+do $$ begin
+  if exists (
+    select 1 from public.profiles
+    where role is null or role not in ('editor', 'admin')
+  ) then
+    raise exception 'Part A: every staff profile needs role editor or admin first';
+  end if;
+end $$;
 
 -- Same attributes as the existing definition: SQL, stable, security definer
 -- (so a caller can ask about themselves without read access to all profiles),
