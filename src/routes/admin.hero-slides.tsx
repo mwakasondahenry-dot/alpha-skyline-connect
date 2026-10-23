@@ -20,6 +20,7 @@ const PAGE_OPTIONS = [
 const CONFIG: CrudConfig = {
   table: "hero_slides",
   title: "Hero slides",
+  itemName: "hero slide",
   description: "Photos that rotate in the big hero banner at the top of each page.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
@@ -30,9 +31,27 @@ const CONFIG: CrudConfig = {
     { key: "published", label: "Published" },
   ],
   fields: [
-    { name: "page_key", label: "Page", kind: "select", required: true, options: PAGE_OPTIONS, defaultValue: "home" },
-    { name: "image_url", label: "Photo", kind: "image", required: true, helpText: "Wide landscape photos work best (at least 1600px across)." },
-    { name: "alt_text", label: "Alt text", kind: "text", helpText: "Short description of the photo, for screen readers." },
+    {
+      name: "page_key",
+      label: "Page",
+      kind: "select",
+      required: true,
+      options: PAGE_OPTIONS,
+      defaultValue: "home",
+    },
+    {
+      name: "image_url",
+      label: "Photo",
+      kind: "image",
+      required: true,
+      helpText: "Wide landscape photos work best (at least 1600px across).",
+    },
+    {
+      name: "alt_text",
+      label: "Alt text",
+      kind: "text",
+      helpText: "Short description of the photo, for screen readers.",
+    },
     { name: "caption", label: "Caption (optional)", kind: "text" },
     { name: "sort_order", label: "Order", kind: "number", defaultValue: 0 },
     { name: "published", label: "Published", kind: "boolean", defaultValue: true },

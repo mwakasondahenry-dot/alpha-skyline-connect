@@ -9,6 +9,7 @@ export const Route = createFileRoute("/admin/news")({
 const CONFIG: CrudConfig = {
   table: "news",
   title: "News",
+  itemName: "news post",
   description: "Post updates that appear in the homepage slideshow and on school pages.",
   orderBy: { column: "published_at", ascending: false },
   listColumns: [
@@ -21,11 +22,41 @@ const CONFIG: CrudConfig = {
   ],
   fields: [
     { name: "title", label: "Title", kind: "text", required: true },
-    { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "group-wide" },
+    {
+      name: "school_slug",
+      label: "School",
+      kind: "school",
+      required: true,
+      defaultValue: "group-wide",
+    },
     { name: "body", label: "Body", kind: "textarea" },
-    { name: "cover_url", label: "Poster image (optional)", kind: "image", helpText: "Shown on the homepage slideshow and news cards." },
-    { name: "urgent", label: "Urgent announcement", kind: "boolean", helpText: "Pops up site-wide on first visit. Use sparingly for important announcements." },
-    { name: "published", label: "Published", kind: "boolean", placeholder: "Show on the public site" },
-    { name: "published_at", label: "Publish date", kind: "date", helpText: "Used to sort the homepage slideshow." },
+    {
+      name: "cover_url",
+      label: "Poster image (optional)",
+      kind: "image",
+      helpText: "Shown on the homepage slideshow and news cards.",
+    },
+    {
+      name: "urgent",
+      label: "Urgent announcement",
+      kind: "boolean",
+      helpText:
+        "Pops up across the whole site the first time each visitor opens it. Use only for important announcements.",
+    },
+    {
+      name: "published",
+      label: "Published",
+      kind: "boolean",
+      placeholder: "Show on the public site",
+      defaultValue: true,
+      helpText:
+        "Goes live on the public site as soon as you save. Untick to keep it hidden as a draft.",
+    },
+    {
+      name: "published_at",
+      label: "Publish date",
+      kind: "date",
+      helpText: "Used to sort the homepage slideshow.",
+    },
   ],
 };

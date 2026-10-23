@@ -9,6 +9,7 @@ export const Route = createFileRoute("/admin/events")({
 const CONFIG: CrudConfig = {
   table: "events",
   title: "Events",
+  itemName: "event",
   description: "Open days, parents' meetings, sports days. Shown on the homepage rail and /events.",
   orderBy: { column: "event_date", ascending: false },
   listColumns: [
@@ -21,11 +22,30 @@ const CONFIG: CrudConfig = {
   ],
   fields: [
     { name: "title", label: "Title", kind: "text", required: true },
-    { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "group-wide" },
+    {
+      name: "school_slug",
+      label: "School",
+      kind: "school",
+      required: true,
+      defaultValue: "group-wide",
+    },
     { name: "event_date", label: "Event date", kind: "date", required: true },
     { name: "location", label: "Location", kind: "text" },
     { name: "description", label: "Description", kind: "textarea" },
-    { name: "cover_url", label: "Poster image (optional)", kind: "image", helpText: "Shown above the event card on the homepage rail and /events." },
-    { name: "published", label: "Published", kind: "boolean" },
+    {
+      name: "cover_url",
+      label: "Poster image (optional)",
+      kind: "image",
+      helpText: "Shown above the event card on the homepage rail and /events.",
+    },
+    {
+      name: "published",
+      label: "Published",
+      kind: "boolean",
+      placeholder: "Show on the public site",
+      defaultValue: true,
+      helpText:
+        "Goes live on the public site as soon as you save. Untick to keep it hidden as a draft.",
+    },
   ],
 };

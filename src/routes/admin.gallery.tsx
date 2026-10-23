@@ -9,7 +9,9 @@ export const Route = createFileRoute("/admin/gallery")({
 const CONFIG: CrudConfig = {
   table: "gallery",
   title: "Activities Gallery",
-  description: "Photos of school life, activities and events. For facility photos, use the Facilities Gallery.",
+  itemName: "photo",
+  description:
+    "Photos of school life, activities and events. For facility photos, use the Facilities Gallery.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
     { key: "image_url", label: "Photo" },
@@ -18,7 +20,13 @@ const CONFIG: CrudConfig = {
     { key: "sort_order", label: "Order" },
   ],
   fields: [
-    { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "nursery-primary" },
+    {
+      name: "school_slug",
+      label: "School",
+      kind: "school",
+      required: true,
+      defaultValue: "nursery-primary",
+    },
     { name: "image_url", label: "Image", kind: "image", required: true },
     { name: "caption", label: "Caption", kind: "text" },
     { name: "sort_order", label: "Sort order", kind: "number", defaultValue: 0 },

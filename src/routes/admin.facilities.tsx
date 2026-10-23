@@ -9,7 +9,9 @@ export const Route = createFileRoute("/admin/facilities")({
 const CONFIG: CrudConfig = {
   table: "facilities",
   title: "Facilities",
-  description: "Classrooms, labs, sports grounds — shown on each school page and the global /facilities tour.",
+  itemName: "facility",
+  description:
+    "Classrooms, labs, sports grounds — shown on each school page and the global /facilities tour.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
     { key: "image_url", label: "Photo" },
@@ -20,16 +22,28 @@ const CONFIG: CrudConfig = {
     { key: "sort_order", label: "Order" },
   ],
   fields: [
-    { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "nursery-primary" },
+    {
+      name: "school_slug",
+      label: "School",
+      kind: "school",
+      required: true,
+      defaultValue: "nursery-primary",
+    },
     { name: "name", label: "Name", kind: "text", required: true },
-    { name: "category", label: "Category", kind: "select", options: [
-      { value: "academic", label: "Academic" },
-      { value: "sports", label: "Sports" },
-      { value: "boarding", label: "Boarding" },
-      { value: "arts", label: "Arts" },
-      { value: "aviation", label: "Aviation" },
-      { value: "general", label: "General" },
-    ], defaultValue: "general" },
+    {
+      name: "category",
+      label: "Category",
+      kind: "select",
+      options: [
+        { value: "academic", label: "Academic" },
+        { value: "sports", label: "Sports" },
+        { value: "boarding", label: "Boarding" },
+        { value: "arts", label: "Arts" },
+        { value: "aviation", label: "Aviation" },
+        { value: "general", label: "General" },
+      ],
+      defaultValue: "general",
+    },
     { name: "description", label: "Description", kind: "textarea" },
     { name: "image_url", label: "Photo", kind: "image" },
     { name: "sort_order", label: "Sort order", kind: "number", defaultValue: 0 },

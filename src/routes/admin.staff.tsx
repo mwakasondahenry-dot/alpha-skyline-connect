@@ -9,6 +9,7 @@ export const Route = createFileRoute("/admin/staff")({
 const CONFIG: CrudConfig = {
   table: "staff",
   title: "Staff",
+  itemName: "staff member",
   description: "Teachers and leadership shown on school pages.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
@@ -19,7 +20,13 @@ const CONFIG: CrudConfig = {
     { key: "sort_order", label: "Order" },
   ],
   fields: [
-    { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "nursery-primary" },
+    {
+      name: "school_slug",
+      label: "School",
+      kind: "school",
+      required: true,
+      defaultValue: "nursery-primary",
+    },
     { name: "name", label: "Name", kind: "text", required: true },
     { name: "title", label: "Title / role", kind: "text" },
     { name: "photo_url", label: "Photo", kind: "image" },

@@ -1,5 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import { AdminCrud, type CrudConfig } from "@/lib/admin-crud";
+import { crudKey } from "@/lib/admin-crud-defaults";
+import { useAdminAuth } from "@/lib/admin-auth";
 
 export const Route = createFileRoute("/admin/facility-photos")({
   head: () => ({ meta: [{ title: "Facilities Gallery · Alpha Admin" }] }),
@@ -9,19 +12,26 @@ export const Route = createFileRoute("/admin/facility-photos")({
 const CONFIG: CrudConfig = {
   table: "facility_photos",
   title: "Facilities Gallery",
+  itemName: "facility photo",
   description:
     "Upload multiple up-to-date photos for each facility. Pick the school first, then choose the facility.",
   orderBy: { column: "sort_order", ascending: true },
   listColumns: [
     { key: "image_url", label: "Photo" },
     { key: "school_slug", label: "School" },
-    { key: "facility_id", label: "Facility" },
+    { key: "facility_id", label: "Facility", render: (v) => <FacilityName id={v} /> },
     { key: "caption", label: "Caption" },
     { key: "sort_order", label: "Order" },
     { key: "published", label: "Published" },
   ],
   fields: [
-    { name: "school_slug", label: "School", kind: "school", required: true, defaultValue: "nursery-primary" },
+    {
+      name: "school_slug",
+      label: "School",
+      kind: "school",
+      required: true,
+      defaultValue: "nursery-primary",
+    },
     {
       name: "facility_id",
       label: "Facility",
@@ -41,7 +51,10 @@ const CONFIG: CrudConfig = {
           console.error("[facility_photos.loadOptions]", error);
           return [];
         }
-        return (data ?? []).map((r: { id: string; name: string }) => ({ value: r.id, label: r.name }));
+        return (data ?? []).map((r: { id: string; name: string }) => ({
+          value: r.id,
+          label: r.name,
+        }));
       },
     },
     { name: "image_url", label: "Photo", kind: "image", required: true },
@@ -50,3 +63,29 @@ const CONFIG: CrudConfig = {
     { name: "published", label: "Published", kind: "boolean", defaultValue: true },
   ],
 };
+
+/**
+ * The facility's name instead of its id. One lookup of every facility, kept
+ * under the Facilities list key so editing a facility refreshes it too.
+ */
+function FacilityName({ id }: { id: unknown }) {
+  const { client, session } = useAdminAuth();
+  const { data } = useQuery({
+    queryKey: [...crudKey("facilities"), "names"],
+    enabled: !!client && !!session?.user.id,
+    queryFn: async () => {
+      const { data, error } = await client!.from("facilities").select("id,name");
+      if (error) throw error;
+      return new Map((data ?? []).map((r: { id: string; name: string }) => [r.id, r.name]));
+    },
+  });
+  if (id == null || id === "") return <span className="text-[var(--color-ink-soft)]">—</span>;
+  if (!data) return <span className="text-[var(--color-ink-soft)]">…</span>;
+  return (
+    <>
+      {data.get(String(id)) ?? (
+        <span className="text-[var(--color-ink-soft)]">Facility removed</span>
+      )}
+    </>
+  );
+}
