@@ -4,6 +4,7 @@ import {
   schoolLd,
   eventsLd,
   breadcrumbLd,
+  newsArticleLd,
   type EventLdInput,
 } from "./structured-data";
 import { SITE_URL } from "./seo";
@@ -56,7 +57,9 @@ describe("schools", () => {
 
   it("points every school at the one organization node", () => {
     for (const slug of ["alpha-high", "alpha-girls", "nursery-primary"] as const) {
-      expect(schoolLd(slug, "x").parentOrganization).toEqual({ "@id": `${SITE_URL}/#organization` });
+      expect(schoolLd(slug, "x").parentOrganization).toEqual({
+        "@id": `${SITE_URL}/#organization`,
+      });
     }
   });
 
@@ -122,5 +125,46 @@ describe("blocked claims", () => {
   it("leaves no bracketed placeholder in any node", () => {
     const all = JSON.stringify([organizationLd(), schoolLd("alpha-girls", "A girls' secondary.")]);
     expect(all).not.toMatch(/\[[^\]]*to be (confirmed|provided)[^\]]*\]/i);
+  });
+});
+
+describe("news article", () => {
+  const ARTICLE = {
+    id: "3f2b8c1e-9a4d-4e2f-8b6a-1c2d3e4f5a6b",
+    title: "Form One 2027 admission now open",
+    body: "Applications are open.",
+    cover_url: "https://example.supabase.co/storage/v1/object/public/news/cover.jpg",
+    published_at: "2026-10-01T09:00:00+00:00",
+  };
+
+  it("carries the visible headline, date, image and page URL", () => {
+    const ld = newsArticleLd(ARTICLE, "Applications are open.");
+    expect(ld["@type"]).toBe("NewsArticle");
+    expect(ld.headline).toBe(ARTICLE.title);
+    expect(ld.datePublished).toBe(ARTICLE.published_at);
+    expect(ld.image).toEqual([ARTICLE.cover_url]);
+    expect(ld.url).toBe(`${SITE_URL}/news/${ARTICLE.id}`);
+    expect(ld.mainEntityOfPage).toBe(`${SITE_URL}/news/${ARTICLE.id}`);
+    expect(ld.description).toBe("Applications are open.");
+  });
+
+  it("is published by the one organization node", () => {
+    expect(newsArticleLd(ARTICLE, "x").publisher).toEqual({ "@id": `${SITE_URL}/#organization` });
+  });
+
+  it("omits the image and date when the page has neither", () => {
+    const ld = newsArticleLd({ ...ARTICLE, cover_url: null, published_at: null }, "x");
+    expect(ld).not.toHaveProperty("image");
+    expect(ld).not.toHaveProperty("datePublished");
+  });
+
+  it("omits a date that does not parse", () => {
+    expect(newsArticleLd({ ...ARTICLE, published_at: "soon" }, "x")).not.toHaveProperty(
+      "datePublished",
+    );
+  });
+
+  it("claims no author, since articles carry no byline", () => {
+    expect(JSON.stringify(newsArticleLd(ARTICLE, "x"))).not.toMatch(/"author"/);
   });
 });

@@ -39,6 +39,7 @@ import { Route as AdminStoriesRouteImport } from './routes/admin.stories'
 import { Route as AdminTestimonialsRouteImport } from './routes/admin.testimonials'
 import { Route as AlumniIndexRouteImport } from './routes/alumni.index'
 import { Route as AlumniSubmitRouteImport } from './routes/alumni.submit'
+import { Route as NewsIdRouteImport } from './routes/news_.$id'
 import { Route as SchoolsAlphaGirlsRouteImport } from './routes/schools.alpha-girls'
 import { Route as SchoolsAlphaHighRouteImport } from './routes/schools.alpha-high'
 import { Route as SchoolsNurseryPrimaryRouteImport } from './routes/schools.nursery-primary'
@@ -202,6 +203,11 @@ const AlumniSubmitRoute = AlumniSubmitRouteImport.update({
   path: '/alumni/submit',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NewsIdRoute = NewsIdRouteImport.update({
+  id: '/news_/$id',
+  path: '/news/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SchoolsAlphaGirlsRoute = SchoolsAlphaGirlsRouteImport.update({
   id: '/schools/alpha-girls',
   path: '/schools/alpha-girls',
@@ -292,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/admin/stories': typeof AdminStoriesRouteWithChildren
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
+  '/news/$id': typeof NewsIdRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -335,6 +342,7 @@ export interface FileRoutesByTo {
   '/admin/stories': typeof AdminStoriesRouteWithChildren
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
+  '/news/$id': typeof NewsIdRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -380,6 +388,7 @@ export interface FileRoutesById {
   '/admin/stories': typeof AdminStoriesRouteWithChildren
   '/admin/testimonials': typeof AdminTestimonialsRoute
   '/alumni/submit': typeof AlumniSubmitRoute
+  '/news_/$id': typeof NewsIdRoute
   '/schools/alpha-girls': typeof SchoolsAlphaGirlsRoute
   '/schools/alpha-high': typeof SchoolsAlphaHighRoute
   '/schools/nursery-primary': typeof SchoolsNurseryPrimaryRoute
@@ -426,6 +435,7 @@ export interface FileRouteTypes {
     | '/admin/stories'
     | '/admin/testimonials'
     | '/alumni/submit'
+    | '/news/$id'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -469,6 +479,7 @@ export interface FileRouteTypes {
     | '/admin/stories'
     | '/admin/testimonials'
     | '/alumni/submit'
+    | '/news/$id'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -513,6 +524,7 @@ export interface FileRouteTypes {
     | '/admin/stories'
     | '/admin/testimonials'
     | '/alumni/submit'
+    | '/news_/$id'
     | '/schools/alpha-girls'
     | '/schools/alpha-high'
     | '/schools/nursery-primary'
@@ -544,6 +556,7 @@ export interface RootRouteChildren {
   ScholarshipsRoute: typeof ScholarshipsRoute
   TestimonialsRoute: typeof TestimonialsRoute
   AlumniSubmitRoute: typeof AlumniSubmitRoute
+  NewsIdRoute: typeof NewsIdRoute
   SchoolsAlphaGirlsRoute: typeof SchoolsAlphaGirlsRoute
   SchoolsAlphaHighRoute: typeof SchoolsAlphaHighRoute
   SchoolsNurseryPrimaryRoute: typeof SchoolsNurseryPrimaryRoute
@@ -767,6 +780,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlumniSubmitRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/news_/$id': {
+      id: '/news_/$id'
+      path: '/news/$id'
+      fullPath: '/news/$id'
+      preLoaderRoute: typeof NewsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/schools/alpha-girls': {
       id: '/schools/alpha-girls'
       path: '/schools/alpha-girls'
@@ -945,6 +965,7 @@ const rootRouteChildren: RootRouteChildren = {
   ScholarshipsRoute: ScholarshipsRoute,
   TestimonialsRoute: TestimonialsRoute,
   AlumniSubmitRoute: AlumniSubmitRoute,
+  NewsIdRoute: NewsIdRoute,
   SchoolsAlphaGirlsRoute: SchoolsAlphaGirlsRoute,
   SchoolsAlphaHighRoute: SchoolsAlphaHighRoute,
   SchoolsNurseryPrimaryRoute: SchoolsNurseryPrimaryRoute,
