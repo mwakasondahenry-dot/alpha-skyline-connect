@@ -1,5 +1,13 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { clearDraft, draftKey, loginRedirect, readDraft, safeRedirect, saveDraft } from "./drafts";
+import {
+  clearAllDrafts,
+  clearDraft,
+  draftKey,
+  loginRedirect,
+  readDraft,
+  safeRedirect,
+  saveDraft,
+} from "./drafts";
 
 const g = globalThis as unknown as { sessionStorage?: unknown };
 let original: unknown;
@@ -17,6 +25,10 @@ function stub() {
     getItem: (k: string) => m.get(k) ?? null,
     setItem: (k: string, v: string) => void m.set(k, v),
     removeItem: (k: string) => void m.delete(k),
+    get length() {
+      return m.size;
+    },
+    key: (i: number) => [...m.keys()][i] ?? null,
   };
   return m;
 }
@@ -33,6 +45,14 @@ describe("drafts", () => {
     clearDraft(k);
     expect(readDraft(k)).toBeNull();
   });
+  it("clears every admin draft on sign-out and leaves other storage alone", () => {
+    const m = stub();
+    saveDraft(draftKey("stories", "7"), { a: 1 });
+    saveDraft(draftKey("news", "new"), { b: 2 });
+    m.set("alpha-urgent-dismissed", "[]");
+    clearAllDrafts();
+    expect([...m.keys()]).toEqual(["alpha-urgent-dismissed"]);
+  });
   it("returns null for corrupt JSON", () => {
     const m = stub();
     m.set("k", "{nope");
@@ -46,6 +66,7 @@ describe("drafts", () => {
     expect(() => saveDraft("k", 1)).not.toThrow();
     expect(readDraft("k")).toBeNull();
     expect(() => clearDraft("k")).not.toThrow();
+    expect(() => clearAllDrafts()).not.toThrow();
   });
 });
 

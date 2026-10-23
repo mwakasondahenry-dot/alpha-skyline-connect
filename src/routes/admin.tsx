@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { AdminAuthProvider, useAdminAuth } from "@/lib/admin-auth";
 import { noindexHead } from "@/lib/seo";
-import { loginRedirect, safeRedirect } from "@/lib/admin/drafts";
+import { clearAllDrafts, loginRedirect, safeRedirect } from "@/lib/admin/drafts";
 import { useAdminCounts } from "@/lib/admin/counts";
 import { OutcomeProvider } from "@/components/admin/kit";
 import { Sidebar } from "@/components/admin/shell/sidebar";
@@ -71,6 +71,9 @@ function AdminGate() {
     setSigningOut(true);
     try {
       await signOut();
+      // A deliberate sign-out forgets unsaved edits (shared phones); an
+      // expired sign-in does not come through here, so it keeps them.
+      clearAllDrafts();
     } catch {
       // Still signed in: a later expiry must remember its page again.
       leaving.current = false;
