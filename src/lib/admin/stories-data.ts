@@ -91,11 +91,26 @@ function storyPhotoPath(id: string, ext: string) {
   return `testimonials/story-${id}.${ext}`;
 }
 
-/** The story's own public file, if photo_url points at one (never a shared file). */
-function ownPublicPath(story: Pick<AdminStory, "id" | "photo_url">): string | null {
-  if (!story.photo_url) return null;
-  const m = story.photo_url.match(/\/(testimonials\/story-([^/]+)\.[a-z0-9]+)$/i);
-  return m && m[2] === story.id ? m[1] : null;
+/** Extension of a storage path, "jpg" when it has none. */
+function extOf(path: string) {
+  return path.match(/\.([a-z0-9]+)$/i)?.[1] ?? "jpg";
+}
+
+/**
+ * The story's own public files (the photo and its small copy), when photo_url
+ * points at one: `story-<id>.<ext>` from publishing, or `story-<id>-<ts>.<ext>`
+ * from a replaced photo. Anything else may be a shared image used elsewhere on
+ * the site, so it is never treated as the story's own.
+ */
+function ownPublicFiles(story: Pick<AdminStory, "id" | "photo_url">): string[] {
+  if (!story.photo_url) return [];
+  const m = story.photo_url.match(/\/(testimonials\/(story-[^/.]+)\.[a-z0-9]+)$/i);
+  if (!m) return [];
+  const stem = m[2];
+  const base = `story-${story.id}`;
+  const own =
+    stem === base || (stem.startsWith(`${base}-`) && /^\d+$/.test(stem.slice(base.length + 1)));
+  return own ? [m[1], smallPhotoPath(stem)] : [];
 }
 
 /** A storage call whose failure is harmless (a stray file) and must not fail the action. */
@@ -110,19 +125,26 @@ async function quietly(label: string, run: () => Promise<{ error: unknown }>) {
 
 /**
  * The small copy the site loads instead of the original
- * (src/lib/testimonial-photo.ts). The site shows story photos at most 120px
- * tall. If the copy cannot be made, the page falls back to the original, so a
- * failure here is reported to the console and never blocks the action.
+ * (src/lib/testimonial-photo.ts), for the photo stored as `<stem>.<ext>`. The
+ * site shows story photos at most 120px tall. If the copy cannot be made, the
+ * page falls back to the original, so a failure here is reported to the
+ * console and never blocks the action. The site falls back only when the
+ * small file is missing, though: an older small copy at the same path would
+ * keep showing the previous photo, so on failure it is removed.
  */
-async function uploadSmallCopy(sb: SupabaseClient, id: string, file: Blob) {
+async function uploadSmallCopy(sb: SupabaseClient, stem: string, file: Blob) {
+  const path = smallPhotoPath(stem);
   try {
     const small = await makeSmallCopy(file, SMALL_EDGE);
     const { error } = await sb.storage
       .from(PUBLIC_BUCKET)
-      .upload(smallPhotoPath(`story-${id}`), small, { contentType: "image/webp", upsert: true });
+      .upload(path, small, { contentType: "image/webp", upsert: true });
     if (error) throw error;
   } catch (err) {
     console.warn("Small copy of the story photo was not saved", err);
+    await quietly("Stale small copy was not removed", () =>
+      sb.storage.from(PUBLIC_BUCKET).remove([path]),
+    );
   }
 }
 
@@ -256,8 +278,7 @@ export async function publishStory(sb: SupabaseClient, story: AdminStory): Promi
     const { data: file, error: dlError } = await sb.storage.from(PENDING_BUCKET).download(pending);
     if (dlError || !file) return fail(dlError ?? new Error("Object not found"));
 
-    const ext = pending.split(".").pop() || "jpg";
-    const destination = storyPhotoPath(story.id, ext);
+    const destination = storyPhotoPath(story.id, extOf(pending));
     const { error: upError } = await sb.storage
       .from(PUBLIC_BUCKET)
       .upload(destination, file, { contentType: file.type, upsert: true });
@@ -265,7 +286,7 @@ export async function publishStory(sb: SupabaseClient, story: AdminStory): Promi
 
     const publicUrl = sb.storage.from(PUBLIC_BUCKET).getPublicUrl(destination).data.publicUrl;
 
-    await uploadSmallCopy(sb, story.id, file);
+    await uploadSmallCopy(sb, `story-${story.id}`, file);
 
     /* Guarded on the pending path too: if someone replaced the photo since
        this screen loaded, publishing the old copy would be wrong. */
@@ -308,6 +329,12 @@ export async function saveStoryEdit(
  * Add or replace a story's photo. A Waiting story's photo is still private, so
  * the new one replaces the pending photo; every other story's goes straight to
  * the public bucket like an approved photo, with its small copy.
+ *
+ * The new photo always gets a fresh, versioned name (never an overwrite), so
+ * the row's current files stay intact until the row points at the new ones:
+ * the guarded update runs first, then the old files are removed. If the update
+ * conflicts or fails, the new files are removed instead and the row's files
+ * are untouched. A fresh name also means no CDN-cached old image at the URL.
  */
 export async function replaceStoryPhoto(
   sb: SupabaseClient,
@@ -317,20 +344,32 @@ export async function replaceStoryPhoto(
   try {
     const { blob, ext } = await compressImage(file);
     const contentType = ext === "png" ? "image/png" : "image/webp";
+    const stem = `story-${story.id}-${Date.now()}`;
 
     if (story.status === "waiting") {
       const old = story.pending_photo_path;
-      /* Overwrite in place when the extension matches; otherwise a new name,
-         so publishing (which takes the extension from the path) stays right. */
-      const target = old && old.split(".").pop() === ext ? old : `staff/story-${story.id}.${ext}`;
+      const target = `staff/${stem}.${ext}`;
       const { error: upError } = await sb.storage
         .from(PENDING_BUCKET)
         .upload(target, blob, { contentType, upsert: true });
       if (upError) return fail(upError);
 
-      const result = await guardedUpdate(sb, story.id, "waiting", { pending_photo_path: target });
-      if (!result.ok) return result;
-      if (old && old !== target) {
+      /* Also guarded on the photo this screen saw, so a photo someone else
+         put there meanwhile is never orphaned. */
+      const result = await guardedUpdate(
+        sb,
+        story.id,
+        "waiting",
+        { pending_photo_path: target },
+        (q) => (old ? q.eq("pending_photo_path", old) : q.is("pending_photo_path", null)),
+      );
+      if (!result.ok) {
+        await quietly("New pending photo was not removed", () =>
+          sb.storage.from(PENDING_BUCKET).remove([target]),
+        );
+        return result;
+      }
+      if (old) {
         await quietly("Old pending photo was not removed", () =>
           sb.storage.from(PENDING_BUCKET).remove([old]),
         );
@@ -338,21 +377,29 @@ export async function replaceStoryPhoto(
       return OK;
     }
 
-    const destination = storyPhotoPath(story.id, ext);
+    const destination = `testimonials/${stem}.${ext}`;
     const { error: upError } = await sb.storage
       .from(PUBLIC_BUCKET)
       .upload(destination, blob, { contentType, upsert: true });
     if (upError) return fail(upError);
-    await uploadSmallCopy(sb, story.id, blob);
+    await uploadSmallCopy(sb, stem, blob);
 
     const publicUrl = sb.storage.from(PUBLIC_BUCKET).getPublicUrl(destination).data.publicUrl;
-    const result = await guardedUpdate(sb, story.id, story.status, { photo_url: publicUrl });
-    if (!result.ok) return result;
+    const oldUrl = story.photo_url;
+    const result = await guardedUpdate(sb, story.id, story.status, { photo_url: publicUrl }, (q) =>
+      oldUrl ? q.eq("photo_url", oldUrl) : q.is("photo_url", null),
+    );
+    if (!result.ok) {
+      await quietly("New story photo was not removed", () =>
+        sb.storage.from(PUBLIC_BUCKET).remove([destination, smallPhotoPath(stem)]),
+      );
+      return result;
+    }
 
-    const oldOwn = ownPublicPath(story);
-    if (oldOwn && oldOwn !== destination) {
+    const oldFiles = ownPublicFiles(story);
+    if (oldFiles.length > 0) {
       await quietly("Old story photo was not removed", () =>
-        sb.storage.from(PUBLIC_BUCKET).remove([oldOwn]),
+        sb.storage.from(PUBLIC_BUCKET).remove(oldFiles),
       );
     }
     return OK;
@@ -381,11 +428,9 @@ export async function removeStoryPhoto(sb: SupabaseClient, story: AdminStory): P
   if (!result.ok) return result;
   /* Only the story's own files. A photo_url pointing anywhere else may be a
      shared image used elsewhere on the site, so it is left in place. */
-  const own = ownPublicPath(story);
-  if (own) {
-    await quietly("Story photo was not removed", () =>
-      sb.storage.from(PUBLIC_BUCKET).remove([own, smallPhotoPath(`story-${story.id}`)]),
-    );
+  const own = ownPublicFiles(story);
+  if (own.length > 0) {
+    await quietly("Story photo was not removed", () => sb.storage.from(PUBLIC_BUCKET).remove(own));
   }
   return OK;
 }
@@ -445,7 +490,7 @@ export async function deleteStory(sb: SupabaseClient, story: AdminStory): Promis
   /* The row is gone; removing its files is cleanup, and a failure only leaves
      a stray file. */
   const pending = story.pending_photo_path;
-  const own = ownPublicPath(story);
+  const publicFiles = [...new Set([...ownPublicFiles(story), smallPhotoPath(`story-${story.id}`)])];
   await Promise.all([
     pending
       ? quietly("Pending photo was not removed", () =>
@@ -453,9 +498,7 @@ export async function deleteStory(sb: SupabaseClient, story: AdminStory): Promis
         )
       : null,
     quietly("Story photo was not removed", () =>
-      sb.storage
-        .from(PUBLIC_BUCKET)
-        .remove([...(own ? [own] : []), smallPhotoPath(`story-${story.id}`)]),
+      sb.storage.from(PUBLIC_BUCKET).remove(publicFiles),
     ),
   ]);
   return OK;
@@ -509,7 +552,8 @@ export async function swapFeaturedOrder(
   const second = await setOrder(sb, b.id, b.order, a.order);
   if (!second.ok) {
     /* Put the first one back so the two never share a place. */
-    await setOrder(sb, a.id, b.order, a.order);
+    const rollback = await setOrder(sb, a.id, b.order, a.order);
+    if (!rollback.ok) console.warn("Could not put the featured order back", rollback);
     return second;
   }
   return OK;

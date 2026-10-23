@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 vi.mock("@/lib/image-compress", () => ({
@@ -307,6 +307,16 @@ describe("publishStory", () => {
       photo_url: "https://cdn.test/storage/v1/object/public/media/testimonials/story-s1.jpg",
       pending_photo_path: null,
     });
+    // Guarded on the photo that was copied, so a replaced photo is never published stale.
+    expect(u.filters).toContainEqual(["eq", "pending_photo_path", "2026/abc.jpg"]);
+  });
+
+  it("takes a pending path without an extension as jpg", async () => {
+    const { sb, calls } = fakeClient();
+    expect(await publishStory(sb, story({ pending_photo_path: "2026/abc" }))).toEqual({
+      ok: true,
+    });
+    expect(trace(calls)[1]).toBe("storage:upload:media:testimonials/story-s1.jpg");
   });
 
   it("does not publish or remove the pending file when the public upload fails", async () => {
@@ -338,18 +348,21 @@ describe("publishStory", () => {
     expect(trace(calls)).toEqual([
       "storage:download:alumni-pending:2026/abc.jpg",
       "storage:upload:media:testimonials/story-s1.jpg",
+      // A stale small copy would hide the new photo; removing it makes the site fall back.
+      "storage:remove:media:testimonials/small/story-s1.webp",
       "db:update:testimonials",
       "storage:remove:alumni-pending:2026/abc.jpg",
     ]);
   });
 
-  it("still publishes when the small copy upload fails", async () => {
-    const { sb } = fakeClient((c, f) =>
+  it("still publishes when the small copy upload fails, and removes any stale small copy", async () => {
+    const { sb, calls } = fakeClient((c, f) =>
       c.kind === "storage" && c.op === "upload" && String(c.args[0]).includes("/small/")
         ? { data: null, error: { message: "small failed" } }
         : f,
     );
     expect(await publishStory(sb, story())).toEqual({ ok: true });
+    expect(trace(calls)).toContain("storage:remove:media:testimonials/small/story-s1.webp");
   });
 
   it("refuses without a consent record and makes no calls", async () => {
@@ -432,39 +445,112 @@ describe("saveStoryEdit", () => {
 
 describe("replaceStoryPhoto", () => {
   const file = new File(["x"], "me.jpg", { type: "image/jpeg" });
+  const TS = 1_760_000_000_000;
+  const PUB = "https://cdn.test/storage/v1/object/public/media/";
 
-  it("for a waiting story writes the private pending photo only", async () => {
+  beforeEach(() => {
+    vi.spyOn(Date, "now").mockReturnValue(TS);
+  });
+  afterEach(() => {
+    vi.mocked(Date.now).mockRestore();
+  });
+
+  it("for a waiting story writes a fresh private pending file, then removes the old one", async () => {
     const { sb, calls } = fakeClient();
     const r = await replaceStoryPhoto(sb, story({ pending_photo_path: "2026/abc.jpg" }), file);
     expect(r).toEqual({ ok: true });
     expect(compressImage).toHaveBeenCalledWith(file);
-    const storage = calls.filter((c) => c.kind === "storage");
-    expect(storage.every((c) => c.bucket === "alumni-pending")).toBe(true);
+    expect(trace(calls)).toEqual([
+      `storage:upload:alumni-pending:staff/story-s1-${TS}.webp`,
+      "db:update:testimonials",
+      "storage:remove:alumni-pending:2026/abc.jpg",
+    ]);
     const [u] = dbCalls(calls);
     expect(u.filters).toContainEqual(["eq", "status", "waiting"]);
-    expect(u.payload).not.toHaveProperty("photo_url");
-    // The old file is removed only after the row points at the new one.
-    expect(trace(calls).at(-1)).toBe("storage:remove:alumni-pending:2026/abc.jpg");
+    expect(u.payload).toEqual({ pending_photo_path: `staff/story-s1-${TS}.webp` });
   });
 
-  it("for a live story uploads to public media with a small copy and sets photo_url", async () => {
+  it("for a waiting story on a conflict removes the new file and keeps the old one", async () => {
+    const { sb, calls } = fakeClient((c, f) => (c.kind === "db" ? { data: [], error: null } : f));
+    const r = await replaceStoryPhoto(sb, story({ pending_photo_path: "2026/abc.jpg" }), file);
+    expect(r).toEqual({ ok: false, conflict: true });
+    expect(trace(calls)).toEqual([
+      `storage:upload:alumni-pending:staff/story-s1-${TS}.webp`,
+      "db:update:testimonials",
+      `storage:remove:alumni-pending:staff/story-s1-${TS}.webp`,
+    ]);
+  });
+
+  it("for a live story uploads a versioned public file and small copy, updates, then removes the old files", async () => {
     const { sb, calls } = fakeClient();
+    const r = await replaceStoryPhoto(
+      sb,
+      story({
+        status: "live",
+        pending_photo_path: null,
+        photo_url: `${PUB}testimonials/story-s1.jpg`,
+      }),
+      file,
+    );
+    expect(r).toEqual({ ok: true });
+    expect(trace(calls)).toEqual([
+      `storage:upload:media:testimonials/story-s1-${TS}.webp`,
+      `storage:upload:media:testimonials/small/story-s1-${TS}.webp`,
+      "db:update:testimonials",
+      "storage:remove:media:testimonials/story-s1.jpg,testimonials/small/story-s1.webp",
+    ]);
+    const [u] = dbCalls(calls);
+    expect(u.filters).toContainEqual(["eq", "status", "live"]);
+    expect(u.payload).toEqual({ photo_url: `${PUB}testimonials/story-s1-${TS}.webp` });
+  });
+
+  it("for a live story with an earlier versioned photo removes that one and its small copy", async () => {
+    const { sb, calls } = fakeClient();
+    await replaceStoryPhoto(
+      sb,
+      story({
+        status: "hidden",
+        pending_photo_path: null,
+        photo_url: `${PUB}testimonials/story-s1-123.webp`,
+      }),
+      file,
+    );
+    expect(trace(calls).at(-1)).toBe(
+      "storage:remove:media:testimonials/story-s1-123.webp,testimonials/small/story-s1-123.webp",
+    );
+  });
+
+  it("for a live story on a conflict removes the new files and leaves the row's files", async () => {
+    const { sb, calls } = fakeClient((c, f) => (c.kind === "db" ? { data: [], error: null } : f));
+    const r = await replaceStoryPhoto(
+      sb,
+      story({
+        status: "live",
+        pending_photo_path: null,
+        photo_url: `${PUB}testimonials/story-s1.jpg`,
+      }),
+      file,
+    );
+    expect(r).toEqual({ ok: false, conflict: true });
+    expect(trace(calls).slice(2)).toEqual([
+      "db:update:testimonials",
+      `storage:remove:media:testimonials/story-s1-${TS}.webp,testimonials/small/story-s1-${TS}.webp`,
+    ]);
+  });
+
+  it("removes the stale small copy when the new small copy cannot be uploaded", async () => {
+    const { sb, calls } = fakeClient((c, f) =>
+      c.kind === "storage" && c.op === "upload" && String(c.args[0]).includes("/small/")
+        ? { data: null, error: { message: "small failed" } }
+        : f,
+    );
     const r = await replaceStoryPhoto(
       sb,
       story({ status: "live", pending_photo_path: null, photo_url: null }),
       file,
     );
     expect(r).toEqual({ ok: true });
-    expect(trace(calls)).toEqual([
-      "storage:upload:media:testimonials/story-s1.webp",
-      "storage:upload:media:testimonials/small/story-s1.webp",
-      "db:update:testimonials",
-    ]);
-    const [u] = dbCalls(calls);
-    expect(u.filters).toContainEqual(["eq", "status", "live"]);
-    expect(u.payload).toMatchObject({
-      photo_url: "https://cdn.test/storage/v1/object/public/media/testimonials/story-s1.webp",
-    });
+    expect(trace(calls)).toContain(`storage:remove:media:testimonials/small/story-s1-${TS}.webp`);
   });
 
   it("stops before any upload when compression refuses the file", async () => {
@@ -600,6 +686,33 @@ describe("deleteStory", () => {
     );
   });
 
+  it("removes a versioned photo and its small copy", async () => {
+    const { sb, calls } = fakeClient();
+    const s = story({
+      status: "hidden",
+      pending_photo_path: null,
+      photo_url: "https://cdn.test/storage/v1/object/public/media/testimonials/story-s1-123.webp",
+    });
+    expect(await deleteStory(sb, s)).toEqual({ ok: true });
+    expect(trace(calls).slice(1)).toEqual([
+      "storage:remove:media:testimonials/story-s1-123.webp,testimonials/small/story-s1-123.webp,testimonials/small/story-s1.webp",
+    ]);
+  });
+
+  it("does not treat another story's file as its own", async () => {
+    const { sb, calls } = fakeClient();
+    const s = story({
+      id: "s1",
+      status: "hidden",
+      pending_photo_path: null,
+      photo_url: "https://cdn.test/storage/v1/object/public/media/testimonials/story-s1-other.jpg",
+    });
+    await deleteStory(sb, s);
+    expect(trace(calls).slice(1)).toEqual([
+      "storage:remove:media:testimonials/small/story-s1.webp",
+    ]);
+  });
+
   it("removes no files when the row was not deleted", async () => {
     const { sb, calls } = fakeClient((c, f) => (c.kind === "db" ? { data: [], error: null } : f));
     expect(await deleteStory(sb, story({ status: "hidden" }))).toEqual({
@@ -652,5 +765,20 @@ describe("featured", () => {
     expect(db).toHaveLength(3);
     expect(db[2].payload).toEqual({ featured_order: 1 });
     expect(db[2].filters).toContainEqual(["eq", "id", "a"]);
+  });
+
+  it("warns when putting the first back also fails", async () => {
+    let n = 0;
+    const { sb } = fakeClient((c, f) => {
+      if (c.kind !== "db") return f;
+      n += 1;
+      return n >= 2 ? { data: [], error: null } : f;
+    });
+    const r = await swapFeaturedOrder(sb, { id: "a", order: 1 }, { id: "b", order: 2 });
+    expect(r).toEqual({ ok: false, conflict: true });
+    expect(console.warn).toHaveBeenCalledWith(
+      expect.stringContaining("featured order"),
+      expect.anything(),
+    );
   });
 });
