@@ -14,13 +14,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-export type AdminNavCount = "storiesWaiting" | "inboxNew" | "total";
+export type AdminNavCount = "storiesWaiting" | "inboxNew" | "todayTotal";
 
 export type AdminNavLink = { to: string; label: string };
 
 export type AdminNavItem = AdminNavLink & {
   icon: LucideIcon;
-  /** Badge source. "total" is every waiting thing (Today). */
+  /** Badge source. "todayTotal" (Today) is stories waiting plus new enquiries. */
   count?: AdminNavCount;
   /** On a phone: in the bottom bar, or in the More sheet. */
   phone: "bar" | "more";
@@ -29,7 +29,7 @@ export type AdminNavItem = AdminNavLink & {
 };
 
 export const ADMIN_NAV: AdminNavItem[] = [
-  { to: "/admin", label: "Today", icon: Sun, count: "total", phone: "bar" },
+  { to: "/admin", label: "Today", icon: Sun, count: "todayTotal", phone: "bar" },
   {
     to: "/admin/stories",
     label: "Stories",
@@ -94,7 +94,9 @@ export function navCount(
 ): number {
   if (kind === "storiesWaiting") return c.storiesWaiting;
   if (kind === "inboxNew") return c.inboxNew;
-  if (kind === "total") return c.storiesWaiting + c.inboxNew + c.photosEmpty;
+  // Only things a person must answer: empty photo positions are a card on
+  // Today, not a badge, or the badge would never go out.
+  if (kind === "todayTotal") return c.storiesWaiting + c.inboxNew;
   return 0;
 }
 
@@ -102,7 +104,7 @@ export function navCount(
 export const COUNT_LABEL: Record<AdminNavCount, string> = {
   storiesWaiting: "stories waiting",
   inboxNew: "new enquiries",
-  total: "things waiting",
+  todayTotal: "stories and enquiries waiting",
 };
 
 /**

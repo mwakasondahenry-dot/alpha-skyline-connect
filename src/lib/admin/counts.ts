@@ -21,7 +21,10 @@ export function countEmptyPhotoPositions(uploadedKeys: Iterable<string>): number
   return PHOTO_SLOTS.filter((s) => !s.fallback && !uploaded.has(s.key)).length;
 }
 
-/** The Today badge: everything that is waiting, in one number. */
+/**
+ * Everything waiting, photos included: zero means Today says "Nothing needs
+ * you right now." Not the nav badge, which leaves photos out (navCount).
+ */
 export function totalNeedingAttention(c: AdminCounts): number {
   return c.storiesWaiting + c.inboxNew + c.photosEmpty;
 }

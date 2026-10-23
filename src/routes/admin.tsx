@@ -7,8 +7,9 @@ import { loginRedirect, safeRedirect } from "@/lib/admin/drafts";
 import { useAdminCounts } from "@/lib/admin/counts";
 import { OutcomeProvider } from "@/components/admin/kit";
 import { Sidebar } from "@/components/admin/shell/sidebar";
-import { BottomBar } from "@/components/admin/shell/bottom-bar";
+import { BOTTOM_BAR_HEIGHT, BottomBar } from "@/components/admin/shell/bottom-bar";
 import { MoreSheet } from "@/components/admin/shell/more-sheet";
+import type { CSSProperties } from "react";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -37,6 +38,7 @@ function AdminGate() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const pathname = useRouterState({ select: (s) => trimSlash(s.location.pathname) });
+  const searchStr = useRouterState({ select: (s) => s.location.searchStr });
   const redirectParam = useRouterState({
     select: (s) => (s.location.search as { redirect?: unknown }).redirect,
   });
@@ -49,8 +51,11 @@ function AdminGate() {
 
   useEffect(() => {
     if (!ready) return;
+    // Signed out or expired: drop every admin query, so whoever signs in
+    // next on this phone never sees the last person's data.
+    if (!session) queryClient.removeQueries({ queryKey: ["admin"] });
     if (!session && !isLoginPage) {
-      const href = leaving.current ? "/admin/login" : loginRedirect(pathname);
+      const href = leaving.current ? "/admin/login" : loginRedirect(pathname + searchStr);
       leaving.current = false;
       navigate({ href, replace: true });
     } else if (session && isLoginPage) {
@@ -59,15 +64,16 @@ function AdminGate() {
         replace: true,
       });
     }
-  }, [ready, session, isLoginPage, pathname, redirectParam, navigate]);
+  }, [ready, session, isLoginPage, pathname, searchStr, redirectParam, navigate, queryClient]);
 
   async function handleSignOut() {
     leaving.current = true;
     setSigningOut(true);
     try {
       await signOut();
-      // The next person to sign in on this phone must not see these counts.
-      queryClient.removeQueries({ queryKey: ["admin"] });
+    } catch {
+      // Still signed in: a later expiry must remember its page again.
+      leaving.current = false;
     } finally {
       setSigningOut(false);
     }
@@ -125,12 +131,14 @@ function Shell({
   }, [pathname]);
 
   return (
-    // data-admin scopes the kit's dialog and sheet motion. On a phone the
-    // outcome line sits above the 4rem bottom bar; from 768px it moves to
-    // the top right and ignores this.
+    // data-admin scopes the kit's dialog and sheet motion. --admin-bar-h is
+    // the phone bar's height (one constant, in bottom-bar.tsx): the outcome
+    // line sits just above it and the content is padded past it. From 768px
+    // the outcome line moves to the top right and ignores this.
     <div
       data-admin=""
-      className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)] [--admin-outcome-bottom:4.75rem] md:[--admin-outcome-bottom:1rem]"
+      style={{ "--admin-bar-h": BOTTOM_BAR_HEIGHT } as CSSProperties}
+      className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)] [--admin-outcome-bottom:calc(var(--admin-bar-h)+0.75rem)] md:[--admin-outcome-bottom:1rem]"
     >
       <OutcomeProvider>
         <a
@@ -149,7 +157,7 @@ function Shell({
         <main
           id="admin-main"
           tabIndex={-1}
-          className="pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] focus:outline-none md:pb-0 md:pl-64"
+          className="pb-[calc(var(--admin-bar-h)+1.5rem+env(safe-area-inset-bottom,0px))] focus:outline-none md:pb-0 md:pl-64"
         >
           <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
             <Outlet />

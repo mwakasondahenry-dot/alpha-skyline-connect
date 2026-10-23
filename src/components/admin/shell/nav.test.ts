@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { ADMIN_NAV, isCurrent, isWithin } from "./nav";
+import { ADMIN_NAV, isCurrent, isWithin, navCount } from "./nav";
 
 describe("ADMIN_NAV", () => {
   it("lists the areas by job, Alumni between Inbox and News & events", () => {
@@ -60,5 +60,26 @@ describe("isWithin", () => {
     expect(isWithin(photos, "/admin/gallery")).toBe(true);
     expect(isWithin(photos, "/admin/photos")).toBe(true);
     expect(isWithin(photos, "/admin/staff")).toBe(false);
+  });
+});
+
+describe("navCount", () => {
+  const c = { storiesWaiting: 2, inboxNew: 3, photosEmpty: 13 };
+
+  it("gives Today stories waiting plus new enquiries, leaving empty photos out", () => {
+    const today = ADMIN_NAV.find((n) => n.to === "/admin")!;
+    expect(navCount(today.count, c)).toBe(5);
+    expect(navCount(today.count, { storiesWaiting: 0, inboxNew: 0, photosEmpty: 13 })).toBe(0);
+  });
+
+  it("gives Stories and Inbox their own counts", () => {
+    const stories = ADMIN_NAV.find((n) => n.to === "/admin/stories")!;
+    const inbox = ADMIN_NAV.find((n) => n.to === "/admin/inbox")!;
+    expect(navCount(stories.count, c)).toBe(2);
+    expect(navCount(inbox.count, c)).toBe(3);
+  });
+
+  it("gives no number to an item without a badge", () => {
+    expect(navCount(undefined, c)).toBe(0);
   });
 });

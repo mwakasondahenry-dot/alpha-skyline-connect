@@ -62,3 +62,13 @@ describe("redirects", () => {
     }
   });
 });
+
+describe("redirect round trip with query params", () => {
+  it("keeps a page's search string through loginRedirect and safeRedirect", () => {
+    const path = "/admin/stories?tab=live";
+    const href = loginRedirect(path);
+    expect(href).toBe(`/admin/login?redirect=${encodeURIComponent(path)}`);
+    const param = new URLSearchParams(href.split("?")[1]).get("redirect");
+    expect(safeRedirect(param)).toBe(path);
+  });
+});
