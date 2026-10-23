@@ -229,7 +229,8 @@ export type AlumniFilters = { q: string; schools: string[]; yearFrom: number | n
   has: Array<"photo"|"email"|"phone">; sort: "year"|"name"|"recent" };
 export const EMPTY_FILTERS: AlumniFilters; // sort "year"
 export function filterAlumni(people: AlumniPerson[], f: AlumniFilters): AlumniPerson[];
-export function facetCounts(people: AlumniPerson[], f: AlumniFilters): Record<"school"|"story"|"invite"|"city", Record<string, number>>;
+export function facetCounts(people: AlumniPerson[], f: AlumniFilters): Record<"school"|"story"|"invite"|"city"|"year", Record<string, number>>;
+// "year" keys are graduation years as strings ("2019") plus "none" for no year; counts ignore the active year range.
 // counts for each facet computed with every OTHER active filter applied (standard faceting).
 export function filtersToParams(f: AlumniFilters): Record<string, string>;   // omit defaults; arrays comma-joined
 export function filtersFromParams(p: Record<string, unknown>): AlumniFilters; // tolerant of junk
@@ -245,7 +246,7 @@ Merge rule (spec): a story joins its invite by `invite_id`; otherwise by phone n
   - `filterAlumni` `q:"jose"` matches "José Mwakasonda"; `q:"o'brien"` matches "O’Brien"; `q:"EY"` matches company "EY Tanzania"; `q:"0712345678"` matches `+255712345678`.
   - Year range 2015–2019 inclusive excludes 2014 and null years; `story:["none"]` returns people with no story; `has:["email"]`.
   - Sort `year` puts 2024 before 2015, nulls last; `name` is locale A–Z.
-  - `facetCounts` school counts ignore the active school filter but respect the year filter.
+  - `facetCounts` school counts ignore the active school filter but respect the year filter; `year` counts ignore the active year range but respect the school filter (e.g. two 2019 people at Alpha High → `year["2019"] === 2`).
   - `filtersFromParams(filtersToParams(f))` deep-equals `f` for a fully populated `f`; `filtersFromParams({yearFrom:"x", story:"live,bogus"})` → `yearFrom:null, story:["live"]`.
   - `alumniCsv` quotes a name with a comma and a quote mark (`"Mwakasonda, ""Henry"""`), ends lines with `\r\n`.
 - [ ] **Step 2: Run** → FAIL. **Step 3: Implement** (normalise text with `.normalize("NFD").replace(/\p{Diacritic}/gu,"").replace(/[’']/g,"'").toLowerCase()`; phone search on digits only). **Step 4: Run** → PASS.
@@ -327,7 +328,7 @@ CSS (append to `src/styles.css`): `.admin-press` (120ms `transform: scale(.97)` 
 
 **Interfaces:** Consumes Task 5 entirely, `contactLinks`, `formatAdminDate`, `schoolLabel`, `WholePhoto`.
 
-- [ ] **Step 1:** Load invites (`audience = 'alumni'`, explicit columns) and stories (`grad_year is not null`, explicit columns incl. `answers`) once with TanStack Query; `mergeAlumni`. Search param schema = `filtersToParams` / `filtersFromParams` (route `validateSearch`). Search input (debounced 150ms, `type="search"`), filter chips opening `AdminSheet` pickers with `facetCounts`, removable active chips, "Clear all", sort select, result line "<n> former students · <k> filters". Phone: `PersonCard` list; ≥ 768px: `PersonTable` with sticky header in an `overflow-x-auto` wrapper. **Every row shows the submitted phone and email** (owner request 2026-10-23): on `PersonCard` as two tappable lines (`tel:` and `mailto:` from `contactLinks`, 44px tall, the card's own tap still opens the person), in `PersonTable` as Phone and Email columns with the same links; "Not given" in `--color-ink-soft` when absent. The phone is displayed in a readable form (e.g. `+255 712 345 678`). Empty result: "No former students match. Clear filters".
+- [ ] **Step 1:** Load invites (`audience = 'alumni'`, explicit columns) and stories (`grad_year is not null`, explicit columns incl. `answers`) once with TanStack Query; `mergeAlumni`. Search param schema = `filtersToParams` / `filtersFromParams` (route `validateSearch`). Search input (debounced 150ms, `type="search"`), filter chips opening `AdminSheet` pickers with `facetCounts` — the **Class of** picker (owner request 2026-10-23: "filter by graduation year") lists every graduation year present, newest first, each as a 44px row "2019 · 14"; tapping a row sets `yearFrom = yearTo = that year`; below the list, From and To selects set a range, and decade quick picks (2020s, 2010s, 2000s) set a range; the active chip reads "Class of 2019" or "Class of 2015–2019", removable active chips, "Clear all", sort select, result line "<n> former students · <k> filters". Phone: `PersonCard` list; ≥ 768px: `PersonTable` with sticky header in an `overflow-x-auto` wrapper. **Every row shows the submitted phone and email** (owner request 2026-10-23): on `PersonCard` as two tappable lines (`tel:` and `mailto:` from `contactLinks`, 44px tall, the card's own tap still opens the person), in `PersonTable` as Phone and Email columns with the same links; "Not given" in `--color-ink-soft` when absent. The phone is displayed in a readable form (e.g. `+255 712 345 678`). Empty result: "No former students match. Clear filters".
 - [ ] **Step 2:** "Download list" → `ConfirmDialog` with "This file contains phone numbers and emails. Keep it inside the school." → `Blob` of `alumniCsv(filtered)` downloaded as `alpha-alumni-YYYY-MM-DD.csv`. Nothing server-side.
 - [ ] **Step 3:** Person detail `admin.alumni.$key.tsx` per spec (photo whole, facts, WhatsApp/Call/Email, story with status and link, invite with status and link, first invited/submitted dates).
 - [ ] **Step 4:** Verify typecheck/lint/tests; with the owner signed in, run the spec's alumni "Done means" search at 375px and time it.

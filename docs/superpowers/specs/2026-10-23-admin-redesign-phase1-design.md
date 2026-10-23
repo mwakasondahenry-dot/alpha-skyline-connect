@@ -299,7 +299,9 @@ matches as you type, case and accent insensitive). Filters, as chips that
 open a small picker, each showing counts:
 
 - School (Alpha High, Alpha Girls, Nursery & Primary, not recorded)
-- Class of (a from–to year range, plus quick picks by decade)
+- Class of / graduation year (owner request): every year present with its
+  count, tap one for a single class; or a from–to range, plus quick picks by
+  decade
 - Story (none, waiting, live, hidden, declined)
 - Invite (not invited, invited, opened, submitted)
 - City or country (the values present)
