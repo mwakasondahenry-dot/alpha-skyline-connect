@@ -362,11 +362,15 @@ function only<T extends string>(v: unknown, allowed: readonly T[]): T[] {
 
 export function filtersFromParams(p: Record<string, unknown>): AlumniFilters {
   const sort = SORTS.find((s) => s === p.sort) ?? EMPTY_FILTERS.sort;
+  let yearFrom = year(p.yearFrom);
+  let yearTo = year(p.yearTo);
+  if (yearFrom !== null && yearTo !== null && yearFrom > yearTo)
+    [yearFrom, yearTo] = [yearTo, yearFrom];
   return {
-    q: typeof p.q === "string" ? p.q : "",
+    q: typeof p.q === "string" ? p.q : typeof p.q === "number" ? String(p.q) : "",
     schools: list(p.schools),
-    yearFrom: year(p.yearFrom),
-    yearTo: year(p.yearTo),
+    yearFrom,
+    yearTo,
     story: only(p.story, [...STORY_STATUSES, NONE] as const),
     invite: only(p.invite, INVITE_STATUSES),
     cities: list(p.cities),
@@ -384,8 +388,15 @@ const INVITE_LABEL: Record<AlumniPerson["inviteStatus"], string> = {
   submitted: "Submitted",
 };
 
-function cell(v: string | number | null): string {
-  const s = v === null ? "" : String(v);
+const FORMULA = /^[=+\-@\t\r]/;
+const PLAIN_PHONE = /^\+?[\d ]+$/;
+
+/** Spreadsheets run cells starting with = + - @ as formulas; a leading quote defuses them. */
+function cell(v: string | number | null, plainPhone = false): string {
+  let s = v === null ? "" : String(v);
+  if (typeof v === "string" && FORMULA.test(s) && !(plainPhone && PLAIN_PHONE.test(s))) {
+    s = `'${s}`;
+  }
   return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
 }
 
@@ -416,5 +427,5 @@ export function alumniCsv(people: AlumniPerson[]): string {
       INVITE_LABEL[p.inviteStatus],
     ]),
   ];
-  return rows.map((r) => r.map(cell).join(",")).join("\r\n") + "\r\n";
+  return rows.map((r) => r.map((v, i) => cell(v, i === 1)).join(",")).join("\r\n") + "\r\n";
 }

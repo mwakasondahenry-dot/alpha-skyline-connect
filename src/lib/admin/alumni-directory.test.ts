@@ -251,6 +251,32 @@ describe("params", () => {
   });
 });
 
+describe("alumniCsv formula safety", () => {
+  it("prefixes risky cells but keeps phones and years", () => {
+    const csv = alumniCsv([
+      person({
+        name: '=HYPERLINK("http://x","y")',
+        phone: "+255712345678",
+        company: "-Acme",
+      }),
+    ]);
+    const row = csv.split("\r\n")[1];
+    expect(row.startsWith(`"'=HYPERLINK(""http://x"",""y"")",+255712345678,`)).toBe(true);
+    expect(row).toContain(",'-Acme,");
+    expect(row).toContain("Alpha High,2019");
+  });
+});
+
+describe("params extras", () => {
+  it("accepts a numeric q", () => {
+    expect(filtersFromParams({ q: 2019 }).q).toBe("2019");
+  });
+  it("swaps a reversed year range", () => {
+    const r = filtersFromParams({ yearFrom: "2019", yearTo: "2010" });
+    expect([r.yearFrom, r.yearTo]).toEqual([2010, 2019]);
+  });
+});
+
 describe("alumniCsv", () => {
   it("writes the header, quotes, and CRLF", () => {
     const csv = alumniCsv([
