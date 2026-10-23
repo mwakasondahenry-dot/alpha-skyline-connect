@@ -26,8 +26,8 @@
 -- Other tables (news, events, gallery, ...) still use auth.role() =
 -- 'authenticated' and are NOT changed here.
 --
--- DANGER: a staff account whose role is not 'editor' or 'admin' (null is not
--- possible, the column is not null, but a typo or other value is) loses
+-- DANGER: a staff account whose role is not 'editor' or 'admin' (null, if the
+-- live column was ever made nullable, a typo, or any other value) loses
 -- access to the testimonials queue, pending photos, invites and enquiries the
 -- moment PART B runs. That is why PART A exists.
 --
