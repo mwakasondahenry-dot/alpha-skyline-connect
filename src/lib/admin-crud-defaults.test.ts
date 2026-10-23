@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  isCrudFormChanged,
   dateCellLabel,
   dateInputValue,
   initialValue,
@@ -179,5 +180,19 @@ describe("naming a row", () => {
   it("writes the outcome line with the name, or the item when there is none", () => {
     expect(outcomeLine("Deleted", row, "staff member", staff)).toBe("Deleted “Grace Mushi”.");
     expect(outcomeLine("Saved", {}, "photo", { listColumns: [] })).toBe("Saved the photo.");
+  });
+});
+
+describe("isCrudFormChanged", () => {
+  const start = { title: "Sports day", sort_order: 3, published: false, image_url: "" };
+  it("is clean when nothing differs, even when a number came back as typed text", () => {
+    expect(isCrudFormChanged(start, start)).toBe(false);
+    expect(isCrudFormChanged({ ...start, sort_order: "3" }, start)).toBe(false);
+    expect(isCrudFormChanged({ ...start, image_url: null }, start)).toBe(false);
+  });
+  it("is dirty when any field differs", () => {
+    expect(isCrudFormChanged({ ...start, title: "Sports day!" }, start)).toBe(true);
+    expect(isCrudFormChanged({ ...start, published: true }, start)).toBe(true);
+    expect(isCrudFormChanged({ ...start, image_url: "https://x/y.webp" }, start)).toBe(true);
   });
 });

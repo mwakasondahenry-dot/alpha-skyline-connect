@@ -79,6 +79,24 @@ export function saveValue(field: FieldShape, raw: unknown, original?: unknown): 
   return raw;
 }
 
+function comparable(v: unknown): string {
+  if (v === null || v === undefined) return "";
+  return typeof v === "object" ? JSON.stringify(v) : String(v);
+}
+
+/**
+ * Whether a form differs from what it opened with, so closing it should ask
+ * first. Compared as the inputs show them: 3 and "3", "" and null are the same.
+ */
+export function isCrudFormChanged(
+  form: Record<string, unknown>,
+  start: Record<string, unknown>,
+): boolean {
+  const keys = new Set([...Object.keys(form), ...Object.keys(start)]);
+  for (const k of keys) if (comparable(form[k]) !== comparable(start[k])) return true;
+  return false;
+}
+
 /** Query key for a table's admin list. Other admin lookups on the same table live under it. */
 export function crudKey(table: string) {
   return ["admin", "crud", table] as const;

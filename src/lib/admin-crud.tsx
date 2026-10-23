@@ -12,6 +12,7 @@
  */
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useBlocker } from "@tanstack/react-router";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { AlertCircle, Pencil, Plus, Trash2, Upload } from "lucide-react";
 import { useAdminAuth } from "@/lib/admin-auth";
@@ -34,6 +35,7 @@ import {
   crudKey,
   dateCellLabel,
   initialValue,
+  isCrudFormChanged,
   itemNameOf,
   outcomeLine,
   rowName,
@@ -133,13 +135,34 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
   const [sheet, setSheet] = useState<{ row: Row | null; n: number } | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  // Unsaved changes in the open form: closing it asks "Discard your changes?".
+  const [dirty, setDirty] = useState(false);
+  const [askDiscard, setAskDiscard] = useState(false);
+  const guardOn = sheetOpen && dirty;
+  const guardRef = useRef(guardOn);
+  guardRef.current = guardOn;
+  const proceeding = useRef(false);
+  // Phone Back (or any link) while the form has changes asks first too.
+  const blocker = useBlocker({
+    shouldBlockFn: () => guardRef.current,
+    enableBeforeUnload: () => guardRef.current,
+    withResolver: true,
+  });
   const [toDelete, setToDelete] = useState<Row | null>(null);
   const [flash, setFlash] = useState<Record<string, number>>({});
   const els = useRef(new Map<string, HTMLElement>());
 
   function openSheet(row: Row | null) {
     setSheet((s) => ({ row, n: (s?.n ?? 0) + 1 }));
+    setDirty(false);
     setSheetOpen(true);
+  }
+
+  /** Overlay, Esc, the X and Cancel: a clean form closes, a changed one asks first. */
+  function requestClose() {
+    if (saving) return; // nothing closes it mid-save
+    if (dirty) setAskDiscard(true);
+    else setSheetOpen(false);
   }
 
   function flashRow(id: string) {
@@ -351,8 +374,8 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
         <AdminSheet
           open={sheetOpen}
           onOpenChange={(next) => {
-            if (!next && saving) return; // nothing closes it mid-save
-            setSheetOpen(next);
+            if (next) setSheetOpen(true);
+            else requestClose();
           }}
           title={`${sheet.row ? "Edit" : "New"} ${item}`}
           wide
@@ -362,11 +385,35 @@ export function AdminCrud({ config }: { config: CrudConfig }) {
             config={config}
             initial={sheet.row ?? undefined}
             onBusyChange={setSaving}
-            onCancel={() => setSheetOpen(false)}
+            onDirtyChange={setDirty}
+            onCancel={requestClose}
             onSaved={onSaved}
           />
         </AdminSheet>
       ) : null}
+
+      <ConfirmDialog
+        open={askDiscard || blocker.status === "blocked"}
+        onOpenChange={(next) => {
+          if (next) return;
+          setAskDiscard(false);
+          if (blocker.status === "blocked" && !proceeding.current) blocker.reset?.();
+          proceeding.current = false;
+        }}
+        title="Discard your changes?"
+        body={`Your changes to this ${item} are not saved.`}
+        confirmLabel="Discard changes"
+        cancelLabel="Keep editing"
+        danger
+        onConfirm={() => {
+          setDirty(false);
+          setSheetOpen(false);
+          if (blocker.status === "blocked") {
+            proceeding.current = true;
+            blocker.proceed?.();
+          }
+        }}
+      />
 
       <ConfirmDialog
         open={!!toDelete}
@@ -493,12 +540,14 @@ function CrudForm({
   config,
   initial,
   onBusyChange,
+  onDirtyChange,
   onCancel,
   onSaved,
 }: {
   config: CrudConfig;
   initial?: Row;
   onBusyChange: (busy: boolean) => void;
+  onDirtyChange: (dirty: boolean) => void;
   onCancel: () => void;
   onSaved: (row: Row, isNew: boolean) => void;
 }) {
@@ -524,6 +573,12 @@ function CrudForm({
     onBusyChange(busy || anyUploading);
   }, [busy, anyUploading, onBusyChange]);
   useEffect(() => () => onBusyChange(false), [onBusyChange]);
+
+  const changed = isCrudFormChanged(form, defaults);
+  useEffect(() => {
+    onDirtyChange(changed);
+  }, [changed, onDirtyChange]);
+  useEffect(() => () => onDirtyChange(false), [onDirtyChange]);
 
   function set(k: string, v: unknown) {
     setForm((p) => ({ ...p, [k]: v }));
