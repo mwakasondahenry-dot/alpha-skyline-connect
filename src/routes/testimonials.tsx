@@ -59,39 +59,39 @@ function TestimonialsPage() {
 
       <nav aria-label="Jump to a section" className={`${SHELL} -mt-7 relative z-10`}>
         <div className="mx-auto flex w-fit gap-1 rounded-[var(--radius-btn)] bg-white p-1 shadow-[var(--card-shadow)] ring-1 ring-[var(--color-deep-blue)]/10">
-          <JumpLink to="#parents">Parents</JumpLink>
           <JumpLink to="#alumni">Alumni</JumpLink>
+          <JumpLink to="#parents">Parents</JumpLink>
         </div>
       </nav>
 
-      <section id="parents" className={`${SHELL} scroll-mt-24 py-[var(--space-section-y)]`}>
+      <section id="alumni" className={`${SHELL} scroll-mt-24 py-[var(--space-section-y)]`}>
         <SectionHead
-          title="Trusted by"
-          accent="Families"
-          intro="Parents share what Alpha has meant for their children, inside and outside the classroom."
+          title="Where they are"
+          accent="now"
+          intro="Former students on how their years at Alpha shaped what came next, at university, at work and in life."
         />
-        {parents.length > 0 ? (
+        {alumni.length > 0 ? (
           <div className="mt-[var(--space-block-y)]">
-            <StoryList items={parents} label="Parent testimonials" meta={parentMeta} />
+            <StoryList items={alumni} label="Alumni stories" meta={alumniMeta} />
           </div>
         ) : (
-          <Waiting>Parent stories will appear here as families share them.</Waiting>
+          <Waiting>Alumni stories will appear here as they arrive.</Waiting>
         )}
       </section>
 
-      <section id="alumni" className="scroll-mt-24 bg-[var(--color-surface)]">
+      <section id="parents" className="scroll-mt-24 bg-[var(--color-surface)]">
         <div className={`${SHELL} py-[var(--space-section-y)]`}>
           <SectionHead
-            title="Where they are"
-            accent="now"
-            intro="Former students on how their years at Alpha shaped what came next, at university, at work and in life."
+            title="Trusted by"
+            accent="Families"
+            intro="Parents share what Alpha has meant for their children, inside and outside the classroom."
           />
-          {alumni.length > 0 ? (
+          {parents.length > 0 ? (
             <div className="mt-[var(--space-block-y)]">
-              <StoryList items={alumni} label="Alumni stories" meta={alumniMeta} />
+              <StoryList items={parents} label="Parent testimonials" meta={parentMeta} />
             </div>
           ) : (
-            <Waiting>Alumni stories will appear here as they arrive.</Waiting>
+            <Waiting>Parent stories will appear here as families share them.</Waiting>
           )}
         </div>
       </section>
