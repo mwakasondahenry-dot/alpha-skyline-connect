@@ -1,7 +1,14 @@
-import { createFileRoute, Outlet, useNavigate, useRouterState, Link } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { createFileRoute, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef, useState } from "react";
 import { AdminAuthProvider, useAdminAuth } from "@/lib/admin-auth";
 import { noindexHead } from "@/lib/seo";
+import { loginRedirect, safeRedirect } from "@/lib/admin/drafts";
+import { useAdminCounts } from "@/lib/admin/counts";
+import { OutcomeProvider } from "@/components/admin/kit";
+import { Sidebar } from "@/components/admin/shell/sidebar";
+import { BottomBar } from "@/components/admin/shell/bottom-bar";
+import { MoreSheet } from "@/components/admin/shell/more-sheet";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -21,27 +28,53 @@ function AdminLayout() {
   );
 }
 
+function trimSlash(p: string) {
+  return p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
+}
+
 function AdminGate() {
   const { ready, session, signOut } = useAdminAuth();
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const queryClient = useQueryClient();
+  const pathname = useRouterState({ select: (s) => trimSlash(s.location.pathname) });
+  const redirectParam = useRouterState({
+    select: (s) => (s.location.search as { redirect?: unknown }).redirect,
+  });
   const isLoginPage = pathname === "/admin/login";
+
+  // A deliberate sign-out goes to a plain login page; an expired session
+  // remembers where it was so sign-in can return there.
+  const leaving = useRef(false);
+  const [signingOut, setSigningOut] = useState(false);
 
   useEffect(() => {
     if (!ready) return;
     if (!session && !isLoginPage) {
-      navigate({ to: "/admin/login", replace: true });
+      const href = leaving.current ? "/admin/login" : loginRedirect(pathname);
+      leaving.current = false;
+      navigate({ href, replace: true });
     } else if (session && isLoginPage) {
-      navigate({ to: "/admin", replace: true });
+      navigate({
+        href: safeRedirect(typeof redirectParam === "string" ? redirectParam : null),
+        replace: true,
+      });
     }
-  }, [ready, session, isLoginPage, navigate]);
+  }, [ready, session, isLoginPage, pathname, redirectParam, navigate]);
+
+  async function handleSignOut() {
+    leaving.current = true;
+    setSigningOut(true);
+    try {
+      await signOut();
+      // The next person to sign in on this phone must not see these counts.
+      queryClient.removeQueries({ queryKey: ["admin"] });
+    } finally {
+      setSigningOut(false);
+    }
+  }
 
   if (!ready) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--color-off-white)]">
-        <div className="text-sm text-[var(--color-deep-blue)]">Loading admin…</div>
-      </div>
-    );
+    return <GateMessage>Loading admin…</GateMessage>;
   }
 
   // Login page renders without the shell.
@@ -49,58 +82,94 @@ function AdminGate() {
 
   // Awaiting redirect to login.
   if (!session) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[var(--color-off-white)]">
-        <div className="text-sm text-[var(--color-deep-blue)]">Redirecting to sign in…</div>
-      </div>
-    );
+    return <GateMessage>Redirecting to sign in…</GateMessage>;
   }
 
   return (
-    <div className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)]">
-      <header className="border-b border-[var(--color-deep-blue)]/10 bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <Link to="/admin" className="text-base font-semibold text-[var(--color-deep-blue)]">
-            Alpha Schools <span className="text-[var(--color-gold)]">Admin</span>
-          </Link>
-          <nav className="flex flex-wrap items-center gap-1 text-sm">
-            <AdminNavLink to="/admin">Dashboard</AdminNavLink>
-            <AdminNavLink to="/admin/news">News</AdminNavLink>
-            <AdminNavLink to="/admin/events">Events</AdminNavLink>
-            <AdminNavLink to="/admin/photos">School photos</AdminNavLink>
-            <AdminNavLink to="/admin/facility-photos">Facilities Gallery</AdminNavLink>
-            <AdminNavLink to="/admin/hero-slides">Hero slides</AdminNavLink>
-            <AdminNavLink to="/admin/testimonials">Testimonials</AdminNavLink>
-            <AdminNavLink to="/admin/staff">Staff</AdminNavLink>
+    <Shell
+      pathname={pathname}
+      email={session.user.email ?? ""}
+      onSignOut={() => void handleSignOut()}
+      signingOut={signingOut}
+    />
+  );
+}
 
-            <button
-              type="button"
-              onClick={() => {
-                void signOut();
-              }}
-              className="ml-2 rounded-md border border-[var(--color-deep-blue)]/20 px-3 py-1.5 text-[var(--color-deep-blue)] transition hover:bg-[var(--color-deep-blue)] hover:text-white"
-            >
-              Log out
-            </button>
-          </nav>
-        </div>
-      </header>
-      <main className="mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8">
-        <Outlet />
-      </main>
+function GateMessage({ children }: { children: string }) {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[var(--color-off-white)]">
+      <p role="status" className="text-sm text-[var(--color-deep-blue)]">
+        {children}
+      </p>
     </div>
   );
 }
 
-function AdminNavLink({ to, children }: { to: string; children: React.ReactNode }) {
+function Shell({
+  pathname,
+  email,
+  onSignOut,
+  signingOut,
+}: {
+  pathname: string;
+  email: string;
+  onSignOut: () => void;
+  signingOut: boolean;
+}) {
+  const counts = useAdminCounts();
+  const [moreOpen, setMoreOpen] = useState(false);
+
+  // A page change (a link in the sheet, Back) closes the More sheet.
+  useEffect(() => {
+    setMoreOpen(false);
+  }, [pathname]);
+
   return (
-    <Link
-      to={to}
-      activeOptions={{ exact: to === "/admin" }}
-      className="rounded-md px-3 py-1.5 text-[var(--color-ink)] transition hover:bg-[var(--color-deep-blue)]/5"
-      activeProps={{ className: "rounded-md px-3 py-1.5 bg-[var(--color-deep-blue)] text-white" }}
+    // data-admin scopes the kit's dialog and sheet motion. On a phone the
+    // outcome line sits above the 4rem bottom bar; from 768px it moves to
+    // the top right and ignores this.
+    <div
+      data-admin=""
+      className="min-h-screen bg-[var(--color-off-white)] text-[var(--color-ink)] [--admin-outcome-bottom:4.75rem] md:[--admin-outcome-bottom:1rem]"
     >
-      {children}
-    </Link>
+      <OutcomeProvider>
+        <a
+          href="#admin-main"
+          className="sr-only z-50 rounded-[var(--radius-btn)] bg-[var(--color-surface)] px-4 py-3 text-sm font-semibold text-[var(--color-deep-blue)] shadow-[var(--shadow-card)] focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        >
+          Skip to content
+        </a>
+        <Sidebar
+          pathname={pathname}
+          counts={counts}
+          email={email}
+          onSignOut={onSignOut}
+          signingOut={signingOut}
+        />
+        <main
+          id="admin-main"
+          tabIndex={-1}
+          className="pb-[calc(5.5rem+env(safe-area-inset-bottom,0px))] focus:outline-none md:pb-0 md:pl-64"
+        >
+          <div className="mx-auto max-w-5xl px-4 py-6 sm:px-6 md:py-10">
+            <Outlet />
+          </div>
+        </main>
+        <BottomBar
+          pathname={pathname}
+          counts={counts}
+          moreOpen={moreOpen}
+          onMore={() => setMoreOpen(true)}
+        />
+        <MoreSheet
+          open={moreOpen}
+          onOpenChange={setMoreOpen}
+          pathname={pathname}
+          email={email}
+          onSignOut={onSignOut}
+          signingOut={signingOut}
+        />
+      </OutcomeProvider>
+    </div>
   );
 }
