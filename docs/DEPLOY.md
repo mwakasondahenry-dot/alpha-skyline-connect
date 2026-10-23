@@ -101,6 +101,10 @@ Cloudflare issues the HTTPS certificate itself; nothing else to configure.
   `alpha_migration_admin_stories.sql` (explicit story states). Run before
   deploying the admin redesign; the old admin keeps working after it (the
   trigger keeps `published` and `status` in step).
+- Then `alpha_migration_staff_role.sql` (makes "staff only" check the profile
+  role, `editor` or `admin`, instead of just having an account; also moves the
+  contact-message policies onto it). **Run Part A first and check the result:**
+  every staff account must show `editor` or `admin` before you run Part B.
 
 ## Later deploys
 
