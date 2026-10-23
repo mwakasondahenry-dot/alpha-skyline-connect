@@ -53,6 +53,8 @@ export type OutcomeInput = {
   link?: { to: string; label: string };
 };
 
+export type PauseReason = "pointer" | "focus";
+
 export type Outcome = OutcomeInput & {
   /** New for every `show()`, so the same text shown twice still re-announces and re-enters. */
   id: number;
@@ -73,7 +75,9 @@ export function createOutcomeStore({
 }: { clearAfterMs?: number; describeError?: (err: unknown) => string } = {}) {
   let state: Outcome | null = null;
   let nextId = 1;
-  let paused = false;
+  // Pointer and focus hold the clock independently: the pointer leaving
+  // must not restart it while focus is still inside, and vice versa.
+  const holds = new Set<PauseReason>();
   let timer: ReturnType<typeof setTimeout> | null = null;
   const listeners = new Set<() => void>();
 
@@ -86,7 +90,7 @@ export function createOutcomeStore({
   }
   function startClock() {
     stopClock();
-    if (!state || paused || state.undoing || state.tone === "error") return;
+    if (!state || holds.size > 0 || state.undoing || state.tone === "error") return;
     timer = setTimeout(() => {
       timer = null;
       state = null;
@@ -110,21 +114,21 @@ export function createOutcomeStore({
     show(input: OutcomeInput) {
       // A new outcome mounts a new line, which the pointer or focus that
       // paused the old one is no longer on.
-      paused = false;
+      holds.clear();
       set({ ...input, id: nextId++, tone: "info", undoing: false });
     },
     clear() {
-      paused = false;
+      holds.clear();
       set(null);
     },
     /** Hold the outcome while the pointer or focus is on it. */
-    pause() {
-      paused = true;
+    pause(reason: PauseReason) {
+      holds.add(reason);
       stopClock();
     },
-    /** Let go: the outcome gets a fresh full interval, not the remainder. */
-    resume() {
-      paused = false;
+    /** Let go of one hold; once none remain the outcome gets a fresh full interval. */
+    resume(reason: PauseReason) {
+      holds.delete(reason);
       startClock();
     },
     async undo(): Promise<void> {

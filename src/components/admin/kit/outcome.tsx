@@ -4,15 +4,24 @@
  * Undo").
  *
  * <OutcomeProvider> lives in the admin shell, above the routes, so a screen
- * can call `show()` and then navigate away and the line survives. The
- * role="status" region is always mounted and only its contents change, so
- * screen readers announce every outcome; under reduced motion nothing moves
- * but the words still arrive.
+ * can call `show()` and then navigate away and the line survives. A
+ * visually hidden role="status" node is always mounted and carries only the
+ * sentence, so screen readers announce every outcome; the visible line and
+ * its controls sit outside it. Under reduced motion nothing moves but the
+ * words still arrive.
  *
  * Placement: fixed near the bottom on a phone (above the shell's tab bar, set
  * `--admin-outcome-bottom` on an ancestor to move it), top-right from 768px.
  */
-import { useEffect, useState, useSyncExternalStore, type MouseEvent, type ReactNode } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type MouseEvent,
+  type ReactNode,
+} from "react";
 import { useRouter } from "@tanstack/react-router";
 import { AlertCircle, CheckCircle2, X } from "lucide-react";
 import { AdminButton } from "./button";
@@ -52,22 +61,77 @@ function OutcomeLine({ store }: { store: OutcomeStore }) {
 
   const shown = current ?? leaving;
 
+  // Focus: remember where it was when an outcome arrived, and if focus is in
+  // the line when the line (or its Undo button) goes away, put it back there,
+  // or on <main>, rather than letting it fall to <body>.
+  const box = useRef<HTMLDivElement>(null);
+  const focusInside = useRef(false);
+  const returnTo = useRef<HTMLElement | null>(null);
+  const currentId = current?.id;
+
+  useLayoutEffect(() => {
+    if (currentId === undefined || focusInside.current) return;
+    const active = document.activeElement;
+    returnTo.current = active instanceof HTMLElement && active !== document.body ? active : null;
+  }, [currentId]);
+
+  useLayoutEffect(() => {
+    if (!focusInside.current) return;
+    const stillInside = box.current?.contains(document.activeElement) ?? false;
+    if (current && stillInside) return;
+    focusInside.current = false;
+    store.resume("focus");
+    restoreFocus(returnTo.current);
+  });
+
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-[calc(var(--admin-outcome-bottom,1rem)_+_env(safe-area-inset-bottom,0px))] z-40 flex justify-center px-4 md:inset-x-auto md:bottom-auto md:right-6 md:top-6 md:justify-end md:px-0">
-      <div role="status" aria-live="polite" className="w-full max-w-md">
-        {shown ? (
-          <OutcomeCard
-            // A new id re-runs the rise; a text change within one outcome
-            // (Undo → "Undone.") only swaps the words.
-            key={shown.id}
-            outcome={shown}
-            leaving={!current}
-            store={store}
-          />
-        ) : null}
+    <>
+      {/* The announcement: always mounted, text only. A new node per outcome
+          so the same sentence twice is announced twice. */}
+      <div role="status" aria-live="polite" className="sr-only">
+        {current ? <span key={`${current.id}:${current.text}`}>{current.text}</span> : null}
       </div>
-    </div>
+      <div className="pointer-events-none fixed inset-x-0 bottom-[calc(var(--admin-outcome-bottom,1rem)_+_env(safe-area-inset-bottom,0px))] z-40 flex justify-center px-4 md:inset-x-auto md:bottom-auto md:right-6 md:top-6 md:justify-end md:px-0">
+        <div
+          ref={box}
+          className="w-full max-w-md"
+          onFocus={() => {
+            focusInside.current = true;
+            store.pause("focus");
+          }}
+          onBlur={(e) => {
+            // A blur from a node being removed is handled by the effect above.
+            if (!e.target.isConnected) return;
+            if (e.currentTarget.contains(e.relatedTarget as Node | null)) return;
+            focusInside.current = false;
+            store.resume("focus");
+          }}
+        >
+          {shown ? (
+            <OutcomeCard
+              // A new id re-runs the rise; a text change within one outcome
+              // (Undo → "Undone.") only swaps the words.
+              key={shown.id}
+              outcome={shown}
+              leaving={!current}
+              store={store}
+            />
+          ) : null}
+        </div>
+      </div>
+    </>
   );
+}
+
+function restoreFocus(preferred: HTMLElement | null) {
+  if (preferred?.isConnected) {
+    preferred.focus({ preventScroll: true });
+    if (document.activeElement === preferred) return;
+  }
+  const main = document.querySelector<HTMLElement>("main");
+  if (!main) return;
+  if (!main.hasAttribute("tabindex")) main.setAttribute("tabindex", "-1");
+  main.focus({ preventScroll: true });
 }
 
 function OutcomeCard({
@@ -91,22 +155,20 @@ function OutcomeCard({
     }
     if (!to.startsWith("/") || to.startsWith("//")) return;
     e.preventDefault();
-    router.history.push(to);
+    void router.navigate({ to });
   }
 
   return (
     <div
+      // A leaving line is on its way out: not focusable, not clickable.
+      inert={leaving}
       className={
         "pointer-events-auto flex items-center gap-3 rounded-[var(--radius-card)] border bg-[var(--color-surface)] py-1.5 pl-4 pr-1.5 shadow-[var(--shadow-banner)] " +
         (error ? "border-[var(--color-danger)]/40 " : "border-[var(--color-hairline)] ") +
         (leaving ? "admin-fade-out" : "admin-rise")
       }
-      onPointerEnter={store.pause}
-      onPointerLeave={store.resume}
-      onFocus={store.pause}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) store.resume();
-      }}
+      onPointerEnter={() => store.pause("pointer")}
+      onPointerLeave={() => store.resume("pointer")}
     >
       <Icon
         aria-hidden

@@ -33,18 +33,26 @@ function easeOut(): string {
   return v || "ease-out";
 }
 
+/** Inline styles collapseAndRemove() overwrote, so restoreCollapsed() can put them back. */
+const saved = new WeakMap<HTMLElement, { overflow: string; display: string }>();
+
 /**
  * Fades a row out (150ms) then closes the gap it leaves (height, padding,
  * margin and borders to 0 over 200ms). Resolves when the row has no height.
- * Under reduced motion, or without WAAPI, it hides at once.
+ * Under reduced motion both steps take 0ms. Without the Web Animations API
+ * the row is hidden at once with `display: none`.
  *
  * React owns the node, so this never detaches it: drop the row from state
- * once the promise resolves. To bring a collapsed row back instead (Undo
- * before a refetch), cancel its animations: `el.getAnimations().forEach(a => a.cancel())`.
+ * once the promise resolves. To bring the row back instead (Undo before a
+ * refetch), call `restoreCollapsed(el)`.
  * A flex/grid `gap` around the row closes when React removes it, not here.
  */
 export async function collapseAndRemove(el: HTMLElement): Promise<void> {
-  if (typeof el.animate !== "function") return;
+  if (!saved.has(el)) saved.set(el, { overflow: el.style.overflow, display: el.style.display });
+  if (typeof el.animate !== "function") {
+    el.style.display = "none";
+    return;
+  }
   const reduce = prefersReducedMotion();
   const easing = easeOut();
   const cs = getComputedStyle(el);
@@ -82,6 +90,23 @@ export async function collapseAndRemove(el: HTMLElement): Promise<void> {
       { duration: reduce ? 0 : 200, easing, fill: "forwards" },
     ).finished;
   } catch {
-    // Cancelled (the row was restored or unmounted): nothing left to wait for.
+    // Cancelled (restoreCollapsed, or the row unmounted): nothing left to wait for.
+  }
+}
+
+/**
+ * Undoes collapseAndRemove() on a row that is staying: cancels its
+ * animations (a pending collapse promise then resolves) and puts back the
+ * inline `overflow` and `display` it changed. The row reappears at once.
+ */
+export function restoreCollapsed(el: HTMLElement): void {
+  if (typeof el.getAnimations === "function") {
+    for (const a of el.getAnimations()) a.cancel();
+  }
+  const prev = saved.get(el);
+  if (prev) {
+    el.style.overflow = prev.overflow;
+    el.style.display = prev.display;
+    saved.delete(el);
   }
 }

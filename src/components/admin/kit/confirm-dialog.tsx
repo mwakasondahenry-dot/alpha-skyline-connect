@@ -10,7 +10,6 @@ import { useState, type ReactNode } from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
 import {
   AlertDialog,
-  AlertDialogCancel,
   AlertDialogDescription,
   AlertDialogOverlay,
   AlertDialogPortal,
@@ -101,11 +100,14 @@ export function ConfirmDialog({
           ) : null}
 
           <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-            <AlertDialogCancel asChild>
+            {/* The primitive, not ui/alert-dialog's AlertDialogCancel: that one
+                injects shadcn outline button classes which would win over
+                AdminButton's through the Slot merge. */}
+            <AlertDialogPrimitive.Cancel asChild>
               <AdminButton variant="secondary" disabled={busy}>
                 {cancelLabel}
               </AdminButton>
-            </AlertDialogCancel>
+            </AlertDialogPrimitive.Cancel>
             <AdminButton
               variant={danger ? "danger" : "primary"}
               busy={busy}

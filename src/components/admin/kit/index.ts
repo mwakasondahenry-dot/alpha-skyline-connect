@@ -8,5 +8,10 @@ export { AdminSheet, type AdminSheetProps } from "./admin-sheet";
 export { CountBadge } from "./count-badge";
 export { EmptyState } from "./empty-state";
 export { ListCard, type ListCardProps } from "./list-card";
-export { collapseAndRemove, prefersReducedMotion, useDelayedFlag } from "./motion";
+export {
+  collapseAndRemove,
+  restoreCollapsed,
+  prefersReducedMotion,
+  useDelayedFlag,
+} from "./motion";
 export { SPINNER_DELAY_MS, OUTCOME_CLEAR_MS } from "./timers";

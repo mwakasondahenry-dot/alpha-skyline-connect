@@ -110,20 +110,33 @@ describe("createOutcomeStore", () => {
     const store = createOutcomeStore();
     store.show({ text: "A" });
     vi.advanceTimersByTime(7000);
-    store.pause();
+    store.pause("pointer");
     vi.advanceTimersByTime(60_000);
     expect(store.get()?.text).toBe("A");
-    store.resume();
+    store.resume("pointer");
     vi.advanceTimersByTime(OUTCOME_CLEAR_MS - 1);
     expect(store.get()?.text).toBe("A");
     vi.advanceTimersByTime(1);
     expect(store.get()).toBeNull();
   });
 
+  it("pointer and focus hold the clock separately", () => {
+    const store = createOutcomeStore();
+    store.show({ text: "A" });
+    store.pause("focus");
+    store.pause("pointer");
+    store.resume("pointer"); // pointer leaves, focus still inside
+    vi.advanceTimersByTime(OUTCOME_CLEAR_MS * 2);
+    expect(store.get()?.text).toBe("A");
+    store.resume("focus");
+    vi.advanceTimersByTime(OUTCOME_CLEAR_MS);
+    expect(store.get()).toBeNull();
+  });
+
   it("a new outcome is not held by a pause left over from the old one", () => {
     const store = createOutcomeStore();
     store.show({ text: "A" });
-    store.pause();
+    store.pause("pointer");
     store.clear(); // dismissed while focused: no blur arrives
     store.show({ text: "B" });
     vi.advanceTimersByTime(OUTCOME_CLEAR_MS);
