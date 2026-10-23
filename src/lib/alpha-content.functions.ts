@@ -3,6 +3,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { cached, TTL_SECONDS } from "@/lib/edge-cache";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseBaseUrl } from "@/lib/server/supabase-url";
+import { isUuid } from "@/lib/news";
 import type {
   Database,
   NewsRow,
@@ -96,6 +97,62 @@ export const getHomeWhatsNew = createServerFn({ method: "GET" }).handler(
     );
   },
 );
+
+// ---- News pages ----------------------------------------------------------
+export type PublicNewsItem = Pick<
+  NewsRow,
+  "id" | "title" | "body" | "cover_url" | "published_at" | "school_slug"
+>;
+
+/** Every published article for /news, newest first, undated ones last. */
+export const getAllNews = createServerFn({ method: "GET" }).handler(
+  async (): Promise<PublicNewsItem[]> => {
+    return cached(
+      "all-news",
+      async () => {
+        const sb = serverClient();
+        const { data, error } = await sb
+          .from("news")
+          .select("id,title,body,cover_url,published_at,school_slug")
+          .eq("published", true)
+          .order("published_at", { ascending: false, nullsFirst: false });
+        if (error) throw error;
+        return data ?? [];
+      },
+      TTL_SECONDS,
+      () => [],
+    );
+  },
+);
+
+/**
+ * One published article for /news/$id, or null. The id is checked to be a
+ * UUID before any query, so a mistyped or hostile URL is a 404 without a
+ * round trip to the database. An unpublished row is null, exactly as a
+ * missing one is.
+ */
+export const getNewsArticle = createServerFn({ method: "GET" })
+  .validator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .handler(async ({ data }): Promise<PublicNewsItem | null> => {
+    if (!isUuid(data.id)) return null;
+    const id = data.id.toLowerCase();
+    return cached(
+      `news-article:${id}`,
+      async () => {
+        const sb = serverClient();
+        const { data: row, error } = await sb
+          .from("news")
+          .select("id,title,body,cover_url,published_at,school_slug")
+          .eq("published", true)
+          .eq("id", id)
+          .maybeSingle();
+        if (error) throw error;
+        return row ?? null;
+      },
+      TTL_SECONDS,
+      () => null,
+    );
+  });
 
 export type UrgentNewsItem = Pick<
   NewsRow,

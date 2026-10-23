@@ -11,15 +11,15 @@
  *     links where the code in the URL is the only credential. Listing them
  *     would publish the credential.
  *   - Anything whose route file sets a robots meta is out. That covers the
- *     unlisted story forms, the /alumni/submit redirect, and the four
- *     "coming next" stubs (/news, /gallery, /scholarships, /coding), which
- *     are noindex until there is a page there to index.
+ *     unlisted story forms, the /alumni/submit redirect, and the "coming
+ *     next" stubs (/gallery, /scholarships, /coding), which are noindex
+ *     until there is a page there to index.
  *
- * On dynamic URLs: there is no per-article route in this app. News and
- * events are rendered as lists on /news and /events from Supabase rows;
- * no /news/$slug or /events/$id exists, so there is no per-row URL for a
- * sitemap to point at. When such a route is added, extend collectRoutes —
- * the rest of this file already handles whatever it returns.
+ * On dynamic URLs: /news/$id (src/routes/news_.$id.tsx) is one page per
+ * published article, but this script reads only the file system and git,
+ * never the database, so it cannot list the articles. They are reached by
+ * crawling /news, which is listed. Add them here only if the build gains
+ * database access by some other route; do not add a Supabase read here.
  *
  * lastmod comes from the last commit that touched the route file. It is the
  * most honest signal available at build time; a build timestamp would claim
@@ -38,7 +38,8 @@ function weight(path) {
   if (path === "/") return { priority: "1.0", changefreq: "weekly" };
   if (path.startsWith("/schools/")) return { priority: "0.9", changefreq: "monthly" };
   if (["/admission", "/aviation"].includes(path)) return { priority: "0.8", changefreq: "monthly" };
-  if (["/events", "/contact", "/about"].includes(path)) return { priority: "0.7", changefreq: "weekly" };
+  if (["/events", "/news", "/contact", "/about"].includes(path))
+    return { priority: "0.7", changefreq: "weekly" };
   return { priority: "0.6", changefreq: "monthly" };
 }
 
@@ -75,7 +76,9 @@ function collectRoutes() {
 
     routes.push({ path, lastmod: lastModified(file) });
   }
-  return routes.sort((a, b) => (a.path === "/" ? -1 : b.path === "/" ? 1 : a.path.localeCompare(b.path)));
+  return routes.sort((a, b) =>
+    a.path === "/" ? -1 : b.path === "/" ? 1 : a.path.localeCompare(b.path),
+  );
 }
 
 function sitemap(routes) {

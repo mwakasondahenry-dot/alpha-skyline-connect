@@ -46,8 +46,16 @@ type Campus = { locality: string; name: string; path: string };
 
 const CAMPUSES: Record<string, Campus> = {
   "alpha-high": { locality: "Mikocheni", name: "Alpha High School", path: "/schools/alpha-high" },
-  "alpha-girls": { locality: "Kunduchi", name: "Alpha Girls High School", path: "/schools/alpha-girls" },
-  "nursery-primary": { locality: "Kunduchi", name: "Alpha Nursery & Primary School", path: "/schools/nursery-primary" },
+  "alpha-girls": {
+    locality: "Kunduchi",
+    name: "Alpha Girls High School",
+    path: "/schools/alpha-girls",
+  },
+  "nursery-primary": {
+    locality: "Kunduchi",
+    name: "Alpha Nursery & Primary School",
+    path: "/schools/nursery-primary",
+  },
 };
 
 function address(locality?: string) {
@@ -194,6 +202,45 @@ export function websiteLd() {
     "@id": `${SITE_URL}/#website`,
     name: SITE_NAME,
     url: `${SITE_URL}/`,
+    inLanguage: "en",
+    publisher: { "@id": ORG_ID },
+  };
+}
+
+export type NewsArticleLdInput = {
+  id: string;
+  title: string;
+  body: string | null;
+  cover_url: string | null;
+  published_at: string | null;
+};
+
+/**
+ * One published news article, on its own page (/news/<id>).
+ *
+ * Only what the page shows: the headline is the h1, the date is the one
+ * printed under it, the image is the cover shown whole above the body, and
+ * the description is the opening of the body the reader is about to read.
+ * No author: articles carry no byline, so none is claimed here; the
+ * publisher is the one organization node. A date that does not parse is
+ * left out rather than emitted broken, and so is an absent cover.
+ */
+export function newsArticleLd(article: NewsArticleLdInput, description: string) {
+  const url = absoluteUrl(`/news/${article.id}`);
+  const published =
+    article.published_at && !Number.isNaN(new Date(article.published_at).getTime())
+      ? article.published_at
+      : null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "@id": `${url}#article`,
+    headline: article.title,
+    url,
+    mainEntityOfPage: url,
+    ...(description ? { description } : {}),
+    ...(published ? { datePublished: published } : {}),
+    ...(article.cover_url ? { image: [article.cover_url] } : {}),
     inLanguage: "en",
     publisher: { "@id": ORG_ID },
   };

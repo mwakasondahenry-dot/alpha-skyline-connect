@@ -643,7 +643,8 @@ type FeedCard = {
   blurb: string | null;
   image: string | null;
   school: string;
-  to: "/news" | "/events";
+  /** A news card opens its own article; an event card opens the events page. */
+  newsId: string | null;
 };
 
 function toFeed(news: HomeWhatsNew["news"], events: HomeEventItem[]): FeedCard[] {
@@ -654,7 +655,7 @@ function toFeed(news: HomeWhatsNew["news"], events: HomeEventItem[]): FeedCard[]
     blurb: x.description,
     image: null,
     school: x.school_slug,
-    to: "/events",
+    newsId: null,
   }));
   const n: FeedCard[] = news
     .filter((x) => x.published_at)
@@ -665,7 +666,7 @@ function toFeed(news: HomeWhatsNew["news"], events: HomeEventItem[]): FeedCard[]
       blurb: x.body,
       image: x.cover_url,
       school: x.school_slug,
-      to: "/news",
+      newsId: x.id,
     }));
   return [...e, ...n].slice(0, 3);
 }
@@ -709,7 +710,9 @@ function NewsAndEvents({ news, events }: { news: HomeWhatsNew["news"]; events: H
           {cards.map((c) => (
             <li key={c.key}>
               <Link
-                to={c.to}
+                {...(c.newsId
+                  ? { to: "/news/$id" as const, params: { id: c.newsId } }
+                  : { to: "/events" as const })}
                 className="group flex h-full flex-col overflow-hidden rounded-[var(--radius-card)] bg-[var(--card-bg)] shadow-[var(--card-shadow)] transition-shadow hover:shadow-[var(--card-shadow-hover)] motion-reduce:transition-none"
               >
                 {c.image && (
