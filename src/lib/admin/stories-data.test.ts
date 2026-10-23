@@ -465,6 +465,9 @@ describe("replaceStoryPhoto", () => {
       "db:update:testimonials",
       "storage:remove:alumni-pending:2026/abc.jpg",
     ]);
+    // Names are versioned, so never overwrite: no storage update policy needed.
+    const pendingUpload = calls[0] as Extract<Call, { kind: "storage" }>;
+    expect(pendingUpload.args[2]).toMatchObject({ upsert: false });
     const [u] = dbCalls(calls);
     expect(u.filters).toContainEqual(["eq", "status", "waiting"]);
     expect(u.payload).toEqual({ pending_photo_path: `staff/story-s1-${TS}.webp` });

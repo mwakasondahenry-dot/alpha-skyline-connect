@@ -94,7 +94,7 @@ Cloudflare issues the HTTPS certificate itself; nothing else to configure.
   Until `alpha_migration_staff_role.sql` has run, any account with a profile
   row counts as staff; after it, staff means a profile with role `editor` or
   `admin`.
-- Check the five migrations have been run on the Supabase project, in order:
+- Check the six migrations have been run on the Supabase project, in order:
   `alpha_migration_alumni_submissions.sql`,
   `alpha_migration_testimonial_invites.sql`,
   `alpha_migration_parent_invites.sql`,
@@ -103,6 +103,11 @@ Cloudflare issues the HTTPS certificate itself; nothing else to configure.
   `alpha_migration_admin_stories.sql` (explicit story states). Run before
   deploying the admin redesign; the old admin keeps working after it (the
   trigger keeps `published` and `status` in step).
+- `alpha_migration_pending_photo_staff_upload.sql` (lets staff put a new
+  photo on a waiting story, in the private `alumni-pending` bucket). Run
+  before deploying the admin redesign. Harmless if a matching policy was
+  already made in the dashboard.
+- Deploy (`npm run deploy`).
 - Then `alpha_migration_staff_role.sql` (makes "staff only" check the profile
   role, `editor` or `admin`, instead of just having an account; also moves the
   contact-message policies onto it). **Run Part A first and check the result:**

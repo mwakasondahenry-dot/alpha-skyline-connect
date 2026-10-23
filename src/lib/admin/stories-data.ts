@@ -351,7 +351,9 @@ export async function replaceStoryPhoto(
       const target = `staff/${stem}.${ext}`;
       const { error: upError } = await sb.storage
         .from(PENDING_BUCKET)
-        .upload(target, blob, { contentType, upsert: true });
+        // The name is versioned, so never an overwrite: staff need only the
+        // insert policy (alpha_migration_pending_photo_staff_upload.sql).
+        .upload(target, blob, { contentType, upsert: false });
       if (upError) return fail(upError);
 
       /* Also guarded on the photo this screen saw, so a photo someone else
