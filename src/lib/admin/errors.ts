@@ -16,7 +16,9 @@ export function friendlyError(err: unknown): string {
     return `This ${what} was changed by someone else. It has been refreshed.`;
   }
   if (code === "PGRST301" || /jwt expired/i.test(message)) return EXPIRED;
-  if (err instanceof TypeError && /failed to fetch|network/i.test(message)) {
+  // supabase-js hands back plain objects ({ message: "TypeError: Failed to
+  // fetch", code: "" }) and wrapped storage errors, so match the text, not the type.
+  if (/failed to fetch|networkerror|network request failed|load failed/i.test(message)) {
     return "No internet connection. Nothing was saved.";
   }
   if (code === "42501" || /row-level security/i.test(message)) {

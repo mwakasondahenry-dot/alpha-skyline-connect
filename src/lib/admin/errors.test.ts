@@ -24,6 +24,24 @@ describe("friendlyError", () => {
       "This story was changed by someone else. It has been refreshed.",
     );
   });
+  it("treats network failures as offline whatever shape they arrive in", () => {
+    const OFFLINE = "No internet connection. Nothing was saved.";
+    // supabase-js postgrest returns a plain object, not a TypeError.
+    expect(
+      friendlyError({ message: "TypeError: Failed to fetch", details: "", hint: "", code: "" }),
+    ).toBe(OFFLINE);
+    // storage-js wraps the fetch failure in a StorageUnknownError.
+    const storageErr = Object.assign(new Error("Failed to fetch"), {
+      name: "StorageUnknownError",
+      originalError: new TypeError("Failed to fetch"),
+    });
+    expect(friendlyError(storageErr)).toBe(OFFLINE);
+    expect(friendlyError({ message: "NetworkError when attempting to fetch resource." })).toBe(
+      OFFLINE,
+    );
+    expect(friendlyError({ message: "Network request failed" })).toBe(OFFLINE);
+    expect(friendlyError(new TypeError("Load failed"))).toBe(OFFLINE);
+  });
   it("names the thing that changed in a conflict", () => {
     expect(friendlyError({ kind: "conflict", what: "message" })).toBe(
       "This message was changed by someone else. It has been refreshed.",
