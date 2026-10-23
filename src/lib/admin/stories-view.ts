@@ -327,6 +327,23 @@ export function validateStoryForm(
   return errors;
 }
 
+/** The story form's fields in the order it shows them. */
+const FORM_ORDER: (keyof StoryFormValues)[] = [
+  "speaker",
+  "author_name",
+  "quote",
+  "relationship",
+  "company",
+  "grad_year",
+  "school_slug",
+  "consent",
+];
+
+/** The first field on screen with a problem, to move the cursor to; null when there is none. */
+export function firstInvalidField(errors: StoryFormErrors): keyof StoryFormValues | null {
+  return FORM_ORDER.find((k) => errors[k]) ?? null;
+}
+
 /** The fields to save. A parent never keeps a class year. Run validateStoryForm first. */
 export function formToEdit(form: StoryFormValues): StoryEdit {
   const year = Number(form.grad_year.trim());

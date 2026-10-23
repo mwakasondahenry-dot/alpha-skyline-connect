@@ -29,6 +29,8 @@ export type AdminSheetProps = {
   /** Wider panel on desktop for forms with side-by-side fields. */
   wide?: boolean;
   className?: string;
+  /** Radix's focus return on close; call preventDefault() to move focus elsewhere. */
+  onCloseAutoFocus?: (event: Event) => void;
 };
 
 export function AdminSheet({
@@ -39,6 +41,7 @@ export function AdminSheet({
   children,
   wide = false,
   className,
+  onCloseAutoFocus,
 }: AdminSheetProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -46,6 +49,7 @@ export function AdminSheet({
         <DialogOverlay data-admin="" className="admin-overlay" />
         <DialogPrimitive.Content
           data-admin=""
+          onCloseAutoFocus={onCloseAutoFocus}
           // Without a description Radix would point aria-describedby at nothing.
           {...(description ? {} : { "aria-describedby": undefined })}
           className={cn(

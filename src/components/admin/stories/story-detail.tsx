@@ -52,6 +52,7 @@ import {
   shownPhoto,
   storySource,
   storyToForm,
+  firstInvalidField,
   validateStoryForm,
   type BarActionKind,
   type StoryFormErrors,
@@ -118,6 +119,10 @@ export function StoryDetail({
   const [busyKind, setBusyKind] = useState<string | null>(null);
   const [doneKind, setDoneKind] = useState<BarActionKind | null>(null);
   const [declineOpen, setDeclineOpen] = useState(false);
+  /** The decline sheet was asked to save edits that do not pass the checks. */
+  const [fixFirst, setFixFirst] = useState(false);
+  const focusOnClose = useRef<keyof StoryFormValues | null>(null);
+  const editRef = useRef<HTMLElement>(null);
   const [declineReason, setDeclineReason] = useState("");
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [photoOpen, setPhotoOpen] = useState(false);
@@ -159,6 +164,21 @@ export function StoryDetail({
     clearDraft(key);
   }
 
+  /** Move the cursor to a form field, bringing it into view. */
+  function focusField(field: keyof StoryFormValues) {
+    const el = editRef.current?.querySelector<HTMLElement>(`[data-field="${field}"]`);
+    if (!el) return;
+    el.scrollIntoView({ block: "center" });
+    el.focus({ preventScroll: true });
+  }
+
+  /** Check the fields, showing their errors. Returns the first field to fix, or null. */
+  function checkEdits(): keyof StoryFormValues | null {
+    const errs = validateStoryForm(form, { isNew: false });
+    setErrors(errs);
+    return firstInvalidField(errs);
+  }
+
   /** Check and save the fields. On success the form is the saved story. */
   async function saveEdits(): Promise<boolean> {
     if (!story || !data.client) return false;
@@ -178,6 +198,11 @@ export function StoryDetail({
 
   async function saveOnly() {
     if (!story) return;
+    const invalid = checkEdits();
+    if (invalid) {
+      focusField(invalid);
+      return;
+    }
     setBusyKind("save");
     const ok = await saveEdits();
     setBusyKind(null);
@@ -236,6 +261,15 @@ export function StoryDetail({
   /** Publish, Decline, Restore, Hide, Show. Unsaved edits are saved first. */
   async function stateMove(action: StateMove, extra: Record<string, unknown> = {}) {
     if (!story) return;
+    if (dirty) {
+      const invalid = checkEdits();
+      if (invalid) {
+        // From the decline sheet the form is hidden behind it: say so there.
+        if (action === "decline") setFixFirst(true);
+        else focusField(invalid);
+        return;
+      }
+    }
     setBusyKind(action);
     if (dirty && !(await saveEdits())) {
       setBusyKind(null);
@@ -309,8 +343,10 @@ export function StoryDetail({
   }
 
   function onAction(kind: BarActionKind) {
-    if (kind === "decline") setDeclineOpen(true);
-    else if (kind === "delete") setDeleteOpen(true);
+    if (kind === "decline") {
+      setFixFirst(false);
+      setDeclineOpen(true);
+    } else if (kind === "delete") setDeleteOpen(true);
     else if (kind === "feature") void toggleFeature();
     else if (kind === "invite-again") void inviteAgain();
     else void stateMove(kind);
@@ -515,7 +551,7 @@ export function StoryDetail({
 
       <StoryPreview values={form} photo={photo} />
 
-      <section aria-labelledby="story-edit-heading" className="space-y-4">
+      <section ref={editRef} aria-labelledby="story-edit-heading" className="space-y-4">
         <h2
           id="story-edit-heading"
           className="text-xs font-bold uppercase tracking-[0.12em] text-[var(--color-deep-blue)]"
@@ -601,6 +637,14 @@ export function StoryDetail({
             onOpenChange={(open) => {
               if (busyKind === "decline") return;
               setDeclineOpen(open);
+              setFixFirst(false);
+            }}
+            onCloseAutoFocus={(e) => {
+              const field = focusOnClose.current;
+              if (!field) return;
+              focusOnClose.current = null;
+              e.preventDefault();
+              focusField(field);
             }}
             title={`Decline ${possessive(story.author_name)} story?`}
             description="It is kept under Declined, with its photo, so you can restore it later."
@@ -632,24 +676,42 @@ export function StoryDetail({
                   {error}
                 </p>
               ) : null}
-              <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-                <AdminButton
-                  variant="secondary"
-                  disabled={busyKind === "decline"}
-                  onClick={() => setDeclineOpen(false)}
-                >
-                  Cancel
-                </AdminButton>
-                <AdminButton
-                  type="submit"
-                  variant="primary"
-                  icon={X}
-                  busy={busyKind === "decline"}
-                  busyLabel="Declining…"
-                >
-                  Decline story
-                </AdminButton>
-              </div>
+              {fixFirst ? (
+                <div className="space-y-3">
+                  <p role="alert" className="text-sm leading-snug text-[var(--color-danger)]">
+                    Some fields need attention. Close this and fix them first.
+                  </p>
+                  <AdminButton
+                    variant="primary"
+                    onClick={() => {
+                      focusOnClose.current = firstInvalidField(errors);
+                      setFixFirst(false);
+                      setDeclineOpen(false);
+                    }}
+                  >
+                    Close and fix them
+                  </AdminButton>
+                </div>
+              ) : (
+                <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+                  <AdminButton
+                    variant="secondary"
+                    disabled={busyKind === "decline"}
+                    onClick={() => setDeclineOpen(false)}
+                  >
+                    Cancel
+                  </AdminButton>
+                  <AdminButton
+                    type="submit"
+                    variant="primary"
+                    icon={X}
+                    busy={busyKind === "decline"}
+                    busyLabel="Declining…"
+                  >
+                    Decline story
+                  </AdminButton>
+                </div>
+              )}
             </form>
           </AdminSheet>
 

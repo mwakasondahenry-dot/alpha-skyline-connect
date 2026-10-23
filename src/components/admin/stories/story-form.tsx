@@ -66,6 +66,7 @@ export function StoryForm({
                   value={s.value}
                   checked={checked}
                   onChange={() => onChange({ speaker: s.value })}
+                  data-field={s === SPEAKERS[0] ? "speaker" : undefined}
                   className="sr-only"
                 />
                 {s.label}
@@ -79,6 +80,7 @@ export function StoryForm({
       <Field label="Name" htmlFor={f("name")} error={errors.author_name} errorId={f("name-error")}>
         <input
           id={f("name")}
+          data-field="author_name"
           type="text"
           autoComplete="off"
           value={values.author_name}
@@ -97,6 +99,7 @@ export function StoryForm({
       >
         <textarea
           id={f("quote")}
+          data-field="quote"
           rows={5}
           value={values.quote}
           onChange={(e) => onChange({ quote: e.target.value })}
@@ -148,6 +151,7 @@ export function StoryForm({
           >
             <input
               id={f("year")}
+              data-field="grad_year"
               type="text"
               inputMode="numeric"
               autoComplete="off"
@@ -171,6 +175,7 @@ export function StoryForm({
       >
         <select
           id={f("school")}
+          data-field="school_slug"
           value={values.school_slug}
           onChange={(e) => onChange({ school_slug: e.target.value })}
           aria-invalid={!!errors.school_slug || undefined}
@@ -192,6 +197,7 @@ export function StoryForm({
               type="checkbox"
               checked={values.consent}
               onChange={(e) => onChange({ consent: e.target.checked })}
+              data-field="consent"
               aria-invalid={!!errors.consent || undefined}
               aria-describedby={errors.consent ? f("consent-error") : undefined}
               className="mt-0.5 h-5 w-5 shrink-0 accent-[var(--color-deep-blue)]"

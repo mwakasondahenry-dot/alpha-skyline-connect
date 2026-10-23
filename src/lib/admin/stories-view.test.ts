@@ -7,6 +7,7 @@ import {
   cardLines,
   formToEdit,
   isFormDirty,
+  firstInvalidField,
   isStoryTab,
   moveExtra,
   nextFeaturedOrder,
@@ -307,5 +308,14 @@ describe("refeatureOrder", () => {
     ];
     expect(refeatureOrder("s1", 2, list)).toBe(3);
     expect(refeatureOrder("s1", null, list)).toBe(3);
+  });
+});
+
+describe("firstInvalidField", () => {
+  it("names the first field with a problem, in the order the form shows them", () => {
+    expect(firstInvalidField({})).toBeNull();
+    expect(firstInvalidField({ quote: "x", author_name: "y" })).toBe("author_name");
+    expect(firstInvalidField({ consent: "x", grad_year: "y" })).toBe("grad_year");
+    expect(firstInvalidField({ school_slug: "x", speaker: "y" })).toBe("speaker");
   });
 });
