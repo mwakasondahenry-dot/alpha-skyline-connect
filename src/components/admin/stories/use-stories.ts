@@ -21,6 +21,7 @@ import {
   type MoveResult,
 } from "@/lib/admin/stories-data";
 import { UNDO, transition } from "@/lib/admin/story-status";
+import { moveExtra, undoMoveExtra } from "@/lib/admin/stories-view";
 import { collapseAndRemove, useRowState } from "@/components/admin/kit";
 
 export const STORIES_LIST_KEY = ["admin", "stories", "list"] as const;
@@ -175,7 +176,7 @@ export function useStoryData() {
       const ok = await run(story.id, () => {
         if (action === "publish") return publishStory(client, story);
         const { from, to } = transition(action);
-        return guardedMove(client, story.id, from, to, extra);
+        return guardedMove(client, story.id, from, to, { ...moveExtra(action), ...extra });
       });
       if (ok) countsChanged();
       return ok;
@@ -183,17 +184,28 @@ export function useStoryData() {
     [client, run, countsChanged, ui],
   );
 
-  /** The Undo for a state move: the reverse move, guarded on the state it left the story in. */
+  /**
+   * The Undo for a state move: the reverse move, guarded on the state it left
+   * the story in. `before` is the story as it was, so Undo of Hide can put its
+   * featured place back.
+   */
   const undoMove = useCallback(
-    (id: string, action: StateMove) => async () => {
-      if (!client) throw new Error("Not signed in");
-      const back = UNDO[action];
-      const result = await guardedMove(client, id, back.from, back.to);
-      await refreshStory(id);
-      countsChanged();
-      if (!result.ok) throw "conflict" in result ? CONFLICT : result.error;
-      ui.flashRow(id);
-    },
+    (id: string, action: StateMove, before: Pick<AdminStory, "featured" | "featured_order">) =>
+      async () => {
+        if (!client) throw new Error("Not signed in");
+        const back = UNDO[action];
+        const result = await guardedMove(
+          client,
+          id,
+          back.from,
+          back.to,
+          undoMoveExtra(action, before),
+        );
+        await refreshStory(id);
+        countsChanged();
+        if (!result.ok) throw "conflict" in result ? CONFLICT : result.error;
+        ui.flashRow(id);
+      },
     [client, refreshStory, countsChanged, ui],
   );
 

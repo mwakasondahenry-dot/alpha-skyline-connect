@@ -69,6 +69,40 @@ export function nextFeaturedOrder(stories: AdminStory[]): number {
   return max + 1;
 }
 
+type MoveAction = "publish" | "decline" | "restore" | "hide" | "show";
+
+/**
+ * Fields a state move sets beside the status. Hiding a story takes it off the
+ * home page too, in the same guarded update, so a hidden story is never left
+ * featured.
+ */
+export function moveExtra(action: MoveAction): Record<string, unknown> {
+  return action === "hide" ? { featured: false, featured_order: null } : {};
+}
+
+/** Fields the Undo of a move puts back: Undo of Hide restores the featured place it had. */
+export function undoMoveExtra(
+  action: MoveAction,
+  before: Pick<AdminStory, "featured" | "featured_order">,
+): Record<string, unknown> {
+  return action === "hide"
+    ? { featured: before.featured, featured_order: before.featured_order }
+    : {};
+}
+
+/**
+ * The place an unfeatured story takes again on Undo: its old place while no
+ * other featured story has taken it, otherwise after the last one.
+ */
+export function refeatureOrder(id: string, previous: number | null, stories: AdminStory[]): number {
+  const taken =
+    previous != null &&
+    stories.some((s) => s.id !== id && s.featured && s.featured_order === previous);
+  return previous != null && !taken
+    ? previous
+    : nextFeaturedOrder(stories.filter((s) => s.id !== id));
+}
+
 /**
  * The photo to show for a story: the private submitted photo (by its signed
  * URL) while there is one, otherwise the public photo. Null while the signed

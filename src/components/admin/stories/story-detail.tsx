@@ -44,7 +44,9 @@ import {
   cardLines,
   formToEdit,
   isFormDirty,
+  moveExtra,
   nextFeaturedOrder,
+  refeatureOrder,
   outcomeText,
   possessive,
   shownPhoto,
@@ -217,7 +219,7 @@ export function StoryDetail({
     const sitePage = action === "publish" || action === "show";
     outcome.show({
       text: outcomeText(action, current.author_name),
-      undo: data.undoMove(current.id, action),
+      undo: data.undoMove(current.id, action, current),
       link: sitePage
         ? { to: `/testimonials#story-${current.id}`, label: "View on site" }
         : undefined,
@@ -225,6 +227,7 @@ export function StoryDetail({
     await data.leaveList(current.id, {
       status: transition(action).to,
       decided_at: new Date().toISOString(),
+      ...moveExtra(action),
       ...(action === "decline" ? { decline_reason: declineReason.trim() || null } : {}),
     });
     void data.refreshStory(current.id);
@@ -252,6 +255,7 @@ export function StoryDetail({
     const sb = data.client;
     const on = !story.featured;
     const order = on ? nextFeaturedOrder(stories) : null;
+    const previousOrder = story.featured_order;
     setBusyKind("feature");
     const ok = await data.run(story.id, () => setFeatured(sb, story.id, on, order));
     setBusyKind(null);
@@ -265,7 +269,13 @@ export function StoryDetail({
       undo: async () => {
         const list = qc.getQueryData<AdminStory[]>(STORIES_LIST_KEY) ?? [];
         const back = !on;
-        const result = await setFeatured(sb, storyId, back, back ? nextFeaturedOrder(list) : null);
+        // Undo of unfeature puts it back in the place it had.
+        const result = await setFeatured(
+          sb,
+          storyId,
+          back,
+          back ? refeatureOrder(storyId, previousOrder, list) : null,
+        );
         await data.refreshStory(storyId);
         if (!result.ok) throw "conflict" in result ? CONFLICT : result.error;
         ui.flashRow(storyId);

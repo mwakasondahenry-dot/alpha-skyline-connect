@@ -8,7 +8,10 @@ import {
   formToEdit,
   isFormDirty,
   isStoryTab,
+  moveExtra,
   nextFeaturedOrder,
+  refeatureOrder,
+  undoMoveExtra,
   outcomeText,
   possessive,
   shownPhoto,
@@ -272,5 +275,37 @@ describe("story form", () => {
     expect(isFormDirty({ ...storyToForm(s), quote: "Changed" }, s)).toBe(true);
     expect(isFormDirty(EMPTY_STORY_FORM, null)).toBe(false);
     expect(isFormDirty({ ...EMPTY_STORY_FORM, author_name: "A" }, null)).toBe(true);
+  });
+});
+
+describe("hiding a featured story", () => {
+  it("takes it off the home page in the same update", () => {
+    expect(moveExtra("hide")).toEqual({ featured: false, featured_order: null });
+    for (const a of ["publish", "decline", "restore", "show"] as const) {
+      expect(moveExtra(a)).toEqual({});
+    }
+  });
+  it("Undo of Hide puts both featured values back", () => {
+    expect(undoMoveExtra("hide", story({ featured: true, featured_order: 3 }))).toEqual({
+      featured: true,
+      featured_order: 3,
+    });
+    expect(undoMoveExtra("hide", story())).toEqual({ featured: false, featured_order: null });
+    expect(undoMoveExtra("show", story({ featured: true, featured_order: 3 }))).toEqual({});
+  });
+});
+
+describe("refeatureOrder", () => {
+  it("gives an unfeatured story its old place back", () => {
+    const list = [story({ id: "a", featured: true, featured_order: 1 })];
+    expect(refeatureOrder("s1", 2, list)).toBe(2);
+  });
+  it("goes last when the old place has been taken, or there was none", () => {
+    const list = [
+      story({ id: "a", featured: true, featured_order: 1 }),
+      story({ id: "b", featured: true, featured_order: 2 }),
+    ];
+    expect(refeatureOrder("s1", 2, list)).toBe(3);
+    expect(refeatureOrder("s1", null, list)).toBe(3);
   });
 });
