@@ -237,7 +237,7 @@ export function VoicesSpotlight({ items }: { items: TestimonialItem[] }) {
           <ul
             ref={facesRef}
             aria-label="Choose a voice"
-            className="voice-faces -mx-[var(--container-gutter)] mt-5 flex gap-1.5 overflow-x-auto px-[var(--container-gutter)] py-2 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+            className="voice-faces -mx-[var(--container-gutter)] mt-5 flex gap-2 overflow-x-auto px-[var(--container-gutter)] py-3 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
           >
             {items.map((t, i) => (
               <li key={t.id} className="shrink-0">
@@ -246,14 +246,14 @@ export function VoicesSpotlight({ items }: { items: TestimonialItem[] }) {
                   onClick={() => go(i)}
                   aria-label={t.author_name}
                   aria-pressed={i === idx}
-                  className="voice-face grid h-11 w-11 place-items-center rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)]"
+                  className="voice-face grid h-14 w-14 place-items-center sm:h-16 sm:w-16 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)]"
                   data-on={i === idx || undefined}
                 >
                   <WholePhoto
                     src={t.photo_url}
                     name={t.author_name}
-                    className="h-10 w-10 rounded-full"
-                    initialClassName="text-base"
+                    className="h-12 w-12 rounded-full sm:h-14 sm:w-14"
+                    initialClassName="text-lg sm:text-xl"
                   />
                 </button>
               </li>
