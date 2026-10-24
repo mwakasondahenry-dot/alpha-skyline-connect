@@ -75,20 +75,24 @@ export function YouthHero({ actions }: { actions: ReactNode }) {
             <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap">{actions}</div>
           </div>
         </div>
+      </div>
 
+      {/* The picture breaks out of the text column on wide screens, so the
+          navy field does not sit empty on both sides of it. */}
+      <div className="mx-auto w-full max-w-[110rem] px-[var(--container-gutter)] lg:px-8">
         <figure className="relative mt-10 lg:mt-14">
           <div className="yh-window relative overflow-hidden rounded-[1.5rem] bg-[var(--color-deep-blue-dark)] lg:rounded-[2.25rem]">
             <Photo
               width={1672}
               height={941}
               src={illustration}
-              sizes="(min-width: 1280px) 1184px, 100vw"
+              sizes="(min-width: 1760px) 1696px, 100vw"
               alt="Illustration of a graduate and three Alpha students in uniform, above Dar es Salaam"
               loading="eager"
               fetchPriority="high"
               decoding="async"
-              className="yh-photo block aspect-[4/3] w-full object-cover sm:aspect-[16/9] lg:aspect-[2/1]"
-              style={{ objectPosition: "50% 22%" }}
+              className="yh-photo block aspect-[4/3] w-full object-cover sm:aspect-[16/9] lg:aspect-[21/9]"
+              style={{ objectPosition: "50% 8%" }}
             />
             <figcaption className="absolute bottom-3 right-3 rounded-full bg-[var(--color-scrim-navy)]/75 px-2.5 py-1 text-xs font-semibold text-[var(--color-surface)]/90 lg:bottom-5 lg:right-5">
               Illustration

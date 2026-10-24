@@ -1,6 +1,6 @@
 /**
  * The home page's testimonials: one voice at a time, large, with every voice
- * present as a row of faces beneath it.
+ * present as a row of faces above it.
  *
  * No cards and no frames: the quote is set as display type on the page
  * ground, and the faces say "there are many of us" without asking anyone to
@@ -125,6 +125,74 @@ export function VoicesSpotlight({ items }: { items: TestimonialItem[] }) {
         if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setFocused(false);
       }}
     >
+      {count > 1 && (
+        <div className="mb-8 lg:pl-20">
+          <ul
+            ref={facesRef}
+            aria-label="Choose a voice"
+            className="voice-faces -mx-[var(--container-gutter)] flex gap-2 overflow-x-auto px-[var(--container-gutter)] py-3 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
+          >
+            {items.map((t, i) => (
+              <li key={t.id} className="shrink-0">
+                <button
+                  type="button"
+                  onClick={() => go(i)}
+                  aria-label={t.author_name}
+                  aria-pressed={i === idx}
+                  className="voice-face grid h-14 w-14 place-items-center sm:h-16 sm:w-16 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)]"
+                  data-on={i === idx || undefined}
+                >
+                  <WholePhoto
+                    src={t.photo_url}
+                    name={t.author_name}
+                    className="h-12 w-12 rounded-full sm:h-14 sm:w-14"
+                    initialClassName="text-lg sm:text-xl"
+                  />
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="mt-4 flex items-center gap-3">
+            {auto && (
+              <button
+                type="button"
+                onClick={() => setStopped((s) => !s)}
+                aria-label={stopped ? "Play the quotes" : "Pause the quotes"}
+                className="-ml-3 grid h-11 w-11 shrink-0 place-items-center rounded-full text-[var(--color-deep-blue)] transition-colors duration-150 hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)] motion-reduce:transition-none"
+              >
+                {stopped ? (
+                  <Play className="h-4 w-4 fill-current" aria-hidden />
+                ) : (
+                  <Pause className="h-4 w-4 fill-current" aria-hidden />
+                )}
+              </button>
+            )}
+            <span
+              aria-hidden
+              className="relative block h-0.5 flex-1 overflow-hidden rounded-full bg-[var(--color-hairline)]"
+            >
+              {auto && (
+                <span
+                  key={idx}
+                  className="voice-timer absolute inset-0 origin-left bg-[var(--color-gold)]"
+                  style={{
+                    animationDuration: `${HOLD_MS}ms`,
+                    animationPlayState: running ? "running" : "paused",
+                  }}
+                  onAnimationEnd={() => go(idx + 1)}
+                />
+              )}
+            </span>
+            <span
+              className="shrink-0 tabular-nums text-[var(--color-ink-soft)]"
+              style={{ ...T.body, fontSize: "var(--text-label)" }}
+            >
+              {idx + 1} / {count}
+            </span>
+          </div>
+        </div>
+      )}
+
       <div className="lg:pl-20">
         <ul className="grid" aria-live={running ? "off" : "polite"}>
           {items.map((t, i) => {
@@ -134,7 +202,7 @@ export function VoicesSpotlight({ items }: { items: TestimonialItem[] }) {
             return (
               <li
                 key={t.id}
-                className="voice self-end [grid-area:1/1]"
+                className="voice self-start [grid-area:1/1]"
                 data-state={state}
                 role="group"
                 aria-roledescription="slide"
@@ -142,9 +210,8 @@ export function VoicesSpotlight({ items }: { items: TestimonialItem[] }) {
                 aria-hidden={i !== idx}
               >
                 <figure>
-                  {/* The mark travels with its quote. Short quotes sit low in
-                      the block, next to the faces, rather than leaving a gap
-                      under themselves. */}
+                  {/* The mark travels with its quote. Quotes hang from the
+                      top, just under the faces. */}
                   <span
                     aria-hidden
                     className="pointer-events-none mb-1 block select-none font-display leading-[0.7] text-[var(--color-gold)] lg:-ml-20 lg:mb-0 lg:h-0 lg:w-20 lg:translate-y-2"
@@ -192,75 +259,6 @@ export function VoicesSpotlight({ items }: { items: TestimonialItem[] }) {
           })}
         </ul>
       </div>
-
-      {count > 1 && (
-        <div className="mt-10 lg:pl-20">
-          <div className="flex items-center gap-3">
-            {auto && (
-              <button
-                type="button"
-                onClick={() => setStopped((s) => !s)}
-                aria-label={stopped ? "Play the quotes" : "Pause the quotes"}
-                className="-ml-3 grid h-11 w-11 shrink-0 place-items-center rounded-full text-[var(--color-deep-blue)] transition-colors duration-150 hover:bg-[var(--color-surface-muted)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)] motion-reduce:transition-none"
-              >
-                {stopped ? (
-                  <Play className="h-4 w-4 fill-current" aria-hidden />
-                ) : (
-                  <Pause className="h-4 w-4 fill-current" aria-hidden />
-                )}
-              </button>
-            )}
-            <span
-              aria-hidden
-              className="relative block h-0.5 flex-1 overflow-hidden rounded-full bg-[var(--color-hairline)]"
-            >
-              {auto && (
-                <span
-                  key={idx}
-                  className="voice-timer absolute inset-0 origin-left bg-[var(--color-gold)]"
-                  style={{
-                    animationDuration: `${HOLD_MS}ms`,
-                    animationPlayState: running ? "running" : "paused",
-                  }}
-                  onAnimationEnd={() => go(idx + 1)}
-                />
-              )}
-            </span>
-            <span
-              className="shrink-0 tabular-nums text-[var(--color-ink-soft)]"
-              style={{ ...T.body, fontSize: "var(--text-label)" }}
-            >
-              {idx + 1} / {count}
-            </span>
-          </div>
-
-          <ul
-            ref={facesRef}
-            aria-label="Choose a voice"
-            className="voice-faces -mx-[var(--container-gutter)] mt-5 flex gap-2 overflow-x-auto px-[var(--container-gutter)] py-3 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0"
-          >
-            {items.map((t, i) => (
-              <li key={t.id} className="shrink-0">
-                <button
-                  type="button"
-                  onClick={() => go(i)}
-                  aria-label={t.author_name}
-                  aria-pressed={i === idx}
-                  className="voice-face grid h-14 w-14 place-items-center sm:h-16 sm:w-16 rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-brand-blue)]"
-                  data-on={i === idx || undefined}
-                >
-                  <WholePhoto
-                    src={t.photo_url}
-                    name={t.author_name}
-                    className="h-12 w-12 rounded-full sm:h-14 sm:w-14"
-                    initialClassName="text-lg sm:text-xl"
-                  />
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </div>
   );
 }

@@ -576,7 +576,7 @@ function AviationChapter() {
 /* ------------------------------------------------------------------ *
  * 6. IN THEIR WORDS
  * Every published quote, parents and former students alike: one large
- * quote at a time with every voice present as a row of faces beneath it.
+ * quote at a time with every voice present as a row of faces above it.
  * The owner asked for all of them, in motion (2026-10-22), then for
  * something minimal with no boxes (2026-10-23).
  * ------------------------------------------------------------------ */
